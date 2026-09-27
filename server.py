@@ -73,11 +73,32 @@ FREE_AGENTS = [
     {"name": "Anthony Martial", "age": 30, "pos": "FORVET", "claimed_pot": 79, "real_pot": 79, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "Serbest kaldı. Yüksek potansiyelli hamle santraforu."}
 ]
 
+CLUB_SCOUTS_DB = {
+    "galatasaray": {"name": "Erdal Keser", "role": "Avrupa Scout Direktörü", "rating": 86, "salary": 6_000_000, "region": "Almanya & Fransa"},
+    "fenerbahce": {"name": "Baki Mercimek", "role": "Global Transfer Başgözlemcisi", "rating": 85, "salary": 6_000_000, "region": "Avrupa & Hollanda"},
+    "besiktas": {"name": "Gökhan Keskin", "role": "Altyapı & İzleme Komitesi Şefi", "rating": 84, "salary": 5_500_000, "region": "Balkanlar & Türkiye"},
+    "trabzonspor": {"name": "İhsan Derelioğlu", "role": "Başgözlemci & Oyuncu İzleme", "rating": 82, "salary": 4_500_000, "region": "Karadeniz & Doğu Avrupa"},
+    "goztepe": {"name": "Murat Uluç", "role": "Göztepe A Takım Scout Şefi", "rating": 76, "salary": 3_500_000, "region": "Ege & Güney Amerika"},
+    "samsunspor": {"name": "Cenk İşler", "role": "Futbol Gözlemcisi & Analiz", "rating": 75, "salary": 3_000_000, "region": "Türkiye & İskandinavya"},
+    "basaksehir": {"name": "Zafer Şahin", "role": "Kurumsal Oyuncu İzleme Şefi", "rating": 78, "salary": 4_000_000, "region": "Süper Lig & Afrika"},
+    "eyupspor": {"name": "Umut Bulut", "role": "Yerli Yetenek Avcısı", "rating": 73, "salary": 2_500_000, "region": "1. Lig & Alt Ligler"},
+    "kasimpasa": {"name": "Barış Kanbak", "role": "Gelişim & Scout Şefi", "rating": 74, "salary": 2_800_000, "region": "Gurbetçiler & Avrupa"},
+    "sivasspor": {"name": "Mehmet Yıldız", "role": "Anadolu & Balkan Scout Şefi", "rating": 74, "salary": 2_800_000, "region": "Balkanlar & Anadolu"},
+    "antalyaspor": {"name": "Sedat Ağçay", "role": "Akdeniz Scout Lideri", "rating": 73, "salary": 2_500_000, "region": "Akdeniz & Brezilya"},
+    "alanyaspor": {"name": "Ceyhun Gülselam", "role": "Scout & Analiz Şefi", "rating": 75, "salary": 3_000_000, "region": "Avrupa & Alt Ligler"},
+    "rizespor": {"name": "Orhan Ovacıklı", "role": "Bölge Scout Koordinatörü", "rating": 72, "salary": 2_400_000, "region": "Karadeniz & Gürcistan"},
+    "kayserispor": {"name": "Gökhan Ünal", "role": "Hücum & Forvet Gözlemcisi", "rating": 73, "salary": 2_600_000, "region": "Türkiye & Gurbetçiler"},
+    "konyaspor": {"name": "Ömer Ali Şahiner", "role": "Kulüp Başgözlemcisi", "rating": 74, "salary": 2_800_000, "region": "İç Anadolu & Balkanlar"},
+    "gaziantepfk": {"name": "Erdal Güneş", "role": "Güneydoğu & Orta Doğu Şefi", "rating": 72, "salary": 2_200_000, "region": "Güneydoğu & Romanya"},
+    "bodrumfk": {"name": "Celal Dumanlı", "role": "Gençlik & Amatör Gözlemci", "rating": 71, "salary": 2_000_000, "region": "Ege & 2. Lig"},
+    "adanademirspor": {"name": "Volkan Dikmen", "role": "Scout & Performans Şefi", "rating": 72, "salary": 2_200_000, "region": "Akdeniz & İtalya"}
+}
+
 SCOUT_CANDIDATES = [
-    {"id": "sc1", "name": "Cemil 'Kartal Göz' Kaya", "role": "Yerli Lig Kurdu", "rating": 72, "salary": 3_000_000, "region": "Türkiye & Alt Ligler"},
-    {"id": "sc2", "name": "Eduardo Da Silva", "role": "Güney Amerika Uzmanı", "rating": 85, "salary": 7_000_000, "region": "Brezilya & Arjantin"},
-    {"id": "sc3", "name": "Klaus Richter", "role": "Avrupa Veri Analisti", "rating": 90, "salary": 10_000_000, "region": "Almanya & Fransa"},
-    {"id": "sc4", "name": "Murat Çırak", "role": "Çaylak Gözlemci", "rating": 60, "salary": 1_500_000, "region": "Amatör Ligler"}
+    {"id": "sc1", "name": "Klaus Richter", "role": "Avrupa Veri Analisti", "rating": 90, "salary": 10_000_000, "region": "Almanya & Fransa"},
+    {"id": "sc2", "name": "Eduardo Da Silva", "role": "Güney Amerika Uzmanı", "rating": 86, "salary": 7_500_000, "region": "Brezilya & Arjantin"},
+    {"id": "sc3", "name": "Cemil 'Kartal Göz' Kaya", "role": "Yerli Lig Kurdu", "rating": 78, "salary": 3_500_000, "region": "Türkiye & Alt Ligler"},
+    {"id": "sc4", "name": "Jean-Pierre Mendy", "role": "Genç Yetenek Kaşifi", "rating": 84, "salary": 6_000_000, "region": "Batı Afrika & Fransa"}
 ]
 
 AVAILABLE_SPONSORS = [
@@ -280,7 +301,7 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
             "praised_count": 0,
             "tactical_vision": "Yüksek Tempolu Hücum & Alan Daraltma"
         },
-        "scout": SCOUT_CANDIDATES[0],
+        "scout": CLUB_SCOUTS_DB.get(team["id"], SCOUT_CANDIDATES[0]),
         "squad": enriched_squad,
         "fixtures": fixtures,
         "standings": standings,
@@ -337,10 +358,10 @@ def get_state(session_id: Optional[str] = None):
                         state["media_trust"] = 70
                     if "captain_name" not in state:
                         state["captain_name"] = get_captain_name(state.get("squad", []))
-                    if "squad_harmony" not in state:
-                        state["squad_harmony"] = 80
                     if "incoming_bids" not in state:
                         state["incoming_bids"] = []
+                    if "club_scout" not in state or not state["club_scout"]:
+                        state["club_scout"] = CLUB_SCOUTS_DB.get(state.get("team_id"), {"name": "Cemil Kaya", "rating": 74, "salary": 2_000_000, "role": "Scout Şefi", "region": "Türkiye"})
                     return state
         except Exception:
             pass
@@ -420,6 +441,53 @@ def api_squad_swap(req: SquadSwapRequest):
         save_state(state)
         return {"status": "ok", "state": state}
     raise HTTPException(status_code=400, detail="Geçersiz oyuncu sıralaması!")
+
+@app.post("/api/squad/auto-pick")
+def api_squad_auto_pick():
+    state = get_state()
+    squad = list(state.get("squad", []))
+    if not squad:
+        raise HTTPException(status_code=400, detail="Kadro bulunamadı!")
+
+    gks = [p for p in squad if "KL" in p.get("pos", "")]
+    gks.sort(key=lambda x: (x.get("suspended_weeks", 0) == 0, x.get("injured_weeks", 0) == 0, x.get("overall", 75)), reverse=True)
+    best_gk = gks[0] if gks else squad[0]
+
+    remaining = [p for p in squad if p != best_gk]
+
+    def sort_key(p):
+        is_healthy = (p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0)
+        return (is_healthy, p.get("overall", 75))
+
+    remaining.sort(key=sort_key, reverse=True)
+
+    gk_is_foreign = best_gk.get("is_foreign", True)
+    starters_outfield = []
+    bench = []
+    foreign_count = 1 if gk_is_foreign else 0
+
+    for p in remaining:
+        if len(starters_outfield) < 10:
+            if p.get("is_foreign", True):
+                if foreign_count < 8:
+                    starters_outfield.append(p)
+                    foreign_count += 1
+                else:
+                    bench.append(p)
+            else:
+                starters_outfield.append(p)
+        else:
+            bench.append(p)
+
+    while len(starters_outfield) < 10 and bench:
+        starters_outfield.append(bench.pop(0))
+
+    new_squad = [best_gk] + starters_outfield + bench
+    state["squad"] = new_squad
+    state["team_power"] = round(sum(p["overall"] for p in new_squad[:11]) / 11)
+    state["my_radar"] = calculate_team_radar(new_squad)
+    save_state(state)
+    return {"status": "ok", "message": "Teknik Direktör ideal ilk 11'i belirledi!", "state": state}
 
 class StartGameRequest(BaseModel):
     team_id: str
@@ -1070,10 +1138,7 @@ def api_captain_report():
     state = get_state()
     squad = state["squad"]
     captain = state.get("captain_name") or get_captain_name(squad)
-
-    # Huzursuz veya zam talep eden oyuncuları filtrele
-    unhappy_players = [p for p in squad if p.get("morale", 80) < 70]
-    wage_demanding = [p for p in squad if p.get("contract_years", 2) == 1 or p.get("overall", 75) >= 83 and p.get("wage", 0) < 15_000_000]
+    week = state.get("week", 1)
 
     harmony = state.get("squad_harmony", 80)
     summary_text = ""
@@ -1084,22 +1149,45 @@ def api_captain_report():
     else:
         summary_text = f"Kaptan {captain}: 'Başkanım acil toplantı lazım! Takımda gruplaşma var ve bazı oyuncular antrenmana isteksiz çıkıyor.'"
 
+    wage_demands = []
+    # Otantik ve performansa dayalı zam talepleri:
+    # İlk haftalarda (maç oynanmadan) kimse zam istemez.
+    # Süreç içinde (hafta >= 3), parlayan, skorer veya kilit olan 1-2 oyuncu zam ister.
+    if week >= 3:
+        candidates = []
+        for p in squad:
+            ovr = p.get("overall", 75)
+            wage = p.get("wage", 3_000_000)
+            contract = p.get("contract_years", 2)
+            
+            if ovr >= 80 and wage < 12_000_000:
+                candidates.append((p, "Ligdeki üstün performansı ve takımın kilit ismi olması sebebiyle zam istiyor.", 1.45))
+            elif any(pos in p.get("pos", "") for pos in ["FOR", "SANTRAFOR", "KANAT"]) and ovr >= 77 and wage < 8_000_000:
+                candidates.append((p, "Son haftalardaki hücum katkısıyla parladı. Menajeri kulübe zam talebini iletti.", 1.50))
+            elif contract == 1 and ovr >= 78:
+                candidates.append((p, "Sözleşmesinin son senesinde. Bedelsiz ayrılmamak adına zamlı yeni kontrat talep ediyor.", 1.35))
+
+        for p, reason, multiplier in candidates[:2]:
+            curr_w = p.get("wage", 3_000_000)
+            demanded_w = max(int(curr_w * multiplier), curr_w + 2_000_000)
+            wage_demands.append({
+                "name": p["name"],
+                "pos": p["pos"],
+                "current_wage": curr_w,
+                "demanded_wage": demanded_w,
+                "contract_years": p.get("contract_years", 2),
+                "morale": p.get("morale", 80),
+                "reason": reason
+            })
+
+    unhappy_players = [p for p in squad if p.get("morale", 80) < 70]
+
     return {
         "captain_name": captain,
         "squad_harmony": harmony,
         "summary": summary_text,
         "unhappy_players": [p["name"] for p in unhappy_players[:3]],
-        "wage_demands": [
-            {
-                "name": p["name"],
-                "pos": p["pos"],
-                "current_wage": p["wage"],
-                "demanded_wage": int(p["wage"] * 1.3),
-                "contract_years": p.get("contract_years", 2),
-                "morale": p.get("morale", 80)
-            }
-            for p in wage_demanding[:4]
-        ]
+        "wage_demands": wage_demands
     }
 
 class WageNegotiationRequest(BaseModel):
@@ -1462,7 +1550,17 @@ def api_scout_candidates():
 
 @app.get("/api/sponsors/available")
 def api_get_sponsors():
-    return AVAILABLE_SPONSORS
+    state = get_state()
+    active_sponsors = state.get("finances", {}).get("active_sponsors", [])
+    active_types = {s.get("type") for s in active_sponsors}
+    active_ids = {s.get("id") for s in active_sponsors}
+    
+    result = []
+    for sp in AVAILABLE_SPONSORS:
+        item = dict(sp)
+        item["is_signed"] = (item["id"] in active_ids) or (item["type"] in active_types)
+        result.append(item)
+    return result
 
 class SignSponsorRequest(BaseModel):
     sponsor_id: str
@@ -1473,11 +1571,28 @@ def api_sign_sponsor(req: SignSponsorRequest):
     sp = next((s for s in AVAILABLE_SPONSORS if s["id"] == req.sponsor_id), None)
     if not sp:
         raise HTTPException(status_code=404, detail="Sponsor bulunamadı!")
+
+    finances = state.setdefault("finances", {})
+    active = finances.setdefault("active_sponsors", [])
+
+    for existing in active:
+        if existing.get("id") == sp["id"]:
+            raise HTTPException(status_code=400, detail=f"{sp['name']} anlaşması zaten aktif! Sezon sonuna kadar geçerlidir.")
+        if existing.get("type") == sp.get("type"):
+            type_tr = {"chest": "Göğüs", "stadium": "Stadyum", "back": "Forma Sırt"}.get(sp.get("type"), "Bu alanda")
+            raise HTTPException(status_code=400, detail=f"{type_tr} sponsoru olarak zaten '{existing.get('name')}' ile sözleşmeniz var! Birden fazla sponsor bağlanamaz.")
+
     state["budget"] += sp["income_season"]
-    state["finances"]["active_sponsors"].append(sp)
-    state["news"].insert(0, f"🤝 YENİ SPONSOR: {sp['name']} (+{sp['income_season']:,} ₺)!")
+    active.append({
+        "id": sp["id"],
+        "type": sp["type"],
+        "name": sp["name"],
+        "income_season": sp["income_season"]
+    })
+    msg = f"✍️ RESMİ SPONSORLUK: {sp['name']} kulübümüzle 1 sezonluk anlaşma imzaladı (+{sp['income_season']:,} ₺ peşin gelir)!"
+    state["news"].insert(0, msg)
     save_state(state)
-    return {"message": f"{sp['name']} sponsoru imzalandı!", "state": state}
+    return {"message": msg, "state": state}
 
 class UndergroundDealRequest(BaseModel):
     deal_type: str
