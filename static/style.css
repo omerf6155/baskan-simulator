@@ -1,0 +1,42 @@
+/* Temiz Minimalist Spor Uygulaması Stilleri */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Nav Bar Aktif Eleman */
+.nav-item.active {
+  color: #f59e0b;
+}
+.nav-item.active i {
+  color: #f59e0b;
+}
+
+/* Basın Seçim Butonları */
+.press-opt-btn.selected {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+/* Toast Bildirim */
+#toast-box.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Şampiyonluk / Tablo Vurgusu */
+.table-leader-row {
+  background: rgba(245, 158, 11, 0.08);
+}
+.table-relegation-row {
+  background: rgba(225, 29, 72, 0.06);
+}
