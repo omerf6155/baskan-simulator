@@ -4,6 +4,7 @@ import random
 import contextvars
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -160,6 +161,21 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
         p["morale"] = random.randint(75, 95)
     if "wage_demand" not in p:
         p["wage_demand"] = 0
+
+    # Yaş ve Potansiyel (26 yaş altı için özel gelişim potansiyeli)
+    if "age" not in p or not p["age"]:
+        p["age"] = random.randint(19, 32)
+    
+    age = int(p["age"])
+    ovr = int(p.get("overall", 75))
+    if age < 26:
+        if "potential" not in p or not p["potential"]:
+            growth_room = max(3, (27 - age) * 2)
+            p["potential"] = min(94, max(ovr + 2, ovr + growth_room))
+        p["is_youth"] = True
+    else:
+        p["potential"] = ovr
+        p["is_youth"] = False
 
     # Yabancı / Yerli Kontrolü (Süper Lig Kuralı)
     name_lower = str(p.get("name", "")).lower()
@@ -1173,6 +1189,9 @@ def api_captain_report():
             wage_demands.append({
                 "name": p["name"],
                 "pos": p["pos"],
+                "age": p.get("age", 25),
+                "potential": p.get("potential", p.get("overall", 75) + 3),
+                "is_youth": p.get("age", 25) < 26,
                 "current_wage": curr_w,
                 "demanded_wage": demanded_w,
                 "contract_years": p.get("contract_years", 2),
@@ -1223,43 +1242,128 @@ def api_wage_negotiation(req: WageNegotiationRequest):
 
 # ==================== TEKNİK DİREKTÖR GELECEK VİZYONU ====================
 class CoachVisionRequest(BaseModel):
-    vision_focus: str # 'youth' (altyapı genci çıkar), 'defensive' (savunma kampı), 'attacking' (hücum temposu)
+    vision_focus: str # 'youth', 'gegenpress', 'defensive', 'setpiece', 'wage_discipline'
 
 @app.post("/api/coach/future-vision")
 def api_coach_future_vision(req: CoachVisionRequest):
     state = get_state()
     coach = state["coach"]
+    current_week = state.get("week", 1)
+    current_half = 1 if current_week <= 17 else 2
+
+    # Sınırlandırma: Her yarı sezonda sadece 1 kez vizyon toplantısı yapılabilir!
+    if state.get("coach_vision_used_half") == current_half:
+        next_period = "18. Hafta (2. Devre Başı)" if current_half == 1 else "Gelecek Sezon"
+        raise HTTPException(
+            status_code=400,
+            detail=f"Hoca vizyon toplantısı bu yarı sezonda zaten tamamlandı! Yeni stratejik hak: {next_period}."
+        )
 
     if req.vision_focus == "youth":
-        # Akademiden genç bir yetenek kadroya katılır
+        # Altyapı akademisinden 18 yaşında yüksek potansiyelli (Wonderkid) genç yetenek
+        name = random.choice(["Erencan Aktaş", "Baran Yılmaz", "Semih Güler", "Oğuzhan Kaya", "Yusuf Demirbaş"])
+        pos = random.choice(["KANAT", "MERKEZ OS", "STP", "SANTRAFOR"])
         academy_star = {
-            "name": random.choice(["Erencan Aktaş", "Baran Yılmaz", "Semih Güler", "Oğuzhan Kaya"]),
-            "pos": random.choice(["KANAT", "MERKEZ OS", "STP", "SANTRAFOR"]),
+            "name": name,
+            "pos": pos,
             "age": 18,
-            "overall": 77,
-            "wage": 2_500_000,
-            "val": 22_000_000,
-            "skills": {"pac": 85, "sho": 76, "pas": 75, "dri": 80, "def": 55, "phy": 72},
-            "contract_years": 4,
-            "morale": 100
+            "overall": 78,
+            "potential": 90,
+            "is_youth": True,
+            "is_foreign": False,
+            "wage": 2_000_000,
+            "val": 28_000_000,
+            "skills": {"pac": 88, "sho": 78, "pas": 77, "dri": 82, "def": 58, "phy": 74},
+            "contract_years": 5,
+            "morale": 100,
+            "yellow_cards": 0,
+            "suspended_weeks": 0,
+            "injured_weeks": 0
         }
         state["squad"].append(academy_star)
-        msg = f"🌟 ALTYAPIDAN YENİ YILDIZ: Hoca {coach['name']}, 18 yaşındaki {academy_star['name']} ({academy_star['pos']}) yeteneğini A takıma çıkardı!"
+        msg = f"🌟 AKADEMİ REFORMU: 18 yaşındaki süper yetenek {name} ({pos} • POT: 90) A takıma kazandırıldı ve 5 yıllık sözleşme imzalandı!"
+    elif req.vision_focus == "gegenpress" or req.vision_focus == "attacking":
+        for p in state["squad"]:
+            if "skills" in p:
+                p["skills"]["sho"] = min(99, p["skills"].get("sho", 75) + 3)
+                p["skills"]["pac"] = min(99, p["skills"].get("pac", 75) + 3)
+                p["skills"]["dri"] = min(99, p["skills"].get("dri", 75) + 2)
+        coach["style"] = "Yüksek Pres & Amansız Gegenpressing"
+        coach["attack"] = min(99, coach.get("attack", 70) + 4)
+        msg = f"⚡ GEGENPRESS KAMPI: {coach['name']} tüm takımı yüksek pres ve hücum temposuna soktu (+3 Hız, +3 Şut, +2 Dripling)!"
     elif req.vision_focus == "defensive":
         for p in state["squad"]:
-            if "skills" in p and "def" in p["skills"]:
-                p["skills"]["def"] = min(99, p["skills"]["def"] + 3)
-                p["skills"]["phy"] = min(99, p["skills"]["phy"] + 2)
-        coach["style"] = "Kaya Gibi Defans & Hızlı Kontratak"
-        msg = f"🛡️ SAVUNMA DOKTRİNİ: {coach['name']} tüm takımı çelik gibi savunma disiplinine soktu (+3 Takım Defansı)!"
-    else: # attacking
+            if "skills" in p:
+                p["skills"]["def"] = min(99, p["skills"].get("def", 75) + 4)
+                p["skills"]["phy"] = min(99, p["skills"].get("phy", 75) + 3)
+        coach["style"] = "Catenaccio & Çelik Defans Bloğu"
+        coach["defense"] = min(99, coach.get("defense", 70) + 5)
+        msg = f"🛡️ SAVUNMA DOKTRİNİ: {coach['name']} tüm takıma İtalyan savunma disiplini aşıladı (+4 Defans, +3 Fizik Direnç)!"
+    elif req.vision_focus == "setpiece":
         for p in state["squad"]:
-            if "skills" in p and "sho" in p["skills"]:
-                p["skills"]["sho"] = min(99, p["skills"]["sho"] + 3)
-                p["skills"]["pac"] = min(99, p["skills"]["pac"] + 2)
-        coach["style"] = "Yüksek Pres & Tam Saha Baskın Hücum"
-        msg = f"⚡ HÜCUM ŞOVU: {coach['name']} takımı tam saha baskı ve fırtına hücum sistemine geçirdi (+3 Takım Şutu)!"
+            if "skills" in p:
+                p["skills"]["pas"] = min(99, p["skills"].get("pas", 75) + 4)
+                p["skills"]["sho"] = min(99, p["skills"].get("sho", 75) + 2)
+        coach["style"] = "Duran Top & Taktiksel Frikik Organizasyonu"
+        msg = f"🎯 DURAN TOP KAMPI: Korner ve frikik taktikleri baştan yazıldı (+4 Pas, +2 Şut kalitesi)!"
+    elif req.vision_focus == "wage_discipline":
+        total_saved = 0
+        for p in state["squad"]:
+            old_w = p.get("wage", 3_000_000)
+            new_w = max(1_000_000, int(old_w * 0.90))
+            total_saved += (old_w - new_w)
+            p["wage"] = new_w
+        coach["moral"] = min(100, coach.get("moral", 80) + 5)
+        state["political_power"] = min(100, state.get("political_power", 55) + 6)
+        msg = f"💼 MAAŞ REFORMU: Hoca soyunma odasında fedakarlık başlattı! Yıllık toplam {total_saved:,} ₺ maaş tasarrufu sağlandı."
+    else:
+        raise HTTPException(status_code=400, detail="Geçersiz vizyon odağı!")
 
+    state["coach_vision_used_half"] = current_half
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== MAÇ SONU HOCA BRİFİNGİ & OYUNCU DİYALOĞU ====================
+class CoachPostMatchTalkRequest(BaseModel):
+    action: str # 'bonus' (1M prim), 'praise' (tebrik), 'warn' (sert uyarı & yedek), 'fine' (500K ceza)
+    player_name: str
+
+@app.post("/api/coach/post-match-talk")
+def api_coach_post_match_talk(req: CoachPostMatchTalkRequest):
+    state = get_state()
+    player = next((p for p in state["squad"] if p["name"] == req.player_name), None)
+    coach = state.get("coach", {})
+    
+    if req.action == "bonus":
+        if state["budget"] < 1_000_000:
+            raise HTTPException(status_code=400, detail="Kasada 1M ₺ prim bütçesi yok!")
+        state["budget"] -= 1_000_000
+        if player: player["morale"] = 100
+        coach["moral"] = min(100, coach.get("moral", 80) + 4)
+        state["fan_trust"] = min(100, state.get("fan_trust", 80) + 2)
+        msg = f"💰 MAÇ PRİMİ: {req.player_name} için 1.000.000 ₺ maç primi ödendi. Oyuncunun morali tavan yaptı!"
+    elif req.action == "praise":
+        coach["moral"] = min(100, coach.get("moral", 80) + 5)
+        if player: player["morale"] = min(100, player.get("morale", 80) + 5)
+        msg = f"👏 TEBRİK: Teknik Direktör ve {req.player_name} kutlandı. Soyunma odasında motivasyon arttı."
+    elif req.action == "warn":
+        if player:
+            player["morale"] = max(40, player.get("morale", 80) - 10)
+            squad = state["squad"]
+            p_idx = next((i for i, x in enumerate(squad) if x["name"] == req.player_name), -1)
+            if 0 <= p_idx < 11 and len(squad) > 11:
+                squad[p_idx], squad[11] = squad[11], squad[p_idx]
+        coach["moral"] = min(100, coach.get("moral", 80) + 3)
+        state["squad_harmony"] = min(100, state.get("squad_harmony", 80) + 4)
+        msg = f"⚠️ SERT UYARI: {req.player_name} yetersiz performansı sebebiyle uyarıldı ve yedek kulübesine çekildi."
+    elif req.action == "fine":
+        state["budget"] += 500_000
+        if player: player["morale"] = max(30, player.get("morale", 80) - 15)
+        msg = f"💸 PARA CEZASI: Disiplinsizlik sebebiyle {req.player_name}'a 500.000 ₺ ceza kesildi ve kulüp kasasına aktarıldı."
+    else:
+        msg = "Görüşme tamamlandı."
+        
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
@@ -1695,6 +1799,17 @@ def api_coach_dialog(req: CoachDialogAction):
     state["coach_dialog_pending"] = False
     save_state(state)
     return {"message": msg, "state": state}
+
+@app.get("/")
+def get_root_index():
+    return FileResponse(
+        os.path.join(STATIC_DIR, "index.html"),
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static_assets")
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")

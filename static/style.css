@@ -40,3 +40,22 @@
 .table-relegation-row {
   background: rgba(225, 29, 72, 0.06);
 }
+
+/* Header HUD Yerleşim Güvencesi */
+header {
+  display: block !important;
+  width: 100% !important;
+}
+.header-top-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+.header-hud-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.375rem !important;
+  width: 100% !important;
+}
+

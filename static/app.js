@@ -738,11 +738,14 @@ function renderSquadPlayerCard(p, idx, isStarter) {
          <span>⭐</span> <span class="hidden xs:inline">11'e Al</span>
        </button>`;
 
+  const potVal = p.potential || Math.min(94, p.overall + Math.max(3, (27 - (p.age || 24)) * 2));
+  const isYouth = (p.age || 24) < 26;
+
   card.innerHTML = `
     <div class="flex items-center gap-2 truncate">
       <span class="text-[9px] font-black px-1.5 py-0.5 rounded ${
         p.pos === "KL" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "bg-slate-800 text-slate-300"
-      }">${p.pos}</span>
+      }">${shortenPosition(p.pos)}</span>
       <div class="truncate">
         <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5">
           <span>${p.name}</span>
@@ -750,6 +753,7 @@ function renderSquadPlayerCard(p, idx, isStarter) {
           ${isForeign 
             ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">🌐 YBN</span>' 
             : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">🇹🇷 TR</span>'}
+          ${isYouth ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 py-0.2 rounded font-bold" title="Genç Yetenek Potansiyeli">⚡ POT: ${potVal}</span>` : ''}
           ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse">🩹 Sakat (${p.injured_weeks} Hf)</span>` : ''}
           ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse">🔴 Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
           ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold">${p.yellow_cards}🟨</span>` : ''}
@@ -1052,14 +1056,31 @@ function startFireworks() {
   fireworksAnimationId = requestAnimationFrame(animate);
 }
 
-function triggerGoalCelebration(ev, match) {
-  const overlay = document.getElementById("goal-celebration-overlay");
-  const card = document.getElementById("goal-celebration-card");
-  const scorerEl = document.getElementById("goal-scorer-name");
-  const detailEl = document.getElementById("goal-scorer-detail");
-  const scoreEl = document.getElementById("goal-celebration-score");
+function shortenPosition(pos) {
+  if (!pos) return "OY";
+  const p = pos.toUpperCase();
+  if (p.includes("KL") || p.includes("KALE")) return "KL";
+  if (p.includes("STP") || p.includes("STOPER")) return "STP";
+  if (p.includes("SAĞ BEK") || p.includes("SAG BEK") || p.includes("RB")) return "SB";
+  if (p.includes("SOL BEK") || p.includes("LB")) return "SLB";
+  if (p.includes("ÖN LİBERO") || p.includes("ON LIBERO") || p.includes("DOS") || p.includes("CDM")) return "ÖNL";
+  if (p.includes("MERKEZ OS") || p.includes("ORTA SAHA") || p.includes("CM")) return "OS";
+  if (p.includes("FORVET ARKASI") || p.includes("OFANSİF") || p.includes("ON NUMARA") || p.includes("CAM")) return "OOS";
+  if (p.includes("SAĞ KANAT") || p.includes("SAG KANAT") || p.includes("RW")) return "SK";
+  if (p.includes("SOL KANAT") || p.includes("LW")) return "SLK";
+  if (p.includes("SANTRAFOR") || p.includes("SANTRATOR") || p.includes("ST")) return "ST";
+  if (p.includes("FORVET") || p.includes("CF")) return "FOR";
+  if (p.includes("KANAT")) return "KNT";
+  return pos.substring(0, 3).toUpperCase();
+}
 
-  if (!overlay || !card) return;
+function triggerGoalCelebration(ev, match) {
+  const banner = document.getElementById("goal-floating-banner");
+  const scorerEl = document.getElementById("mini-goal-scorer");
+  const detailEl = document.getElementById("mini-goal-detail");
+  const scoreEl = document.getElementById("mini-goal-score");
+
+  if (!banner) return;
 
   let scorerName = ev.scorer || "Golcümüz";
   if (!ev.scorer && ev.text) {
@@ -1067,40 +1088,33 @@ function triggerGoalCelebration(ev, match) {
     if (m) scorerName = m[1].trim();
   }
 
-  scorerEl.innerText = scorerName.toUpperCase();
-  detailEl.innerText = `${ev.minute}' Dakika • ${gameState.club_name}`;
-  scoreEl.innerText = (ev.home_score !== undefined && ev.away_score !== undefined) ? `${ev.home_score} - ${ev.away_score}` : "GOL!";
+  if (scorerEl) scorerEl.innerText = scorerName;
+  if (detailEl) detailEl.innerText = `${ev.minute}' • ${gameState ? gameState.club_name : 'Gol'}`;
+  if (scoreEl) scoreEl.innerText = (ev.home_score !== undefined && ev.away_score !== undefined) ? `${ev.home_score} - ${ev.away_score}` : "GOL!";
 
-  overlay.classList.remove("hidden");
+  banner.classList.remove("hidden");
   setTimeout(() => {
-    card.classList.remove("scale-50", "opacity-0");
-    card.classList.add("scale-100", "opacity-100");
+    banner.classList.remove("-translate-y-12", "opacity-0");
+    banner.classList.add("translate-y-0", "opacity-100");
   }, 20);
 
   playStadiumGoalSound();
-  startFireworks();
 
   if (celebrationTimeout) clearTimeout(celebrationTimeout);
-  celebrationTimeout = setTimeout(() => dismissGoalCelebration(), 2200);
+  celebrationTimeout = setTimeout(() => dismissGoalCelebration(), 2000);
 }
 
 function dismissGoalCelebration() {
-  const overlay = document.getElementById("goal-celebration-overlay");
-  const card = document.getElementById("goal-celebration-card");
-  if (!overlay || !card) return;
-
+  const banner = document.getElementById("goal-floating-banner");
+  if (!banner) return;
   if (celebrationTimeout) clearTimeout(celebrationTimeout);
-  card.classList.remove("scale-100", "opacity-100");
-  card.classList.add("scale-50", "opacity-0");
+
+  banner.classList.remove("translate-y-0", "opacity-100");
+  banner.classList.add("-translate-y-12", "opacity-0");
 
   setTimeout(() => {
-    overlay.classList.add("hidden");
-    const canvas = document.getElementById("goal-fireworks-canvas");
-    if (canvas) {
-      const ctx = canvas.getContext("2d");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  }, 250);
+    banner.classList.add("hidden");
+  }, 300);
 }
 
 // ==================== İKİ DEVRELİ MAÇ SİMÜLASYONU (10s + 10s) ====================
@@ -1344,16 +1358,19 @@ function finishMatch(match) {
       const item = document.createElement("div");
       item.className = "bg-slate-900/90 border border-slate-800 p-2 rounded-lg flex items-center justify-between";
       item.innerHTML = `
-        <div class="flex items-center gap-1.5 truncate">
-          <span class="text-[9px] font-bold px-1 py-0.2 rounded bg-slate-800 text-slate-300 border border-slate-700">${p.pos}</span>
-          <span class="text-xs font-semibold text-white truncate max-w-[105px]">${p.name}</span>
-          ${p.is_sub ? '<span class="text-[8px] text-blue-400 bg-blue-950 px-1 py-0.2 rounded border border-blue-800 font-semibold">YDK</span>' : ''}
-          ${p.goals > 0 ? `<span class="text-[9px] font-black text-amber-400">⚽${p.goals > 1 ? p.goals : ''}</span>` : ''}
+        <div class="flex items-center gap-1.5 min-w-0 flex-1 mr-1">
+          <span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700 flex-shrink-0">${shortenPosition(p.pos)}</span>
+          <span class="text-xs font-semibold text-white truncate" title="${p.name}">${p.name}</span>
+          ${p.is_sub ? '<span class="text-[8px] text-blue-300 bg-blue-950 px-1 py-0.2 rounded border border-blue-800 flex-shrink-0 font-bold">YDK</span>' : ''}
+          ${p.goals > 0 ? `<span class="text-[9px] font-black text-amber-400 flex-shrink-0">⚽${p.goals > 1 ? p.goals : ''}</span>` : ''}
         </div>
-        <span class="text-xs font-black font-mono px-1.5 py-0.5 rounded border ${rtgColor}">${p.rating.toFixed(1)}</span>
+        <span class="text-xs font-black font-mono px-1.5 py-0.5 rounded border flex-shrink-0 ${rtgColor}">${p.rating.toFixed(1)}</span>
       `;
       ratingsGrid.appendChild(item);
     });
+
+    // Hoca Maç Sonu Oyuncu Değerlendirmesi & Brifing Kutusu
+    renderPostMatchCoachBriefing(match);
   }
 
   const matchIncome = (match.ticket_income || 0) + (match.store_income || 0);
@@ -1379,8 +1396,125 @@ function resetSimButton() {
   lucide.createIcons();
 }
 
+function renderPostMatchCoachBriefing(match) {
+  const box = document.getElementById("coach-post-match-briefing");
+  if (!box || !gameState || !match.player_ratings || match.player_ratings.length === 0) return;
+
+  const coachNameEl = document.getElementById("briefing-coach-name");
+  const tagEl = document.getElementById("briefing-player-tag");
+  const textEl = document.getElementById("briefing-text");
+  const actionsEl = document.getElementById("briefing-actions");
+
+  if (coachNameEl) coachNameEl.innerText = gameState.coach ? gameState.coach.name : "Teknik Direktör";
+
+  // En iyi ve en kötü oyuncuyu tespit et
+  const sorted = [...match.player_ratings].sort((a, b) => b.rating - a.rating);
+  const best = sorted[0];
+  const worst = sorted[sorted.length - 1];
+
+  let selectedPlayer = null;
+  let briefingMode = "best";
+
+  if (best && best.rating >= 7.6) {
+    selectedPlayer = best;
+    briefingMode = "best";
+  } else if (worst && worst.rating <= 6.3) {
+    selectedPlayer = worst;
+    briefingMode = "worst";
+  } else {
+    selectedPlayer = best || { name: "Takım", rating: 7.0 };
+    briefingMode = "neutral";
+  }
+
+  if (briefingMode === "best") {
+    if (tagEl) {
+      tagEl.innerText = "⭐ Maçın Yıldızı";
+      tagEl.className = "text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold";
+    }
+    if (textEl) {
+      textEl.innerText = `Hoca ${gameState.coach.name}: "Başkanım, ${selectedPlayer.name} bugün sahada resital sundu (${selectedPlayer.rating.toFixed(1)} Puan). Bu formu korumak için oyuncuyu onore edelim mi?"`;
+    }
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <button onclick="submitCoachPostMatchTalk('bonus', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-300 font-bold text-[10px] text-center transition-all">
+          💰 1M ₺ Prim Ver
+        </button>
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-300 font-bold text-[10px] text-center transition-all">
+          👏 Tebrik Et
+        </button>
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-[10px] text-center transition-all">
+          📋 "Rehavet Yok"
+        </button>
+      `;
+    }
+  } else if (briefingMode === "worst") {
+    if (tagEl) {
+      tagEl.innerText = "⚠️ Düşük Performans";
+      tagEl.className = "text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-1.5 py-0.5 rounded font-bold";
+    }
+    if (textEl) {
+      textEl.innerText = `Hoca ${gameState.coach.name}: "Başkanım, ${selectedPlayer.name} bugün sahada çok isteksizdi ve beklentinin çok altında kaldı (${selectedPlayer.rating.toFixed(1)} Puan). Bir tedbir alalım mı?"`;
+    }
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <button onclick="submitCoachPostMatchTalk('warn', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500/50 text-rose-300 font-bold text-[10px] text-center transition-all">
+          ⚠️ Uyar & Yedeğe Al
+        </button>
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-300 font-bold text-[10px] text-center transition-all">
+          🤝 "Destek Ol Hocam"
+        </button>
+        <button onclick="submitCoachPostMatchTalk('fine', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-300 font-bold text-[10px] text-center transition-all">
+          💸 500K ₺ Ceza Kes
+        </button>
+      `;
+    }
+  } else {
+    if (tagEl) {
+      tagEl.innerText = "📋 Genel Değerlendirme";
+      tagEl.className = "text-[9px] bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold";
+    }
+    if (textEl) {
+      textEl.innerText = `Hoca ${gameState.coach.name}: "Takım bugün dengeli bir oyun ortaya koydu. Gelecek haftanın taktik hazırlığına başladık."`;
+    }
+    if (actionsEl) {
+      actionsEl.innerHTML = `
+        <button onclick="submitCoachPostMatchTalk('praise', '')" class="col-span-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-[10px] text-center transition-all">
+          👍 "Eline sağlık hocam, devam edelim"
+        </button>
+      `;
+    }
+  }
+
+  box.classList.remove("hidden");
+}
+
+async function submitCoachPostMatchTalk(action, playerName) {
+  try {
+    const res = await apiFetch("/api/coach/post-match-talk", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: action, player_name: playerName })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem başarısız!");
+      return;
+    }
+    showToast(data.message);
+    const box = document.getElementById("coach-post-match-briefing");
+    if (box) box.classList.add("hidden");
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function prepareNextMatch() {
   dismissGoalCelebration();
+  const briefingBox = document.getElementById("coach-post-match-briefing");
+  if (briefingBox) briefingBox.classList.add("hidden");
+
   if (gameState && gameState.season_finished) {
     showToast("🏆 Sezon tamamlandı! Kongre ve Kupa ekranına geçiliyor.");
     checkSeasonEndModal();
@@ -1425,11 +1559,16 @@ async function openCaptainReportModal() {
       data.wage_demands.forEach(p => {
         const item = document.createElement("div");
         item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-xl space-y-2";
+        const potBadge = (p.age < 26) ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-bold">⚡ POT: ${p.potential}</span>` : '';
         item.innerHTML = `
           <div class="flex justify-between items-center text-xs">
             <div>
-              <span class="font-extrabold text-white">${p.name}</span>
-              <span class="text-[9px] text-amber-400 font-bold ml-1">(${p.pos})</span>
+              <div class="flex items-center gap-1.5">
+                <span class="font-extrabold text-white">${p.name}</span>
+                <span class="text-[9px] text-amber-400 font-bold">(${shortenPosition(p.pos)})</span>
+                <span class="text-[9px] text-slate-400 font-semibold">${p.age} Yaş</span>
+                ${potBadge}
+              </div>
               <div class="text-[10px] text-slate-400">Mevcut: ${formatMoney(p.current_wage)} • İstediği: <strong class="text-emerald-400">${formatMoney(p.demanded_wage)}</strong></div>
             </div>
             <span class="text-[9px] font-bold text-amber-300 bg-slate-800 px-1.5 py-0.5 rounded">${p.contract_years} Yıl Kaldı</span>
@@ -1487,6 +1626,18 @@ async function respondWageNegotiation(playerName, decision) {
 
 // ==================== HOCA VİZYONU MODALI ====================
 function openCoachVisionModal() {
+  if (gameState) {
+    const badge = document.getElementById("coach-vision-status-badge");
+    if (badge) {
+      if (gameState.coach_vision_used_half) {
+        badge.className = "px-2 py-0.5 rounded font-bold bg-amber-950 text-amber-300 border border-amber-700/50";
+        badge.innerText = "Bu Yarı Sezonda Kullanıldı (Kilitli)";
+      } else {
+        badge.className = "px-2 py-0.5 rounded font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/50";
+        badge.innerText = "Müsait ✓";
+      }
+    }
+  }
   document.getElementById("modal-coach-vision").classList.remove("hidden");
 }
 
@@ -1560,9 +1711,10 @@ function onScoutTeamChanged() {
     item.innerHTML = `
       <div class="truncate">
         <div class="font-extrabold text-white text-[11px] truncate flex items-center gap-1.5">
-          <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-amber-400">${p.pos}</span>
+          <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-amber-400">${shortenPosition(p.pos)}</span>
           <span>${p.name}</span>
           <span class="text-[9px] text-slate-400">(${p.age} yaş)</span>
+          ${(p.age < 26) ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-bold">⚡ POT: ${p.potential || Math.min(94, p.overall + Math.max(3, (27 - p.age) * 2))}</span>` : ''}
         </div>
         <div class="text-[9px] text-slate-400 mt-0.5">
           Değer: <strong class="text-emerald-400">${formatMoney(p.val)}</strong> • Maaş: ${formatMoney(p.wage)} • Sözleşme: ${p.contract_years || 2} Yıl
@@ -1716,7 +1868,7 @@ function renderIncomingBids() {
       <div class="flex justify-between items-center text-xs">
         <div>
           <span class="font-extrabold text-white">${bid.player_name}</span>
-          <span class="text-[9px] text-amber-400 font-bold ml-1">(${bid.pos})</span>
+          <span class="text-[9px] text-amber-400 font-bold ml-1">(${shortenPosition(bid.pos)})</span>
           <div class="text-[10px] text-slate-300 mt-0.5">
             Talip: <strong class="text-amber-400">${bid.club}</strong> • Bonservis: <strong class="text-emerald-400">${formatMoney(bid.offer_val)}</strong>
           </div>
@@ -1804,7 +1956,7 @@ function renderTransferMarket() {
     item.innerHTML = `
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-bold text-white text-xs">${p.name} <span class="text-[10px] text-amber-400 font-semibold">(${p.pos}, ${p.age} yaş)</span></div>
+          <div class="font-bold text-white text-xs">${p.name} <span class="text-[10px] text-amber-400 font-semibold">(${shortenPosition(p.pos)}, ${p.age} yaş)</span></div>
           <div class="text-[9px] text-slate-400 mt-0.5">Bonservis: <strong>${formatMoney(p.price || 0)}</strong> • Maaş: ${formatMoney(p.salary || p.wage || 0)}</div>
         </div>
         <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
