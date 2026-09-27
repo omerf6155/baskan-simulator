@@ -1,8 +1,9 @@
 import os
 import json
 import random
+import contextvars
 from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -12,6 +13,33 @@ app = FastAPI(title="Sayin Baskan Simulator - Super Lig Genisletilmis Surum")
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 SAVE_FILE = os.path.join(os.path.dirname(__file__), "savegame.json")
+SAVES_DIR = os.path.join(os.path.dirname(__file__), "saves")
+os.makedirs(SAVES_DIR, exist_ok=True)
+
+current_session_cv = contextvars.ContextVar("current_session_cv", default="default")
+
+def sanitize_session_id(session_id: Optional[str]) -> str:
+    if not session_id:
+        return "default"
+    clean = "".join(c for c in str(session_id) if c.isalnum() or c in ("-", "_"))
+    return clean[:45] if clean else "default"
+
+@app.middleware("http")
+async def session_middleware(request: Request, call_next):
+    sid = request.headers.get("X-Session-Id") or request.query_params.get("session") or "default"
+    token = current_session_cv.set(sanitize_session_id(sid))
+    try:
+        response = await call_next(request)
+        response.headers["X-Session-Id"] = current_session_cv.get()
+        return response
+    finally:
+        current_session_cv.reset(token)
+
+def get_save_path(session_id: Optional[str] = None) -> str:
+    sid = sanitize_session_id(session_id or current_session_cv.get())
+    if sid == "default":
+        return SAVE_FILE
+    return os.path.join(SAVES_DIR, f"{sid}.json")
 
 # ==================== DÜNYA YILDIZLARI & TRANSFER HAVUZU ====================
 WORLD_SUPERSTARS = [
@@ -101,6 +129,20 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
         p["morale"] = random.randint(75, 95)
     if "wage_demand" not in p:
         p["wage_demand"] = 0
+
+    # Yabancı / Yerli Kontrolü (Süper Lig Kuralı)
+    name_lower = str(p.get("name", "")).lower()
+    turkish_indicators = ["ç", "ğ", "ı", "ö", "ş", "ü", "ahmet", "mehmet", "ali", "ömer", "can", "kerem", "barış", "uğurcan", "ferdi", "semih", "irfan", "mert", "samet", "eren", "enes", "hakan", "yusuf", "abdülkerim", "okay", "berke", "kaan", "cenk", "ozan", "salih", "taylan", "orhan", "serdar", "batagov", "deniz", "güler", "kaya", "yılmaz", "demir", "çelik", "özkan", "gökhan"]
+    p["is_foreign"] = not (any(c in name_lower for c in ["ç", "ğ", "ı", "ö", "ş", "ü"]) or any(w in name_lower.split() for w in turkish_indicators))
+
+    # Sakatlık & Kart Cezaları
+    if "yellow_cards" not in p:
+        p["yellow_cards"] = 0
+    if "suspended_weeks" not in p:
+        p["suspended_weeks"] = 0
+    if "injured_weeks" not in p:
+        p["injured_weeks"] = 0
+
     return p
 
 def calculate_team_radar(squad: List[Dict]) -> Dict[str, int]:
@@ -266,14 +308,15 @@ def default_career_state(chosen_team_id: str = "trabzonspor", is_started: bool =
         ]
     }
 
-def get_state():
-    if os.path.exists(SAVE_FILE):
+def get_state(session_id: Optional[str] = None):
+    sid = sanitize_session_id(session_id or current_session_cv.get())
+    path = get_save_path(sid)
+    if os.path.exists(path):
         try:
-            with open(SAVE_FILE, "r", encoding="utf-8") as f:
+            with open(path, "r", encoding="utf-8") as f:
                 state = json.load(f)
                 valid_ids = [t["id"] for t in TEAMS_DB]
                 if state.get("team_id") in valid_ids and "is_started" in state:
-                    # Eksik alanları tamamla
                     if "squad" in state:
                         state["squad"] = [enrich_player(p) for p in state["squad"]]
                     if "max_weeks" not in state or state["max_weeks"] < 34:
@@ -291,12 +334,23 @@ def get_state():
                     return state
         except Exception:
             pass
+
+    # Eğer varsayılan ana save dosyası varsa ve session default ise oradan yükle
+    if sid == "default" and os.path.exists(SAVE_FILE):
+        try:
+            with open(SAVE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+
     state = default_career_state("trabzonspor", is_started=False)
-    save_state(state)
+    save_state(state, sid)
     return state
 
-def save_state(state):
-    with open(SAVE_FILE, "w", encoding="utf-8") as f:
+def save_state(state, session_id: Optional[str] = None):
+    sid = sanitize_session_id(session_id or current_session_cv.get())
+    path = get_save_path(sid)
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=2)
 
 # ==================== KULÜP LİSTESİ VE KADROLARI ====================
@@ -339,6 +393,23 @@ def api_get_all_squads():
             "squad": enriched
         })
     return result
+
+class SquadSwapRequest(BaseModel):
+    index1: int
+    index2: int
+
+@app.post("/api/squad/swap")
+def api_squad_swap(req: SquadSwapRequest):
+    state = get_state()
+    squad = state.get("squad", [])
+    if 0 <= req.index1 < len(squad) and 0 <= req.index2 < len(squad):
+        squad[req.index1], squad[req.index2] = squad[req.index2], squad[req.index1]
+        state["squad"] = squad
+        state["my_radar"] = calculate_team_radar(squad)
+        state["team_power"] = round(sum(p["overall"] for p in squad[:11]) / 11)
+        save_state(state)
+        return {"status": "ok", "state": state}
+    raise HTTPException(status_code=400, detail="Geçersiz oyuncu sıralaması!")
 
 class StartGameRequest(BaseModel):
     team_id: str
@@ -438,11 +509,24 @@ def api_match_half1(req: Half1Request):
     coach_mistakes = 0
 
     opp_team = next((t for t in TEAMS_DB if t["name"] == opponent_name), None)
-    starting_xi = [p["name"] for p in state["squad"][:11]]
+    healthy_squad = [p for p in state["squad"] if p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0]
+    if len(healthy_squad) < 11:
+        healthy_squad = state["squad"]
+    starting_xi = [p["name"] for p in healthy_squad[:11]]
     scorers = []
 
-    my_attackers = [p["name"] for p in state["squad"] if any(pos in p["pos"] for pos in ["FOR", "SANTRAFOR", "KANAT"])] or starting_xi
-    my_midfielders = [p["name"] for p in state["squad"] if any(pos in p["pos"] for pos in ["OS", "MERKEZ", "LİBERO", "ARKASI"])] or starting_xi
+    # Yabancı Kuralı (Süper Lig: İlk 11'de maksimum 8 yabancı)
+    foreign_count = sum(1 for p in healthy_squad[:11] if p.get("is_foreign", True))
+    if foreign_count > 8:
+        state["budget"] = max(0, state["budget"] - 4_000_000)
+        events.append({
+            "minute": 1,
+            "type": "coach_action",
+            "text": f"⚠️ TFF KURAL İHLALİ: İlk 11'de {foreign_count} yabancı yer aldı (Limit: 8)! TFF 4.000.000 ₺ ceza kesti."
+        })
+
+    my_attackers = [p["name"] for p in healthy_squad if any(pos in p["pos"] for pos in ["FOR", "SANTRAFOR", "KANAT"])] or starting_xi
+    my_midfielders = [p["name"] for p in healthy_squad if any(pos in p["pos"] for pos in ["OS", "MERKEZ", "LİBERO", "ARKASI"])] or starting_xi
 
     if opp_team and opp_team.get("squad"):
         opp_attackers = [p["name"] for p in opp_team["squad"] if any(pos in p["pos"] for pos in ["FOR", "SANTRAFOR", "KANAT"])] or [f"{opponent_name} Forveti"]
@@ -490,8 +574,9 @@ def api_match_half1(req: Half1Request):
                 "away_score": away_curr
             })
 
-    # Cache'e kaydet
-    ACTIVE_MATCH_CACHE["half1"] = {
+    # Cache'e kaydet (Session bazlı)
+    sid = current_session_cv.get()
+    ACTIVE_MATCH_CACHE[sid] = {
         "week": current_week,
         "is_home": is_home,
         "opponent_name": opponent_name,
@@ -535,7 +620,8 @@ class HalftimeActionRequest(BaseModel):
 @app.post("/api/match/half2")
 def api_match_half2(req: HalftimeActionRequest):
     state = get_state()
-    h1 = ACTIVE_MATCH_CACHE.get("half1")
+    sid = current_session_cv.get()
+    h1 = ACTIVE_MATCH_CACHE.get(sid) or ACTIVE_MATCH_CACHE.get("half1")
     if not h1:
         raise HTTPException(status_code=400, detail="İlk yarı verisi bulunamadı!")
 
@@ -633,6 +719,37 @@ def api_match_half2(req: HalftimeActionRequest):
                 "away_score": away_curr
             })
 
+    # 2. Devre Kart ve Sakatlık Olayları
+    healthy_starters = [p for p in state["squad"] if p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0][:11]
+    if healthy_starters and random.random() < 0.45:
+        cp = random.choice(healthy_starters)
+        cp["yellow_cards"] = cp.get("yellow_cards", 0) + 1
+        m_min = random.randint(52, 86)
+        if cp["yellow_cards"] >= 4:
+            cp["suspended_weeks"] = 1
+            cp["yellow_cards"] = 0
+            events.append({"minute": m_min, "type": "coach_mistake", "text": f"🟨 4. SARI KART! {cp['name']} cezalı duruma düştü, sonraki maç oynamayacak!"})
+        else:
+            events.append({"minute": m_min, "type": "coach_action", "text": f"🟨 SARI KART: {cp['name']} sert faul yaptı ({cp['yellow_cards']}/4 kart)."})
+
+    if healthy_starters and random.random() < 0.04:
+        rp = random.choice(healthy_starters)
+        rp["suspended_weeks"] = 2
+        events.append({"minute": random.randint(65, 88), "type": "coach_mistake", "text": f"🟥 DOĞRUDAN KIRMIZI KART! {rp['name']} hakemi protesto ettiği için atıldı (2 maç ceza)!"})
+
+    if healthy_starters and random.random() < 0.12:
+        ip = random.choice(healthy_starters)
+        iw = random.randint(1, 3)
+        ip["injured_weeks"] = iw
+        events.append({"minute": random.randint(55, 82), "type": "coach_mistake", "text": f"🩹 SAKATLIK ŞOKU: {ip['name']} arka adalesini tutarak kenara geldi ({iw} hafta yok)."})
+
+    # Maç tamamlandığı için mevcut cezaların ve sakatlıkların 1 hafta azalması
+    for p in state["squad"]:
+        if p.get("suspended_weeks", 0) > 0:
+            p["suspended_weeks"] -= 1
+        if p.get("injured_weeks", 0) > 0:
+            p["injured_weeks"] -= 1
+
     # Hasılat ve Finans Hesaplamaları
     ticket_income = 0
     store_income = 0
@@ -648,13 +765,25 @@ def api_match_half2(req: HalftimeActionRequest):
 
     tv_income = 14_000_000 if is_derby else 7_000_000
     weekly_wage_expense = sum(p["wage"] for p in state["squad"]) // 34 + (state["coach"]["salary"] // 34)
-    net_income = (ticket_income + store_income + tv_income) - weekly_wage_expense
+
+    # Bankalar Birliği Borç Faizi Kesintisi
+    debt_interest = int(state.get("debt", 200_000_000) * 0.003)
+    net_income = (ticket_income + store_income + tv_income) - weekly_wage_expense - debt_interest
     state["budget"] += net_income
 
     state["finances"]["last_ticket_income"] = ticket_income
     state["finances"]["last_store_income"] = store_income
     state["finances"]["last_tv_income"] = tv_income
     state["finances"]["last_wage_expense"] = weekly_wage_expense
+    state["finances"]["last_debt_interest"] = debt_interest
+
+    # Transfer Tahtası ve Borç Kuralı
+    if state["budget"] < -30_000_000:
+        state["transfer_ban"] = True
+        state["transfer_window_open"] = False
+        state["news"].insert(0, "⚠️ TFF & BANKALAR BİRLİĞİ: Kulüp borç limitini aştığı için Transfer Tahtası KAPATILDI!")
+    else:
+        state["transfer_ban"] = False
 
     # Oyuncu Reytingleri (Sofascore)
     player_ratings = []

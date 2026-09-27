@@ -1,3 +1,338 @@
+// ==================== CİHAZ BAZLI BAĞIMSIZ SESSION & NETWORK ====================
+function getSessionId() {
+  let sid = localStorage.getItem("baskan_session_id");
+  if (!sid) {
+    sid = "sid_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now().toString(36);
+    localStorage.setItem("baskan_session_id", sid);
+  }
+  return sid;
+}
+
+async function apiFetch(url, options = {}) {
+  const sid = getSessionId();
+  options = options || {};
+  options.headers = options.headers || {};
+  if (options.headers instanceof Headers) {
+    options.headers.set("X-Session-Id", sid);
+  } else {
+    options.headers["X-Session-Id"] = sid;
+  }
+  const sep = url.includes("?") ? "&" : "?";
+  const urlWithSession = `${url}${sep}session=${encodeURIComponent(sid)}`;
+  return fetch(urlWithSession, options);
+}
+
+// ==================== SES & ARKA PLAN MÜZİK MOTORU (BGM & SFX) ====================
+let audioCtx = null;
+let masterBgmGain = null;
+let masterSfxGain = null;
+let isBgmPlaying = localStorage.getItem("baskan_bgm_playing") === "true";
+let currentBgmTrack = localStorage.getItem("baskan_bgm_track") || "lounge";
+let bgmVolume = parseFloat(localStorage.getItem("baskan_bgm_vol") || "0.35");
+let sfxVolume = parseFloat(localStorage.getItem("baskan_sfx_vol") || "0.75");
+let bgmIntervalId = null;
+let bgmStepIndex = 0;
+let sunoAudio = null;
+
+function initAudioSystem() {
+  if (audioCtx) {
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    return;
+  }
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+  audioCtx = new AudioContextClass();
+
+  masterBgmGain = audioCtx.createGain();
+  masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
+  masterBgmGain.connect(audioCtx.destination);
+
+  masterSfxGain = audioCtx.createGain();
+  masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
+  masterSfxGain.connect(audioCtx.destination);
+}
+
+// 4 Ayrı Ambient & Synth Teması
+const SYNTH_TRACKS = {
+  lounge: {
+    tempo: 900,
+    chords: [
+      [146.83, 174.61, 220.00, 261.63, 329.63],
+      [98.00,  174.61, 246.94, 329.63],
+      [130.81, 164.81, 196.00, 246.94, 293.66],
+      [110.00, 164.81, 196.00, 261.63]
+    ],
+    bass: [73.42, 49.00, 65.41, 55.00],
+    wave: "sine",
+    cutoff: 800
+  },
+  championship: {
+    tempo: 650,
+    chords: [
+      [174.61, 220.00, 261.63, 349.23],
+      [196.00, 246.94, 293.66, 392.00],
+      [220.00, 261.63, 329.63, 440.00],
+      [261.63, 329.63, 392.00, 523.25]
+    ],
+    bass: [87.31, 98.00, 110.00, 130.81],
+    wave: "sawtooth",
+    cutoff: 1200
+  },
+  derby: {
+    tempo: 800,
+    chords: [
+      [82.41, 123.47, 164.81, 196.00],
+      [87.31, 130.81, 174.61, 207.65],
+      [82.41, 123.47, 146.83, 196.00],
+      [116.54, 164.81, 196.00, 277.18]
+    ],
+    bass: [41.20, 43.65, 41.20, 58.27],
+    wave: "triangle",
+    cutoff: 600
+  },
+  night: {
+    tempo: 1100,
+    chords: [
+      [146.83, 220.00, 261.63, 349.23],
+      [98.00, 196.00, 246.94, 293.66],
+      [130.81, 196.00, 246.94, 329.63],
+      [82.41, 164.81, 207.65, 246.94]
+    ],
+    bass: [73.42, 49.00, 65.41, 41.20],
+    wave: "sine",
+    cutoff: 700
+  }
+};
+
+function playSynthChordStep() {
+  if (!audioCtx || !isBgmPlaying || !masterBgmGain) return;
+  const cfg = SYNTH_TRACKS[currentBgmTrack] || SYNTH_TRACKS.lounge;
+  const chord = cfg.chords[bgmStepIndex % cfg.chords.length];
+  const bassFreq = cfg.bass[bgmStepIndex % cfg.bass.length];
+  bgmStepIndex++;
+
+  const now = audioCtx.currentTime;
+  const duration = (cfg.tempo / 1000) * 0.95;
+
+  chord.forEach(freq => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+
+    osc.type = cfg.wave;
+    osc.frequency.setValueAtTime(freq, now);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(cfg.cutoff, now);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.04, now + 0.15);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterBgmGain);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.05);
+  });
+
+  const bassOsc = audioCtx.createOscillator();
+  const bassGain = audioCtx.createGain();
+  bassOsc.type = "sine";
+  bassOsc.frequency.setValueAtTime(bassFreq, now);
+
+  bassGain.gain.setValueAtTime(0, now);
+  bassGain.gain.linearRampToValueAtTime(0.08, now + 0.08);
+  bassGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.9);
+
+  bassOsc.connect(bassGain);
+  bassGain.connect(masterBgmGain);
+  bassOsc.start(now);
+  bassOsc.stop(now + duration);
+}
+
+function startBgm() {
+  initAudioSystem();
+  if (sunoAudio) {
+    sunoAudio.pause();
+    sunoAudio = null;
+  }
+  if (bgmIntervalId) {
+    clearInterval(bgmIntervalId);
+    bgmIntervalId = null;
+  }
+
+  isBgmPlaying = true;
+  localStorage.setItem("baskan_bgm_playing", "true");
+  updateMusicUIButtons(true);
+
+  if (currentBgmTrack.startsWith("suno_")) {
+    const trackFile = currentBgmTrack.replace("suno_", "") + ".mp3";
+    sunoAudio = new Audio(`/static/music/${trackFile}`);
+    sunoAudio.loop = true;
+    sunoAudio.volume = bgmVolume;
+    sunoAudio.play().catch(err => {
+      console.warn("Suno dosyası oynatılamadı, synth devreye giriyor:", err);
+      showToast("Suno MP3 bulunamadı, Synth devrede!");
+      currentBgmTrack = "lounge";
+      startBgm();
+    });
+    return;
+  }
+
+  const cfg = SYNTH_TRACKS[currentBgmTrack] || SYNTH_TRACKS.lounge;
+  playSynthChordStep();
+  bgmIntervalId = setInterval(playSynthChordStep, cfg.tempo);
+}
+
+function stopBgm() {
+  isBgmPlaying = false;
+  localStorage.setItem("baskan_bgm_playing", "false");
+  if (bgmIntervalId) {
+    clearInterval(bgmIntervalId);
+    bgmIntervalId = null;
+  }
+  if (sunoAudio) {
+    sunoAudio.pause();
+    sunoAudio = null;
+  }
+  updateMusicUIButtons(false);
+}
+
+function toggleMusicPlayback() {
+  initAudioSystem();
+  if (isBgmPlaying) {
+    stopBgm();
+    showToast("Arka plan müziği duraklatıldı 🔇");
+  } else {
+    startBgm();
+    showToast("Arka plan müziği çalıyor 🎵");
+  }
+}
+
+function updateMusicUIButtons(playing) {
+  const hBtn = document.getElementById("header-music-btn");
+  const hIcon = document.getElementById("header-music-icon");
+  const hLbl = document.getElementById("header-music-label");
+  const mBtn = document.getElementById("settings-music-toggle-btn");
+
+  if (playing) {
+    if (hBtn) hBtn.className = "text-[9px] text-amber-400 font-bold flex items-center gap-1 bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/40 animate-pulse";
+    if (hIcon) hIcon.innerText = "🎵";
+    if (hLbl) hLbl.innerText = "Müzik Açık";
+    if (mBtn) {
+      mBtn.innerText = "Çalıyor 🎵";
+      mBtn.className = "px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-[10px] shadow-sm";
+    }
+  } else {
+    if (hBtn) hBtn.className = "text-[9px] text-slate-400 font-bold flex items-center gap-1 bg-slate-900/90 px-1.5 py-0.5 rounded border border-slate-700";
+    if (hIcon) hIcon.innerText = "🔇";
+    if (hLbl) hLbl.innerText = "Müzik";
+    if (mBtn) {
+      mBtn.innerText = "Kapalı 🔇";
+      mBtn.className = "px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-bold text-[10px] shadow-sm";
+    }
+  }
+}
+
+function onBgmVolumeChange(val) {
+  bgmVolume = val / 100;
+  localStorage.setItem("baskan_bgm_vol", bgmVolume.toString());
+  const txt = document.getElementById("bgm-volume-txt");
+  if (txt) txt.innerText = `${val}%`;
+  if (masterBgmGain && audioCtx) {
+    masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
+  }
+  if (sunoAudio) {
+    sunoAudio.volume = bgmVolume;
+  }
+}
+
+function onSfxVolumeChange(val) {
+  sfxVolume = val / 100;
+  localStorage.setItem("baskan_sfx_vol", sfxVolume.toString());
+  const txt = document.getElementById("sfx-volume-txt");
+  if (txt) txt.innerText = `${val}%`;
+  if (masterSfxGain && audioCtx) {
+    masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
+  }
+}
+
+function onBgmTrackChange(val) {
+  currentBgmTrack = val;
+  localStorage.setItem("baskan_bgm_track", val);
+  if (isBgmPlaying) {
+    startBgm();
+  }
+}
+
+function openSettingsModal() {
+  const modal = document.getElementById("modal-settings");
+  if (!modal) return;
+  const bgmSlider = document.getElementById("bgm-volume-slider");
+  const bgmTxt = document.getElementById("bgm-volume-txt");
+  const sfxSlider = document.getElementById("sfx-volume-slider");
+  const sfxTxt = document.getElementById("sfx-volume-txt");
+  const trackSel = document.getElementById("bgm-track-select");
+
+  if (bgmSlider) bgmSlider.value = Math.round(bgmVolume * 100);
+  if (bgmTxt) bgmTxt.innerText = `${Math.round(bgmVolume * 100)}%`;
+  if (sfxSlider) sfxSlider.value = Math.round(sfxVolume * 100);
+  if (sfxTxt) sfxTxt.innerText = `${Math.round(sfxVolume * 100)}%`;
+  if (trackSel) trackSel.value = currentBgmTrack;
+
+  updateMusicUIButtons(isBgmPlaying);
+  modal.classList.remove("hidden");
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById("modal-settings");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function resetCareerPrompt() {
+  if (!confirm("⚠️ Mevcut kariyerinizi sıfırlamak ve yeni bir kulüp seçmek istediğinize emin misiniz?")) {
+    return;
+  }
+  closeSettingsModal();
+  try {
+    const res = await apiFetch("/api/resign", { method: "POST" });
+    if (res.ok) {
+      showToast("Kariyer sıfırlandı. Yeni takımınızı seçin!");
+      await fetchState();
+      openTeamSelectModal();
+    } else {
+      showToast("Kariyer sıfırlanamadı!");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast("Sunucu hatası!");
+  }
+}
+
+async function swapSquadPlayers(idx1, idx2) {
+  try {
+    const res = await apiFetch("/api/squad/swap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index1: idx1, index2: idx2 })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      gameState = data.state;
+      renderUI();
+      showToast("Kadro güncellendi 🔄");
+    } else {
+      showToast("Sıralama değiştirilemedi!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // ==================== GLOBAL APP STATE ====================
 let gameState = null;
 let currentPressOption = null;
@@ -17,6 +352,17 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSponsors();
   loadTransferMarket();
   lucide.createIcons();
+
+  const unlockAudio = () => {
+    initAudioSystem();
+    if (localStorage.getItem("baskan_bgm_playing") === "true" && !isBgmPlaying) {
+      startBgm();
+    }
+    document.removeEventListener("click", unlockAudio);
+    document.removeEventListener("touchstart", unlockAudio);
+  };
+  document.addEventListener("click", unlockAudio);
+  document.addEventListener("touchstart", unlockAudio);
 });
 
 function showToast(msg) {
@@ -81,7 +427,7 @@ function toggleStandingsSubTab(sub) {
 // ==================== STATE YÖNETİMİ & RENDER ====================
 async function fetchState() {
   try {
-    const res = await fetch("/api/state");
+    const res = await apiFetch("/api/state");
     gameState = await res.json();
     renderUI();
   } catch (e) {
@@ -381,6 +727,29 @@ function renderSquadList() {
 
   document.getElementById("squad-player-count").innerText = gameState.squad.length;
 
+  const starters = gameState.squad.slice(0, 11);
+  const foreignCount = starters.filter(p => p.is_foreign !== false).length;
+
+  // Yabancı Kuralı Bilgi / Uyarı Başlığı (Süper Lig: İlk 11'de en fazla 8 yabancı)
+  const banner = document.createElement("div");
+  banner.className = `p-2 mb-2 rounded-xl border flex items-center justify-between text-[11px] ${
+    foreignCount > 8
+      ? "bg-red-950/70 border-red-600/70 text-red-200"
+      : "bg-slate-900/80 border-slate-800 text-slate-300"
+  }`;
+  banner.innerHTML = `
+    <div class="flex items-center gap-1.5">
+      <span class="text-xs">🌐</span>
+      <span>İlk 11 Yabancı Kuralı: <strong class="${foreignCount > 8 ? 'text-red-400 font-black' : 'text-emerald-400 font-bold'}">${foreignCount}/8 Yabancı</strong></span>
+    </div>
+    ${
+      foreignCount > 8
+        ? '<span class="text-[9px] bg-red-700 text-white font-black px-2 py-0.5 rounded animate-pulse">4M ₺ CEZA TEHLİKESİ!</span>'
+        : '<span class="text-[9px] text-emerald-400 font-semibold bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/40">Kurala Uygun ✓</span>'
+    }
+  `;
+  container.appendChild(banner);
+
   gameState.squad.forEach((p, idx) => {
     const isStarter = idx < 11;
     const card = document.createElement("div");
@@ -390,6 +759,9 @@ function renderSquadList() {
 
     const sk = p.skills || {};
     const contractYears = p.contract_years !== undefined ? p.contract_years : 2;
+    const isInjured = (p.injured_weeks || 0) > 0;
+    const isSuspended = (p.suspended_weeks || 0) > 0;
+    const isForeign = p.is_foreign !== false;
 
     card.innerHTML = `
       <div class="flex items-center gap-2 truncate">
@@ -400,17 +772,27 @@ function renderSquadList() {
           <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5">
             <span>${p.name}</span>
             ${idx === 0 && !p.pos.includes("KL") ? '<span class="text-[8px] bg-amber-500 text-black px-1 rounded font-black">KAPTAN</span>' : ''}
+            ${isForeign 
+              ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">🌐 YBN</span>' 
+              : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">🇹🇷 TR</span>'}
+            ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse">🩹 Sakat (${p.injured_weeks} Hf)</span>` : ''}
+            ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse">🔴 Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
+            ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold">${p.yellow_cards}🟨</span>` : ''}
           </div>
           <div class="text-[9px] text-slate-400">
             ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${contractYears} Yıl</strong> • Maaş: ${formatMoney(p.wage)}
           </div>
         </div>
       </div>
-      <div class="text-right flex items-center gap-2 flex-shrink-0">
+      <div class="text-right flex items-center gap-1.5 flex-shrink-0">
+        <div class="flex flex-col gap-0.5">
+          ${idx > 0 ? `<button onclick="swapSquadPlayers(${idx}, ${idx - 1})" title="İlk 11'e / Yukarı Taşı" class="w-4 h-4 rounded bg-slate-800 hover:bg-amber-500 hover:text-black text-slate-300 text-[8px] flex items-center justify-center font-bold">▲</button>` : '<div class="w-4 h-4"></div>'}
+          ${idx < gameState.squad.length - 1 ? `<button onclick="swapSquadPlayers(${idx}, ${idx + 1})" title="Yedeğe / Aşağı Taşı" class="w-4 h-4 rounded bg-slate-800 hover:bg-amber-500 hover:text-black text-slate-300 text-[8px] flex items-center justify-center font-bold">▼</button>` : '<div class="w-4 h-4"></div>'}
+        </div>
         <div class="text-[9px] text-slate-400 hidden sm:block">
           Hız:${sk.pac || 75} Şut:${sk.sho || 75}
         </div>
-        <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+        <span class="text-xs font-black ${isStarter ? 'text-amber-400 bg-slate-800 border-slate-700' : 'text-slate-400 bg-slate-900 border-slate-800'} px-2 py-0.5 rounded border">
           ${p.overall}
         </span>
       </div>
@@ -493,10 +875,10 @@ let fireworksAnimationId = null;
 
 function playStadiumGoalSound() {
   try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
-    if (ctx.state === "suspended") ctx.resume();
+    initAudioSystem();
+    if (!audioCtx) return;
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const ctx = audioCtx;
 
     const now = ctx.currentTime;
 
@@ -509,7 +891,7 @@ function playStadiumGoalSound() {
     subGain.gain.setValueAtTime(0.8, now);
     subGain.gain.exponentialRampToValueAtTime(0.01, now + 0.9);
     subOsc.connect(subGain);
-    subGain.connect(ctx.destination);
+    subGain.connect(masterSfxGain || ctx.destination);
     subOsc.start(now);
     subOsc.stop(now + 0.9);
 
@@ -531,7 +913,7 @@ function playStadiumGoalSound() {
 
       osc.connect(filter);
       filter.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(masterSfxGain || ctx.destination);
 
       osc.start(now + idx * 0.14);
       osc.stop(now + idx * 0.14 + 1.25);
@@ -564,7 +946,7 @@ function playStadiumGoalSound() {
 
     crowdSource.connect(crowdFilter);
     crowdFilter.connect(crowdGain);
-    crowdGain.connect(ctx.destination);
+    crowdGain.connect(masterSfxGain || ctx.destination);
 
     crowdSource.start(now);
     crowdSource.stop(now + 2.5);
@@ -737,7 +1119,7 @@ async function startMatchSimulation() {
   `;
 
   try {
-    const res = await fetch("/api/match/half1", {
+    const res = await apiFetch("/api/match/half1", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ press_boost: currentPressOption })
@@ -790,7 +1172,7 @@ async function submitHalftimeAction(action) {
   }
 
   try {
-    const res = await fetch("/api/match/half2", {
+    const res = await apiFetch("/api/match/half2", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: action })
@@ -993,7 +1375,7 @@ function prepareNextMatch() {
 // ==================== KAPTAN RAPORU & MAAŞ TALEP MODALI ====================
 async function openCaptainReportModal() {
   try {
-    const res = await fetch("/api/captain/report");
+    const res = await apiFetch("/api/captain/report");
     const data = await res.json();
 
     document.getElementById("captain-name-title").innerText = `Kaptan: ${data.captain_name}`;
@@ -1047,7 +1429,7 @@ function closeCaptainReportModal() {
 
 async function respondWageNegotiation(playerName, decision) {
   try {
-    const res = await fetch("/api/player/wage-negotiation", {
+    const res = await apiFetch("/api/player/wage-negotiation", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ player_name: playerName, decision: decision })
@@ -1077,7 +1459,7 @@ function closeCoachVisionModal() {
 
 async function submitCoachVision(focus) {
   try {
-    const res = await fetch("/api/coach/future-vision", {
+    const res = await apiFetch("/api/coach/future-vision", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ vision_focus: focus })
@@ -1099,7 +1481,7 @@ async function submitCoachVision(focus) {
 // ==================== TÜM LİG SQUAD BROWSER & KULÜPLER ARASI TRANSFER ====================
 async function openLeagueScoutModal() {
   try {
-    const res = await fetch("/api/teams/all-squads");
+    const res = await apiFetch("/api/teams/all-squads");
     allLeagueSquads = await res.json();
 
     const select = document.getElementById("scout-league-team-select");
@@ -1192,7 +1574,7 @@ async function submitClubNegotiation() {
   activeNegotiation.bidFee = bidFee;
 
   try {
-    const res = await fetch("/api/transfer/negotiate-club", {
+    const res = await apiFetch("/api/transfer/negotiate-club", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1232,7 +1614,7 @@ async function submitPlayerSigning() {
   const offeredWage = parseInt(wageInput.value) || activeNegotiation.requiredWage;
 
   try {
-    const res = await fetch("/api/transfer/sign-negotiated-player", {
+    const res = await apiFetch("/api/transfer/sign-negotiated-player", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1262,7 +1644,7 @@ async function submitPlayerSigning() {
 // ==================== TRANSFER GÜNÜ İLERLETME & GELEN TEKLİFLER ====================
 async function advanceTransferDay() {
   try {
-    const res = await fetch("/api/transfer/advance-day", { method: "POST" });
+    const res = await apiFetch("/api/transfer/advance-day", { method: "POST" });
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Gün ilerletilemedi!");
@@ -1321,7 +1703,7 @@ function renderIncomingBids() {
 
 async function respondIncomingBid(bidId, action) {
   try {
-    const res = await fetch("/api/transfer/respond-incoming-bid", {
+    const res = await apiFetch("/api/transfer/respond-incoming-bid", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ bid_id: bidId, action: action })
@@ -1342,7 +1724,7 @@ async function respondIncomingBid(bidId, action) {
 // ==================== TRANSFER PAZARI KATEGORİLERİ (DÜNYA YILDIZLARI & SERBESTLER) ====================
 async function loadTransferMarket() {
   try {
-    const res = await fetch("/api/transfer/market");
+    const res = await apiFetch("/api/transfer/market");
     marketData = await res.json();
     renderTransferMarket();
   } catch (e) {
@@ -1401,7 +1783,7 @@ function renderTransferMarket() {
 
 async function buyMarketPlayer(playerName, price, salary) {
   try {
-    const res = await fetch("/api/transfer/sign-negotiated-player", {
+    const res = await apiFetch("/api/transfer/sign-negotiated-player", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -1427,7 +1809,7 @@ async function buyMarketPlayer(playerName, price, salary) {
 // ==================== SİYASET VE CUMHURBAŞKANLIĞI HİBE SİSTEMİ ====================
 async function doPoliticsAction(actType) {
   try {
-    const res = await fetch("/api/politics/action", {
+    const res = await apiFetch("/api/politics/action", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action_type: actType })
@@ -1461,7 +1843,7 @@ async function requestPresidentialGrant() {
   if (!confirm(confirmMsg)) return;
 
   try {
-    const res = await fetch("/api/politics/presidential-grant", { method: "POST" });
+    const res = await apiFetch("/api/politics/presidential-grant", { method: "POST" });
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Hibe talebi iletilemedi!");
@@ -1537,7 +1919,7 @@ async function startNextSeason() {
   if (modal) modal.classList.add("hidden");
 
   try {
-    const res = await fetch("/api/season/next", { method: "POST" });
+    const res = await apiFetch("/api/season/next", { method: "POST" });
     const data = await res.json();
     if (!res.ok) {
       await fetchState();
@@ -1572,7 +1954,7 @@ function closeElectionModal() {
 
 async function runElection(promise) {
   try {
-    const res = await fetch("/api/election/run", {
+    const res = await apiFetch("/api/election/run", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ promise: promise })
@@ -1622,7 +2004,7 @@ async function runElection(promise) {
 // ==================== TAKIM SEÇİMİ VE İSTİFA ====================
 async function loadTeamsList() {
   try {
-    const res = await fetch("/api/teams");
+    const res = await apiFetch("/api/teams");
     teamsList = await res.json();
     renderTeamSelectList();
   } catch (e) {
@@ -1671,7 +2053,7 @@ function renderTeamSelectList() {
 
 async function selectTeamAndStart(teamId) {
   try {
-    const res = await fetch("/api/start-game", {
+    const res = await apiFetch("/api/start-game", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ team_id: teamId })
@@ -1693,7 +2075,7 @@ async function promptResign() {
   if (!confirm(`${gameState.club_name} kulübü başkanlığından istifa etmek istediğinize emin misiniz?`)) return;
 
   try {
-    const res = await fetch("/api/resign", { method: "POST" });
+    const res = await apiFetch("/api/resign", { method: "POST" });
     const data = await res.json();
     gameState = data.state;
     showToast("İstifanız kabul edildi. Yeni kulübünüzü seçebilirsiniz.");
@@ -1713,7 +2095,7 @@ function closeCoachModal() {
 }
 async function submitCoachDialog(action) {
   try {
-    const res = await fetch("/api/coach/dialog", {
+    const res = await apiFetch("/api/coach/dialog", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action: action })
@@ -1735,7 +2117,7 @@ async function submitCoachDialog(action) {
 async function fireScout() {
   if (confirm("Scout ekibini 2M ₺ tazminat ödeyerek kovmak istiyor musunuz?")) {
     try {
-      const res = await fetch("/api/scout/fire", { method: "POST" });
+      const res = await apiFetch("/api/scout/fire", { method: "POST" });
       const data = await res.json();
       if (!res.ok) {
         showToast(data.detail || "İşlem başarısız!");
@@ -1752,7 +2134,7 @@ async function fireScout() {
 
 async function loadScoutCandidates() {
   try {
-    const res = await fetch("/api/scout/candidates");
+    const res = await apiFetch("/api/scout/candidates");
     const candidates = await res.json();
     const container = document.getElementById("scout-candidates-list");
     if (!container) return;
@@ -1779,7 +2161,7 @@ async function loadScoutCandidates() {
 
 async function hireScout(scoutId) {
   try {
-    const res = await fetch("/api/scout/hire", {
+    const res = await apiFetch("/api/scout/hire", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scout_id: scoutId })
@@ -1800,7 +2182,7 @@ async function hireScout(scoutId) {
 // ==================== SPONSORLUKLAR & YERALTI ====================
 async function loadSponsors() {
   try {
-    const res = await fetch("/api/sponsors/available");
+    const res = await apiFetch("/api/sponsors/available");
     const sponsors = await res.json();
     const container = document.getElementById("available-sponsors-list");
     if (!container) return;
@@ -1827,7 +2209,7 @@ async function loadSponsors() {
 
 async function signSponsor(spId) {
   try {
-    const res = await fetch("/api/sponsors/sign", {
+    const res = await apiFetch("/api/sponsors/sign", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sponsor_id: spId })
@@ -1847,7 +2229,7 @@ async function signSponsor(spId) {
 
 async function makeUndergroundDeal(dealType) {
   try {
-    const res = await fetch("/api/underground/deal", {
+    const res = await apiFetch("/api/underground/deal", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ deal_type: dealType })
@@ -1867,7 +2249,7 @@ async function makeUndergroundDeal(dealType) {
 
 async function startRealEstateProject(projType) {
   try {
-    const res = await fetch("/api/realestate/start", {
+    const res = await apiFetch("/api/realestate/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ project_type: projType })

@@ -41,10 +41,17 @@
         <div class="text-right">
           <div class="text-xs font-bold text-slate-200">
             <span id="header-season">1</span>. Sezon • H<span id="header-week" class="text-amber-400">1</span>/34
+          <div class="flex items-center gap-1.5 justify-end mt-0.5">
+            <button onclick="toggleMusicPlayback()" id="header-music-btn" class="text-[9px] text-slate-300 hover:text-amber-400 font-bold flex items-center gap-1 bg-slate-900/90 px-1.5 py-0.5 rounded border border-slate-700">
+              <span id="header-music-icon">🎵</span> <span id="header-music-label">Müzik</span>
+            </button>
+            <button onclick="openSettingsModal()" class="text-[9px] text-slate-300 hover:text-white font-bold flex items-center gap-0.5 bg-slate-900/90 px-1.5 py-0.5 rounded border border-slate-700">
+              <i data-lucide="settings" class="w-3 h-3 text-slate-300"></i> Ayar
+            </button>
+            <button onclick="promptResign()" class="text-[9px] text-rose-400/90 hover:text-rose-300 font-bold">
+              İstifa
+            </button>
           </div>
-          <button onclick="promptResign()" class="text-[10px] text-rose-400/80 hover:text-rose-300 font-medium">
-            İstifa Et
-          </button>
         </div>
       </div>
 
@@ -1097,6 +1104,85 @@
       </div>
       <div class="text-[10px] text-slate-400 mt-3 font-medium flex items-center justify-center gap-1">
         <span>🏟️</span> <span>TARAFTAR ÇILGINA DÖNDÜ!</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. OYUN & SES AYARLARI MODALI -->
+  <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3.5 max-h-[90vh] overflow-y-auto scrollbar-thin">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="text-xs font-black text-white flex items-center gap-1.5">
+          <i data-lucide="settings" class="w-4 h-4 text-amber-400"></i>
+          <span>OYUN & SES AYARLARI</span>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+      </div>
+
+      <!-- Müzik Kontrolleri -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-white">
+            <i data-lucide="music" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Arka Plan Müziği</span>
+          </div>
+          <button onclick="toggleMusicPlayback()" id="settings-music-toggle-btn" class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-[10px] shadow-sm">
+            Çalıyor 🔊
+          </button>
+        </div>
+
+        <div class="space-y-1">
+          <div class="flex justify-between text-[10px] text-slate-400">
+            <span>Müzik Seviyesi:</span>
+            <strong class="text-amber-400" id="bgm-volume-txt">35%</strong>
+          </div>
+          <input type="range" id="bgm-volume-slider" min="0" max="100" value="35" oninput="onBgmVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+        </div>
+
+        <!-- Müzik Teması / Parça Seçimi -->
+        <div class="space-y-1 pt-1">
+          <label class="block text-[10px] font-semibold text-slate-400">Müzik Teması (Suno & Synth):</label>
+            <option value="championship">🏆 Şampiyonluk Hırsı (Epic Synth & Rhythm)</option>
+            <option value="lounge" selected>🍸 Protokol Lounge (Chill Lofi & Beats)</option>
+            <option value="derby">🔥 Büyük Derbi Ateşi (Dinamik Bas & Tribün)</option>
+            <option value="night">🌃 Gece Mesaisi (Gece Sezonu & Strateji)</option>
+            <option value="suno_track1">📁 Suno AI: static/music/track1.mp3</option>
+            <option value="suno_track2">📁 Suno AI: static/music/track2.mp3</option>
+            <option value="suno_track3">📁 Suno AI: static/music/track3.mp3</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Maç & Stadyum Efektleri -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex items-center gap-1.5 text-xs font-bold text-white">
+          <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Stadyum & Gol Efektleri</span>
+        </div>
+        <div class="space-y-1">
+          <div class="flex justify-between text-[10px] text-slate-400">
+            <span>Efekt Seviyesi:</span>
+            <strong class="text-emerald-400" id="sfx-volume-txt">75%</strong>
+          </div>
+          <input type="range" id="sfx-volume-slider" min="0" max="100" value="75" oninput="onSfxVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
+        </div>
+      </div>
+
+      <!-- Suno AI Rehberi -->
+      <div class="bg-purple-950/30 p-2.5 rounded-xl border border-purple-800/40 text-[10px] space-y-1">
+        <div class="font-bold text-purple-300 flex items-center gap-1">
+          <span>💡</span> <span>Kendi Suno Müziklerini Ekle:</span>
+        </div>
+        <p class="text-slate-300 text-[9px] leading-relaxed">
+          Suno'da ürettiğin müzikleri oyun klasöründeki <code class="text-amber-300 font-mono">static/music/</code> içine <code class="text-amber-300 font-mono">track1.mp3</code> olarak attığında doğrudan çalar!
+        </p>
+      </div>
+
+      <!-- Kariyeri Sıfırla Butonu -->
+      <div class="pt-1">
+        <button onclick="resetCareerPrompt()" class="w-full py-2 rounded-lg bg-rose-950/60 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 font-bold text-xs transition-all">
+          ⚠️ Kariyeri Sıfırla (Yeni Takım Seç)
+        </button>
       </div>
     </div>
   </div>
