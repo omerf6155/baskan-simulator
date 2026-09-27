@@ -52,6 +52,14 @@ def get_save_path(session_id: Optional[str] = None) -> str:
         return SAVE_FILE
     return os.path.join(SAVES_DIR, f"{sid}.json")
 
+def format_money_val(amount: int) -> str:
+    if abs(amount) >= 1_000_000:
+        return f"{amount / 1_000_000:.1f}M ₺".replace(".0M", "M")
+    elif abs(amount) >= 1_000:
+        return f"{amount / 1_000:.0f}K ₺"
+    return f"{amount} ₺"
+
+
 # ==================== DÜNYA YILDIZLARI & TRANSFER HAVUZU ====================
 WORLD_SUPERSTARS = [
     {"name": "Erling Haaland", "age": 26, "pos": "SANTRAFOR", "claimed_pot": 92, "real_pot": 92, "price": 260_000_000, "salary": 75_000_000, "is_star": True, "desc": "Manchester City'nin gol makinesi. Süper Lig'e gelirse yer yerinden oynar."},
@@ -980,6 +988,55 @@ def api_match_half2(req: HalftimeActionRequest):
         state["coach"]["moral"] = max(20, state["coach"]["moral"] - 12)
         coach_statement = f"{state['coach']['name']}: 'Taraftarımızdan ve başkanımızdan özür diliyoruz. Bu sonuç bize yakışmadı, gereken neyse yapacağız!'"
 
+    # Yeraltı Yasadışı Bahis & Şike Kuponu Sonuçlandırma
+    ug = state.setdefault("underground", {})
+    active_bet = ug.get("active_bet")
+    if active_bet:
+        b_type = active_bet.get("bet_type")
+        bet_amount = active_bet.get("amount", 0)
+        payout = active_bet.get("potential_payout", 0)
+        is_won = False
+
+        if b_type == "win":
+            is_won = (my_score > opp_score)
+        elif b_type == "opponent_win":
+            is_won = (opp_score > my_score)
+        elif b_type == "over35":
+            is_won = ((my_score + opp_score) >= 4)
+        elif b_type == "ht_ft":
+            h1_my = h1.get("my_score", 0)
+            h1_opp = h1.get("opp_score", 0)
+            is_won = (h1_my <= h1_opp and my_score > opp_score) or (my_score > opp_score and random.random() < 0.65)
+
+        if is_won:
+            state["budget"] += payout
+            state["news"].insert(0, f"🤑 MERDİVENALTI VURGUN: Yasadışı kupon tuttu! Kasaya +{format_money_val(payout)} nakit kara para girdi!")
+        else:
+            state["news"].insert(0, f"💸 KUPOON YATTI: Yasadışı bahis tutmadı! {format_money_val(bet_amount)} nakit buhar oldu.")
+
+        # MASAK / TFF Polis Baskını & Soruşturma Riski
+        risk = active_bet.get("risk_pct", 15)
+        if random.randint(1, 100) <= risk:
+            fine = 25_000_000
+            state["budget"] -= fine
+            my_stand["points"] = max(0, my_stand["points"] - 3)
+            state["fan_trust"] = max(10, state["fan_trust"] - 15)
+            state["board_trust"] = max(10, state["board_trust"] - 20)
+            ug["under_investigation"] = True
+            ug["caught_count"] = ug.get("caught_count", 0) + 1
+            state["news"].insert(0, f"🚨 MASAK & POLİS BASKINI: Yasadışı bahis ve kara para trafiği deşifre oldu! TFF kulübün 3 PUANINI SİLDİ, 25M ₺ para cezası kesildi!")
+
+        ug["last_bet"] = {
+            "won": is_won,
+            "title": active_bet.get("title", ""),
+            "payout": payout if is_won else 0,
+            "amount": bet_amount
+        }
+        ug["active_bet"] = None
+
+    if ug.get("active_deal"):
+        ug["active_deal"] = None
+
     state["standings"].sort(key=lambda s: (s["points"], s["gd"], s["gf"]), reverse=True)
 
     cur_fixture = next(f for f in state["fixtures"] if f["week"] == state["week"])
@@ -1723,6 +1780,69 @@ def api_underground_deal(req: UndergroundDealRequest):
 
     save_state(state)
     return {"message": "Karanlık anlaşma sağlandı. Çanta teslim edildi.", "state": state}
+
+class UndergroundBetRequest(BaseModel):
+    bet_type: str
+    amount: int
+
+@app.post("/api/underground/bet")
+def api_underground_bet(req: UndergroundBetRequest):
+    state = get_state()
+    ug = state.setdefault("underground", {})
+    if ug.get("active_bet"):
+        raise HTTPException(status_code=400, detail="Zaten sıradaki maç için aktif bir yasadışı kuponunuz var!")
+
+    if req.amount < 5_000_000:
+        raise HTTPException(status_code=400, detail="Minimum yasadışı bahis tutarı 5M ₺'dir!")
+    if state["budget"] < req.amount:
+        raise HTTPException(status_code=400, detail="Yetersiz bütçe! Kasada bu kadar nakit para yok.")
+
+    odds_map = {
+        "win": {"title": "Kendi Takımına Temiz Galibiyet", "odds": 1.85, "risk": 12},
+        "over35": {"title": "3.5 Gol Üstü (En az 4 gol)", "odds": 2.40, "risk": 18},
+        "ht_ft": {"title": "İlk Yarı / İkinci Yarı Şikeli Çevirme", "odds": 3.60, "risk": 25},
+        "opponent_win": {"title": "Karanlık Kasa: Rakip Takım Kazanır (Ters Şike)", "odds": 4.80, "risk": 35},
+    }
+
+    bet_info = odds_map.get(req.bet_type)
+    if not bet_info:
+        raise HTTPException(status_code=400, detail="Geçersiz bahis türü!")
+
+    state["budget"] -= req.amount
+    potential_payout = int(req.amount * bet_info["odds"])
+
+    ug["active_bet"] = {
+        "bet_type": req.bet_type,
+        "title": bet_info["title"],
+        "amount": req.amount,
+        "odds": bet_info["odds"],
+        "potential_payout": potential_payout,
+        "risk_pct": bet_info["risk"],
+        "week": state["week"]
+    }
+
+    save_state(state)
+    return {
+        "message": f"Karanlık kupon yapıldı! Yatırılan: {format_money_val(req.amount)} • Oran: {bet_info['odds']}x • Olası Kazanç: {format_money_val(potential_payout)}",
+        "state": state
+    }
+
+@app.delete("/api/underground/bet")
+def api_underground_cancel_bet():
+    state = get_state()
+    ug = state.setdefault("underground", {})
+    bet = ug.get("active_bet")
+    if not bet:
+        raise HTTPException(status_code=400, detail="İptal edilecek aktif bir kupon bulunamadı.")
+
+    refund = int(bet["amount"] * 0.85)
+    state["budget"] += refund
+    ug["active_bet"] = None
+    save_state(state)
+    return {
+        "message": f"Yasadışı kupon bozduruldu. %15 komisyon kesilerek {format_money_val(refund)} kasaya iade edildi.",
+        "state": state
+    }
 
 class RealEstateProjRequest(BaseModel):
     project_type: str

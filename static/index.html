@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20260928_v6">
+  <link rel="stylesheet" href="style.css?v=20260928_v7">
 </head>
 <body class="bg-[#0b0f19] text-slate-100 font-['Inter'] antialiased min-h-screen flex items-center justify-center p-0 md:p-3 select-none">
 
@@ -713,6 +713,85 @@
           </div>
         </div>
 
+        <!-- YASADIŞI MERDİVENALTI BAHİS ŞEBEKESİ & KUPON -->
+        <div class="bg-gradient-to-b from-[#1c1322] to-[#120c18] border border-amber-500/50 rounded-xl p-3.5 space-y-2.5 shadow-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 text-xs font-black text-amber-400">
+              <span class="text-sm">🎰</span>
+              <span>YASADIŞI MERDİVENALTI BAHİS ŞEBEKESİ</span>
+            </div>
+            <span class="text-[9px] bg-red-950 text-red-300 border border-red-700/60 px-1.5 py-0.5 rounded font-bold animate-pulse">HIZLI PARA & YÜKSEK RİSK</span>
+          </div>
+
+          <p class="text-[10px] text-slate-300 leading-relaxed">
+            Kulüp kasasındaki nakitle sıradaki maça el altından illegal kupon yapın. Maç bittiğinde kazanç doğrudan kasaya yatar. Ancak <strong class="text-rose-400">MASAK ve Polis baskını</strong> olursa -3 puan silme ve 25M ₺ ceza riski vardır!
+          </p>
+
+          <!-- Aktif Kupon Kutusu (Varsa) -->
+          <div id="active-bet-box" class="hidden p-2.5 rounded-lg bg-slate-900 border border-amber-500/60 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-amber-300 font-bold" id="active-bet-title">Kupon: Kendi Takımına Galibiyet</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">Yatırılan: <span id="active-bet-amt" class="text-white font-mono">10M ₺</span> • Olası Kazanç: <strong id="active-bet-payout" class="text-emerald-400 font-mono">18.5M ₺</strong></div>
+            </div>
+            <button onclick="cancelUndergroundBet()" class="px-2 py-1 rounded bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 text-[9px] font-bold">
+              Bozdur (%15 Ceza)
+            </button>
+          </div>
+
+          <!-- Kupon Yapma Seçenekleri -->
+          <div id="place-bet-box" class="space-y-2">
+            <div class="grid grid-cols-2 gap-1.5">
+              <!-- 1. Kendi Takımına Galibiyet -->
+              <button onclick="selectBetOption('win', 1.85, 12, 'Kendi Takımına Temiz Galibiyet')" class="bet-opt-btn selected-bet p-2 rounded-lg bg-slate-900 border border-amber-400 text-left transition-all" data-type="win">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-bold text-white">🟢 Takımına Galibiyet</span>
+                  <span class="text-[10px] font-black text-amber-400 font-mono">1.85x</span>
+                </div>
+                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %12 • Maçı kazanırsak</div>
+              </button>
+
+              <!-- 2. 3.5 Üst -->
+              <button onclick="selectBetOption('over35', 2.40, 18, '3.5 Gol Üstü (En az 4 Gol)')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-amber-400 text-left transition-all" data-type="over35">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-bold text-white">⚽ 3.5 Gol Üstü</span>
+                  <span class="text-[10px] font-black text-amber-400 font-mono">2.40x</span>
+                </div>
+                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %18 • En az 4 gol olursa</div>
+              </button>
+
+              <!-- 3. Şikeli Çevirme (İY/MS) -->
+              <button onclick="selectBetOption('ht_ft', 3.60, 25, 'İY/MS Şikeli Geri Dönüş')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-amber-400 text-left transition-all" data-type="ht_ft">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-bold text-white">⚡ Şikeli Çevirme (İY/MS)</span>
+                  <span class="text-[10px] font-black text-amber-400 font-mono">3.60x</span>
+                </div>
+                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %25 • İY Beraber/Mağlup, MS Galip</div>
+              </button>
+
+              <!-- 4. Ters Şike: Rakip Kazanır -->
+              <button onclick="selectBetOption('opponent_win', 4.80, 35, 'Karanlık Kasa: Rakip Takım Kazanır')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-rose-400 text-left transition-all" data-type="opponent_win">
+                <div class="flex justify-between items-center">
+                  <span class="text-[11px] font-bold text-rose-300">💣 Rakip Kazanır (Ters Şike)</span>
+                  <span class="text-[10px] font-black text-rose-400 font-mono">4.80x</span>
+                </div>
+                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %35 • Rakip kazanırsa dev kasa</div>
+              </button>
+            </div>
+
+            <!-- Bahis Tutarı Seçimi -->
+            <div class="flex items-center gap-1.5 pt-1">
+              <span class="text-[9px] text-slate-400 font-bold">Kasa Bas:</span>
+              <button onclick="selectBetAmount(10000000)" class="bet-amt-btn selected-amt flex-1 py-1 rounded bg-amber-500 text-slate-950 font-black text-[10px] text-center" data-amt="10000000">10M ₺</button>
+              <button onclick="selectBetAmount(25000000)" class="bet-amt-btn flex-1 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200 text-[10px] font-bold hover:bg-slate-700 text-center" data-amt="25000000">25M ₺</button>
+              <button onclick="selectBetAmount(50000000)" class="bet-amt-btn flex-1 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200 text-[10px] font-bold hover:bg-slate-700 text-center" data-amt="50000000">50M ₺</button>
+            </div>
+
+            <button onclick="submitUndergroundBet()" id="btn-submit-bet" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all">
+              <span>🎲 Kuponu Yatır</span> • <span id="bet-summary-calc" class="font-mono">10M ₺ Bas → 18.5M ₺ Kazan</span>
+            </button>
+          </div>
+        </div>
+
         <!-- Yeraltı Şike & Hakem Bağlama -->
         <div class="bg-[#181111] border border-rose-950/80 rounded-xl p-3.5 space-y-2">
           <div class="flex items-center gap-1.5 text-xs font-bold text-rose-400">
@@ -1340,6 +1419,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20260928_v6"></script>
+  <script src="app.js?v=20260928_v7"></script>
 </body>
 </html>

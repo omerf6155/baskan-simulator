@@ -582,6 +582,7 @@ function renderUI() {
     if (scoutNameEl) scoutNameEl.innerText = gameState.club_scout.name || "Cemil Kaya";
     if (scoutRatingEl) scoutRatingEl.innerText = `%${gameState.club_scout.rating || 75}`;
   }
+  renderUndergroundBetState();
 }
 
 // ==================== HEXAGONAL RADAR / SPIDER CHART ÇİZİMİ ====================
@@ -2581,3 +2582,112 @@ async function startRealEstateProject(projType) {
     console.error(e);
   }
 }
+
+// ==================== YASADIŞI MERDİVENALTI BAHİS SİSTEMİ ====================
+let selectedBetType = "win";
+let selectedBetOdds = 1.85;
+let selectedBetRisk = 12;
+let selectedBetTitle = "Kendi Takımına Temiz Galibiyet";
+let selectedBetAmount = 10_000_000;
+
+function selectBetOption(type, odds, risk, title) {
+  selectedBetType = type;
+  selectedBetOdds = odds;
+  selectedBetRisk = risk;
+  selectedBetTitle = title;
+
+  document.querySelectorAll(".bet-opt-btn").forEach(btn => {
+    if (btn.dataset.type === type) {
+      btn.className = "bet-opt-btn selected-bet p-2 rounded-lg bg-slate-900 border border-amber-400 text-left transition-all";
+    } else {
+      btn.className = "bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-amber-400 text-left transition-all";
+    }
+  });
+
+  updateBetSummaryUI();
+}
+
+function selectBetAmount(amt) {
+  selectedBetAmount = amt;
+  document.querySelectorAll(".bet-amt-btn").forEach(btn => {
+    if (parseInt(btn.dataset.amt) === amt) {
+      btn.className = "bet-amt-btn selected-amt flex-1 py-1 rounded bg-amber-500 text-slate-950 font-black text-[10px] text-center";
+    } else {
+      btn.className = "bet-amt-btn flex-1 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200 text-[10px] font-bold hover:bg-slate-700 text-center";
+    }
+  });
+  updateBetSummaryUI();
+}
+
+function updateBetSummaryUI() {
+  const calcEl = document.getElementById("bet-summary-calc");
+  if (!calcEl) return;
+  const payout = Math.floor(selectedBetAmount * selectedBetOdds);
+  calcEl.innerText = `${formatMoney(selectedBetAmount)} Bas → ${formatMoney(payout)} Kazan (${selectedBetOdds}x)`;
+}
+
+function renderUndergroundBetState() {
+  if (!gameState) return;
+  const ug = gameState.underground || {};
+  const activeBetBox = document.getElementById("active-bet-box");
+  const placeBetBox = document.getElementById("place-bet-box");
+  if (!activeBetBox || !placeBetBox) return;
+
+  if (ug.active_bet) {
+    activeBetBox.classList.remove("hidden");
+    placeBetBox.classList.add("hidden");
+    const bet = ug.active_bet;
+    document.getElementById("active-bet-title").innerText = `Kupon: ${bet.title || bet.bet_type} (${bet.odds}x)`;
+    document.getElementById("active-bet-amt").innerText = formatMoney(bet.amount);
+    document.getElementById("active-bet-payout").innerText = formatMoney(bet.potential_payout);
+  } else {
+    activeBetBox.classList.add("hidden");
+    placeBetBox.classList.remove("hidden");
+    updateBetSummaryUI();
+  }
+}
+
+async function submitUndergroundBet() {
+  if (!gameState) return;
+  if (gameState.budget < selectedBetAmount) {
+    showToast("Yetersiz bütçe! Kasada bu kadar nakit yok.");
+    return;
+  }
+
+  try {
+    const res = await apiFetch("/api/underground/bet", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bet_type: selectedBetType, amount: selectedBetAmount })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Bahis yatırılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
+async function cancelUndergroundBet() {
+  try {
+    const res = await apiFetch("/api/underground/bet", { method: "DELETE" });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İptal edilemedi!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
