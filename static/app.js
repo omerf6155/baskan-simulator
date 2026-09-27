@@ -1,5 +1,23 @@
 // ==================== CİHAZ BAZLI BAĞIMSIZ SESSION & NETWORK ====================
+function normalizeNameSlug(name) {
+  if (!name) return "baskan";
+  const trMap = {
+    'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+    'Ç': 'c', 'Ğ': 'g', 'İ': 'i', 'Ö': 'o', 'Ş': 's', 'Ü': 'u'
+  };
+  let slug = name.split('').map(ch => trMap[ch] || ch).join('').toLowerCase();
+  slug = slug.replace(/[^a-z0-9_-]/g, '');
+  return slug.slice(0, 32) || "baskan";
+}
+
 function getSessionId() {
+  const customUser = localStorage.getItem("baskan_username");
+  if (customUser && customUser.trim()) {
+    const slug = normalizeNameSlug(customUser.trim());
+    const userSid = "user_" + slug;
+    localStorage.setItem("baskan_session_id", userSid);
+    return userSid;
+  }
   let sid = localStorage.getItem("baskan_session_id");
   if (!sid) {
     sid = "sid_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now().toString(36);
@@ -459,6 +477,10 @@ function renderUI() {
   // Header Barları
   document.getElementById("header-club-name").innerText = gameState.club_name;
   document.getElementById("header-pres-name").innerText = gameState.president_name;
+  const userSettingSpan = document.getElementById("settings-current-username");
+  if (userSettingSpan) {
+    userSettingSpan.innerText = gameState.president_name || localStorage.getItem("baskan_username") || "Ömer Başkan";
+  }
   document.getElementById("header-season").innerText = gameState.season;
   document.getElementById("header-week").innerText = Math.min(gameState.week, gameState.max_weeks || 34);
 
@@ -2001,7 +2023,10 @@ async function runElection(promise) {
   }
 }
 
-// ==================== TAKIM SEÇİMİ VE İSTİFA ====================
+// ==================== TAKIM SEÇİMİ, BAŞKAN HESABI VE İSTİFA ====================
+let nameCheckTimeout = null;
+let verifiedExistingAccount = null;
+
 async function loadTeamsList() {
   try {
     const res = await apiFetch("/api/teams");
@@ -2013,8 +2038,110 @@ async function loadTeamsList() {
 }
 
 function openTeamSelectModal() {
-  document.getElementById("modal-team-select").classList.remove("hidden");
+  const modal = document.getElementById("modal-team-select");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+
+  // Kapat butonu sadece oyun zaten başlamışsa görünsün
+  const closeBtn = document.getElementById("btn-close-team-select");
+  if (closeBtn) {
+    if (gameState && gameState.is_started) closeBtn.classList.remove("hidden");
+    else closeBtn.classList.add("hidden");
+  }
+
+  // Başkan adını pre-fill yap
+  const inputPres = document.getElementById("input-president-name");
+  if (inputPres) {
+    if (!inputPres.value) {
+      inputPres.value = localStorage.getItem("baskan_username") || (gameState && gameState.president_name ? gameState.president_name : "");
+    }
+  }
+
   if (!teamsList || teamsList.length === 0) loadTeamsList();
+  else renderTeamSelectList();
+
+  checkAccountStatus();
+}
+
+function closeTeamSelectModalIfStarted() {
+  if (gameState && gameState.is_started) {
+    document.getElementById("modal-team-select").classList.add("hidden");
+  } else {
+    showToast("Lütfen bir başkan adı girip kulübünüzü seçin!");
+  }
+}
+
+function onPresidentNameInput(val) {
+  if (nameCheckTimeout) clearTimeout(nameCheckTimeout);
+  nameCheckTimeout = setTimeout(() => {
+    checkAccountStatus();
+  }, 450);
+}
+
+async function checkAccountStatus() {
+  const nameInput = document.getElementById("input-president-name");
+  if (!nameInput) return;
+  const username = nameInput.value.trim();
+  const careerBox = document.getElementById("existing-career-box");
+  const teamWrapper = document.getElementById("team-selection-wrapper");
+
+  if (!username) {
+    if (careerBox) careerBox.classList.add("hidden");
+    if (teamWrapper) teamWrapper.classList.remove("hidden");
+    verifiedExistingAccount = null;
+    return;
+  }
+
+  try {
+    const res = await apiFetch(`/api/account/check?username=${encodeURIComponent(username)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.exists) {
+        verifiedExistingAccount = data;
+        if (careerBox) {
+          careerBox.classList.remove("hidden");
+          const logoEl = document.getElementById("existing-career-logo");
+          if (logoEl) logoEl.src = data.logo ? data.logo + "?v=3" : "";
+          const clubEl = document.getElementById("existing-career-club");
+          if (clubEl) clubEl.innerText = data.club_name;
+          const detEl = document.getElementById("existing-career-details");
+          if (detEl) detEl.innerText = `Başkan ${data.president_name || username} • ${data.season || 1}. Sezon • Hafta ${data.week || 1} • Kasa: ${formatMoney(data.budget || 0)}`;
+        }
+      } else {
+        verifiedExistingAccount = null;
+        if (careerBox) careerBox.classList.add("hidden");
+        if (teamWrapper) teamWrapper.classList.remove("hidden");
+      }
+    }
+  } catch (err) {
+    console.warn("Account check error:", err);
+  }
+}
+
+function showTeamListForNewCareer() {
+  const careerBox = document.getElementById("existing-career-box");
+  if (careerBox) careerBox.classList.add("hidden");
+  const teamWrapper = document.getElementById("team-selection-wrapper");
+  if (teamWrapper) teamWrapper.classList.remove("hidden");
+  showToast("Aşağıdan yeni bir kulüp seçerek sıfırdan başlayabilirsiniz.");
+}
+
+async function continueExistingCareer() {
+  if (!verifiedExistingAccount) return;
+  const username = verifiedExistingAccount.username;
+  localStorage.setItem("baskan_username", username);
+  const sid = "user_" + normalizeNameSlug(username);
+  localStorage.setItem("baskan_session_id", sid);
+
+  document.getElementById("modal-team-select").classList.add("hidden");
+  showToast(`Hoş geldiniz ${username}! ${verifiedExistingAccount.club_name} kariyeriniz yüklendi 🏆`);
+  await fetchState();
+  switchTab("office");
+}
+
+function promptSwitchAccount() {
+  closeSettingsModal();
+  openTeamSelectModal();
 }
 
 function renderTeamSelectList() {
@@ -2052,21 +2179,34 @@ function renderTeamSelectList() {
 }
 
 async function selectTeamAndStart(teamId) {
+  const nameInput = document.getElementById("input-president-name");
+  let username = nameInput ? nameInput.value.trim() : "";
+  if (!username) {
+    username = prompt("Lütfen Başkan Adınızı / Kullanıcı Adınızı girin:", "Ömer Başkan") || "Sayın Başkan";
+  }
+  username = username.trim() || "Sayın Başkan";
+
+  // Kullanıcı adını hem session hem username olarak kaydet
+  localStorage.setItem("baskan_username", username);
+  const sid = "user_" + normalizeNameSlug(username);
+  localStorage.setItem("baskan_session_id", sid);
+
   try {
     const res = await apiFetch("/api/start-game", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ team_id: teamId })
+      body: JSON.stringify({ team_id: teamId, president_name: username })
     });
     const data = await res.json();
     gameState = data;
     viewingFinishedMatch = false;
     document.getElementById("modal-team-select").classList.add("hidden");
-    showToast(`🏆 ${data.club_name} kulübünün yeni başkanı oldunuz!`);
+    showToast(`🏆 Sayın ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
     renderUI();
     switchTab("office");
   } catch (e) {
     console.error(e);
+    showToast("Kulüp seçimi başlatılamadı!");
   }
 }
 

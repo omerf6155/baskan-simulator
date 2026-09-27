@@ -772,19 +772,86 @@
 
   <!-- ==================== MODALLAR ==================== -->
 
-  <!-- 1. KULÜP SEÇİM MODALI -->
+  <!-- 1. BAŞKAN GİRİŞİ & KULÜP SEÇİM MODALI -->
   <div id="modal-team-select" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#111726] border border-slate-700 w-full max-w-md rounded-2xl p-4 max-h-[88vh] flex flex-col shadow-2xl">
-      <div class="pb-2.5 border-b border-slate-800">
-        <h2 class="text-sm font-extrabold text-white flex items-center gap-1.5">
-          <i data-lucide="shield" class="w-4 h-4 text-amber-400"></i> Süper Lig Kulübünüzü Seçin
-        </h2>
-        <p class="text-[11px] text-slate-400">18 kulüpten birini seçerek başkanlık kariyerinize başlayın.</p>
+    <div class="bg-[#111726] border border-slate-700 w-full max-w-md rounded-2xl p-4 max-h-[90vh] flex flex-col shadow-2xl space-y-3">
+      
+      <!-- Başlık -->
+      <div class="pb-2 border-b border-slate-800 flex justify-between items-center">
+        <div>
+          <h2 class="text-sm font-extrabold text-white flex items-center gap-1.5">
+            <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
+            <span>BAŞKAN GİRİŞİ & KULÜP SEÇİMİ</span>
+          </h2>
+          <p class="text-[10px] text-slate-400">İsminizi belirleyin, kulübünüzü seçin ve kariyerinize başlayın.</p>
+        </div>
+        <button onclick="closeTeamSelectModalIfStarted()" id="btn-close-team-select" class="text-slate-400 hover:text-white text-xs font-bold hidden">✕</button>
       </div>
 
-      <div class="flex-1 overflow-y-auto space-y-2 py-3 pr-1 scrollbar-thin" id="team-select-list">
-        <!-- 18 Süper Lig Kulübü JS ile buraya basılır -->
+      <!-- Başkan Adı Giriş Kutusu -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-1.5">
+        <label class="block text-[10px] font-bold text-amber-400 uppercase tracking-wide">
+          1. Başkan Adınız / Hesabınız:
+        </label>
+        <div class="flex gap-2">
+          <input 
+            type="text" 
+            id="input-president-name" 
+            placeholder="Örn: Ömer Başkan, Can, Ahmet..." 
+            oninput="onPresidentNameInput(this.value)"
+            class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white font-bold placeholder-slate-500 focus:outline-none focus:border-amber-400" 
+          />
+          <button 
+            type="button" 
+            onclick="checkAccountStatus()" 
+            class="px-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition-all flex items-center gap-1 flex-shrink-0">
+            <span>Kontrol Et</span>
+          </button>
+        </div>
+        <p class="text-[9px] text-slate-400">
+          💡 Bu isimle açtığınız kariyer sunucuda size özel kaydedilir. İstediğiniz cihazdan bu isimle devam edebilirsiniz.
+        </p>
       </div>
+
+      <!-- Bulunan Mevcut Kariyer Kartı (Varsa) -->
+      <div id="existing-career-box" class="hidden bg-emerald-950/40 p-3 rounded-xl border border-emerald-600/50 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 p-0.5 flex items-center justify-center flex-shrink-0">
+              <img id="existing-career-logo" src="" class="w-full h-full object-contain" />
+            </div>
+            <div>
+              <div class="text-xs font-extrabold text-white flex items-center gap-1">
+                <span id="existing-career-club">Trabzonspor</span>
+                <span class="text-[8px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1 rounded font-bold">KAYITLI KARİYER</span>
+              </div>
+              <div class="text-[10px] text-emerald-300 font-semibold" id="existing-career-details">
+                1. Sezon • Hafta 5 • Kasa: 450M ₺
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-2 pt-1">
+          <button onclick="continueExistingCareer()" class="flex-1 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition-all flex items-center justify-center gap-1 shadow-md">
+            <span>▶</span> <span>Bu Kariyerle Devam Et</span>
+          </button>
+          <button onclick="showTeamListForNewCareer()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-[10px] transition-all">
+            Sıfırdan Başla 🔄
+          </button>
+        </div>
+      </div>
+
+      <!-- Kulüp Seçim Listesi (18 Kulüp) -->
+      <div id="team-selection-wrapper" class="flex-1 flex flex-col min-h-0 space-y-1">
+        <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 px-0.5">
+          <span>2. YÖNETMEK İSTEDİĞİNİZ KULÜBÜ SEÇİN:</span>
+          <span class="text-amber-400 font-bold">18 Kulüp</span>
+        </div>
+        <div class="flex-1 overflow-y-auto space-y-2 py-1 pr-1 scrollbar-thin max-h-[46vh]" id="team-select-list">
+          <!-- 18 Süper Lig Kulübü JS ile buraya basılır -->
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1142,6 +1209,7 @@
         <!-- Müzik Teması / Parça Seçimi -->
         <div class="space-y-1 pt-1">
           <label class="block text-[10px] font-semibold text-slate-400">Müzik Teması (Suno & Synth):</label>
+          <select id="bgm-track-select" onchange="onBgmTrackChange(this.value)" class="w-full bg-slate-800 border border-slate-700 text-xs rounded-lg px-2.5 py-1.5 text-white font-semibold">
             <option value="championship">🏆 Şampiyonluk Hırsı (Epic Synth & Rhythm)</option>
             <option value="lounge" selected>🍸 Protokol Lounge (Chill Lofi & Beats)</option>
             <option value="derby">🔥 Büyük Derbi Ateşi (Dinamik Bas & Tribün)</option>
@@ -1151,6 +1219,20 @@
             <option value="suno_track3">📁 Suno AI: static/music/track3.mp3</option>
           </select>
         </div>
+      </div>
+
+      <!-- Aktif Başkan Hesabı & Profil Değiştirme -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-white">
+            <i data-lucide="user-check" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Aktif Başkan Hesabı:</span>
+          </div>
+          <span id="settings-current-username" class="text-amber-400 font-bold text-xs truncate max-w-[130px]">Ömer</span>
+        </div>
+        <button onclick="promptSwitchAccount()" class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition-all flex items-center justify-center gap-1.5">
+          <span>👥</span> <span>Farklı Başkanla Giriş Yap / Hesap Değiştir</span>
+        </button>
       </div>
 
       <!-- Maç & Stadyum Efektleri -->

@@ -18,10 +18,20 @@ os.makedirs(SAVES_DIR, exist_ok=True)
 
 current_session_cv = contextvars.ContextVar("current_session_cv", default="default")
 
+def normalize_name_to_slug(name: Optional[str]) -> str:
+    if not name:
+        return "baskan"
+    tr_map = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
+    slug = str(name).translate(tr_map).lower()
+    clean = "".join(c for c in slug if c.isalnum() or c in ("-", "_"))
+    return clean[:35] or "baskan"
+
 def sanitize_session_id(session_id: Optional[str]) -> str:
     if not session_id:
         return "default"
-    clean = "".join(c for c in str(session_id) if c.isalnum() or c in ("-", "_"))
+    tr_map = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
+    slug = str(session_id).translate(tr_map)
+    clean = "".join(c for c in slug if c.isalnum() or c in ("-", "_"))
     return clean[:45] if clean else "default"
 
 @app.middleware("http")
@@ -229,7 +239,7 @@ def generate_initial_standings(teams: List[Dict]):
         })
     return table
 
-def default_career_state(chosen_team_id: str = "trabzonspor", is_started: bool = True):
+def default_career_state(chosen_team_id: str = "trabzonspor", president_name: str = "Ömer Başkan", is_started: bool = True):
     team = next((t for t in TEAMS_DB if t["id"] == chosen_team_id), TEAMS_DB[0])
     fixtures = generate_fixtures(team["name"], TEAMS_DB)
     standings = generate_initial_standings(TEAMS_DB)
@@ -242,7 +252,7 @@ def default_career_state(chosen_team_id: str = "trabzonspor", is_started: bool =
         "team_id": team["id"],
         "club_name": team["name"],
         "club_short": team["short"],
-        "president_name": "Ömer Başkan",
+        "president_name": president_name,
         "city": team["city"],
         "logo": team.get("logo", ""),
         "is_big": team.get("is_big", False),
@@ -413,12 +423,42 @@ def api_squad_swap(req: SquadSwapRequest):
 
 class StartGameRequest(BaseModel):
     team_id: str
+    president_name: Optional[str] = "Ömer Başkan"
 
 @app.post("/api/start-game")
 def api_start_game(req: StartGameRequest):
-    state = default_career_state(req.team_id, is_started=True)
+    pres_name = (req.president_name or "").strip() or "Ömer Başkan"
+    state = default_career_state(req.team_id, president_name=pres_name, is_started=True)
     save_state(state)
     return state
+
+@app.get("/api/account/check")
+def api_account_check(username: str):
+    user = (username or "").strip()
+    if not user:
+        raise HTTPException(status_code=400, detail="Kullanıcı adı boş olamaz.")
+    slug = normalize_name_to_slug(user)
+    sid = f"user_{slug}"
+    path = get_save_path(sid)
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                state = json.load(f)
+                if state.get("is_started"):
+                    return {
+                        "exists": True,
+                        "session_id": sid,
+                        "username": user,
+                        "president_name": state.get("president_name", user),
+                        "club_name": state.get("club_name"),
+                        "season": state.get("season", 1),
+                        "week": state.get("week", 1),
+                        "budget": state.get("budget", 0),
+                        "logo": state.get("logo", "")
+                    }
+        except Exception:
+            pass
+    return {"exists": False, "session_id": sid, "username": user}
 
 @app.post("/api/resign")
 def api_resign():
