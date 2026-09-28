@@ -249,23 +249,23 @@ async function swapSquadPlayers(idx1, idx2) {
 function isGoalkeeper(pos) {
   if (!pos) return false;
   const p = String(pos).toUpperCase().trim();
-  return p === "GK" || p === "KL" || p.includes("KALE");
+  return p === "GK" || p === "KL" || p.startsWith("KALE") || p.startsWith("GK");
 }
 
 function shortenPosition(pos) {
   if (!pos) return "CM";
   const p = String(pos).toUpperCase().trim();
-  if (p.includes("KL") || p.includes("GK") || p.includes("KALE")) return "GK";
-  if (p.includes("STP") || p.includes("CB") || p.includes("STOPER")) return "CB";
+  if (p.includes("KL") || p === "GK" || p.includes("KALE")) return "GK";
+  if (p.includes("STP") || p === "CB" || p.includes("STOPER")) return "CB";
   if (p.includes("SOL BEK") || p.includes("SLB") || p === "LB") return "LB";
-  if (p.includes("SAĞ BEK") || p.includes("SAG BEK") || p.includes("SB") || p === "RB") return "RB";
-  if (p.includes("ÖN LİBERO") || p.includes("ON LIBERO") || p.includes("DOS") || p.includes("CDM") || p.includes("LİBERO") || p === "ÖNL") return "CDM";
-  if (p.includes("FORVET ARKASI") || p.includes("OFANSİF") || p.includes("ON NUMARA") || p.includes("CAM") || p.includes("OOS")) return "CAM";
-  if (p.includes("MERKEZ OS") || p.includes("ORTA SAHA") || p === "CM" || p === "OS") return "CM";
-  if (p.includes("SAĞ KANAT") || p.includes("SAG KANAT") || p === "RW" || p.includes("RM") || p === "SK") return "RW";
-  if (p.includes("SOL KANAT") || p === "LW" || p.includes("LM") || p === "SLK") return "LW";
-  if (p.includes("SANTRAFOR") || p.includes("SANTRATOR") || p === "ST") return "ST";
-  if (p.includes("FORVET") || p.includes("CF") || p === "FOR") return "ST";
+  if ((p.includes("SA") && p.includes("BEK")) || p.includes("SGB") || p === "RB" || p.includes("SB")) return "RB";
+  if (p === "CDM" || p === "DMF" || p.includes("DOS") || (p.includes("N L") && p.includes("BERO"))) return "DMF";
+  if (p === "CAM" || p === "AMF" || p.includes("OOS") || p.includes("FORVET ARK") || p.includes("ON NUMARA")) return "AMF";
+  if (p.includes("MERKEZ") || p.includes("ORTA SAHA") || p === "CM" || p === "OS") return "CM";
+  if ((p.includes("SA") && p.includes("KANAT")) || p.includes("SGK") || p === "RW" || p === "SK") return "RW";
+  if ((p.includes("SOL") && p.includes("KANAT")) || p.includes("SLK") || p === "LW") return "LW";
+  if (p.includes("SANTRAF") || p.includes("SANTRAT") || p === "ST" || p === "CF") return "ST";
+  if (p.includes("FORVET") && !p.includes("ARK")) return "ST";
   if (p.includes("KANAT")) return "RW";
   return p.substring(0, 3);
 }
@@ -274,7 +274,7 @@ function getPosCategory(pos) {
   const p = shortenPosition(pos);
   if (p === "GK") return "GK";
   if (["LB", "CB", "RB"].includes(p)) return "DEF";
-  if (["CDM", "CM", "CAM"].includes(p)) return "MID";
+  if (["DMF", "CM", "AMF"].includes(p)) return "MID";
   return "FWD";
 }
 
@@ -285,7 +285,7 @@ function getFifaPosBadgeHtml(pos) {
     colorClass = "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-sm";
   } else if (["LB", "CB", "RB"].includes(p)) {
     colorClass = "bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm";
-  } else if (["CDM", "CM", "CAM"].includes(p)) {
+  } else if (["DMF", "CM", "AMF"].includes(p)) {
     colorClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm";
   } else if (["LW", "RW", "ST"].includes(p)) {
     colorClass = "bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm";
@@ -1043,7 +1043,7 @@ function renderSquadList() {
   // İlk 11 Hatları: Kaleci -> Defans -> Orta Saha -> Forvet
   const sGk = starters.filter(item => isGoalkeeper(item.player.pos));
   const sDef = starters.filter(item => !isGoalkeeper(item.player.pos) && ["LB", "CB", "RB"].includes(shortenPosition(item.player.pos)));
-  const sMid = starters.filter(item => !isGoalkeeper(item.player.pos) && ["CDM", "CM", "CAM"].includes(shortenPosition(item.player.pos)));
+  const sMid = starters.filter(item => !isGoalkeeper(item.player.pos) && ["DMF", "CM", "AMF"].includes(shortenPosition(item.player.pos)));
   const sFwd = starters.filter(item => !isGoalkeeper(item.player.pos) && ["LW", "RW", "ST"].includes(shortenPosition(item.player.pos)));
   const sOther = starters.filter(item => !sGk.includes(item) && !sDef.includes(item) && !sMid.includes(item) && !sFwd.includes(item));
 
@@ -1079,7 +1079,7 @@ function renderSquadList() {
 
     const bGk = bench.filter(item => isGoalkeeper(item.player.pos));
     const bDef = bench.filter(item => !isGoalkeeper(item.player.pos) && ["LB", "CB", "RB"].includes(shortenPosition(item.player.pos)));
-    const bMid = bench.filter(item => !isGoalkeeper(item.player.pos) && ["CDM", "CM", "CAM"].includes(shortenPosition(item.player.pos)));
+    const bMid = bench.filter(item => !isGoalkeeper(item.player.pos) && ["DMF", "CM", "AMF"].includes(shortenPosition(item.player.pos)));
     const bFwd = bench.filter(item => !isGoalkeeper(item.player.pos) && ["LW", "RW", "ST"].includes(shortenPosition(item.player.pos)));
     const bOther = bench.filter(item => !bGk.includes(item) && !bDef.includes(item) && !bMid.includes(item) && !bFwd.includes(item));
 
@@ -2737,6 +2737,9 @@ async function selectTeamAndStart(teamId) {
   const sid = "user_" + normalizeNameSlug(username);
   localStorage.setItem("baskan_session_id", sid);
 
+  // Yeni oyun başlatılıyor: tutorial'ı sıfırla
+  try { localStorage.removeItem("baskan_story_tutorial_seen"); } catch(e) {}
+
   try {
     const res = await apiFetch("/api/start-game", {
       method: "POST",
@@ -3404,7 +3407,7 @@ const TUTORIAL_STEPS = [
   },
   {
     title: "⚽ Adım 2: Global FIFA Kadro & Taktik Düzeni",
-    coachQuote: "Takım kadromuz uluslararası FIFA mevkilerine (GK, CB, LB, RB, CDM, CM, CAM, RW, LW, ST) göre düzenlenmiştir. İlk 11'de her zaman tam 1 Kaleci olmak zorundadır ve Süper Lig kuralı gereği en fazla 8 Yabancı sahada yer alabilir.",
+    coachQuote: "Takım kadromuz uluslararası FIFA mevkilerine (GK, CB, LB, RB, DMF, CM, AMF, RW, LW, ST) göre düzenlenmiştir. İlk 11'de her zaman tam 1 Kaleci olmak zorundadır ve Süper Lig kuralı gereği en fazla 8 Yabancı sahada yer alabilir.",
     detail: "Kadro listesinde oyuncular mevkilerine göre (Kaleci ➔ Defans ➔ Orta Saha ➔ Forvet) düzenli sıralanır. Kafanız karıştığında tek tıkla 'Hoca 11'i Belirlesin' butonuna basabilirsiniz; ben sizin için en ideal kadroyu anında sahaya sürerim!",
     tip: "💡 İpucu: Kadro sekmesinden oyuncuları tek tıkla yedeğe çekebilir veya yedekten 11'e alabilirsiniz.",
     icon: "📋"

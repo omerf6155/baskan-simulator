@@ -234,32 +234,68 @@ EUROPEAN_CLUBS_MARKET = {
 def to_fifa_pos(pos: str) -> str:
     if not pos:
         return "CM"
-    p = str(pos).upper().strip()
+    # ASCII-safe normalizasyon: Türkçe karakterleri ASCII'ye düşür
+    raw = str(pos).strip()
+    p = raw.upper()
+    # ASCII fallback map: encode/decode ile latin-1 hataları önle
+    try:
+        ascii_p = raw.encode("ascii", errors="replace").decode("ascii").upper()
+    except Exception:
+        ascii_p = p
+
+    # Kaleci
     if "KL" in p or "GK" in p or "KALE" in p:
         return "GK"
-    if "STP" in p or "CB" in p or "STOPER" in p:
+    # Stoper / CB
+    if "STP" in p or p == "CB" or "STOPER" in p:
         return "CB"
-    if "SOL BEK" in p or "SLB" in p or "LB" in p:
+    if "CB" in p.split():
+        return "CB"
+    # Sol Bek
+    if "SOL BEK" in p or "SOL BEK" in ascii_p or "SLB" in p or p == "LB":
         return "LB"
-    if "SAĞ BEK" in p or "SAG BEK" in p or "SB" in p or "RB" in p:
+    if "LB" in p.split():
+        return "LB"
+    # Sağ Bek - SAĞ BEK, SA? BEK (encoding bozuk gelirse)
+    if ("SA" in p and "BEK" in p) or "SGB" in p or p == "RB" or "SB" in p:
         return "RB"
-    if "ÖN LİBERO" in p or "ON LIBERO" in p or "DOS" in p or "CDM" in p or "LİBERO" in p or p == "ÖNL":
+    if "RB" in p.split():
+        return "RB"
+    # CDM / ÖN LİBERO / DOS
+    if "N L" in p and "BERO" in p:  # ÖN LİBERO veya ON LIBERO
         return "CDM"
-    if "FORVET ARKASI" in p or "OFANSİF" in p or "ON NUMARA" in p or "CAM" in p or "OOS" in p:
+    if "DOS" in p or p == "CDM" or "DMF" in p or "CDM" in p.split():
+        return "CDM"
+    # CAM / OOS / FORVET ARKASI / ON NUMARA
+    if "FORVET ARK" in p or "OOS" in p or p == "CAM" or "AMF" in p or "CAM" in p.split():
         return "CAM"
-    if "MERKEZ OS" in p or "ORTA SAHA" in p or "CM" in p or p == "OS":
+    if "OFANS" in ascii_p or "OFANS" in p or "ON NUMARA" in p:
+        return "CAM"
+    # CM / ORTA SAHA / MERKEZ OS
+    if "MERKEZ" in p or "ORTA SAHA" in p or p == "CM" or p == "OS":
         return "CM"
-    if "SAĞ KANAT" in p or "SAG KANAT" in p or "RW" in p or "RM" in p or p == "SK":
+    if "CM" in p.split():
+        return "CM"
+    # RW - Sağ Kanat
+    if ("SA" in p and "KANAT" in p) or "SGK" in p or p == "RW" or "RM" in p or p == "SK":
         return "RW"
-    if "SOL KANAT" in p or "LW" in p or "LM" in p or p == "SLK":
+    if "RW" in p.split():
+        return "RW"
+    # LW - Sol Kanat
+    if ("SOL" in p and "KANAT" in p) or "SLK" in p or p == "LW" or "LM" in p:
         return "LW"
-    if "SANTRAFOR" in p or "SANTRATOR" in p or p == "ST":
+    if "LW" in p.split():
+        return "LW"
+    # ST / Santrafor / Forvet
+    if "SANTRAF" in p or "SANTRAT" in p or p == "ST" or p == "CF" or "CF" in p.split():
         return "ST"
-    if "FORVET" in p or "CF" in p or p == "FOR":
+    if "FORVET" in p and "ARK" not in p:
         return "ST"
+    # Genel KANAT → RW
     if "KANAT" in p:
         return "RW"
-    return p[:3]
+    # Son çare: ilk 3 karakter
+    return p[:3] if len(p) >= 3 else p
 
 def get_position_category_rank(pos: str) -> int:
     f_pos = to_fifa_pos(pos)
@@ -837,6 +873,8 @@ def api_squad_auto_pick():
     if not squad:
         raise HTTPException(status_code=400, detail="Kadro bulunamadı!")
 
+    # Önce tüm oyuncuları enrich et: eski Türkçe pos formatlarını FIFA'ya çevir
+    squad = [enrich_player(dict(p)) for p in squad]
     new_squad = rebalance_and_validate_squad(squad, state.get("club_name", ""))
     state["squad"] = new_squad
     state["team_power"] = round(sum(p["overall"] for p in new_squad[:11]) / 11)
@@ -894,6 +932,13 @@ def api_resign():
 @app.get("/api/state")
 def api_get_state():
     state = get_state()
+
+    # Eski Türkçe pos formatlarını (SOL BEK, SANTRAFOR vb.) FIFA'ya normalize et
+    squad = state.get("squad", [])
+    if squad and any(len(p.get("pos", "")) > 3 for p in squad):
+        state["squad"] = [enrich_player(dict(p)) for p in squad]
+        save_state(state)
+
     # Radar istatistiklerini hesapla
     my_radar = calculate_team_radar(state["squad"])
     state["my_radar"] = my_radar
