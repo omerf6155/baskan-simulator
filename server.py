@@ -471,16 +471,16 @@ def get_state(session_id: Optional[str] = None):
                     # Hoca özellikleri (traits) ve görseli (photo) tamamla
                     coach = state.get("coach")
                     if coach:
-                        if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke"]:
-                            coach["name"] = "Fatih Tekke"
-                            coach["style"] = "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası"
-                            coach["photo"] = "/static/coach_tekke.png"
+                        if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
+                            coach["name"] = "Şenol Güneş"
+                            coach["style"] = "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü"
+                            coach["photo"] = "/static/coach_senol_gunes.png"
                             coach["traits"] = [
-                                {"name": "Bordo-Mavi Tutku", "icon": "🔥", "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."},
-                                {"name": "Topa Hakimiyet & Pas", "icon": "🎨", "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."}
+                                {"name": "Efsanevi Güneş Ekolü", "icon": "☀️", "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."},
+                                {"name": "Hücum & Gol Zenginliği", "icon": "⚽", "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."}
                             ]
                         if not coach.get("photo"):
-                            coach["photo"] = "/static/coach_tekke.png"
+                            coach["photo"] = "/static/coach_senol_gunes.png"
                         if not coach.get("traits"):
                             for t in TEAMS_DB:
                                 if t.get("coach", {}).get("name") == coach.get("name"):
@@ -497,16 +497,16 @@ def get_state(session_id: Optional[str] = None):
                 state = json.load(f)
                 coach = state.get("coach")
                 if coach:
-                    if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke"]:
-                        coach["name"] = "Fatih Tekke"
-                        coach["style"] = "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası"
-                        coach["photo"] = "/static/coach_tekke.png"
+                    if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
+                        coach["name"] = "Şenol Güneş"
+                        coach["style"] = "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü"
+                        coach["photo"] = "/static/coach_senol_gunes.png"
                         coach["traits"] = [
-                            {"name": "Bordo-Mavi Tutku", "icon": "🔥", "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."},
-                            {"name": "Topa Hakimiyet & Pas", "icon": "🎨", "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."}
+                            {"name": "Efsanevi Güneş Ekolü", "icon": "☀️", "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."},
+                            {"name": "Hücum & Gol Zenginliği", "icon": "⚽", "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."}
                         ]
                     if not coach.get("photo"):
-                        coach["photo"] = "/static/coach_tekke.png"
+                        coach["photo"] = "/static/coach_senol_gunes.png"
                     if not coach.get("traits"):
                         for t in TEAMS_DB:
                             if t.get("coach", {}).get("name") == coach.get("name"):

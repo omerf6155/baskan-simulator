@@ -625,7 +625,7 @@ function renderUI() {
   }
 
   // Hoca Özeti & Fotoğrafları
-  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_tekke.png";
+  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_senol_gunes.png";
   const officeCoachPhotoEl = document.getElementById("office-coach-photo");
   if (officeCoachPhotoEl) officeCoachPhotoEl.src = coachPhoto;
   const squadCoachPhotoEl = document.getElementById("squad-coach-photo");

@@ -23,30 +23,30 @@
   "stadium_capacity": 40782,
   "stadium_level": 1,
   "coach": {
-    "name": "Fatih Tekke",
-    "style": "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası",
-    "rating": 84,
-    "attack": 85,
-    "defense": 82,
+    "name": "Şenol Güneş",
+    "style": "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü",
+    "rating": 85,
+    "attack": 86,
+    "defense": 83,
     "youth": 82,
-    "press_rel": 85,
-    "ego": 70,
-    "salary": 32000000,
+    "press_rel": 88,
+    "ego": 74,
+    "salary": 35000000,
     "moral": 100,
     "trust": 75,
     "mistakes_count": 0,
     "praised_count": 0,
-    "photo": "/static/coach_tekke.png",
+    "photo": "/static/coach_senol_gunes.png",
     "traits": [
       {
-        "name": "Bordo-Mavi Tutku",
-        "icon": "🔥",
-        "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."
+        "name": "Efsanevi Güneş Ekolü",
+        "icon": "☀️",
+        "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."
       },
       {
-        "name": "Topa Hakimiyet & Pas",
-        "icon": "🎨",
-        "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."
+        "name": "Hücum & Gol Zenginliği",
+        "icon": "⚽",
+        "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."
       }
     ]
   },
