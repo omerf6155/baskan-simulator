@@ -719,11 +719,15 @@ function renderUI() {
   // Kulüp Scout Şefi Bilgisi
   const scoutNameEl = document.getElementById("scout-current-name");
   const scoutRatingEl = document.getElementById("scout-current-rating");
-  if (gameState.club_scout) {
-    if (scoutNameEl) scoutNameEl.innerText = gameState.club_scout.name || "Cemil Kaya";
-    if (scoutRatingEl) scoutRatingEl.innerText = `%${gameState.club_scout.rating || 75}`;
+  const currentScout = gameState.scout || gameState.club_scout;
+  if (currentScout) {
+    if (scoutNameEl) scoutNameEl.innerText = currentScout.name || "Cemil Kaya";
+    if (scoutRatingEl) scoutRatingEl.innerText = `%${currentScout.rating || 75}`;
   }
   renderUndergroundBetState();
+  loadUndergroundOdds();
+  loadFanSocialFeed();
+  loadCoachRecommendations();
 }
 
 // ==================== HEXAGONAL RADAR / SPIDER CHART ÇİZİMİ ====================
@@ -1034,19 +1038,38 @@ function renderFixtures() {
 function renderFinances() {
   if (!gameState || !gameState.finances) return;
   const fin = gameState.finances;
-  document.getElementById("fin-ticket-val").innerText = formatMoney(fin.last_ticket_income);
-  document.getElementById("fin-store-val").innerText = formatMoney(fin.last_store_income);
-  document.getElementById("fin-tv-val").innerText = formatMoney(fin.last_tv_income);
-  document.getElementById("fin-wage-val").innerText = formatMoney(fin.last_wage_expense);
+  const ticketEl = document.getElementById("fin-ticket-val");
+  const storeEl = document.getElementById("fin-store-val");
+  const tvEl = document.getElementById("fin-tv-val");
+  const sponsorEl = document.getElementById("fin-sponsor-val");
+  const wageEl = document.getElementById("fin-wage-val");
+  const facilityEl = document.getElementById("fin-facility-val");
+  const staffEl = document.getElementById("fin-staff-val");
+  const debtEl = document.getElementById("fin-debt-val");
+  const travelEl = document.getElementById("fin-travel-val");
+  const netEl = document.getElementById("fin-net-change");
+
+  if (ticketEl) ticketEl.innerText = formatMoney(fin.last_ticket_income || 0);
+  if (storeEl) storeEl.innerText = formatMoney(fin.last_store_income || 0);
+  if (tvEl) tvEl.innerText = formatMoney(fin.last_tv_income || 2_500_000);
+  if (sponsorEl) sponsorEl.innerText = formatMoney(fin.last_sponsor_income || 0);
+  if (wageEl) wageEl.innerText = formatMoney(fin.last_wage_expense || 0);
+  if (facilityEl) facilityEl.innerText = formatMoney(fin.last_facility_expense || 2_500_000);
+  if (staffEl) staffEl.innerText = formatMoney(fin.last_staff_expense || 1_800_000);
+  if (debtEl) debtEl.innerText = formatMoney(fin.last_debt_interest || 600_000);
 
   const curFix = (gameState.fixtures || []).find(f => f.week === gameState.week);
   const isAway = curFix && !curFix.is_home;
-  document.getElementById("fin-travel-val").innerText = isAway ? "2M ₺" : "0 ₺";
+  if (travelEl) travelEl.innerText = isAway ? "1.4M ₺" : "0 ₺";
 
-  const net = (fin.last_ticket_income + fin.last_store_income + fin.last_tv_income) - fin.last_wage_expense - (isAway ? 2_000_000 : 0);
-  const netEl = document.getElementById("fin-net-change");
-  netEl.innerText = (net >= 0 ? "+" : "") + formatMoney(net);
-  netEl.className = net >= 0 ? "text-xs font-bold text-emerald-400" : "text-xs font-bold text-rose-400";
+  const net = (fin.last_net_income !== undefined) 
+    ? fin.last_net_income 
+    : ((fin.last_ticket_income || 0) + (fin.last_store_income || 0) + (fin.last_tv_income || 2_500_000) + (fin.last_sponsor_income || 0)) - (fin.last_wage_expense || 0) - 2_500_000 - 1_800_000 - 600_000 - (isAway ? 1_400_000 : 0);
+
+  if (netEl) {
+    netEl.innerText = (net >= 0 ? "+" : "") + formatMoney(net);
+    netEl.className = net >= 0 ? "text-xs font-bold text-emerald-400" : "text-xs font-bold text-rose-400";
+  }
 }
 
 // ==================== GOOOL KUTLAMASI & TARAFTAR SESİ ====================
@@ -2121,11 +2144,17 @@ async function respondIncomingBid(bidId, action) {
   }
 }
 
-// ==================== TRANSFER PAZARI KATEGORİLERİ (DÜNYA YILDIZLARI & SERBESTLER) ====================
+// ==================== TRANSFER PAZARI KATEGORİLERİ (AVRUPA, DÜNYA YILDIZLARI & SERBESTLER) ====================
+let europeanMarketData = {};
+
 async function loadTransferMarket() {
   try {
     const res = await apiFetch("/api/transfer/market");
     marketData = await res.json();
+    const resEur = await apiFetch("/api/transfer/european-market");
+    if (resEur.ok) {
+      europeanMarketData = await resEur.json();
+    }
     renderTransferMarket();
   } catch (e) {
     console.error(e);
@@ -2134,12 +2163,12 @@ async function loadTransferMarket() {
 
 function switchTransferMarketCategory(cat) {
   currentTransferMarketCategory = cat;
-  ["all", "stars", "free"].forEach(c => {
+  ["all", "europe", "stars", "free"].forEach(c => {
     const btn = document.getElementById("btn-tcat-" + c);
     if (btn) {
       btn.className = (c === cat)
-        ? "flex-1 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-[10px] text-center"
-        : "flex-1 py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700";
+        ? "py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-[10px] text-center"
+        : "py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700";
     }
   });
   renderTransferMarket();
@@ -2153,6 +2182,13 @@ function renderTransferMarket() {
   let list = [];
   if (currentTransferMarketCategory === "all") {
     list = (marketData.scout_picks || []).map(p => ({ ...p, type: "scout" }));
+  } else if (currentTransferMarketCategory === "europe") {
+    list = [];
+    Object.keys(europeanMarketData || {}).forEach(club => {
+      (europeanMarketData[club] || []).forEach(p => {
+        list.push({ ...p, club, price: p.val, type: "europe" });
+      });
+    });
   } else if (currentTransferMarketCategory === "stars") {
     list = (marketData.world_stars || []).map(p => ({ ...p, type: "superstar" }));
   } else {
@@ -2163,22 +2199,45 @@ function renderTransferMarket() {
     const item = document.createElement("div");
     item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col gap-1.5 text-xs";
     const cost = (p.price || 0) + (p.salary || p.wage || 0);
+    const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.2 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
 
     item.innerHTML = `
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-bold text-white text-xs">${p.name} <span class="text-[10px] text-amber-400 font-semibold">(${shortenPosition(p.pos)}, ${p.age} yaş)</span></div>
+          <div class="font-bold text-white text-xs">${clubBadge}${p.name} <span class="text-[10px] text-amber-400 font-semibold">(${shortenPosition(p.pos)}, ${p.age} yaş)</span></div>
           <div class="text-[9px] text-slate-400 mt-0.5">Bonservis: <strong>${formatMoney(p.price || 0)}</strong> • Maaş: ${formatMoney(p.salary || p.wage || 0)}</div>
         </div>
         <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
       </div>
       ${p.desc ? `<p class="text-[9px] text-slate-300 italic">"${p.desc}"</p>` : ''}
-      <button onclick="buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000})" class="w-full py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
-        Transfer Et (${formatMoney(cost)})
+      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}')` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000})`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
+        ${p.type === 'europe' ? `Avrupa Transferini Bitir (${formatMoney(cost)})` : `Transfer Et (${formatMoney(cost)})`}
       </button>
     `;
     container.appendChild(item);
   });
+}
+
+async function buyEuropeanPlayer(clubName, playerName) {
+  if (!confirm(`${clubName} kulübünden ${playerName} transfer edilsin mi?`)) return;
+  try {
+    const res = await apiFetch("/api/transfer/sign-european-player", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ club_name: clubName, player_name: playerName })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Transfer yapılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
 }
 
 async function buyMarketPlayer(playerName, price, salary) {
@@ -2925,5 +2984,301 @@ async function cancelUndergroundBet() {
     console.error(e);
     showToast("Bağlantı hatası!");
   }
+}
+
+// ==================== DİNAMİK YASADIŞI BAHİS ORANLARI ====================
+let currentUndergroundOdds = null;
+
+async function loadUndergroundOdds() {
+  try {
+    const res = await apiFetch("/api/underground/odds");
+    currentUndergroundOdds = await res.json();
+    renderUndergroundBetMarkets();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function renderUndergroundBetMarkets() {
+  if (!currentUndergroundOdds || !currentUndergroundOdds.markets) return;
+  const markets = currentUndergroundOdds.markets;
+
+  const btnWin = document.querySelector('.bet-opt-btn[data-type="win"]');
+  const btnOver = document.querySelector('.bet-opt-btn[data-type="over35"]');
+  const btnHtFt = document.querySelector('.bet-opt-btn[data-type="ht_ft"]');
+  const btnOpp = document.querySelector('.bet-opt-btn[data-type="opponent_win"]');
+
+  const mWin = markets.find(m => m.type === "win");
+  const mOver = markets.find(m => m.type === "over35");
+  const mHtFt = markets.find(m => m.type === "ht_ft");
+  const mOpp = markets.find(m => m.type === "opponent_win");
+
+  if (btnWin && mWin) {
+    btnWin.setAttribute("onclick", `selectBetOption('win', ${mWin.odds}, ${mWin.risk_pct}, '${mWin.title}')`);
+    btnWin.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-[11px] font-bold text-white">🟢 ${mWin.title}</span>
+        <span class="text-[10px] font-black text-amber-400 font-mono">${mWin.odds}x</span>
+      </div>
+      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mWin.risk_pct} • ${mWin.desc}</div>
+    `;
+    if (selectedBetType === "win") selectedBetOdds = mWin.odds;
+  }
+
+  if (btnOver && mOver) {
+    btnOver.setAttribute("onclick", `selectBetOption('over35', ${mOver.odds}, ${mOver.risk_pct}, '${mOver.title}')`);
+    btnOver.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-[11px] font-bold text-white">⚽ 3.5 Gol Üstü</span>
+        <span class="text-[10px] font-black text-amber-400 font-mono">${mOver.odds}x</span>
+      </div>
+      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mOver.risk_pct} • ${mOver.desc}</div>
+    `;
+    if (selectedBetType === "over35") selectedBetOdds = mOver.odds;
+  }
+
+  if (btnHtFt && mHtFt) {
+    btnHtFt.setAttribute("onclick", `selectBetOption('ht_ft', ${mHtFt.odds}, ${mHtFt.risk_pct}, '${mHtFt.title}')`);
+    btnHtFt.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-[11px] font-bold text-white">⚡ Şikeli Çevirme (İY/MS)</span>
+        <span class="text-[10px] font-black text-amber-400 font-mono">${mHtFt.odds}x</span>
+      </div>
+      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mHtFt.risk_pct} • ${mHtFt.desc}</div>
+    `;
+    if (selectedBetType === "ht_ft") selectedBetOdds = mHtFt.odds;
+  }
+
+  if (btnOpp && mOpp) {
+    btnOpp.setAttribute("onclick", `selectBetOption('opponent_win', ${mOpp.odds}, ${mOpp.risk_pct}, '${mOpp.title}')`);
+    btnOpp.innerHTML = `
+      <div class="flex justify-between items-center">
+        <span class="text-[11px] font-bold text-rose-300">💀 ${mOpp.title}</span>
+        <span class="text-[10px] font-black text-rose-400 font-mono">${mOpp.odds}x</span>
+      </div>
+      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mOpp.risk_pct} • ${mOpp.desc}</div>
+    `;
+    if (selectedBetType === "opponent_win") selectedBetOdds = mOpp.odds;
+  }
+
+  updateBetSummaryUI();
+}
+
+// ==================== TARAFTAR SOSYAL MEDYA & TRİBÜN SESİ ====================
+async function loadFanSocialFeed() {
+  try {
+    const res = await apiFetch("/api/fans/social-feed");
+    const data = await res.json();
+    const container = document.getElementById("fan-social-feed-container");
+    const demandsContainer = document.getElementById("fan-demands-list");
+    if (!container) return;
+
+    if (demandsContainer && data.demands) {
+      demandsContainer.innerHTML = data.demands.map(d => `<span class="bg-slate-800 px-1.5 py-0.5 rounded text-[9px] border border-slate-700">${d}</span>`).join("");
+    }
+
+    container.innerHTML = "";
+    (data.feed || []).forEach(post => {
+      const card = document.createElement("div");
+      card.className = "bg-slate-900/90 border border-slate-800/80 p-2 rounded-lg text-xs space-y-1 hover:border-slate-700 transition-colors";
+      const sentimentBadge = post.sentiment === "positive" 
+        ? `<span class="text-[8px] bg-emerald-950 text-emerald-300 border border-emerald-800/60 px-1 py-0.2 rounded font-bold">Pozitif</span>`
+        : post.sentiment === "negative"
+        ? `<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-800/60 px-1 py-0.2 rounded font-bold">Tepkili</span>`
+        : `<span class="text-[8px] bg-slate-800 text-slate-300 border border-slate-700 px-1 py-0.2 rounded font-bold">Nötr</span>`;
+
+      card.innerHTML = `
+        <div class="flex justify-between items-center text-[10px]">
+          <div class="flex items-center gap-1.5">
+            <span class="font-bold text-white text-[11px]">${post.name}</span>
+            <span class="text-slate-400 text-[9px]">${post.author}</span>
+          </div>
+          <div class="flex items-center gap-1">
+            ${sentimentBadge}
+            <span class="text-slate-500 text-[9px]">${post.time}</span>
+          </div>
+        </div>
+        <p class="text-[10px] text-slate-200 leading-snug">${post.text}</p>
+        <div class="flex items-center gap-3 text-[9px] text-slate-400 pt-0.5">
+          <span class="flex items-center gap-1 text-rose-400/80">❤️ ${post.likes}</span>
+          <span class="flex items-center gap-1 text-sky-400/80">🔁 ${post.retweets || Math.floor(post.likes * 0.15)}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ==================== TEKNİK DİREKTÖR TRANSFER ÖNERİSİ ====================
+async function loadCoachRecommendations() {
+  try {
+    const res = await apiFetch("/api/coach/transfer-recommendation");
+    const data = await res.json();
+    const posBadge = document.getElementById("coach-rec-target-pos");
+    const reasonEl = document.getElementById("coach-rec-reason");
+    const candidatesEl = document.getElementById("coach-rec-candidates");
+    if (!posBadge || !reasonEl || !candidatesEl) return;
+
+    posBadge.innerText = `${data.target_pos} GEREKLİ`;
+    reasonEl.innerText = `${data.coach_name}: "${data.reason}"`;
+
+    candidatesEl.innerHTML = "";
+    (data.candidates || []).forEach(c => {
+      const item = document.createElement("div");
+      item.className = "bg-slate-900 border border-slate-800 p-2 rounded-lg flex flex-col justify-between text-[10px]";
+      item.innerHTML = `
+        <div>
+          <div class="font-bold text-white text-[11px] truncate">${c.name}</div>
+          <div class="text-[9px] text-amber-400 font-semibold">${c.pos} • ${c.club}</div>
+          <div class="text-[9px] text-slate-400">Güç: ${c.overall} • ${formatMoney(c.val)}</div>
+        </div>
+        <button onclick="buyEuropeanPlayer('${c.club}', '${c.name}')" class="w-full mt-1.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[9px]">
+          Girişim Başlat
+        </button>
+      `;
+      candidatesEl.appendChild(item);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ==================== 4 METRİK (HUD) TIKLANABİLİR BİLGİ MODALI ====================
+const HUD_INFO_DATA = {
+  budget: {
+    title: "Kulüp Kasası (Bütçe)",
+    subtitle: "Mali Güç, Nakit Akışı & Likidite",
+    icon: "wallet",
+    colorClass: "text-emerald-400 bg-emerald-950/80 border-emerald-500/40",
+    desc: "Kulübün anlık kullanabileceği serbest nakit rezervini gösterir. Transfer bonservisleri, oyuncu ve teknik heyet maaşları, tesis bakım ve seyahat giderleri doğrudan kasadan karşılanır.",
+    howIncrease: [
+      "İç saha maçlarında yüksek bilet hasılatı ve forma/mağaza satışları elde ederek.",
+      "Lig maçlarını kazanıp TV yayın primlerinden düzenli sıcak para sağlayarak.",
+      "Göğüs ve stadyum isim hakkı gibi sezonluk sponsorluk anlaşmaları imzalayarak.",
+      "Futbolcuları Avrupa kulüplerine yüksek bonservis bedelleriyle satarak.",
+      "Siyasi nüfuzu artırıp Cumhurbaşkanlığı Acil Kulüp Hibesi talep ederek."
+    ],
+    risks: [
+      "Kasa eksiye düşerse kulüp mali darboğaza girer ve borç faizleri katlanır.",
+      "Bütçe -30M ₺ altına inerse TFF kulübe TRANSFER TAHTASI KISITI uygular ve yeni oyuncu alamazsınız.",
+      "Maaşlar ödenemezse takım içi huzur çöker, oyuncu moralleri dip yapar ve isyan çıkar."
+    ],
+    benefits: [
+      "Dünya yıldızlarını ve Avrupa'nın en potansiyelli wonderkidlerini kadroya katabilirsiniz.",
+      "Stadyum genişletme ve Mega Rezidans/AVM projeleri başlatarak kulübü gayrimenkul zengini yapabilirsiniz.",
+      "Finansal krizdeki rakiplerinize karşı büyük transfer üstünlüğü kurarsınız."
+    ]
+  },
+  fan: {
+    title: "Taraftar Güveni & Tribün Desteği",
+    subtitle: "Sokağın Nabzı, Tribün Doluluğu & Bilet Talebi",
+    icon: "flame",
+    colorClass: "text-amber-400 bg-amber-950/80 border-amber-500/40",
+    desc: "Büyük taraftar kitlelerinin yönetiminize, hocanıza ve takımın futboluna olan inanç endeksidir. Stadyumun doluluk oranını, bilet hasılatını ve mağaza cirosunu doğrudan belirler.",
+    howIncrease: [
+      "Ligde derbileri ve kritik maçları kazanıp takımı üst sıralara taşıyarak.",
+      "Hücum futbolu oynatıp taraftarı heyecanlandıracak yıldız transferleri yaparak.",
+      "Altyapı akademisinden yerli genç yetenekleri A takıma kazandırıp parlatarak.",
+      "Devlet projeleri ve sosyal sorumluluk hamleleriyle kulüp prestijini yükselterek."
+    ],
+    risks: [
+      "Güven %50 altına indiğinde tribünler boşalır, bilet ve mağaza gelirleri bıçak gibi kesilir.",
+      "Güven %35 altına düşerse stadyumda 'Yönetim İstifa' tezahüratları başlar ve kongre üyeleri olağanüstü seçim için imza toplar.",
+      "Düşük güvende elit sponsorlar marka imajları zedeleneceği için sözleşmelerini feshedebilir."
+    ],
+    benefits: [
+      "Her iç saha maçında kapalı gişe oynar, maksimum stadyum ve mağaza hasılatı toplarsınız.",
+      "Yüksek moral ve tribün baskısıyla oyuncular sahada ekstra direnç ve hırsla oynar.",
+      "Olağanüstü kongre ve seçimlerde taraftar arkasında duran başkanı kolay kolay yıkamaz."
+    ]
+  },
+  board: {
+    title: "Kongre & Divan Kurulu Güveni",
+    subtitle: "Başkanlık Koltuğunun Meşruiyeti & İktidar",
+    icon: "users",
+    colorClass: "text-blue-400 bg-blue-950/80 border-blue-500/40",
+    desc: "Kulüp genel kurulu, divan üyeleri ve delegelerin başkan olarak size olan sadakatini temsil eder. Sezon sonu başkanlık seçimlerinde sandıktan zaferle çıkmanızı sağlayan en kritik ölçüttür.",
+    howIncrease: [
+      "Mali disiplini koruyup kulübün borçlarını kontrol altında tutarak.",
+      "Takım içi huzuru ve soyunma odası dengesini (Kaptan Raporu) yüksek tutarak.",
+      "Kongreye verilen vaatleri (stadyum yatırımı, altyapı, şampiyonluk) yerine getirerek.",
+      "Siyasi ilişkileri doğru yönetip kulübe devlet teşvikleri ve hazine arazisi kazandırarak."
+    ],
+    risks: [
+      "Kongre güveni %40 altına düşerse divan kurulu olağanüstü seçim çağrısı yapar.",
+      "Sezon sonu başkanlık seçiminde muhalefet blok oluşturur ve koltuğu kaybedip oyundan elenirsiniz (Game Over!).",
+      "Karanlık işler veya şike baskını durumunda kongre üyeleri güvenoyu vermeyi reddeder."
+    ],
+    benefits: [
+      "Kongre seçimlerinde %80+ oy oranlarıyla güven tazeleyip göreve rahatça devam edersiniz.",
+      "Büyük gayrimenkul ve stadyum genişletme projelerine kongre engelsiz onay verir.",
+      "Kriz dönemlerinde divan heyeti başkanı koruyucu basın açıklamaları yayınlar."
+    ]
+  },
+  politics: {
+    title: "Siyasi Nüfuz & Ankara Gücü",
+    subtitle: "Bürokrasi, TFF Dengeleri & Devlet Fonları",
+    icon: "landmark",
+    colorClass: "text-purple-400 bg-purple-950/80 border-purple-500/40",
+    desc: "Kulübün Ankara bürokrasisi, Spor Bakanlığı ve karar verici siyasi merciler nezdindeki lobi gücüdür. Devlet destekli projeler, hazine arazisi tahsisleri ve Cumhurbaşkanlığı hibeleri için hayatidir.",
+    howIncrease: [
+      "Ankara Ziyareti gerçekleştirerek Spor Bakanlığı ve üst düzey bürokratlarla görüşerek (+10 Siyaset).",
+      "Devlet Destekli Gençlik ve Tesis Sosyal Projelerine imza atarak (+16 Siyaset).",
+      "Kritik gündemlerde federasyon ve spor kamuoyu lehine yapıcı basın açıklamaları yaparak (+8 Siyaset)."
+    ],
+    risks: [
+      "Siyasi nüfuz düşükse (%65 altı) Cumhurbaşkanlığı makamına erişim kapalıdır, başvuru yapamazsınız.",
+      "Yetersiz siyasi güçle Ankara'dan talep edilen projeler geri çevrilir (-15 Kongre).",
+      "TFF ve kurullarda lobi gücünüz zayıflarsa hakem hataları ve cezalarda kulüp yalnız kalır."
+    ],
+    benefits: [
+      "%65 üstü siyasi güçle sezonluk 35M ₺ Cumhurbaşkanlığı Acil Kulüp Hibesi talep edebilirsiniz.",
+      "%85 üstü süper güçle kulübün geleceğini kurtaracak 15 Dönüm Hazine Arazisi ve 30M ₺ altyapı fonu tahsis ettirebilirsiniz.",
+      "Kulübün yeraltı ve MASAK soruşturmalarında siyasi koruma ve kalkan etkisi oluşturur."
+    ]
+  }
+};
+
+function openHudInfoModal(type) {
+  const data = HUD_INFO_DATA[type];
+  if (!data) return;
+
+  const modal = document.getElementById("modal-hud-info");
+  if (!modal) return;
+
+  document.getElementById("hud-info-title").innerText = data.title;
+  document.getElementById("hud-info-subtitle").innerText = data.subtitle;
+  document.getElementById("hud-info-desc").innerText = data.desc;
+
+  const iconBox = document.getElementById("hud-info-icon-box");
+  if (iconBox) {
+    iconBox.className = `w-8 h-8 rounded-lg flex items-center justify-center border ${data.colorClass}`;
+    iconBox.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4"></i>`;
+  }
+
+  const ulIncrease = document.getElementById("hud-info-how-increase");
+  if (ulIncrease) {
+    ulIncrease.innerHTML = data.howIncrease.map(item => `<li>${item}</li>`).join("");
+  }
+
+  const ulRisks = document.getElementById("hud-info-risks");
+  if (ulRisks) {
+    ulRisks.innerHTML = data.risks.map(item => `<li>${item}</li>`).join("");
+  }
+
+  const ulBenefits = document.getElementById("hud-info-benefits");
+  if (ulBenefits) {
+    ulBenefits.innerHTML = data.benefits.map(item => `<li>${item}</li>`).join("");
+  }
+
+  if (window.lucide) lucide.createIcons();
+  modal.classList.remove("hidden");
+}
+
+function closeHudInfoModal() {
+  const modal = document.getElementById("modal-hud-info");
+  if (modal) modal.classList.add("hidden");
 }
 

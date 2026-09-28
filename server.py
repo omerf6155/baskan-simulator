@@ -116,84 +116,119 @@ AVAILABLE_SPONSORS = [
         "type": "chest",
         "type_label": "Göğüs Ana Sponsoru",
         "name": "Türk Hava Yolları",
-        "income_season": 70_000_000,
-        "req_text": "İlk 6 Sıra & %75+ Taraftar",
-        "req_fan": 75,
-        "req_rank": 6,
-        "desc": "Uluslararası prestij ve Avrupa arenası hedefleyen köklü kulüplerle çalışırlar."
+        "income_season": 35_000_000,
+        "req_text": "İlk 5 Sıra & %70+ Taraftar",
+        "req_fan": 70,
+        "req_rank": 5,
+        "desc": "Uluslararası prestij ve Avrupa arenası hedefleyen köklü kulüplerle çalışırlar.",
+        "downside": "İlk 6 sıradan düşülürse sponsorluk ödemeleri dondurulur ve kulübe 6M ₺ ihtar cezası yansıtılır."
     },
     {
         "id": "sp2",
         "type": "chest",
         "type_label": "Göğüs Ana Sponsoru",
         "name": "Binance Global Finans",
-        "income_season": 95_000_000,
-        "req_text": "İlk 3 Şampiyonluk Adayı & %85+ Güven",
-        "req_fan": 85,
+        "income_season": 45_000_000,
+        "req_text": "İlk 3 Şampiyonluk Adayı & %80+ Güven",
+        "req_fan": 80,
         "req_rank": 3,
-        "desc": "Yalnızca şampiyonluk kovalayan dev markalara küresel sermaye yatırımı yaparlar."
+        "desc": "Yalnızca şampiyonluk kovalayan dev markalara küresel sermaye yatırımı yaparlar.",
+        "downside": "Şampiyonluk yarışından kopulması durumunda (4. ve altı) anlaşma feshedilir."
     },
     {
         "id": "sp3",
         "type": "stadium",
         "type_label": "Stadyum İsim Hakkı",
         "name": "Mega Telekom Arena",
-        "income_season": 110_000_000,
+        "income_season": 38_000_000,
         "req_text": "35.000+ Stadyum Kapasitesi",
         "req_stadium": 35000,
-        "desc": "Dev stadyumların teknolojik altyapısını ve 3 sezonluk isim hakkını devralır."
+        "desc": "Dev stadyumların teknolojik altyapısını ve sezonluk isim hakkını devralır.",
+        "downside": "Stadyum doluluğu %50 altına düşerse haftalık hakedişler %40 oranında tırpanlanır."
     },
     {
         "id": "sp4",
         "type": "stadium",
         "type_label": "Stadyum İsim Hakkı",
         "name": "Red Bull Park",
-        "income_season": 130_000_000,
+        "income_season": 48_000_000,
         "req_text": "40.000+ Kapasite & %80+ Taraftar",
         "req_stadium": 40000,
         "req_fan": 80,
-        "desc": "Global enerji devi; stadyumu devasa bir şölen merkezine dönüştürmek için rekor bütçe sunar."
+        "desc": "Global enerji devi; stadyumu devasa bir şölen merkezine dönüştürmek için elit bütçe sunar.",
+        "downside": "Taraftar güveni %65 altına düşerse marka tazminatı olarak 8M ₺ ceza tahsil edilir."
     },
     {
         "id": "sp5",
         "type": "back",
         "type_label": "Forma Sırt & Numara",
         "name": "Uludağ Doğal Maden",
-        "income_season": 35_000_000,
+        "income_season": 14_000_000,
         "req_text": "Tüm Kulüplere Açık",
-        "desc": "Yerli sanayi devi; Süper Lig'in tüm renklerine koşulsuz sırt reklamı sağlar."
+        "desc": "Yerli sanayi devi; Süper Lig'in tüm renklerine sırt reklamı desteği sağlar.",
+        "downside": "Ligin alt sıralarına (küme düşme potası) inilirse sezonluk prim iptal edilir."
     },
     {
         "id": "sp6",
         "type": "back",
         "type_label": "Forma Sırt & Numara",
         "name": "Puma Sportswear",
-        "income_season": 48_000_000,
+        "income_season": 22_000_000,
         "req_text": "İlk 8 Sıra & %60+ Kongre Güveni",
         "req_rank": 8,
         "req_board": 60,
-        "desc": "Avrupa kupaları yolundaki istikrarlı takımların forma sırt tedarikçisi."
+        "desc": "Avrupa kupaları yolundaki istikrarlı takımların forma sırt tedarikçisi.",
+        "downside": "İlk 10 dışına gerilen haftalarda haftalık forma primleri askıya alınır."
     },
     {
         "id": "sp7",
         "type": "arm",
         "type_label": "Forma Kol & Şort",
         "name": "Getir Lojistik",
-        "income_season": 28_000_000,
+        "income_season": 15_000_000,
         "req_text": "Mali Disiplin (Borç Limitini Aşmama)",
         "req_no_debt_limit": True,
-        "desc": "Hızlı teslimat devi; mali tablosu temiz olan kulüplerle kol ve şort ortaklığı kurar."
+        "desc": "Hızlı teslimat devi; mali tablosu temiz olan kulüplerle kol ve şort ortaklığı kurar.",
+        "downside": "Kulübün borç limitini aşması durumunda sözleşme anında tek taraflı feshedilir."
     },
     {
         "id": "sp8",
         "type": "health",
         "type_label": "Resmi Sağlık Sponsoru",
         "name": "Acıbadem Sağlık Grubu",
-        "income_season": 32_000_000,
+        "income_season": 16_000_000,
         "req_text": "Süper Lig Kulübü Olma",
-        "desc": "Kulübün tüm sporcu sağlık kontrollerini üstlenir ve sakatlık sürelerini kısaltır."
+        "desc": "Kulübün tüm sporcu sağlık kontrollerini üstlenir ve sakatlık sürelerini kısaltır.",
+        "downside": "Kulüp doping veya yasadışı soruşturmaya uğrarsa sağlık anlaşması düşer."
     }
 ]
+
+EUROPEAN_CLUBS_MARKET = {
+    "Ajax": [
+        {"name": "Kenneth Taylor", "pos": "MERKEZ OS", "age": 24, "overall": 83, "val": 35_000_000, "wage": 11_000_000, "desc": "Ajax altyapısının maestro oyun kurucusu. Yüksek pas ve vizyon."},
+        {"name": "Brian Brobbey", "pos": "SANTRAFOR", "age": 24, "overall": 83, "val": 42_000_000, "wage": 14_000_000, "desc": "Fiziksel güç abidesi, ceza sahasında durdurulamaz forvet."},
+        {"name": "Mika Godts", "pos": "SOL KANAT", "age": 21, "overall": 80, "potential": 88, "val": 28_000_000, "wage": 7_500_000, "desc": "Belçikalı dahi kanat, müthiş çalım ve asist yeteneği."},
+        {"name": "Jorrel Hato", "pos": "STP", "age": 20, "overall": 82, "potential": 89, "val": 40_000_000, "wage": 9_000_000, "desc": "Avrupa devlerinin peşinde olduğu elit sol ayaklı stoper."}
+    ],
+    "Aston Villa": [
+        {"name": "Jacob Ramsey", "pos": "MERKEZ OS", "age": 25, "overall": 83, "val": 38_000_000, "wage": 13_500_000, "desc": "Premier Lig temposuna alışık, iki yönlü dinamik orta saha."},
+        {"name": "Morgan Rogers", "pos": "FORVET ARKASI", "age": 24, "overall": 82, "val": 32_000_000, "wage": 10_000_000, "desc": "Güçlü dripling, dripling üstü şut ve asist ustası."},
+        {"name": "Jhon Durán", "pos": "SANTRAFOR", "age": 22, "overall": 83, "potential": 88, "val": 45_000_000, "wage": 15_000_000, "desc": "Uzak mesafeli füzeleriyle ünlü Kolombiyalı süper golcü."}
+    ],
+    "Sevilla": [
+        {"name": "Dodi Lukebakio", "pos": "SAĞ KANAT", "age": 28, "overall": 82, "val": 26_000_000, "wage": 9_500_000, "desc": "Hızlı, patlayıcı ve ters ayaklı hücum silahı."},
+        {"name": "Isaac Romero", "pos": "SANTRAFOR", "age": 26, "overall": 80, "val": 22_000_000, "wage": 8_000_000, "desc": "Pres gücü yüksek, savaşçı İspanyol forvet."},
+        {"name": "Juanlu Sánchez", "pos": "SAĞ BEK", "age": 23, "overall": 81, "potential": 86, "val": 24_000_000, "wage": 7_000_000, "desc": "Hücumcu bek ekolünün parlayan genç yıldızı."}
+    ],
+    "Sporting CP": [
+        {"name": "Morten Hjulmand", "pos": "ÖN LİBERO", "age": 27, "overall": 84, "val": 44_000_000, "wage": 14_000_000, "desc": "Kusursuz oyun zekası, top kapan ve oyunu başlatan lider."},
+        {"name": "Francisco Trincão", "pos": "SAĞ KANAT", "age": 26, "overall": 82, "val": 28_000_000, "wage": 9_000_000, "desc": "Teknik kapasitesi yüksek Portekizli solak virtüöz."}
+    ],
+    "Lille": [
+        {"name": "Edon Zhegrova", "pos": "SAĞ KANAT", "age": 27, "overall": 83, "val": 34_000_000, "wage": 11_500_000, "desc": "Ligue 1'in en çok çalım atan kanat oyuncularından biri."},
+        {"name": "Ayyoub Bouaddi", "pos": "MERKEZ OS", "age": 19, "overall": 79, "potential": 88, "val": 22_000_000, "wage": 5_500_000, "desc": "Fransa'nın yeni nesil altın çocuğu, soğukkanlı pasör."}
+    ]
+}
 
 # ==================== OYUNCU VE RADAR İSTATİSTİKLERİ ====================
 def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
@@ -302,6 +337,131 @@ def get_captain_name(squad: List[Dict]) -> str:
     starters = squad[:11] if len(squad) >= 11 else squad
     sorted_p = sorted(starters, key=lambda x: (x.get("age", 25) >= 28, x.get("overall", 75)), reverse=True)
     return sorted_p[0]["name"]
+
+def get_realistic_market_wage(overall: int) -> int:
+    if overall >= 88:
+        return 30_000_000 + (overall - 88) * 8_000_000
+    elif overall >= 84:
+        return 12_000_000 + (overall - 84) * 3_500_000
+    elif overall >= 80:
+        return 6_000_000 + (overall - 80) * 1_500_000
+    elif overall >= 75:
+        return 3_000_000 + (overall - 75) * 600_000
+    else:
+        return max(1_500_000, 2_000_000 + (overall - 70) * 200_000)
+
+GEN_YOUTH_NAMES = [
+    ("Emirhan Yılmaz", "STP"), ("Kerem Öztürk", "MERKEZ OS"), 
+    ("Batuhan Kaya", "KL"), ("Arda Çelik", "SOL BEK"), 
+    ("Yusuf Demir", "SAĞ BEK"), ("Mert Koç", "SANTRAFOR"), 
+    ("Caner Aydın", "SOL KANAT"), ("Furkan Şahin", "SAĞ KANAT"),
+    ("Onur Keskin", "ÖN LİBERO"), ("Burak Doğan", "FORVET ARKASI")
+]
+
+def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "") -> List[Dict]:
+    squad_copy = [dict(p) for p in squad]
+
+    # Bozuk veya uçuk maaşları gerçekçi piyasaya normalize et
+    for p in squad_copy:
+        ovr = p.get("overall", 75)
+        market_w = get_realistic_market_wage(ovr)
+        if p.get("wage", 0) > market_w * 2.2:
+            p["wage"] = market_w
+
+    gks = [p for p in squad_copy if "KL" in p.get("pos", "")]
+    outfield = [p for p in squad_copy if "KL" not in p.get("pos", "")]
+
+    # Kaleci yoksa altyapıdan kaleci çağır
+    if not gks:
+        new_gk = enrich_player({
+            "name": "Burak Özdemir (Altyapı)",
+            "pos": "KL",
+            "age": 19,
+            "overall": 73,
+            "potential": 85,
+            "wage": 2_000_000,
+            "val": 15_000_000,
+            "is_youth": True,
+            "is_foreign": False,
+            "contract_years": 4,
+            "morale": 90
+        })
+        gks.append(new_gk)
+
+    # Yedek kaleci yoksa 2. kaleci ekle
+    if len(gks) < 2:
+        backup_gk = enrich_player({
+            "name": "Eren Kılıç (Altyapı)",
+            "pos": "KL",
+            "age": 18,
+            "overall": 71,
+            "potential": 84,
+            "wage": 1_800_000,
+            "val": 12_000_000,
+            "is_youth": True,
+            "is_foreign": False,
+            "contract_years": 5,
+            "morale": 90
+        })
+        gks.append(backup_gk)
+
+    # Kalecileri sırala: sağlam olan öne, overall yüksek öne
+    gks.sort(key=lambda x: (x.get("suspended_weeks", 0) == 0, x.get("injured_weeks", 0) == 0, x.get("overall", 75)), reverse=True)
+    best_gk = gks[0]
+    bench_gks = gks[1:]
+
+    # Saha içi oyuncuları sırala
+    outfield.sort(key=lambda x: (x.get("suspended_weeks", 0) == 0, x.get("injured_weeks", 0) == 0, x.get("overall", 75)), reverse=True)
+
+    # Saha içi oyuncu sayısı 12'den azsa altyapıdan takviye yap
+    youth_idx = 0
+    while len(outfield) < 13:
+        y_name, y_pos = GEN_YOUTH_NAMES[youth_idx % len(GEN_YOUTH_NAMES)]
+        youth_idx += 1
+        new_youth = enrich_player({
+            "name": f"{y_name} (Altyapı)",
+            "pos": y_pos,
+            "age": random.randint(18, 20),
+            "overall": random.randint(70, 75),
+            "potential": random.randint(84, 89),
+            "wage": 2_200_000,
+            "val": 18_000_000,
+            "is_youth": True,
+            "is_foreign": False,
+            "contract_years": 4,
+            "morale": 90
+        })
+        outfield.append(new_youth)
+
+    # Yabancı kuralını gözeterek ilk 10 saha içi oyuncusunu seç (en fazla 8 yabancı)
+    gk_is_foreign = best_gk.get("is_foreign", True)
+    foreign_count = 1 if gk_is_foreign else 0
+
+    starters_outfield = []
+    bench_outfield = []
+
+    for p in outfield:
+        if len(starters_outfield) < 10:
+            if p.get("is_foreign", True):
+                if foreign_count < 8:
+                    starters_outfield.append(p)
+                    foreign_count += 1
+                else:
+                    bench_outfield.append(p)
+            else:
+                starters_outfield.append(p)
+        else:
+            bench_outfield.append(p)
+
+    while len(starters_outfield) < 10 and bench_outfield:
+        starters_outfield.append(bench_outfield.pop(0))
+
+    # KESİN GARANTİ:
+    # İndeks 0: best_gk (TAM 1 TANE KALECİ)
+    # İndeks 1..10: starters_outfield (TAM 10 TANE SAHA İÇİ OYUNCUSU, ASLA 2. KALECİ YOK)
+    # İndeks 11..son: bench_outfield + bench_gks (yedek kaleciler ve yedek oyuncular)
+    final_squad = [best_gk] + starters_outfield + bench_outfield + bench_gks
+    return final_squad
 
 # ==================== 34 HAFTALIK ÇİFT DEVRE FİKSTÜR ====================
 def generate_fixtures(my_team_name: str, teams: List[Dict]):
@@ -456,6 +616,9 @@ def get_state(session_id: Optional[str] = None):
                 if state.get("team_id") in valid_ids and "is_started" in state:
                     if "squad" in state:
                         state["squad"] = [enrich_player(p) for p in state["squad"]]
+                        state["squad"] = rebalance_and_validate_squad(state["squad"])
+                        state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+                        state["my_radar"] = calculate_team_radar(state["squad"])
                     if "max_weeks" not in state or state["max_weeks"] < 34:
                         state["max_weeks"] = 34
                     if "political_power" not in state:
@@ -497,6 +660,11 @@ def get_state(session_id: Optional[str] = None):
         try:
             with open(SAVE_FILE, "r", encoding="utf-8") as f:
                 state = json.load(f)
+                if "squad" in state:
+                    state["squad"] = [enrich_player(p) for p in state["squad"]]
+                    state["squad"] = rebalance_and_validate_squad(state["squad"])
+                    state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+                    state["my_radar"] = calculate_team_radar(state["squad"])
                 coach = state.get("coach")
                 if coach:
                     team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
@@ -585,9 +753,12 @@ def api_squad_swap(req: SquadSwapRequest):
         temp_squad = list(squad)
         temp_squad[req.index1], temp_squad[req.index2] = temp_squad[req.index2], temp_squad[req.index1]
 
+        prev_starters_gks = sum(1 for p in squad[:11] if "KL" in p.get("pos", ""))
         starters_gks = sum(1 for p in temp_squad[:11] if "KL" in p.get("pos", ""))
-        if starters_gks > 1:
-            raise HTTPException(status_code=400, detail="İlk 11'de birden fazla kaleci bulunamaz! Kaleci yalnızca yedek kaleciyle değiştirilebilir.")
+
+        # Eğer eski kadroda zaten 2 kaleci varsa ve bu hamle kaleci sayısını azaltıyorsa izin ver!
+        if starters_gks > 1 and starters_gks >= prev_starters_gks:
+            raise HTTPException(status_code=400, detail="İlk 11'de birden fazla kaleci bulunamaz! Kaleci yalnızca yedek kaleciyle veya yedek kulübesine çekilerek değiştirilebilir.")
         if starters_gks == 0:
             raise HTTPException(status_code=400, detail="İlk 11'de mutlaka 1 kaleci yer almalıdır! Kaleciyi saha içi oyuncusuyla değiştiremezsiniz.")
 
@@ -606,45 +777,12 @@ def api_squad_auto_pick():
     if not squad:
         raise HTTPException(status_code=400, detail="Kadro bulunamadı!")
 
-    gks = [p for p in squad if "KL" in p.get("pos", "")]
-    gks.sort(key=lambda x: (x.get("suspended_weeks", 0) == 0, x.get("injured_weeks", 0) == 0, x.get("overall", 75)), reverse=True)
-    best_gk = gks[0] if gks else squad[0]
-
-    remaining = [p for p in squad if p != best_gk]
-
-    def sort_key(p):
-        is_healthy = (p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0)
-        return (is_healthy, p.get("overall", 75))
-
-    remaining.sort(key=sort_key, reverse=True)
-
-    gk_is_foreign = best_gk.get("is_foreign", True)
-    starters_outfield = []
-    bench = []
-    foreign_count = 1 if gk_is_foreign else 0
-
-    for p in remaining:
-        if len(starters_outfield) < 10:
-            if p.get("is_foreign", True):
-                if foreign_count < 8:
-                    starters_outfield.append(p)
-                    foreign_count += 1
-                else:
-                    bench.append(p)
-            else:
-                starters_outfield.append(p)
-        else:
-            bench.append(p)
-
-    while len(starters_outfield) < 10 and bench:
-        starters_outfield.append(bench.pop(0))
-
-    new_squad = [best_gk] + starters_outfield + bench
+    new_squad = rebalance_and_validate_squad(squad, state.get("club_name", ""))
     state["squad"] = new_squad
     state["team_power"] = round(sum(p["overall"] for p in new_squad[:11]) / 11)
     state["my_radar"] = calculate_team_radar(new_squad)
     save_state(state)
-    return {"status": "ok", "message": "Teknik Direktör ideal ilk 11'i belirledi!", "state": state}
+    return {"status": "ok", "message": "Teknik Direktör ideal ilk 11'i ve yedekleri başarıyla belirledi!", "state": state}
 
 class StartGameRequest(BaseModel):
     team_id: str
@@ -730,6 +868,13 @@ class Half1Request(BaseModel):
 @app.post("/api/match/half1")
 def api_match_half1(req: Half1Request):
     state = get_state()
+    # Kadro Sağlamlık ve Asgari Oyuncu Kontrolü (3 kişiyle maça çıkmayı engeller)
+    if len(state.get("squad", [])) < 11 or sum(1 for p in state.get("squad", [])[:11] if "KL" in p.get("pos", "")) != 1:
+        state["squad"] = rebalance_and_validate_squad(state.get("squad", []), state.get("club_name", ""))
+        state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+        state["my_radar"] = calculate_team_radar(state["squad"])
+        save_state(state)
+
     current_week = state["week"]
     if current_week > state["max_weeks"]:
         state["season_finished"] = True
@@ -1018,32 +1163,49 @@ def api_match_half2(req: HalftimeActionRequest):
         if p.get("injured_weeks", 0) > 0:
             p["injured_weeks"] -= 1
 
-    # Hasılat ve Finans Hesaplamaları
+    # Hasılat ve Finans Hesaplamaları (Gerçekçi & Dengeli Standartlar)
     ticket_income = 0
     store_income = 0
     if is_home:
-        ticket_price = 1_350 if is_derby else 500
-        occupancy = min(1.0, (state["fan_trust"] + (25 if is_derby else 0)) / 100.0)
+        ticket_price = 750 if is_derby else 320
+        occupancy = min(1.0, (state["fan_trust"] + (20 if is_derby else 0)) / 100.0)
         ticket_income = int(state["stadium_capacity"] * ticket_price * occupancy)
-        store_income = int(state["fan_trust"] * (350_000 if is_derby else 120_000))
+        store_income = int(state["fan_trust"] * (150_000 if is_derby else 65_000))
     else:
-        travel_cost = 3_500_000 if is_derby else 2_000_000
+        travel_cost = 2_500_000 if is_derby else 1_400_000
         state["budget"] = max(0, state["budget"] - travel_cost)
-        store_income = int(state["fan_trust"] * 60_000)
+        store_income = int(state["fan_trust"] * 35_000)
 
-    tv_income = 14_000_000 if is_derby else 7_000_000
+    tv_income = 5_000_000 if is_derby else 2_500_000
     weekly_wage_expense = sum(p["wage"] for p in state["squad"]) // 34 + (state["coach"]["salary"] // 34)
+
+    # Sabit Pasif Masraflar: Stadyum & Tesis Bakımı + İdari Personel/Sağlık/Lojistik
+    facility_maintenance = 2_500_000
+    staff_and_travel = 1_800_000
 
     # Bankalar Birliği Borç Faizi Kesintisi
     debt_interest = int(state.get("debt", 200_000_000) * 0.003)
-    net_income = (ticket_income + store_income + tv_income) - weekly_wage_expense - debt_interest
+
+    # Sponsorluk Haftalık Hak Ediş Geliri (%60'ı 34 haftaya bölünür)
+    weekly_sponsor_income = 0
+    for sp in state.get("finances", {}).get("active_sponsors", []):
+        weekly_sponsor_income += int((sp.get("income_season", 0) * 0.60) / 34)
+
+    total_income = ticket_income + store_income + tv_income + weekly_sponsor_income
+    total_expenses = weekly_wage_expense + facility_maintenance + staff_and_travel + debt_interest
+    net_income = total_income - total_expenses
     state["budget"] += net_income
 
     state["finances"]["last_ticket_income"] = ticket_income
     state["finances"]["last_store_income"] = store_income
     state["finances"]["last_tv_income"] = tv_income
+    state["finances"]["last_sponsor_income"] = weekly_sponsor_income
     state["finances"]["last_wage_expense"] = weekly_wage_expense
+    state["finances"]["last_facility_expense"] = facility_maintenance
+    state["finances"]["last_staff_expense"] = staff_and_travel
     state["finances"]["last_debt_interest"] = debt_interest
+    state["finances"]["last_total_expense"] = total_expenses
+    state["finances"]["last_net_income"] = net_income
 
     # Transfer Tahtası ve Borç Kuralı
     if state["budget"] < -30_000_000:
@@ -1297,53 +1459,68 @@ def api_politics_action(req: PoliticsActionRequest):
 @app.post("/api/politics/presidential-grant")
 def api_presidential_grant():
     state = get_state()
+    cur_season = state.get("season", 1)
+    
+    # 1. Kural: Sezonda Sadece 1 Kez Deneme Hakkı
+    if state.get("presidential_grant_used_season") == cur_season:
+        raise HTTPException(
+            status_code=400,
+            detail=f"{cur_season}. Sezon için Cumhurbaşkanlığı hibe başvuru hakkınızı zaten kullandınız! Saray kapısı sezonda sadece 1 kez çalınabilir. Yeni başvuru hakkı: Gelecek Sezon."
+        )
+
     pol = state.get("political_power", 50)
+    # 2. Kural: Giriş Eşiği Artırıldı (En az %65)
+    if pol < 65:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Siyasi nüfuzunuz Cumhurbaşkanlığı makamına ulaşmak için yetersiz! (Mevcut: %{pol} • En az %65 Siyasi Nüfuz gereklidir)."
+        )
 
-    if pol < 50:
-        raise HTTPException(status_code=400, detail="Siyasi nüfuzunuz Cumhurbaşkanlığı makamına ulaşmak için yetersiz! (En az %50 Siyasi Nüfuz gereklidir)")
+    # Hak tüketildi olarak kaydet (başarılı ya da başarısız fark etmeksizin)
+    state["presidential_grant_used_season"] = cur_season
 
-    # 1. Senaryo: Siyaset %90 Üstü -> Mega Hazine Arazisi Hibe Talebi (%80 Kabul)
-    if pol >= 90:
-        success = (random.random() < 0.80)
+    # 1. Senaryo: Siyaset %85 Üstü -> Hazine Arazisi Hibe Talebi (%40 Kabul)
+    if pol >= 85:
+        success = (random.random() < 0.40)
         if success:
-            acres = 35
+            acres = 15
+            grant_cash = 30_000_000
             state["real_estate"]["land_acres"] += acres
-            state["budget"] += 50_000_000
-            state["fan_trust"] = min(100, state["fan_trust"] + 15)
-            state["board_trust"] = min(100, state["board_trust"] + 20)
-            msg = f"🏛️ CUMHURBAŞKANLIĞI KARARNAMESİ: Sayın Cumhurbaşkanı kulübümüze {acres} DÖNÜM HAZİNE ARAZİSİ ve 50M ₺ altyapı hibesi tahsis etti!"
+            state["budget"] += grant_cash
+            state["fan_trust"] = min(100, state["fan_trust"] + 8)
+            state["board_trust"] = min(100, state["board_trust"] + 12)
+            msg = f"🏛️ CUMHURBAŞKANLIĞI KARARNAMESİ: Sayın Cumhurbaşkanı kulübümüze {acres} DÖNÜM HAZİNE ARAZİSİ ve {format_money_val(grant_cash)} altyapı fonu tahsis etti!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "success", "type": "land", "message": msg, "state": state}
         else:
             # Ret ve Skandal!
-            state["fan_trust"] = max(10, state["fan_trust"] - 25)
-            state["board_trust"] = max(10, state["board_trust"] - 25)
-            state["media_trust"] = max(10, state.get("media_trust", 70) - 20)
-            state["political_power"] = max(20, pol - 20)
-            msg = "❌ SARAY KAPISINDAN RET! Cumhurbaşkanlığı arazi talebini veto etti. Muhalif medya 'Kulüp rezil oldu' manşetleri attı!"
+            state["fan_trust"] = max(10, state["fan_trust"] - 15)
+            state["board_trust"] = max(10, state["board_trust"] - 15)
+            state["media_trust"] = max(10, state.get("media_trust", 70) - 15)
+            state["political_power"] = max(20, pol - 15)
+            msg = "❌ SARAY KAPISINDAN RET! Cumhurbaşkanlığı arazi talebini veto etti. Muhalif basın 'Kulüp eli boş döndü' manşetleri attı (-15 Siyaset, -15 Kongre)!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "rejected", "type": "land", "message": msg, "state": state}
 
-    # 2. Senaryo: Siyaset %50 - %89 Arası -> Acil Nakit Hibe Talebi (%35 Kabul)
+    # 2. Senaryo: Siyaset %65 - %84 Arası -> Acil Kulüp Destek Hibesi (%25 Kabul)
     else:
-        success = (random.random() < 0.35)
+        success = (random.random() < 0.25)
         if success:
-            grant_money = 120_000_000
+            grant_money = 35_000_000
             state["budget"] += grant_money
-            state["board_trust"] = min(100, state["board_trust"] + 12)
-            msg = f"💰 SARAYDAN MÜJDE: Cumhurbaşkanlığı Acil Kulüp Fonu'ndan kulübümüze {grant_money:,} ₺ NAKİT HİBE onaylandı!"
+            state["board_trust"] = min(100, state["board_trust"] + 8)
+            msg = f"💰 SARAYDAN MÜJDE: Cumhurbaşkanlığı Acil Kulüp Fonu'ndan kulübümüze {format_money_val(grant_money)} nakit destek onaylandı!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "success", "type": "cash", "message": msg, "state": state}
         else:
             # Ret ve Kamuoyu Baskısı
-            state["fan_trust"] = max(10, state["fan_trust"] - 15)
-            state["board_trust"] = max(10, state["board_trust"] - 15)
-            state["media_trust"] = max(10, state.get("media_trust", 70) - 10)
+            state["fan_trust"] = max(10, state["fan_trust"] - 10)
+            state["board_trust"] = max(10, state["board_trust"] - 10)
             state["political_power"] = max(20, pol - 10)
-            msg = "❌ HİBE TALEBİ REDDEDİLDİ! Cumhurbaşkanlığı kaynak yetersizliği gerekçesiyle talebi geri çevirdi. Basın 'Başkan Ankara'dan eli boş döndü' yazdı!"
+            msg = "❌ HİBE TALEBİ REDDEDİLDİ! Cumhurbaşkanlığı makamı bütçe disiplini gerekçesiyle hibe talebini geri çevirdi (-10 Siyaset)."
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "rejected", "type": "cash", "message": msg, "state": state}
@@ -1385,7 +1562,8 @@ def api_captain_report():
 
         for p, reason, multiplier in candidates[:2]:
             curr_w = p.get("wage", 3_000_000)
-            demanded_w = max(int(curr_w * multiplier), curr_w + 2_000_000)
+            max_market = get_realistic_market_wage(p.get("overall", 75))
+            demanded_w = min(max_market, max(int(curr_w * multiplier), curr_w + 1_500_000))
             wage_demands.append({
                 "name": p["name"],
                 "pos": p["pos"],
@@ -1736,25 +1914,38 @@ def api_respond_incoming_bid(req: RespondBidRequest):
     if not player:
         raise HTTPException(status_code=404, detail="Oyuncu kadroda bulunamadı!")
 
+    if req.action in ["accept", "counter"]:
+        # TFF Asgari Kadro & Kaleci Kuralı
+        if len(state["squad"]) <= 14:
+            raise HTTPException(status_code=400, detail="TFF Asgari Kadro Kuralı: Kadronuzda en az 14 profesyonel futbolcu bulunmak zorundadır! Daha fazla oyuncu satışı yapamazsınız.")
+        if "KL" in player.get("pos", "") and sum(1 for p in state["squad"] if "KL" in p.get("pos", "")) <= 1:
+            raise HTTPException(status_code=400, detail="TFF Kuralı: Takımda en az 1 kaleci bulunmak zorundadır! Kadronuzdaki tek kaleciyi satamazsınız.")
+
     if req.action == "accept":
         state["budget"] += bid["offer_val"]
         state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+        state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+        state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+        state["my_radar"] = calculate_team_radar(state["squad"])
         state["incoming_bids"] = []
-        msg = f"💰 OYUNCU SATILDI: {player['name']}, {bid['offer_val']:,} ₺ karşılığında {bid['club']} kulübüne transfer oldu!"
+        msg = f"💰 OYUNCU SATILDI: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında {bid['club']} kulübüne transfer oldu!"
     elif req.action == "counter":
         # %50 şansla karşı kulüp ekstra %25 kabul eder
         if random.random() < 0.50:
             extra = int(bid["offer_val"] * 1.25)
             state["budget"] += extra
             state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+            state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+            state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+            state["my_radar"] = calculate_team_radar(state["squad"])
             state["incoming_bids"] = []
-            msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {extra:,} ₺ bedelle satıldı!"
+            msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle satıldı!"
         else:
             state["incoming_bids"] = []
             msg = f"❌ {bid['club']} karşı teklifimizi çok bularak masadan kalktı. Transfer iptal oldu."
     else: # reject
         state["incoming_bids"] = []
-        msg = f"🚫 TEKLİF REDDEDİLDİ: {player['name']} için gelen {bid['offer_val']:,} ₺ teklif geri çevrildi."
+        msg = f"🚫 TEKLİF REDDEDİLDİ: {player['name']} için gelen {format_money_val(bid['offer_val'])} teklif geri çevrildi."
 
     state["news"].insert(0, msg)
     save_state(state)
@@ -1944,14 +2135,67 @@ def api_sign_sponsor(req: SignSponsorRequest):
     if sp.get("req_no_debt_limit") and state.get("budget", 0) < -30_000_000:
         raise HTTPException(status_code=400, detail="Sponsor kriteri karşılanamadı: Kulübün mali limit aşımı bulunuyor.")
 
-    state["budget"] += sp["income_season"]
+    upfront = int(sp["income_season"] * 0.40)
+    weekly_payout = int((sp["income_season"] * 0.60) / 34)
+    state["budget"] += upfront
     active.append({
         "id": sp["id"],
         "type": sp["type"],
         "name": sp["name"],
-        "income_season": sp["income_season"]
+        "income_season": sp["income_season"],
+        "upfront": upfront,
+        "weekly_payout": weekly_payout,
+        "downside": sp.get("downside", "")
     })
-    msg = f"✍️ RESMİ SPONSORLUK: {sp['name']} kulübümüzle 1 sezonluk anlaşma imzaladı (+{sp['income_season']:,} ₺ peşin gelir)!"
+    msg = f"✍️ RESMİ SPONSORLUK: {sp['name']} kulübümüzle 1 sezonluk anlaşma imzaladı (+{format_money_val(upfront)} peşin, haftalık +{format_money_val(weekly_payout)})!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== SCOUT ŞEFİ KOVMA & İŞE ALMA ====================
+@app.post("/api/scout/fire")
+def api_scout_fire():
+    state = get_state()
+    scout = state.get("scout") or state.get("club_scout")
+    if not scout or scout.get("is_vacant"):
+        raise HTTPException(status_code=400, detail="Mevcut bir scout şefi zaten bulunmuyor!")
+    tazminat = 2_000_000
+    if state["budget"] < tazminat:
+        raise HTTPException(status_code=400, detail="Scout ekibini kovmak için 2.000.000 ₺ fesih tazminatı kasada bulunmalıdır!")
+    state["budget"] -= tazminat
+    old_name = scout.get("name", "Scout Şefi")
+    vacant = {
+        "id": "vacant",
+        "name": "Kadro Boş (Scout Aranıyor)",
+        "role": "Görevde kimse yok",
+        "rating": 50,
+        "salary": 0,
+        "region": "-",
+        "is_vacant": True
+    }
+    state["scout"] = vacant
+    state["club_scout"] = vacant
+    msg = f"🚪 Scout Şefi {old_name} ile yollar ayrıldı (2M ₺ fesih tazminatı ödendi). Yeni bir scout şefi istihdam edebilirsiniz."
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+class HireScoutRequest(BaseModel):
+    scout_id: str
+
+@app.post("/api/scout/hire")
+def api_scout_hire(req: HireScoutRequest):
+    state = get_state()
+    cand = next((c for c in SCOUT_CANDIDATES if c["id"] == req.scout_id), None)
+    if not cand:
+        raise HTTPException(status_code=404, detail="Aday bulunamadı!")
+    peşinat = cand["salary"] // 4
+    if state["budget"] < peşinat:
+        raise HTTPException(status_code=400, detail=f"Scout şefinin ilk peşinatı için kasada en az {format_money_val(peşinat)} nakit bulunmalıdır!")
+    state["budget"] -= peşinat
+    state["scout"] = dict(cand)
+    state["club_scout"] = dict(cand)
+    msg = f"👔 Yeni Scout Şefi: {cand['name']} ({cand['role']} - %{cand['rating']}) kulübümüzde göreve başladı!"
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
@@ -1982,6 +2226,84 @@ def api_underground_deal(req: UndergroundDealRequest):
     save_state(state)
     return {"message": "Karanlık anlaşma sağlandı. Çanta teslim edildi.", "state": state}
 
+def calculate_dynamic_betting_odds(state: Dict[str, Any]) -> Dict[str, Any]:
+    cur_fixture = next((f for f in state.get("fixtures", []) if f["week"] == state.get("week", 1)), None)
+    if not cur_fixture:
+        opp_name = "Rakip"
+        opp_power = 75
+        is_home = True
+    else:
+        opp_name = cur_fixture["opponent"]
+        is_home = cur_fixture.get("is_home", True)
+        opp_team = next((t for t in TEAMS_DB if t["name"] == opp_name or t["id"] == opp_name), None)
+        opp_power = opp_team.get("power", 75) if opp_team else 75
+
+    my_power = state.get("team_power", 75)
+    diff = my_power - opp_power
+    if is_home:
+        diff += 4  # Ev sahibi avantajı
+
+    win_odds = max(1.25, min(4.50, round(1.85 - (diff * 0.05), 2)))
+    opp_win_odds = max(1.30, min(6.50, round(2.80 + (diff * 0.08), 2)))
+    over35_odds = max(1.80, min(3.80, round(2.35 + (0.05 if opp_power > 80 else -0.05), 2)))
+    ht_ft_odds = max(3.00, min(7.50, round(4.10 + (abs(diff) * 0.04), 2)))
+
+    return {
+        "opponent": opp_name,
+        "is_home": is_home,
+        "my_power": my_power,
+        "opp_power": opp_power,
+        "diff": diff,
+        "markets": {
+            "win": {
+                "title": f"{state.get('club_name')} Galibiyeti",
+                "odds": win_odds,
+                "risk_pct": 14 if diff >= 0 else 26,
+                "desc": f"{'İç saha avantajıyla ' if is_home else 'Deplasmanda '}temiz 3 puan senaryosu"
+            },
+            "over35": {
+                "title": "3.5 Gol Üstü (En az 4 gol)",
+                "odds": over35_odds,
+                "risk_pct": 20,
+                "desc": "Defansların çöktüğü, karşılıklı gollü çılgın maç senaryosu"
+            },
+            "ht_ft": {
+                "title": "İlk Yarı Yenik / Maç Sonu Galibiyet (1/2 Çevirme)",
+                "odds": ht_ft_odds,
+                "risk_pct": 34,
+                "desc": "Ağır şike ve hakem operasyonu ile ters köşe çevirme"
+            },
+            "opponent_win": {
+                "title": f"{opp_name} Galibiyeti (Ters Bahis / Maçı Satma)",
+                "odds": opp_win_odds,
+                "risk_pct": 38,
+                "desc": "Kendi takımının mağlubiyetine karanlık kasa kuponu yatır"
+            }
+        }
+    }
+
+@app.get("/api/underground/odds")
+def api_underground_odds():
+    state = get_state()
+    odds_calc = calculate_dynamic_betting_odds(state)
+    markets_list = []
+    for k, v in odds_calc["markets"].items():
+        markets_list.append({
+            "type": k,
+            "title": v["title"],
+            "odds": v["odds"],
+            "risk_pct": v["risk_pct"],
+            "desc": v["desc"]
+        })
+    return {
+        "opponent": odds_calc["opponent"],
+        "is_home": odds_calc["is_home"],
+        "my_power": odds_calc["my_power"],
+        "opp_power": odds_calc["opp_power"],
+        "active_bet": state.get("underground", {}).get("active_bet"),
+        "markets": markets_list
+    }
+
 class UndergroundBetRequest(BaseModel):
     bet_type: str
     amount: int
@@ -1998,14 +2320,8 @@ def api_underground_bet(req: UndergroundBetRequest):
     if state["budget"] < req.amount:
         raise HTTPException(status_code=400, detail="Yetersiz bütçe! Kasada bu kadar nakit para yok.")
 
-    odds_map = {
-        "win": {"title": "Kendi Takımına Temiz Galibiyet", "odds": 1.85, "risk": 12},
-        "over35": {"title": "3.5 Gol Üstü (En az 4 gol)", "odds": 2.40, "risk": 18},
-        "ht_ft": {"title": "İlk Yarı / İkinci Yarı Şikeli Çevirme", "odds": 3.60, "risk": 25},
-        "opponent_win": {"title": "Karanlık Kasa: Rakip Takım Kazanır (Ters Şike)", "odds": 4.80, "risk": 35},
-    }
-
-    bet_info = odds_map.get(req.bet_type)
+    odds_calc = calculate_dynamic_betting_odds(state)
+    bet_info = odds_calc["markets"].get(req.bet_type)
     if not bet_info:
         raise HTTPException(status_code=400, detail="Geçersiz bahis türü!")
 
@@ -2018,7 +2334,7 @@ def api_underground_bet(req: UndergroundBetRequest):
         "amount": req.amount,
         "odds": bet_info["odds"],
         "potential_payout": potential_payout,
-        "risk_pct": bet_info["risk"],
+        "risk_pct": bet_info["risk_pct"],
         "week": state["week"]
     }
 
@@ -2027,6 +2343,214 @@ def api_underground_bet(req: UndergroundBetRequest):
         "message": f"Karanlık kupon yapıldı! Yatırılan: {format_money_val(req.amount)} • Oran: {bet_info['odds']}x • Olası Kazanç: {format_money_val(potential_payout)}",
         "state": state
     }
+
+# ==================== TARAFTAR SOSYAL MEDYA & TRİBÜN SESİ ====================
+@app.get("/api/fans/social-feed")
+def api_fans_social_feed():
+    state = get_state()
+    fan_trust = state.get("fan_trust", 50)
+    club = state.get("club_name", "Kulüp")
+    coach_name = state.get("coach", {}).get("name", "Hoca")
+
+    rank = 1
+    for i, s in enumerate(state.get("standings", [])):
+        if s["name"] == club:
+            rank = i + 1
+            break
+
+    posts = []
+    if rank == 1:
+        posts.append({
+            "author": f"@{club.replace(' ', '').lower()}_fanatik",
+            "name": f"{club} Sevdalısı",
+            "tag": "Tribün",
+            "text": f"Lideriz lider! Bu sene o kupa bu müzeye gelecek inşallah! 🏆🔥",
+            "likes": 3410,
+            "sentiment": "positive",
+            "time": "10dk önce"
+        })
+    elif rank <= 4:
+        posts.append({
+            "author": "@tribun_lideri",
+            "name": "Tribün Gözü",
+            "tag": "Tribün Lideri",
+            "text": f"{rank}. sıradayız ama oyun tatmin etmiyor. {coach_name} takımı daha hücumcu oynatmalı!",
+            "likes": 1820,
+            "sentiment": "neutral",
+            "time": "25dk önce"
+        })
+    else:
+        posts.append({
+            "author": "@öfkeli_taraftar",
+            "name": "Arma Uğruna",
+            "tag": "Kongre Üyesi",
+            "text": f"{rank}. sırada olmak bu büyük armaya hakarettir! Yönetim transfer yapsın, hoca da aklını başına alsın!",
+            "likes": 4200,
+            "sentiment": "negative",
+            "time": "5dk önce"
+        })
+
+    if state.get("transfer_window_open", False):
+        posts.append({
+            "author": "@transfer_nobeti",
+            "name": "Transfer Merkezi",
+            "tag": "Gazeteci",
+            "text": f"KULİS: {club} yönetimi Avrupa devlerinden elit oyuncularla masada! Taraftar dünya çapında forvet ve stoper bekliyor.",
+            "likes": 2150,
+            "sentiment": "positive",
+            "time": "1sa önce"
+        })
+    else:
+        posts.append({
+            "author": "@genc_tribun",
+            "name": "Gençlik Kolları",
+            "tag": "Taraftar",
+            "text": "Altyapı akademisindeki genç pırlantalara daha çok şans verilsin! Geleceğimiz özkaynağımızda.",
+            "likes": 1280,
+            "sentiment": "neutral",
+            "time": "2sa önce"
+        })
+
+    if fan_trust >= 75:
+        posts.append({
+            "author": "@baskanin_yanindayiz",
+            "name": "Büyük Arma",
+            "tag": "Taraftar",
+            "text": f"Büyük Başkan arkandayız! Kulübün mali disiplini ve vizyonu 10 numara. Kapalı gişe oynamaya devam!",
+            "likes": 3100,
+            "sentiment": "positive",
+            "time": "3sa önce"
+        })
+    else:
+        posts.append({
+            "author": "@bilet_pahali",
+            "name": "Halkın Takımı",
+            "tag": "Taraftar",
+            "text": "Bilet ve kombine fiyatları cep yakıyor! Yönetim acil öğrenci ve aile tribünü indirimi getirmeli.",
+            "likes": 2450,
+            "sentiment": "negative",
+            "time": "4sa önce"
+        })
+
+    return {
+        "fan_trust": fan_trust,
+        "club_rank": rank,
+        "feed": posts,
+        "demands": [
+            "🏆 Lig şampiyonluğu veya ilk 3 garantisi",
+            "⚽ Hücum futbolu ve bol gollü galibiyetler",
+            "🌍 Avrupa kulüplerinden elit yabancı transferleri",
+            "🎟️ Makul bilet ve forma fiyatları"
+        ]
+    }
+
+# ==================== TEKNİK DİREKTÖR TRANSFER TAVSİYESİ ====================
+@app.get("/api/coach/transfer-recommendation")
+def api_coach_transfer_recommendation():
+    state = get_state()
+    squad = state.get("squad", [])
+    coach = state.get("coach", {})
+
+    gk_ovr = max((p.get("overall", 70) for p in squad if "KL" in p.get("pos", "")), default=70)
+    defs = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["STP", "BEK"])]
+    def_avg = (sum(defs) / len(defs)) if defs else 70
+    mids = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["OS", "LİBERO"])]
+    mid_avg = (sum(mids) / len(mids)) if mids else 70
+    fwds = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["FOR", "SANTRAFOR", "KANAT"])]
+    fwd_avg = (sum(fwds) / len(fwds)) if fwds else 70
+
+    target_pos = "SANTRAFOR"
+    reason = "Gol yollarında tıkanıyoruz. Bitirici ve güçlü bir santrafor şart."
+    rec_players = [
+        {"name": "Brian Brobbey", "club": "Ajax", "pos": "SANTRAFOR", "overall": 83, "val": 42_000_000, "wage": 14_000_000},
+        {"name": "Jhon Durán", "club": "Aston Villa", "pos": "SANTRAFOR", "overall": 83, "val": 45_000_000, "wage": 15_000_000}
+    ]
+
+    if gk_ovr < 78:
+        target_pos = "KALECİ"
+        reason = "Kalede güven veren, refleksleri üst düzey bir file bekçisi önceliğimiz olmalı."
+        rec_players = [
+            {"name": "Mateo 'El Nino' Silva", "club": "Serbest", "pos": "KALECİ", "overall": 82, "val": 30_000_000, "wage": 9_000_000}
+        ]
+    elif def_avg < mid_avg and def_avg < fwd_avg:
+        target_pos = "STOPER"
+        reason = "Defans hattımız hava toplarında ve rakip kontra ataklarda çok açık veriyor."
+        rec_players = [
+            {"name": "Jorrel Hato", "club": "Ajax", "pos": "STP", "overall": 82, "val": 40_000_000, "wage": 9_000_000},
+            {"name": "Lamine Diallo", "club": "Scout Keşfi", "pos": "STP", "overall": 85, "val": 38_000_000, "wage": 12_000_000}
+        ]
+    elif mid_avg < fwd_avg:
+        target_pos = "MERKEZ OS"
+        reason = "Orta sahada pas trafiğini yönetecek ve oyunu iki yönlü oynayacak bir maestroya ihtiyacımız var."
+        rec_players = [
+            {"name": "Kenneth Taylor", "club": "Ajax", "pos": "MERKEZ OS", "overall": 83, "val": 35_000_000, "wage": 11_000_000},
+            {"name": "Jacob Ramsey", "club": "Aston Villa", "pos": "MERKEZ OS", "overall": 83, "val": 38_000_000, "wage": 13_500_000}
+        ]
+
+    return {
+        "coach_name": coach.get("name", "Teknik Direktör"),
+        "target_pos": target_pos,
+        "reason": reason,
+        "ratings": {
+            "gk": round(gk_ovr),
+            "def": round(def_avg),
+            "mid": round(mid_avg),
+            "fwd": round(fwd_avg)
+        },
+        "candidates": rec_players
+    }
+
+# ==================== AVRUPA KULÜPLERİ TRANSFER PAZARI ====================
+class SignEuropeanPlayerRequest(BaseModel):
+    club_name: str
+    player_name: str
+
+@app.get("/api/transfer/european-market")
+def api_transfer_european_market():
+    return EUROPEAN_CLUBS_MARKET
+
+@app.post("/api/transfer/sign-european-player")
+def api_sign_european_player(req: SignEuropeanPlayerRequest):
+    state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır!")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
+    players = EUROPEAN_CLUBS_MARKET.get(req.club_name, [])
+    player = next((p for p in players if p["name"] == req.player_name), None)
+    if not player:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı!")
+
+    fee = player["val"]
+    sign_bonus = int(fee * 0.1)
+    total_cost = fee + sign_bonus
+    if state["budget"] < total_cost:
+        raise HTTPException(status_code=400, detail=f"Bütçe yetersiz! Bonservis + İmza Parası: {format_money_val(total_cost)} nakit gereklidir.")
+
+    state["budget"] -= total_cost
+    new_p = enrich_player({
+        "name": player["name"],
+        "pos": player["pos"],
+        "age": player["age"],
+        "overall": player["overall"],
+        "potential": player.get("potential", player["overall"] + 2),
+        "wage": player["wage"],
+        "val": player["val"],
+        "contract_years": 4,
+        "is_foreign": True,
+        "morale": 95
+    })
+    state["squad"].append(new_p)
+    state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+    state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+    state["my_radar"] = calculate_team_radar(state["squad"])
+    state["fan_trust"] = min(100, state["fan_trust"] + 8)
+
+    msg = f"🌍 AVRUPA BOMBASI: {req.club_name} kulübünden {new_p['name']} ({new_p['pos']} - OVR {new_p['overall']}) kulübümüze imza attı!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
 
 @app.delete("/api/underground/bet")
 def api_underground_cancel_bet():
