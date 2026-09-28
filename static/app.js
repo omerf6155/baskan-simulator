@@ -245,6 +245,78 @@ async function swapSquadPlayers(idx1, idx2) {
   }
 }
 
+// ==================== FIFA POZİSYON STANDARTLARI & YARDIMCILARI ====================
+function isGoalkeeper(pos) {
+  if (!pos) return false;
+  const p = String(pos).toUpperCase().trim();
+  return p === "GK" || p === "KL" || p.includes("KALE");
+}
+
+function shortenPosition(pos) {
+  if (!pos) return "CM";
+  const p = String(pos).toUpperCase().trim();
+  if (p.includes("KL") || p.includes("GK") || p.includes("KALE")) return "GK";
+  if (p.includes("STP") || p.includes("CB") || p.includes("STOPER")) return "CB";
+  if (p.includes("SOL BEK") || p.includes("SLB") || p === "LB") return "LB";
+  if (p.includes("SAĞ BEK") || p.includes("SAG BEK") || p.includes("SB") || p === "RB") return "RB";
+  if (p.includes("ÖN LİBERO") || p.includes("ON LIBERO") || p.includes("DOS") || p.includes("CDM") || p.includes("LİBERO") || p === "ÖNL") return "CDM";
+  if (p.includes("FORVET ARKASI") || p.includes("OFANSİF") || p.includes("ON NUMARA") || p.includes("CAM") || p.includes("OOS")) return "CAM";
+  if (p.includes("MERKEZ OS") || p.includes("ORTA SAHA") || p === "CM" || p === "OS") return "CM";
+  if (p.includes("SAĞ KANAT") || p.includes("SAG KANAT") || p === "RW" || p.includes("RM") || p === "SK") return "RW";
+  if (p.includes("SOL KANAT") || p === "LW" || p.includes("LM") || p === "SLK") return "LW";
+  if (p.includes("SANTRAFOR") || p.includes("SANTRATOR") || p === "ST") return "ST";
+  if (p.includes("FORVET") || p.includes("CF") || p === "FOR") return "ST";
+  if (p.includes("KANAT")) return "RW";
+  return p.substring(0, 3);
+}
+
+function getPosCategory(pos) {
+  const p = shortenPosition(pos);
+  if (p === "GK") return "GK";
+  if (["LB", "CB", "RB"].includes(p)) return "DEF";
+  if (["CDM", "CM", "CAM"].includes(p)) return "MID";
+  return "FWD";
+}
+
+function getFifaPosBadgeHtml(pos) {
+  const p = shortenPosition(pos);
+  let colorClass = "bg-slate-800 text-slate-300 border-slate-700";
+  if (p === "GK") {
+    colorClass = "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-sm";
+  } else if (["LB", "CB", "RB"].includes(p)) {
+    colorClass = "bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm";
+  } else if (["CDM", "CM", "CAM"].includes(p)) {
+    colorClass = "bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-sm";
+  } else if (["LW", "RW", "ST"].includes(p)) {
+    colorClass = "bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm";
+  }
+  return `<span class="px-1.5 py-0.5 rounded font-black text-[9px] tracking-wide border ${colorClass}">${p}</span>`;
+}
+
+function playWhistleSound() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(2400, now);
+    osc.frequency.exponentialRampToValueAtTime(3200, now + 0.07);
+    osc.frequency.exponentialRampToValueAtTime(2600, now + 0.15);
+    osc.frequency.exponentialRampToValueAtTime(3100, now + 0.22);
+    gain.gain.setValueAtTime(0.12, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.28);
+  } catch (e) {
+    // AudioContext might require user gesture
+  }
+}
+
 // ==================== OYUNCU DEĞİŞİKLİĞİ & İLK 11 YÖNETİMİ ====================
 let activeSubSourceIdx = null;
 let activeSubIsStarter = false;
@@ -263,15 +335,13 @@ function openSubstitutionModal(idx, isStarter) {
 
   if (!modal || !sourceCardEl || !listEl) return;
 
-  const isGK = player.pos === "KL";
+  const isGK = isGoalkeeper(player.pos);
   titleEl.innerText = isStarter ? "İLK 11'DEN YEDEĞE AL" : "YEDEKTEN İLK 11'E AL";
 
   // Kaynak oyuncu kartı
   sourceCardEl.innerHTML = `
     <div class="flex items-center gap-2.5 truncate">
-      <span class="text-[10px] font-black px-2 py-1 rounded ${isGK ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-200'}">
-        ${shortenPosition(player.pos)}
-      </span>
+      ${getFifaPosBadgeHtml(player.pos)}
       <div class="truncate">
         <div class="text-xs font-bold text-white flex items-center gap-1.5 truncate">
           <span>${player.name}</span>
@@ -305,20 +375,20 @@ function openSubstitutionModal(idx, isStarter) {
     const benchPlayers = gameState.squad.slice(11).map((p, i) => ({ player: p, actualIdx: 11 + i }));
     if (isGK) {
       // Kaleci çıkıyorsa SADECE yedek kaleciler girebilir!
-      candidates = benchPlayers.filter(c => c.player.pos === "KL");
+      candidates = benchPlayers.filter(c => isGoalkeeper(c.player.pos));
     } else {
       // Saha içi oyuncusu çıkıyorsa SADECE saha içi yedekler girebilir (Kaleci YASAK!)
-      candidates = benchPlayers.filter(c => c.player.pos !== "KL");
+      candidates = benchPlayers.filter(c => !isGoalkeeper(c.player.pos));
     }
   } else {
     // Yedek oyuncu ilk 11'e alınıyor, İLK 11'DEN birinin yerine geçecek
     const starterPlayers = gameState.squad.slice(0, 11).map((p, i) => ({ player: p, actualIdx: i }));
     if (isGK) {
       // Yedek kaleci ilk 11'e giriyorsa SADECE ilk 11'deki kalecinin yerine geçebilir!
-      candidates = starterPlayers.filter(c => c.player.pos === "KL");
+      candidates = starterPlayers.filter(c => isGoalkeeper(c.player.pos));
     } else {
       // Saha içi yedek giriyorsa SADECE ilk 11'deki saha içi oyuncularının yerine geçebilir (Kaleci ÇIKARILAMAZ!)
-      candidates = starterPlayers.filter(c => c.player.pos !== "KL");
+      candidates = starterPlayers.filter(c => !isGoalkeeper(c.player.pos));
     }
   }
 
@@ -336,9 +406,7 @@ function openSubstitutionModal(idx, isStarter) {
       cItem.className = "p-2 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex items-center justify-between transition-all";
       cItem.innerHTML = `
         <div class="flex items-center gap-2 truncate">
-          <span class="text-[9px] font-black px-1.5 py-0.5 rounded ${p.pos === 'KL' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-300'}">
-            ${shortenPosition(p.pos)}
-          </span>
+          ${getFifaPosBadgeHtml(p.pos)}
           <div class="truncate">
             <div class="font-bold text-white text-[11px] truncate flex items-center gap-1">
               <span>${p.name}</span>
@@ -528,6 +596,8 @@ function renderUI() {
   // Başlangıçta kulüp seçilmemişse seçim modalını zorunlu aç
   if (!gameState.is_started) {
     openTeamSelectModal();
+  } else {
+    checkAutoTutorial();
   }
 
   // Header Kulüp Logosu ve Arma
@@ -864,6 +934,16 @@ function drawHexagonalRadar(canvasId, myStats, oppStats) {
 }
 
 // ==================== KADRO VE PUAN DURUMU RENDER ====================
+function renderPosLineHeader(title, count, icon, colorClass = "text-slate-400 border-slate-800") {
+  const div = document.createElement("div");
+  div.className = `flex items-center justify-between px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${colorClass} bg-slate-900/40 border-b border-t border-slate-800/60 my-1 rounded`;
+  div.innerHTML = `
+    <span class="flex items-center gap-1.5"><span>${icon}</span> <span>${title}</span></span>
+    <span class="text-[9px] opacity-75 font-semibold">${count} Oyuncu</span>
+  `;
+  return div;
+}
+
 function renderSquadPlayerCard(p, idx, isStarter) {
   const card = document.createElement("div");
   card.className = `p-2 rounded-lg border flex items-center justify-between text-xs transition-all ${
@@ -889,13 +969,11 @@ function renderSquadPlayerCard(p, idx, isStarter) {
 
   card.innerHTML = `
     <div class="flex items-center gap-2 truncate">
-      <span class="text-[9px] font-black px-1.5 py-0.5 rounded ${
-        p.pos === "KL" ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "bg-slate-800 text-slate-300"
-      }">${shortenPosition(p.pos)}</span>
+      ${getFifaPosBadgeHtml(p.pos)}
       <div class="truncate">
         <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5">
           <span>${p.name}</span>
-          ${idx === 0 && !p.pos.includes("KL") ? '<span class="text-[8px] bg-amber-500 text-black px-1 rounded font-black">KAPTAN</span>' : ''}
+          ${idx === 0 && !isGoalkeeper(p.pos) ? '<span class="text-[8px] bg-amber-500 text-black px-1 rounded font-black">KAPTAN</span>' : ''}
           ${isForeign 
             ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">🌐 YBN</span>' 
             : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">🇹🇷 TR</span>'}
@@ -929,9 +1007,9 @@ function renderSquadList() {
 
   document.getElementById("squad-player-count").innerText = gameState.squad.length;
 
-  const starters = gameState.squad.slice(0, 11);
-  const bench = gameState.squad.slice(11);
-  const foreignCount = starters.filter(p => p.is_foreign !== false).length;
+  const starters = gameState.squad.slice(0, 11).map((p, i) => ({ player: p, actualIdx: i }));
+  const bench = gameState.squad.slice(11).map((p, i) => ({ player: p, actualIdx: 11 + i }));
+  const foreignCount = starters.filter(item => item.player.is_foreign !== false).length;
 
   // Yabancı Kuralı Bilgi / Uyarı Başlığı (Süper Lig: İlk 11'de en fazla 8 yabancı)
   const banner = document.createElement("div");
@@ -955,33 +1033,75 @@ function renderSquadList() {
 
   // 1. Grup: ⭐ İLK 11 (MAÇ KADROSU)
   const startersHeader = document.createElement("div");
-  startersHeader.className = "flex items-center justify-between px-2 py-1.5 text-[11px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg mb-1.5";
+  startersHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-xl mb-2 shadow-sm";
   startersHeader.innerHTML = `
-    <span class="flex items-center gap-1"><span>⭐</span> <span>MAÇ KADROSU (İLK 11)</span></span>
-    <span class="text-[9px] text-slate-400 font-medium">11 Oyuncu</span>
+    <span class="flex items-center gap-1.5"><span>⭐</span> <span>MAÇ KADROSU (İLK 11)</span></span>
+    <span class="text-[9px] text-amber-300/80 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full">11 Oyuncu</span>
   `;
   container.appendChild(startersHeader);
 
-  starters.forEach((p, idx) => {
-    const card = renderSquadPlayerCard(p, idx, true);
-    container.appendChild(card);
-  });
+  // İlk 11 Hatları: Kaleci -> Defans -> Orta Saha -> Forvet
+  const sGk = starters.filter(item => isGoalkeeper(item.player.pos));
+  const sDef = starters.filter(item => !isGoalkeeper(item.player.pos) && ["LB", "CB", "RB"].includes(shortenPosition(item.player.pos)));
+  const sMid = starters.filter(item => !isGoalkeeper(item.player.pos) && ["CDM", "CM", "CAM"].includes(shortenPosition(item.player.pos)));
+  const sFwd = starters.filter(item => !isGoalkeeper(item.player.pos) && ["LW", "RW", "ST"].includes(shortenPosition(item.player.pos)));
+  const sOther = starters.filter(item => !sGk.includes(item) && !sDef.includes(item) && !sMid.includes(item) && !sFwd.includes(item));
+
+  if (sGk.length > 0) {
+    container.appendChild(renderPosLineHeader("Kaleci", sGk.length, "🧤", "text-amber-400"));
+    sGk.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
+  }
+  if (sDef.length > 0) {
+    container.appendChild(renderPosLineHeader("Defans Hattı", sDef.length, "🛡️", "text-sky-400"));
+    sDef.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
+  }
+  if (sMid.length > 0) {
+    container.appendChild(renderPosLineHeader("Orta Saha Hattı", sMid.length, "⚙️", "text-emerald-400"));
+    sMid.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
+  }
+  if (sFwd.length > 0) {
+    container.appendChild(renderPosLineHeader("Forvet & Hücum Hattı", sFwd.length, "🎯", "text-rose-400"));
+    sFwd.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
+  }
+  if (sOther.length > 0) {
+    sOther.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
+  }
 
   // 2. Grup: 🪑 YEDEKLER & REZERVLER
   if (bench.length > 0) {
     const benchHeader = document.createElement("div");
-    benchHeader.className = "flex items-center justify-between px-2 py-1.5 text-[11px] font-bold text-slate-300 bg-slate-800/60 border border-slate-700/60 rounded-lg mt-3 mb-1.5";
+    benchHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-slate-300 bg-slate-800/80 border border-slate-700/80 rounded-xl mt-4 mb-2 shadow-sm";
     benchHeader.innerHTML = `
-      <span class="flex items-center gap-1"><span>🪑</span> <span>YEDEKLER & REZERV KADRO</span></span>
-      <span class="text-[9px] text-slate-400 font-medium">${bench.length} Oyuncu</span>
+      <span class="flex items-center gap-1.5"><span>🪑</span> <span>YEDEKLER & REZERV KADRO</span></span>
+      <span class="text-[9px] text-slate-400 font-bold bg-slate-800 px-2 py-0.5 rounded-full">${bench.length} Oyuncu</span>
     `;
     container.appendChild(benchHeader);
 
-    bench.forEach((p, bIdx) => {
-      const actualIdx = 11 + bIdx;
-      const card = renderSquadPlayerCard(p, actualIdx, false);
-      container.appendChild(card);
-    });
+    const bGk = bench.filter(item => isGoalkeeper(item.player.pos));
+    const bDef = bench.filter(item => !isGoalkeeper(item.player.pos) && ["LB", "CB", "RB"].includes(shortenPosition(item.player.pos)));
+    const bMid = bench.filter(item => !isGoalkeeper(item.player.pos) && ["CDM", "CM", "CAM"].includes(shortenPosition(item.player.pos)));
+    const bFwd = bench.filter(item => !isGoalkeeper(item.player.pos) && ["LW", "RW", "ST"].includes(shortenPosition(item.player.pos)));
+    const bOther = bench.filter(item => !bGk.includes(item) && !bDef.includes(item) && !bMid.includes(item) && !bFwd.includes(item));
+
+    if (bGk.length > 0) {
+      container.appendChild(renderPosLineHeader("Yedek Kaleci", bGk.length, "🧤", "text-amber-400"));
+      bGk.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
+    }
+    if (bDef.length > 0) {
+      container.appendChild(renderPosLineHeader("Yedek Defans", bDef.length, "🛡️", "text-sky-400"));
+      bDef.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
+    }
+    if (bMid.length > 0) {
+      container.appendChild(renderPosLineHeader("Yedek Orta Saha", bMid.length, "⚙️", "text-emerald-400"));
+      bMid.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
+    }
+    if (bFwd.length > 0) {
+      container.appendChild(renderPosLineHeader("Yedek Forvet", bFwd.length, "🎯", "text-rose-400"));
+      bFwd.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
+    }
+    if (bOther.length > 0) {
+      bOther.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
+    }
   }
 }
 
@@ -1221,23 +1341,6 @@ function startFireworks() {
   fireworksAnimationId = requestAnimationFrame(animate);
 }
 
-function shortenPosition(pos) {
-  if (!pos) return "OY";
-  const p = pos.toUpperCase();
-  if (p.includes("KL") || p.includes("KALE")) return "KL";
-  if (p.includes("STP") || p.includes("STOPER")) return "STP";
-  if (p.includes("SAĞ BEK") || p.includes("SAG BEK") || p.includes("RB")) return "SB";
-  if (p.includes("SOL BEK") || p.includes("LB")) return "SLB";
-  if (p.includes("ÖN LİBERO") || p.includes("ON LIBERO") || p.includes("DOS") || p.includes("CDM")) return "ÖNL";
-  if (p.includes("MERKEZ OS") || p.includes("ORTA SAHA") || p.includes("CM")) return "OS";
-  if (p.includes("FORVET ARKASI") || p.includes("OFANSİF") || p.includes("ON NUMARA") || p.includes("CAM")) return "OOS";
-  if (p.includes("SAĞ KANAT") || p.includes("SAG KANAT") || p.includes("RW")) return "SK";
-  if (p.includes("SOL KANAT") || p.includes("LW")) return "SLK";
-  if (p.includes("SANTRAFOR") || p.includes("SANTRATOR") || p.includes("ST")) return "ST";
-  if (p.includes("FORVET") || p.includes("CF")) return "FOR";
-  if (p.includes("KANAT")) return "KNT";
-  return pos.substring(0, 3).toUpperCase();
-}
 
 function triggerGoalCelebration(ev, match) {
   const banner = document.getElementById("goal-floating-banner");
@@ -2200,11 +2303,15 @@ function renderTransferMarket() {
     item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col gap-1.5 text-xs";
     const cost = (p.price || 0) + (p.salary || p.wage || 0);
     const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.2 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
+    const posBadge = getFifaPosBadgeHtml(p.pos);
 
     item.innerHTML = `
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-bold text-white text-xs">${clubBadge}${p.name} <span class="text-[10px] text-amber-400 font-semibold">(${shortenPosition(p.pos)}, ${p.age} yaş)</span></div>
+          <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
+            ${clubBadge}${posBadge}<span class="text-white font-bold">${p.name}</span>
+            <span class="text-[10px] text-slate-400 font-medium">(${p.age} yaş)</span>
+          </div>
           <div class="text-[9px] text-slate-400 mt-0.5">Bonservis: <strong>${formatMoney(p.price || 0)}</strong> • Maaş: ${formatMoney(p.salary || p.wage || 0)}</div>
         </div>
         <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
@@ -2643,6 +2750,9 @@ async function selectTeamAndStart(teamId) {
     showToast(`👑 Büyük Başkan ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
     renderUI();
     switchTab("office");
+    setTimeout(() => {
+      openStoryTutorial(true);
+    }, 500);
   } catch (e) {
     console.error(e);
     showToast("Kulüp seçimi başlatılamadı!");
@@ -3281,4 +3391,147 @@ function closeHudInfoModal() {
   const modal = document.getElementById("modal-hud-info");
   if (modal) modal.classList.add("hidden");
 }
+
+// ==================== HİKAYELİ EĞİTİM & BAŞLANGIÇ REHBERİ (TUTORIAL) ====================
+let currentTutorialStep = 0;
+const TUTORIAL_STEPS = [
+  {
+    title: "💥 Adım 1: Ağır Miras (500M ₺ Borç!)",
+    coachQuote: "Sayın Başkanım kulübe hoş geldiniz ama durumumuz felaket! Bizden önceki yönetim kulübe tam 500.000.000 ₺ borç takıp kayıplara karıştı! Bankalar ve TFF kapıda. Her hafta düzenli kredi faizi ve futbolcu maaşları kasamızdan çekilecek.",
+    detail: "Kulübü kayyuma ve mali iflasa sürüklenmekten kurtarmak için bütçe disiplinini sağlamalı, lüzumsuz yüksek maaşlı isimleri satmalı ve gelir getiren anlaşmalara odaklanmalısınız.",
+    tip: "💡 İpucu: Kasa (Bütçe) sekmesinden haftalık net nakit akışını takip edin; eksiye düşmemek birincil önceliğinizdir!",
+    icon: "💰"
+  },
+  {
+    title: "⚽ Adım 2: Global FIFA Kadro & Taktik Düzeni",
+    coachQuote: "Takım kadromuz uluslararası FIFA mevkilerine (GK, CB, LB, RB, CDM, CM, CAM, RW, LW, ST) göre düzenlenmiştir. İlk 11'de her zaman tam 1 Kaleci olmak zorundadır ve Süper Lig kuralı gereği en fazla 8 Yabancı sahada yer alabilir.",
+    detail: "Kadro listesinde oyuncular mevkilerine göre (Kaleci ➔ Defans ➔ Orta Saha ➔ Forvet) düzenli sıralanır. Kafanız karıştığında tek tıkla 'Hoca 11'i Belirlesin' butonuna basabilirsiniz; ben sizin için en ideal kadroyu anında sahaya sürerim!",
+    tip: "💡 İpucu: Kadro sekmesinden oyuncuları tek tıkla yedeğe çekebilir veya yedekten 11'e alabilirsiniz.",
+    icon: "📋"
+  },
+  {
+    title: "💼 Adım 3: Sponsorluklar & Nakit Akışı",
+    coachQuote: "500 Milyon ₺ borcu eritmenin en temiz yolu sponsorluklardır. Göğüs, Sırt ve Stadyum İsim sponsorlukları sayesinde her hafta kasaya sıcak para akar ve peşin imza parası alırsınız.",
+    detail: "Ancak unutmayın; dev holdingler şart koşar! Ligde üst sıralarda olmak, yüksek taraftar güveni ve stadyum doluluğu büyük sponsorların ana kriterleridir.",
+    tip: "💡 İpucu: Sponsorluk sekmesine giderek şartlarını karşıladığınız firmalarla hemen sözleşme imzalayın!",
+    icon: "🤝"
+  },
+  {
+    title: "🏛️ Adım 4: Siyaset, Lobi & Cumhurbaşkanlığı Hibesi",
+    coachQuote: "Büyük kulüp yönetmek yalnızca yeşil sahada değil, Ankara koridorlarında da güçlü olmayı gerektirir. Ankara ziyaretleri ve sosyal projelerle Siyasi Nüfuzunuzu %65'in üzerine çıkarabilirsiniz.",
+    detail: "Zor günlerde Cumhurbaşkanlığı Makamından yılda 1 defa devasa can suyu hibesi talep etme hakkınız vardır. Bu hibe iflasın eşiğindeki kulübümüz için hayat kurtarıcıdır.",
+    tip: "💡 İpucu: Siyasi lobi hamleleri muhalif taraftarları kızdırabilir; taraftar ve siyaset dengesini iyi gözetin.",
+    icon: "🏛️"
+  },
+  {
+    title: "🎲 Adım 5: Yeraltı Dünyası, Bahis & Sandık Zaferi",
+    coachQuote: "Mali darboğazda karanlık güçler kapınızı çalabilir. Yeraltı bahis baronları maç manipülasyonu karşılığı milyonlar teklif eder. Kolay paradır ama TFF veya savcılık yakalarsa puan silme ve kayyumla kulüp batar!",
+    detail: "Sezon sonunda 34. hafta bittiğinde kulüp üyelerinin karşısına sandığa çıkacaksınız. Kulübü borçtan kurtarıp şampiyon yaparsanız efsane başkan olarak tarihe geçersiniz!",
+    tip: "💡 İpucu: Artık her şeyi biliyorsunuz! Koltuğunuza oturun ve büyük maceraya başlayın!",
+    icon: "🏆"
+  }
+];
+
+function openStoryTutorial(force = false) {
+  const modal = document.getElementById("modal-story-tutorial");
+  if (!modal) return;
+  currentTutorialStep = 0;
+  renderStoryTutorialStep();
+  modal.classList.remove("hidden");
+}
+
+function closeStoryTutorial() {
+  const modal = document.getElementById("modal-story-tutorial");
+  if (modal) modal.classList.add("hidden");
+  try {
+    localStorage.setItem("baskan_story_tutorial_seen", "true");
+  } catch (e) {}
+}
+
+function skipStoryTutorial() {
+  closeStoryTutorial();
+  showToast("⏩ Eğitim atlandı. İstediğiniz an Ayarlar menüsünden tekrar izleyebilirsiniz!");
+}
+
+function renderStoryTutorialStep() {
+  const step = TUTORIAL_STEPS[currentTutorialStep];
+  if (!step) return;
+
+  const titleEl = document.getElementById("tutorial-step-title");
+  const contentEl = document.getElementById("tutorial-step-content");
+  const tipEl = document.getElementById("tutorial-step-tip");
+  const coachImg = document.getElementById("tutorial-coach-photo");
+  const coachNameEl = document.getElementById("tutorial-coach-name");
+  const dotsContainer = document.getElementById("tutorial-step-dots");
+  const prevBtn = document.getElementById("tutorial-prev-btn");
+  const nextBtn = document.getElementById("tutorial-next-btn");
+
+  if (gameState && gameState.coach) {
+    if (coachImg) coachImg.src = gameState.coach.photo || "/static/coach_thomas_reis.png";
+    if (coachNameEl) coachNameEl.innerText = gameState.coach.name || "Teknik Direktör";
+  }
+
+  if (titleEl) titleEl.innerHTML = `<span>${step.icon}</span> <span>${step.title}</span>`;
+  if (contentEl) {
+    contentEl.innerHTML = `
+      <p class="italic text-amber-200/90 font-medium">"${step.coachQuote}"</p>
+      <p class="text-slate-300 mt-2">${step.detail}</p>
+    `;
+  }
+  if (tipEl) {
+    tipEl.innerHTML = `<span class="text-amber-400 text-xs">⚡</span> <span>${step.tip}</span>`;
+  }
+
+  // Step dots
+  if (dotsContainer) {
+    dotsContainer.innerHTML = TUTORIAL_STEPS.map((s, idx) => `
+      <div class="h-2 rounded-full transition-all ${
+        idx === currentTutorialStep ? 'w-6 bg-amber-400' : 'w-2 bg-slate-700'
+      }"></div>
+    `).join("");
+  }
+
+  // Prev / Next button state
+  if (prevBtn) {
+    prevBtn.style.display = currentTutorialStep === 0 ? "none" : "block";
+  }
+  if (nextBtn) {
+    if (currentTutorialStep === TUTORIAL_STEPS.length - 1) {
+      nextBtn.innerHTML = `<span>Başkanlık Koltuğuna Otur! 🏆</span>`;
+      nextBtn.className = "px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1";
+    } else {
+      nextBtn.innerHTML = `<span>İleri</span> <span>➔</span>`;
+      nextBtn.className = "px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1";
+    }
+  }
+}
+
+function nextStoryTutorialStep() {
+  if (currentTutorialStep < TUTORIAL_STEPS.length - 1) {
+    currentTutorialStep++;
+    renderStoryTutorialStep();
+  } else {
+    closeStoryTutorial();
+    showToast("🎉 Büyük Başkan göreve başladı! Bol şanslar!");
+  }
+}
+
+function prevStoryTutorialStep() {
+  if (currentTutorialStep > 0) {
+    currentTutorialStep--;
+    renderStoryTutorialStep();
+  }
+}
+
+function checkAutoTutorial() {
+  try {
+    const seen = localStorage.getItem("baskan_story_tutorial_seen");
+    if (!seen) {
+      setTimeout(() => {
+        openStoryTutorial();
+      }, 700);
+    }
+  } catch (e) {}
+}
+
 

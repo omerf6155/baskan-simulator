@@ -1525,11 +1525,86 @@
         </p>
       </div>
 
+      <!-- Hikaye & Başlangıç Rehberi Butonu -->
+      <div class="pt-1">
+        <button onclick="closeSettingsModal(); openStoryTutorial(true);" class="w-full py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-xs transition-all flex items-center justify-center gap-1.5">
+          <span>🎓</span> <span>Hikaye & Başlangıç Rehberini İzle</span>
+        </button>
+      </div>
+
       <!-- Kariyeri Sıfırla Butonu -->
       <div class="pt-1">
         <button onclick="resetCareerPrompt()" class="w-full py-2 rounded-lg bg-rose-950/60 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 font-bold text-xs transition-all">
           ⚠️ Kariyeri Sıfırla (Yeni Takım Seç)
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. HİKAYELİ EĞİTİM & BAŞLANGIÇ REHBERİ (TUTORIAL MODAL) -->
+  <div id="modal-story-tutorial" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-gradient-to-b from-[#151c2e] to-[#0b0f19] border border-amber-500/40 w-full max-w-lg rounded-2xl p-5 shadow-2xl relative space-y-4">
+      <!-- Header with Skip button -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🏆</span>
+          <div>
+            <h3 class="text-sm font-black text-white tracking-wide flex items-center gap-1.5">
+              <span>BÜYÜK BAŞKAN</span>
+              <span class="text-[9px] bg-amber-500 text-black px-1.5 py-0.5 rounded font-black">HİKAYE & REHBER</span>
+            </h3>
+            <p class="text-[10px] text-slate-400">Kulübün Kaderi Senin Ellerinde!</p>
+          </div>
+        </div>
+        <button onclick="skipStoryTutorial()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all flex items-center gap-1">
+          <span>Eğitimi Atla</span> <span>⏩</span>
+        </button>
+      </div>
+
+      <!-- Coach Avatar & Speech Bubble -->
+      <div class="flex items-start gap-3.5 pt-1">
+        <!-- Coach Avatar -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-lg bg-slate-900 relative">
+            <img id="tutorial-coach-photo" src="/static/coach_thomas_reis.png" alt="Teknik Direktör" class="w-full h-full object-cover" />
+          </div>
+          <span id="tutorial-coach-name" class="text-[10px] font-bold text-amber-300 mt-1 max-w-[80px] text-center truncate">Thomas Reis</span>
+          <span class="text-[8px] text-slate-400 font-medium">Teknik Direktör</span>
+        </div>
+
+        <!-- Speech Bubble (Konuşma Balonu) -->
+        <div class="flex-1 bg-slate-900/90 border border-amber-500/30 rounded-2xl p-3.5 relative shadow-inner text-slate-200">
+          <!-- Speech bubble pointer -->
+          <div class="absolute -left-2 top-5 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-slate-900/90"></div>
+          
+          <h4 id="tutorial-step-title" class="text-xs font-black text-amber-400 flex items-center gap-1.5 mb-1.5">
+            <!-- Dynamic Step Title -->
+          </h4>
+          <div id="tutorial-step-content" class="text-[11px] leading-relaxed text-slate-300 space-y-1.5">
+            <!-- Dynamic Step Content -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlights / Interactive Tip Box -->
+      <div id="tutorial-step-tip" class="bg-amber-950/30 border border-amber-500/20 rounded-xl p-2.5 flex items-center gap-2.5 text-[10px] text-amber-200">
+        <!-- Dynamic tip text -->
+      </div>
+
+      <!-- Controls & Progress Dots -->
+      <div class="flex items-center justify-between border-t border-slate-800 pt-3">
+        <div class="flex items-center gap-1.5" id="tutorial-step-dots">
+          <!-- 5 step dots -->
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="tutorial-prev-btn" onclick="prevStoryTutorialStep()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition-all">
+            ⬅ Geri
+          </button>
+          <button id="tutorial-next-btn" onclick="nextStoryTutorialStep()" class="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1">
+            <span>İleri</span> <span>➔</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

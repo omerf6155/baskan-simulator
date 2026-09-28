@@ -231,17 +231,65 @@ EUROPEAN_CLUBS_MARKET = {
 }
 
 # ==================== OYUNCU VE RADAR İSTATİSTİKLERİ ====================
+def to_fifa_pos(pos: str) -> str:
+    if not pos:
+        return "CM"
+    p = str(pos).upper().strip()
+    if "KL" in p or "GK" in p or "KALE" in p:
+        return "GK"
+    if "STP" in p or "CB" in p or "STOPER" in p:
+        return "CB"
+    if "SOL BEK" in p or "SLB" in p or "LB" in p:
+        return "LB"
+    if "SAĞ BEK" in p or "SAG BEK" in p or "SB" in p or "RB" in p:
+        return "RB"
+    if "ÖN LİBERO" in p or "ON LIBERO" in p or "DOS" in p or "CDM" in p or "LİBERO" in p or p == "ÖNL":
+        return "CDM"
+    if "FORVET ARKASI" in p or "OFANSİF" in p or "ON NUMARA" in p or "CAM" in p or "OOS" in p:
+        return "CAM"
+    if "MERKEZ OS" in p or "ORTA SAHA" in p or "CM" in p or p == "OS":
+        return "CM"
+    if "SAĞ KANAT" in p or "SAG KANAT" in p or "RW" in p or "RM" in p or p == "SK":
+        return "RW"
+    if "SOL KANAT" in p or "LW" in p or "LM" in p or p == "SLK":
+        return "LW"
+    if "SANTRAFOR" in p or "SANTRATOR" in p or p == "ST":
+        return "ST"
+    if "FORVET" in p or "CF" in p or p == "FOR":
+        return "ST"
+    if "KANAT" in p:
+        return "RW"
+    return p[:3]
+
+def get_position_category_rank(pos: str) -> int:
+    f_pos = to_fifa_pos(pos)
+    order = {
+        "GK": 0,
+        "LB": 1,
+        "CB": 2,
+        "RB": 3,
+        "CDM": 4,
+        "CM": 5,
+        "CAM": 6,
+        "LW": 7,
+        "RW": 8,
+        "ST": 9,
+    }
+    return order.get(f_pos, 5)
+
+def is_gk(p: Dict[str, Any]) -> bool:
+    return to_fifa_pos(p.get("pos", "")) == "GK"
+
 def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
-    pos = str(p.get("pos", "MERKEZ OS")).upper()
-    if pos == "KANAT":
-        pos = random.choice(["SAĞ KANAT", "SOL KANAT"])
-        p["pos"] = pos
+    raw_pos = str(p.get("pos", "CM")).upper()
+    fifa_pos = to_fifa_pos(raw_pos)
+    p["pos"] = fifa_pos
     ovr = int(p.get("overall", 75))
 
     skills = p.get("skills")
     if not skills or len(skills) < 6:
         # Radar İstatistikleri: pac (Hız), sho (Şut), pas (Pas), dri (Dripling), def (Defans), phy (Fizik)
-        if "KL" in pos:
+        if fifa_pos == "GK":
             skills = {
                 "pac": max(42, min(85, ovr - 22)),
                 "sho": max(20, min(65, ovr - 38)),
@@ -250,27 +298,27 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
                 "def": max(65, min(95, ovr - 4)),
                 "phy": max(65, min(96, ovr - 2))
             }
-        elif any(k in pos for k in ["BEK", "STP"]):
+        elif fifa_pos in ["CB", "LB", "RB"]:
             skills = {
-                "pac": max(62, min(96, ovr - (4 if "BEK" in pos else 11))),
+                "pac": max(62, min(96, ovr - (4 if fifa_pos in ["LB", "RB"] else 11))),
                 "sho": max(38, min(78, ovr - 26)),
                 "pas": max(60, min(88, ovr - 10)),
                 "dri": max(56, min(86, ovr - 14)),
                 "def": max(72, min(99, ovr + 3)),
                 "phy": max(70, min(98, ovr + 2))
             }
-        elif any(k in pos for k in ["OS", "LİBERO", "ARKASI"]):
+        elif fifa_pos in ["CDM", "CM", "CAM"]:
             skills = {
                 "pac": max(64, min(93, ovr - 8)),
                 "sho": max(64, min(91, ovr - 5)),
                 "pas": max(74, min(99, ovr + 4)),
                 "dri": max(72, min(98, ovr + 2)),
-                "def": max(52, min(90, ovr - (4 if "LİBERO" in pos else 16))),
+                "def": max(52, min(90, ovr - (4 if fifa_pos == "CDM" else 16))),
                 "phy": max(65, min(94, ovr - 5))
             }
-        else: # FORVET, KANAT, SANTRAFOR
+        else:  # RW, LW, ST
             skills = {
-                "pac": max(75, min(99, ovr + (4 if "KANAT" in pos else -2))),
+                "pac": max(75, min(99, ovr + (4 if fifa_pos in ["RW", "LW"] else -2))),
                 "sho": max(75, min(99, ovr + 3)),
                 "pas": max(64, min(92, ovr - 7)),
                 "dri": max(75, min(99, ovr + 3)),
@@ -351,11 +399,11 @@ def get_realistic_market_wage(overall: int) -> int:
         return max(1_500_000, 2_000_000 + (overall - 70) * 200_000)
 
 GEN_YOUTH_NAMES = [
-    ("Emirhan Yılmaz", "STP"), ("Kerem Öztürk", "MERKEZ OS"), 
-    ("Batuhan Kaya", "KL"), ("Arda Çelik", "SOL BEK"), 
-    ("Yusuf Demir", "SAĞ BEK"), ("Mert Koç", "SANTRAFOR"), 
-    ("Caner Aydın", "SOL KANAT"), ("Furkan Şahin", "SAĞ KANAT"),
-    ("Onur Keskin", "ÖN LİBERO"), ("Burak Doğan", "FORVET ARKASI")
+    ("Emirhan Yılmaz", "CB"), ("Kerem Öztürk", "CM"), 
+    ("Batuhan Kaya", "GK"), ("Arda Çelik", "LB"), 
+    ("Yusuf Demir", "RB"), ("Mert Koç", "ST"), 
+    ("Caner Aydın", "LW"), ("Furkan Şahin", "RW"),
+    ("Onur Keskin", "CDM"), ("Burak Doğan", "CAM")
 ]
 
 def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "") -> List[Dict]:
@@ -368,14 +416,14 @@ def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "") -> List
         if p.get("wage", 0) > market_w * 2.2:
             p["wage"] = market_w
 
-    gks = [p for p in squad_copy if "KL" in p.get("pos", "")]
-    outfield = [p for p in squad_copy if "KL" not in p.get("pos", "")]
+    gks = [p for p in squad_copy if is_gk(p)]
+    outfield = [p for p in squad_copy if not is_gk(p)]
 
     # Kaleci yoksa altyapıdan kaleci çağır
     if not gks:
         new_gk = enrich_player({
             "name": "Burak Özdemir (Altyapı)",
-            "pos": "KL",
+            "pos": "GK",
             "age": 19,
             "overall": 73,
             "potential": 85,
@@ -392,7 +440,7 @@ def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "") -> List
     if len(gks) < 2:
         backup_gk = enrich_player({
             "name": "Eren Kılıç (Altyapı)",
-            "pos": "KL",
+            "pos": "GK",
             "age": 18,
             "overall": 71,
             "potential": 84,
@@ -456,11 +504,17 @@ def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "") -> List
     while len(starters_outfield) < 10 and bench_outfield:
         starters_outfield.append(bench_outfield.pop(0))
 
+    # KESİN VE DÜZENLİ MEVKİ SIRALAMASI:
+    # Saha içi oyuncuları FIFA mevkilerine göre sıralanır:
+    # Defans (LB, CB, RB) -> Orta Saha (CDM, CM, CAM) -> Forvet (LW, RW, ST)
+    starters_outfield.sort(key=lambda x: (get_position_category_rank(x.get("pos", "")), -int(x.get("overall", 75))))
+    bench_outfield.sort(key=lambda x: (get_position_category_rank(x.get("pos", "")), -int(x.get("overall", 75))))
+
     # KESİN GARANTİ:
     # İndeks 0: best_gk (TAM 1 TANE KALECİ)
-    # İndeks 1..10: starters_outfield (TAM 10 TANE SAHA İÇİ OYUNCUSU, ASLA 2. KALECİ YOK)
-    # İndeks 11..son: bench_outfield + bench_gks (yedek kaleciler ve yedek oyuncular)
-    final_squad = [best_gk] + starters_outfield + bench_outfield + bench_gks
+    # İndeks 1..10: starters_outfield (TAM 10 TANE SAHA İÇİ OYUNCUSU: DEFANS -> ORTA SAHA -> FORVET)
+    # İndeks 11..son: bench_gks (Yedek Kaleci) + bench_outfield (Yedek Defans -> Orta Saha -> Forvet)
+    final_squad = [best_gk] + starters_outfield + bench_gks + bench_outfield
     return final_squad
 
 # ==================== 34 HAFTALIK ÇİFT DEVRE FİKSTÜR ====================
@@ -530,8 +584,9 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
     fixtures = generate_fixtures(team["name"], TEAMS_DB)
     standings = generate_initial_standings(TEAMS_DB)
     
-    # Kadroyu radar yetenekleriyle zenginleştir
+    # Kadroyu radar yetenekleriyle zenginleştir ve FIFA mevkilerine göre diz
     enriched_squad = [enrich_player(dict(p)) for p in team["squad"]]
+    balanced_squad = rebalance_and_validate_squad(enriched_squad, team["name"])
 
     return {
         "is_started": is_started,
@@ -551,7 +606,12 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "election_result": None,
         "team_power": team["power"],
         "budget": team["budget"],
-        "debt": 250_000_000 if team.get("is_big") else 120_000_000,
+        "debt": 500_000_000, # Eski başkan 500M ₺ borç takıp kaçtı!
+        "story": {
+            "previous_debt": 500_000_000,
+            "debt_paid": 0,
+            "story_title": "500M ₺ Ağır Miras"
+        },
         "fan_trust": team["fan_base"],
         "board_trust": 78,
         "political_power": 55, # Siyaset nüfuzu %0 - %100
@@ -568,10 +628,10 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
             "tactical_vision": "Yüksek Tempolu Hücum & Alan Daraltma"
         },
         "scout": CLUB_SCOUTS_DB.get(team["id"], SCOUT_CANDIDATES[0]),
-        "squad": enriched_squad,
+        "squad": balanced_squad,
         "fixtures": fixtures,
         "standings": standings,
-        "captain_name": get_captain_name(enriched_squad),
+        "captain_name": get_captain_name(balanced_squad),
         "squad_harmony": 82, # Takım içi huzur
         "transfer_day": 1,
         "transfer_max_days": 7,
@@ -753,8 +813,8 @@ def api_squad_swap(req: SquadSwapRequest):
         temp_squad = list(squad)
         temp_squad[req.index1], temp_squad[req.index2] = temp_squad[req.index2], temp_squad[req.index1]
 
-        prev_starters_gks = sum(1 for p in squad[:11] if "KL" in p.get("pos", ""))
-        starters_gks = sum(1 for p in temp_squad[:11] if "KL" in p.get("pos", ""))
+        prev_starters_gks = sum(1 for p in squad[:11] if is_gk(p))
+        starters_gks = sum(1 for p in temp_squad[:11] if is_gk(p))
 
         # Eğer eski kadroda zaten 2 kaleci varsa ve bu hamle kaleci sayısını azaltıyorsa izin ver!
         if starters_gks > 1 and starters_gks >= prev_starters_gks:
@@ -869,7 +929,7 @@ class Half1Request(BaseModel):
 def api_match_half1(req: Half1Request):
     state = get_state()
     # Kadro Sağlamlık ve Asgari Oyuncu Kontrolü (3 kişiyle maça çıkmayı engeller)
-    if len(state.get("squad", [])) < 11 or sum(1 for p in state.get("squad", [])[:11] if "KL" in p.get("pos", "")) != 1:
+    if len(state.get("squad", [])) < 11 or sum(1 for p in state.get("squad", [])[:11] if is_gk(p)) != 1:
         state["squad"] = rebalance_and_validate_squad(state.get("squad", []), state.get("club_name", ""))
         state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
         state["my_radar"] = calculate_team_radar(state["squad"])
@@ -1232,7 +1292,7 @@ def api_match_half2(req: HalftimeActionRequest):
 
         if p["name"] in scorers:
             base_rtg += 1.4
-        if p["pos"] == "KL" and opp_score == 0:
+        if is_gk(p) and opp_score == 0:
             base_rtg += 1.1
 
         final_rtg = min(9.9, max(4.5, round(base_rtg, 1)))
@@ -1918,7 +1978,7 @@ def api_respond_incoming_bid(req: RespondBidRequest):
         # TFF Asgari Kadro & Kaleci Kuralı
         if len(state["squad"]) <= 14:
             raise HTTPException(status_code=400, detail="TFF Asgari Kadro Kuralı: Kadronuzda en az 14 profesyonel futbolcu bulunmak zorundadır! Daha fazla oyuncu satışı yapamazsınız.")
-        if "KL" in player.get("pos", "") and sum(1 for p in state["squad"] if "KL" in p.get("pos", "")) <= 1:
+        if is_gk(player) and sum(1 for p in state["squad"] if is_gk(p)) <= 1:
             raise HTTPException(status_code=400, detail="TFF Kuralı: Takımda en az 1 kaleci bulunmak zorundadır! Kadronuzdaki tek kaleciyi satamazsınız.")
 
     if req.action == "accept":
@@ -1954,14 +2014,14 @@ def api_respond_incoming_bid(req: RespondBidRequest):
 # ==================== TRANSFER MARKİKET (DÜNYA YILDIZLARI & SERBESTLER) ====================
 @app.get("/api/transfer/market")
 def api_transfer_market():
-    # Klasik yetenekler + Serbest Oyuncular + Dünya Yıldızları
+    # Klasik yetenekler + Serbest Oyuncular + Dünya Yıldızları (FIFA standardında pozisyonlar)
     return {
-        "world_stars": WORLD_SUPERSTARS,
-        "free_agents": FREE_AGENTS,
+        "world_stars": [enrich_player(dict(p)) for p in WORLD_SUPERSTARS],
+        "free_agents": [enrich_player(dict(p)) for p in FREE_AGENTS],
         "scout_picks": [
-            {"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "FORVET", "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "desc": "Brezilya'da 18 maçta 16 gol attı."},
-            {"name": "Lamine Diallo", "age": 23, "pos": "STOPER", "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "desc": "Fransa Ligue 2'den kaya gibi genç stoper."},
-            {"name": "Kerem Eren", "age": 18, "pos": "KANAT", "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu."}
+            enrich_player({"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "ST", "overall": 80, "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "desc": "Brezilya'da 18 maçta 16 gol attı."}),
+            enrich_player({"name": "Lamine Diallo", "age": 23, "pos": "CB", "overall": 79, "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "desc": "Fransa Ligue 2'den kaya gibi genç stoper."}),
+            enrich_player({"name": "Kerem Eren", "age": 18, "pos": "RW", "overall": 75, "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu."})
         ]
     }
 
@@ -2451,33 +2511,33 @@ def api_coach_transfer_recommendation():
     squad = state.get("squad", [])
     coach = state.get("coach", {})
 
-    gk_ovr = max((p.get("overall", 70) for p in squad if "KL" in p.get("pos", "")), default=70)
-    defs = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["STP", "BEK"])]
+    gk_ovr = max((p.get("overall", 70) for p in squad if is_gk(p)), default=70)
+    defs = [p.get("overall", 70) for p in squad if to_fifa_pos(p.get("pos", "")) in ["CB", "LB", "RB"]]
     def_avg = (sum(defs) / len(defs)) if defs else 70
-    mids = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["OS", "LİBERO"])]
+    mids = [p.get("overall", 70) for p in squad if to_fifa_pos(p.get("pos", "")) in ["CDM", "CM", "CAM"]]
     mid_avg = (sum(mids) / len(mids)) if mids else 70
-    fwds = [p.get("overall", 70) for p in squad if any(pos in p.get("pos", "") for pos in ["FOR", "SANTRAFOR", "KANAT"])]
+    fwds = [p.get("overall", 70) for p in squad if to_fifa_pos(p.get("pos", "")) in ["LW", "RW", "ST"]]
     fwd_avg = (sum(fwds) / len(fwds)) if fwds else 70
 
-    target_pos = "SANTRAFOR"
+    target_pos = "ST"
     reason = "Gol yollarında tıkanıyoruz. Bitirici ve güçlü bir santrafor şart."
     rec_players = [
-        {"name": "Brian Brobbey", "club": "Ajax", "pos": "SANTRAFOR", "overall": 83, "val": 42_000_000, "wage": 14_000_000},
-        {"name": "Jhon Durán", "club": "Aston Villa", "pos": "SANTRAFOR", "overall": 83, "val": 45_000_000, "wage": 15_000_000}
+        {"name": "Brian Brobbey", "club": "Ajax", "pos": "ST", "overall": 83, "val": 42_000_000, "wage": 14_000_000},
+        {"name": "Jhon Durán", "club": "Aston Villa", "pos": "ST", "overall": 83, "val": 45_000_000, "wage": 15_000_000}
     ]
 
     if gk_ovr < 78:
-        target_pos = "KALECİ"
+        target_pos = "GK"
         reason = "Kalede güven veren, refleksleri üst düzey bir file bekçisi önceliğimiz olmalı."
         rec_players = [
-            {"name": "Mateo 'El Nino' Silva", "club": "Serbest", "pos": "KALECİ", "overall": 82, "val": 30_000_000, "wage": 9_000_000}
+            {"name": "Mateo 'El Nino' Silva", "club": "Serbest", "pos": "GK", "overall": 82, "val": 30_000_000, "wage": 9_000_000}
         ]
     elif def_avg < mid_avg and def_avg < fwd_avg:
-        target_pos = "STOPER"
+        target_pos = "CB"
         reason = "Defans hattımız hava toplarında ve rakip kontra ataklarda çok açık veriyor."
         rec_players = [
-            {"name": "Jorrel Hato", "club": "Ajax", "pos": "STP", "overall": 82, "val": 40_000_000, "wage": 9_000_000},
-            {"name": "Lamine Diallo", "club": "Scout Keşfi", "pos": "STP", "overall": 85, "val": 38_000_000, "wage": 12_000_000}
+            {"name": "Jorrel Hato", "club": "Ajax", "pos": "CB", "overall": 82, "val": 40_000_000, "wage": 9_000_000},
+            {"name": "Lamine Diallo", "club": "Scout Keşfi", "pos": "CB", "overall": 85, "val": 38_000_000, "wage": 12_000_000}
         ]
     elif mid_avg < fwd_avg:
         target_pos = "MERKEZ OS"
@@ -2507,7 +2567,10 @@ class SignEuropeanPlayerRequest(BaseModel):
 
 @app.get("/api/transfer/european-market")
 def api_transfer_european_market():
-    return EUROPEAN_CLUBS_MARKET
+    out = {}
+    for club, players in EUROPEAN_CLUBS_MARKET.items():
+        out[club] = [enrich_player(dict(p)) for p in players]
+    return out
 
 @app.post("/api/transfer/sign-european-player")
 def api_sign_european_player(req: SignEuropeanPlayerRequest):
