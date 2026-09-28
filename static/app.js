@@ -624,7 +624,26 @@ function renderUI() {
     document.getElementById("office-match-loc").innerText = "SEZON BİTTİ";
   }
 
-  // Hoca Özeti
+  // Hoca Özeti & Fotoğrafları
+  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_tekke.png";
+  const officeCoachPhotoEl = document.getElementById("office-coach-photo");
+  if (officeCoachPhotoEl) officeCoachPhotoEl.src = coachPhoto;
+  const squadCoachPhotoEl = document.getElementById("squad-coach-photo");
+  if (squadCoachPhotoEl) squadCoachPhotoEl.src = coachPhoto;
+  const briefingCoachPhotoEl = document.getElementById("briefing-coach-photo");
+  if (briefingCoachPhotoEl) briefingCoachPhotoEl.src = coachPhoto;
+  const dialogCoachPhotoEl = document.getElementById("dialog-coach-photo");
+  if (dialogCoachPhotoEl) dialogCoachPhotoEl.src = coachPhoto;
+  const visionCoachPhotoEl = document.getElementById("vision-coach-photo");
+  if (visionCoachPhotoEl) visionCoachPhotoEl.src = coachPhoto;
+
+  const briefingNameEl = document.getElementById("briefing-coach-name");
+  if (briefingNameEl) briefingNameEl.innerText = gameState.coach.name;
+  const dialogNameEl = document.getElementById("dialog-coach-name");
+  if (dialogNameEl) dialogNameEl.innerText = gameState.coach.name;
+  const visionNameEl = document.getElementById("vision-coach-name");
+  if (visionNameEl) visionNameEl.innerText = gameState.coach.name;
+
   document.getElementById("office-coach-name").innerText = gameState.coach.name;
   document.getElementById("office-coach-style").innerText = gameState.coach.style;
   document.getElementById("squad-coach-name").innerText = gameState.coach.name;

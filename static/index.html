@@ -147,14 +147,15 @@
 
         <!-- Hoca Bilgisi & İstatistikleri -->
         <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-          <div class="flex items-center gap-2.5">
-            <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
-              <i data-lucide="user-check" class="w-5 h-5 text-amber-400"></i>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md relative">
+              <img id="office-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_tekke.png'" />
+              <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[7px] font-black px-1 rounded-tl">TD</span>
             </div>
             <div>
               <div class="text-[10px] text-slate-400">Teknik Direktör</div>
-              <div id="office-coach-name" class="font-bold text-xs text-white">Thomas Reis</div>
-              <div class="text-[10px] text-slate-400 mt-0.5" id="office-coach-style">4-2-3-1 Dinamik Alman Presi</div>
+              <div id="office-coach-name" class="font-bold text-xs text-white">Fatih Tekke</div>
+              <div class="text-[10px] text-slate-400 mt-0.5" id="office-coach-style">4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası</div>
               <div id="office-coach-traits" class="flex flex-wrap gap-1 mt-1"></div>
             </div>
           </div>
@@ -224,11 +225,17 @@
         <!-- Hoca Kartı -->
         <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3.5">
           <div class="flex items-center justify-between mb-2">
-            <div>
-              <div class="text-[10px] text-slate-400">Teknik Direktör</div>
-              <div class="text-sm font-extrabold text-white" id="squad-coach-name">Thomas Reis</div>
-              <div class="text-[11px] text-amber-400 font-semibold" id="squad-coach-style">4-2-3-1 Dinamik Alman Presi</div>
-              <div id="squad-coach-traits" class="flex flex-wrap gap-1 mt-1.5"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow-lg relative">
+                <img id="squad-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_tekke.png'" />
+                <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[8px] font-black px-1 rounded-tl">TD</span>
+              </div>
+              <div>
+                <div class="text-[10px] text-slate-400">Teknik Direktör</div>
+                <div class="text-sm font-extrabold text-white" id="squad-coach-name">Fatih Tekke</div>
+                <div class="text-[11px] text-amber-400 font-semibold" id="squad-coach-style">4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası</div>
+                <div id="squad-coach-traits" class="flex flex-wrap gap-1 mt-1.5"></div>
+              </div>
             </div>
             <div class="text-right">
               <div class="text-[10px] text-slate-400">Maaş</div>
@@ -443,11 +450,13 @@
         <!-- HOCA MAÇ SONU OYUNCU BRİFİNGİ & DİYALOG KUTUSU -->
         <div id="coach-post-match-briefing" class="hidden bg-[#161c2d] border border-blue-500/60 rounded-xl p-3 space-y-2.5 shadow-lg">
           <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
-            <div class="flex items-center gap-2">
-              <span class="text-base">👔</span>
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-blue-500/60 overflow-hidden flex-shrink-0 shadow-md">
+                <img id="briefing-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_tekke.png'" />
+              </div>
               <div>
                 <div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider">Hoca Maç Sonu Raporu</div>
-                <div class="text-xs font-bold text-white" id="briefing-coach-name">Teknik Direktör</div>
+                <div class="text-xs font-bold text-white" id="briefing-coach-name">Fatih Tekke</div>
               </div>
             </div>
             <span class="text-[9px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-1.5 py-0.5 rounded font-bold" id="briefing-player-tag">Performans Değerlendirmesi</span>
@@ -1036,10 +1045,16 @@
   <div id="modal-coach-dialog" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
     <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-        <div class="text-xs font-bold text-white flex items-center gap-1.5">
-          <i data-lucide="door-open" class="w-4 h-4 text-amber-400"></i> Maç Sonu Hoca ile Görüş
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow-md">
+            <img id="dialog-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_tekke.png'" />
+          </div>
+          <div>
+            <div class="text-[9px] text-amber-400 font-bold uppercase">Teknik Direktör Görüşmesi</div>
+            <div class="text-xs font-black text-white" id="dialog-coach-name">Fatih Tekke</div>
+          </div>
         </div>
-        <button onclick="closeCoachModal()" class="text-slate-400 text-xs font-bold">✕</button>
+        <button onclick="closeCoachModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
       </div>
 
       <p class="text-[11px] text-slate-300">Teknik direktöre karşı tavrınızı belirleyin:</p>
@@ -1112,9 +1127,14 @@
   <div id="modal-coach-vision" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
     <div class="bg-[#111726] border border-blue-500/60 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto scrollbar-thin">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-        <div class="text-xs font-extrabold text-white flex items-center gap-1.5">
-          <i data-lucide="compass" class="w-4 h-4 text-blue-400"></i>
-          <span>HOCA STRATEJİK VİZYON TOPLANTISI</span>
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-blue-500/60 overflow-hidden flex-shrink-0 shadow-md">
+            <img id="vision-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_tekke.png'" />
+          </div>
+          <div>
+            <div class="text-[9px] text-blue-400 font-bold uppercase">Stratejik Vizyon</div>
+            <div class="text-xs font-black text-white" id="vision-coach-name">Fatih Tekke</div>
+          </div>
         </div>
         <button onclick="closeCoachVisionModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
       </div>
@@ -1458,6 +1478,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20260928_v8"></script>
+  <script src="app.js?v=20260928_v9"></script>
 </body>
 </html>

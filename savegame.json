@@ -23,29 +23,30 @@
   "stadium_capacity": 40782,
   "stadium_level": 1,
   "coach": {
-    "name": "Thomas Reis",
-    "style": "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı",
-    "rating": 83,
-    "attack": 84,
-    "defense": 85,
-    "youth": 80,
-    "press_rel": 83,
-    "ego": 60,
+    "name": "Fatih Tekke",
+    "style": "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası",
+    "rating": 84,
+    "attack": 85,
+    "defense": 82,
+    "youth": 82,
+    "press_rel": 85,
+    "ego": 70,
     "salary": 32000000,
     "moral": 100,
     "trust": 75,
     "mistakes_count": 0,
     "praised_count": 0,
+    "photo": "/static/coach_tekke.png",
     "traits": [
       {
-        "name": "Alman Savunma Duvarı",
-        "icon": "🛡️",
-        "desc": "Takımın defans ve fiziksel direncine kalıcı +8 katkı sağlar."
+        "name": "Bordo-Mavi Tutku",
+        "icon": "🔥",
+        "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."
       },
       {
-        "name": "Genç Avcısı",
-        "icon": "💎",
-        "desc": "26 yaş altı oyuncuların gelişimini ikiye katlar."
+        "name": "Topa Hakimiyet & Pas",
+        "icon": "🎨",
+        "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."
       }
     ]
   },

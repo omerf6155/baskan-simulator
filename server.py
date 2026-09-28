@@ -400,6 +400,7 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "stadium_level": 1,
         "coach": {
             **team["coach"],
+            "photo": team["coach"].get("photo", "/static/coach_tekke.png"),
             "moral": 82,
             "trust": 78,
             "mistakes_count": 0,
@@ -467,13 +468,24 @@ def get_state(session_id: Optional[str] = None):
                         state["incoming_bids"] = []
                     if "club_scout" not in state or not state["club_scout"]:
                         state["club_scout"] = CLUB_SCOUTS_DB.get(state.get("team_id"), {"name": "Cemil Kaya", "rating": 74, "salary": 2_000_000, "role": "Scout Şefi", "region": "Türkiye"})
-                    # Hoca özellikleri (traits) tamamla
+                    # Hoca özellikleri (traits) ve görseli (photo) tamamla
                     coach = state.get("coach")
-                    if coach and not coach.get("traits"):
-                        for t in TEAMS_DB:
-                            if t.get("coach", {}).get("name") == coach.get("name"):
-                                coach["traits"] = t["coach"].get("traits", [])
-                                break
+                    if coach:
+                        if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke"]:
+                            coach["name"] = "Fatih Tekke"
+                            coach["style"] = "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası"
+                            coach["photo"] = "/static/coach_tekke.png"
+                            coach["traits"] = [
+                                {"name": "Bordo-Mavi Tutku", "icon": "🔥", "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."},
+                                {"name": "Topa Hakimiyet & Pas", "icon": "🎨", "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."}
+                            ]
+                        if not coach.get("photo"):
+                            coach["photo"] = "/static/coach_tekke.png"
+                        if not coach.get("traits"):
+                            for t in TEAMS_DB:
+                                if t.get("coach", {}).get("name") == coach.get("name"):
+                                    coach["traits"] = t["coach"].get("traits", [])
+                                    break
                     return state
         except Exception:
             pass
@@ -484,11 +496,22 @@ def get_state(session_id: Optional[str] = None):
             with open(SAVE_FILE, "r", encoding="utf-8") as f:
                 state = json.load(f)
                 coach = state.get("coach")
-                if coach and not coach.get("traits"):
-                    for t in TEAMS_DB:
-                        if t.get("coach", {}).get("name") == coach.get("name"):
-                            coach["traits"] = t["coach"].get("traits", [])
-                            break
+                if coach:
+                    if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke"]:
+                        coach["name"] = "Fatih Tekke"
+                        coach["style"] = "4-2-3-1 Hücum Zenginliği & Karadeniz Fırtınası"
+                        coach["photo"] = "/static/coach_tekke.png"
+                        coach["traits"] = [
+                            {"name": "Bordo-Mavi Tutku", "icon": "🔥", "desc": "Trabzonspor efsanesi olarak takımın hücum üretkenliğini ve moralini zirveye taşır."},
+                            {"name": "Topa Hakimiyet & Pas", "icon": "🎨", "desc": "Topla oynama ve pas organizasyonunu üst seviyeye çıkarır."}
+                        ]
+                    if not coach.get("photo"):
+                        coach["photo"] = "/static/coach_tekke.png"
+                    if not coach.get("traits"):
+                        for t in TEAMS_DB:
+                            if t.get("coach", {}).get("name") == coach.get("name"):
+                                coach["traits"] = t["coach"].get("traits", [])
+                                break
                 return state
         except Exception:
             pass
@@ -2080,6 +2103,7 @@ def api_coach_dialog(req: CoachDialogAction):
         new_coach = random.choice([t["coach"] for t in TEAMS_DB if t["coach"]["name"] != coach["name"]])
         state["coach"] = {
             **new_coach,
+            "photo": new_coach.get("photo", "/static/coach_tekke.png"),
             "moral": 80,
             "trust": 75,
             "mistakes_count": 0,
