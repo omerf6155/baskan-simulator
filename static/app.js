@@ -580,13 +580,20 @@ function toggleStandingsSubTab(sub) {
 }
 
 // ==================== STATE YÖNETİMİ & RENDER ====================
+let _tutorialShownThisSession = false;
+
 async function fetchState() {
   try {
     const res = await apiFetch("/api/state");
     gameState = await res.json();
     renderUI();
+    // Tutorial: sadece sayfa ilk yüklendiğinde, oyun başlamışsa aç
+    if (!_tutorialShownThisSession && gameState && gameState.is_started) {
+      _tutorialShownThisSession = true;
+      setTimeout(() => openStoryTutorial(), 800);
+    }
   } catch (e) {
-    console.error("State alınamadı", e);
+    console.error("State alinamadi", e);
   }
 }
 
@@ -596,9 +603,8 @@ function renderUI() {
   // Başlangıçta kulüp seçilmemişse seçim modalını zorunlu aç
   if (!gameState.is_started) {
     openTeamSelectModal();
-  } else {
-    checkAutoTutorial();
   }
+  // NOT: Tutorial renderUI'dan değil, sayfa ilk yüklendiğinde fetchState tamamlanınca açılır
 
   // Header Kulüp Logosu ve Arma
   const logoEl = document.getElementById("header-club-logo");
