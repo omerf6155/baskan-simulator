@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Sayın Başkan - Süper Lig Simülatörü</title>
+  <title>Büyük Başkan - Süper Lig Simülatörü</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Inter -->
@@ -30,7 +30,7 @@
           <div class="min-w-0">
             <div class="flex items-center gap-1">
               <h1 class="font-black text-xs text-white truncate max-w-[125px]" id="header-club-name">Trabzonspor</h1>
-              <span class="text-[8px] font-black px-1 py-0.2 rounded bg-slate-800 text-slate-300 border border-slate-700 flex-shrink-0">SÜPER LİG</span>
+              <span class="text-[8px] font-black px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 flex-shrink-0" title="Büyük Başkan">BÜYÜK BAŞKAN</span>
             </div>
             <div class="text-[10px] text-slate-400 truncate">
               Başkan: <span class="text-slate-200 font-semibold" id="header-pres-name">Ömer Başkan</span>
@@ -915,11 +915,15 @@
       <!-- Başlık -->
       <div class="pb-2 border-b border-slate-800 flex justify-between items-center">
         <div>
+          <div class="flex items-center gap-1.5 mb-1">
+            <span class="text-xs font-black tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">👑 BÜYÜK BAŞKAN</span>
+            <span class="text-[10px] text-slate-400 font-bold">• SÜPER LİG</span>
+          </div>
           <h2 class="text-sm font-extrabold text-white flex items-center gap-1.5">
             <i data-lucide="crown" class="w-4 h-4 text-amber-400"></i>
             <span>BAŞKAN GİRİŞİ & KULÜP SEÇİMİ</span>
           </h2>
-          <p class="text-[10px] text-slate-400">İsminizi belirleyin, kulübünüzü seçin ve kariyerinize başlayın.</p>
+          <p class="text-[10px] text-slate-400">Büyük Başkan simülatörüne hoş geldiniz! İsminizi belirleyin ve kulübünüzü seçin.</p>
         </div>
         <button onclick="closeTeamSelectModalIfStarted()" id="btn-close-team-select" class="text-slate-400 hover:text-white text-xs font-bold hidden">✕</button>
       </div>
@@ -1478,6 +1482,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20260928_v11"></script>
+  <script src="app.js?v=20260928_v12"></script>
 </body>
 </html>

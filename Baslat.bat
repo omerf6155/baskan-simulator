@@ -1,7 +1,7 @@
 @echo off
-title Sayin Baskan - Futbol Simulatoru
+title Buyuk Baskan - Futbol Simulatoru
 echo ========================================================
-echo       SAYIN BASKAN: FUTBOL KULUBU YONETIM SIMULATORU
+echo       BUYUK BASKAN: FUTBOL KULUBU YONETIM SIMULATORU
 echo ========================================================
 echo.
 echo Bilgisayardan oynamak icin tarayici aciliyor:

@@ -10,7 +10,7 @@ from pydantic import BaseModel
 
 from teams_data import TEAMS_DB
 
-app = FastAPI(title="Sayin Baskan Simulator - Super Lig Genisletilmis Surum")
+app = FastAPI(title="Büyük Başkan - Süper Lig Simülatörü")
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 SAVE_FILE = os.path.join(os.path.dirname(__file__), "savegame.json")

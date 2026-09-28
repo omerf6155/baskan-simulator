@@ -2562,9 +2562,9 @@ async function selectTeamAndStart(teamId) {
   const nameInput = document.getElementById("input-president-name");
   let username = nameInput ? nameInput.value.trim() : "";
   if (!username) {
-    username = prompt("Lütfen Başkan Adınızı / Kullanıcı Adınızı girin:", "Ömer Başkan") || "Sayın Başkan";
+    username = prompt("Lütfen Büyük Başkan Adınızı girin:", "Büyük Başkan") || "Büyük Başkan";
   }
-  username = username.trim() || "Sayın Başkan";
+  username = username.trim() || "Büyük Başkan";
 
   // Kullanıcı adını hem session hem username olarak kaydet
   localStorage.setItem("baskan_username", username);
@@ -2581,7 +2581,7 @@ async function selectTeamAndStart(teamId) {
     gameState = data;
     viewingFinishedMatch = false;
     document.getElementById("modal-team-select").classList.add("hidden");
-    showToast(`🏆 Sayın ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
+    showToast(`👑 Büyük Başkan ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
     renderUI();
     switchTab("office");
   } catch (e) {
