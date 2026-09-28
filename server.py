@@ -400,7 +400,7 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "stadium_level": 1,
         "coach": {
             **team["coach"],
-            "photo": team["coach"].get("photo", "/static/coach_tekke.png"),
+            "photo": team["coach"].get("photo", "/static/coach_thomas_reis.png"),
             "moral": 82,
             "trust": 78,
             "mistakes_count": 0,
@@ -471,21 +471,23 @@ def get_state(session_id: Optional[str] = None):
                     # Hoca özellikleri (traits) ve görseli (photo) tamamla
                     coach = state.get("coach")
                     if coach:
+                        team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
                         if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
-                            coach["name"] = "Şenol Güneş"
-                            coach["style"] = "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü"
-                            coach["photo"] = "/static/coach_senol_gunes.png"
+                            coach["name"] = "Thomas Reis"
+                            coach["style"] = "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı"
+                            coach["photo"] = "/static/coach_thomas_reis.png"
                             coach["traits"] = [
-                                {"name": "Efsanevi Güneş Ekolü", "icon": "☀️", "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."},
-                                {"name": "Hücum & Gol Zenginliği", "icon": "⚽", "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."}
+                                {"name": "Alman Savunma Duvarı", "icon": "🛡️", "desc": "Yenen gol beklentisini (xGA) %20 düşürür ve savunma disiplini sağlar."},
+                                {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyon ve pres gücünü korur."}
                             ]
-                        if not coach.get("photo"):
-                            coach["photo"] = "/static/coach_senol_gunes.png"
-                        if not coach.get("traits"):
-                            for t in TEAMS_DB:
-                                if t.get("coach", {}).get("name") == coach.get("name"):
-                                    coach["traits"] = t["coach"].get("traits", [])
-                                    break
+                        elif team_info and team_info.get("coach"):
+                            db_c = team_info["coach"]
+                            if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
+                                coach["photo"] = db_c.get("photo", "/static/coach_thomas_reis.png")
+                            if not coach.get("traits"):
+                                coach["traits"] = db_c.get("traits", [])
+                        if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
+                            coach["photo"] = "/static/coach_thomas_reis.png"
                     return state
         except Exception:
             pass
@@ -497,21 +499,23 @@ def get_state(session_id: Optional[str] = None):
                 state = json.load(f)
                 coach = state.get("coach")
                 if coach:
+                    team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
                     if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
-                        coach["name"] = "Şenol Güneş"
-                        coach["style"] = "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü"
-                        coach["photo"] = "/static/coach_senol_gunes.png"
+                        coach["name"] = "Thomas Reis"
+                        coach["style"] = "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı"
+                        coach["photo"] = "/static/coach_thomas_reis.png"
                         coach["traits"] = [
-                            {"name": "Efsanevi Güneş Ekolü", "icon": "☀️", "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."},
-                            {"name": "Hücum & Gol Zenginliği", "icon": "⚽", "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."}
+                            {"name": "Alman Savunma Duvarı", "icon": "🛡️", "desc": "Yenen gol beklentisini (xGA) %20 düşürür ve savunma disiplini sağlar."},
+                            {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyon ve pres gücünü korur."}
                         ]
-                    if not coach.get("photo"):
-                        coach["photo"] = "/static/coach_senol_gunes.png"
-                    if not coach.get("traits"):
-                        for t in TEAMS_DB:
-                            if t.get("coach", {}).get("name") == coach.get("name"):
-                                coach["traits"] = t["coach"].get("traits", [])
-                                break
+                    elif team_info and team_info.get("coach"):
+                        db_c = team_info["coach"]
+                        if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
+                            coach["photo"] = db_c.get("photo", "/static/coach_thomas_reis.png")
+                        if not coach.get("traits"):
+                            coach["traits"] = db_c.get("traits", [])
+                    if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
+                        coach["photo"] = "/static/coach_thomas_reis.png"
                 return state
         except Exception:
             pass
@@ -542,7 +546,9 @@ def api_get_teams():
             "target": t["target"],
             "is_big": t.get("is_big", False),
             "logo": t.get("logo", ""),
-            "coach_name": t["coach"]["name"]
+            "coach_name": t["coach"]["name"],
+            "coach_photo": t["coach"].get("photo", ""),
+            "coach_style": t["coach"].get("style", "")
         }
         for t in TEAMS_DB
     ]

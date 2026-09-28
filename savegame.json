@@ -23,30 +23,30 @@
   "stadium_capacity": 40782,
   "stadium_level": 1,
   "coach": {
-    "name": "Şenol Güneş",
-    "style": "4-2-3-1 Hücum & Tecrübeli Liderlik Ekolü",
-    "rating": 85,
-    "attack": 86,
-    "defense": 83,
-    "youth": 82,
-    "press_rel": 88,
-    "ego": 74,
-    "salary": 35000000,
+    "name": "Thomas Reis",
+    "style": "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı",
+    "rating": 83,
+    "attack": 84,
+    "defense": 82,
+    "youth": 80,
+    "press_rel": 83,
+    "ego": 70,
+    "salary": 32000000,
     "moral": 100,
     "trust": 75,
     "mistakes_count": 0,
     "praised_count": 0,
-    "photo": "/static/coach_senol_gunes.png",
+    "photo": "/static/coach_thomas_reis.png",
     "traits": [
       {
-        "name": "Efsanevi Güneş Ekolü",
-        "icon": "☀️",
-        "desc": "Derbi ve şampiyonluk yarışında takıma ekstra direnç ve moral kazandırır."
+        "name": "Alman Savunma Duvarı",
+        "icon": "🛡️",
+        "desc": "Yenen gol beklentisini (xGA) %20 düşürür ve savunma disiplini sağlar."
       },
       {
-        "name": "Hücum & Gol Zenginliği",
-        "icon": "⚽",
-        "desc": "Maç başına gol ve net pozisyon üretimini üst seviyeye çıkarır."
+        "name": "Fiziksel Kondisyon",
+        "icon": "⚡",
+        "desc": "80. dakikadan sonra takımın kondisyon ve pres gücünü korur."
       }
     ]
   },

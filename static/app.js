@@ -625,7 +625,7 @@ function renderUI() {
   }
 
   // Hoca Özeti & Fotoğrafları
-  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_senol_gunes.png";
+  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_thomas_reis.png";
   const officeCoachPhotoEl = document.getElementById("office-coach-photo");
   if (officeCoachPhotoEl) officeCoachPhotoEl.src = coachPhoto;
   const squadCoachPhotoEl = document.getElementById("squad-coach-photo");
@@ -2542,8 +2542,10 @@ function renderTeamSelectList() {
             <span class="font-extrabold text-xs text-white">${t.name}</span>
             ${t.is_big ? '<span class="text-[8px] font-black px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">BÜYÜK</span>' : ''}
           </div>
-          <div class="text-[9px] text-slate-400 mt-0.5">
-            TD: <span class="text-slate-200 font-semibold">${t.coach_name}</span> • Bütçe: <strong class="text-emerald-400">${formatMoney(t.budget)}</strong>
+          <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+            ${t.coach_photo ? `<img src="${t.coach_photo}" alt="${t.coach_name}" class="w-4 h-4 rounded-full object-cover border border-amber-500/50 inline-block flex-shrink-0" />` : ''}
+            <span>TD: <span class="text-slate-200 font-semibold">${t.coach_name}</span></span>
+            <span>• Bütçe: <strong class="text-emerald-400">${formatMoney(t.budget)}</strong></span>
           </div>
         </div>
       </div>
