@@ -236,52 +236,153 @@ async function swapSquadPlayers(idx1, idx2) {
       renderUI();
       showToast("Kadro güncellendi 🔄");
     } else {
-      showToast("Sıralama değiştirilemedi!");
+      const err = await res.json();
+      showToast(err.detail || "Kadro değişikliği uygulanamadı!");
     }
   } catch (e) {
     console.error(e);
+    showToast("Sunucu bağlantı hatası!");
   }
 }
 
-// Oyuncuyu İlk 11'den tek tıkla doğrudan yedeğe çekme
-async function benchStarterPlayer(idx) {
-  if (!gameState || !gameState.squad || gameState.squad.length <= 11) {
-    showToast("Yedek kulübesinde başka oyuncu bulunmuyor!");
-    return;
-  }
-  // İlk 11 oyuncusunu 11. indeksteki (ilk yedek) oyuncuyla takas et
-  await swapSquadPlayers(idx, 11);
-  showToast("Oyuncu yedek kulübesine çekildi 🪑");
-}
+// ==================== OYUNCU DEĞİŞİKLİĞİ & İLK 11 YÖNETİMİ ====================
+let activeSubSourceIdx = null;
+let activeSubIsStarter = false;
 
-// Yedek oyuncuyu tek tıkla doğrudan İlk 11'e alma
-async function promoteBenchPlayer(idx) {
-  if (!gameState || !gameState.squad) return;
+function openSubstitutionModal(idx, isStarter) {
+  if (!gameState || !gameState.squad || gameState.squad.length <= idx) return;
+  activeSubSourceIdx = idx;
+  activeSubIsStarter = isStarter;
+
   const player = gameState.squad[idx];
-  const starters = gameState.squad.slice(0, 11);
+  const modal = document.getElementById("modal-player-substitution");
+  const titleEl = document.getElementById("sub-modal-title");
+  const sourceCardEl = document.getElementById("sub-source-player-card");
+  const headingEl = document.getElementById("sub-candidates-heading");
+  const listEl = document.getElementById("sub-candidates-list");
 
-  let targetIdx = 10;
-  if (player.pos === "KL") {
-    // Kaleci ise ilk 11'deki kaleciyle değiştir
-    const gkIdx = starters.findIndex(p => p.pos === "KL");
-    targetIdx = gkIdx !== -1 ? gkIdx : 0;
+  if (!modal || !sourceCardEl || !listEl) return;
+
+  const isGK = player.pos === "KL";
+  titleEl.innerText = isStarter ? "İLK 11'DEN YEDEĞE AL" : "YEDEKTEN İLK 11'E AL";
+
+  // Kaynak oyuncu kartı
+  sourceCardEl.innerHTML = `
+    <div class="flex items-center gap-2.5 truncate">
+      <span class="text-[10px] font-black px-2 py-1 rounded ${isGK ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-200'}">
+        ${shortenPosition(player.pos)}
+      </span>
+      <div class="truncate">
+        <div class="text-xs font-bold text-white flex items-center gap-1.5 truncate">
+          <span>${player.name}</span>
+          <span class="text-[9px] ${isStarter ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30' : 'text-slate-400 bg-slate-800'} px-1.5 py-0.2 rounded font-semibold">
+            ${isStarter ? '⭐ İlk 11' : '🪑 Yedek'}
+          </span>
+        </div>
+        <div class="text-[10px] text-slate-400 mt-0.5">
+          ${player.age} yaş • Güç: <strong class="text-amber-300 font-bold">${player.overall}</strong> • Maaş: ${formatMoney(player.wage)}
+        </div>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="text-[10px] text-rose-400 font-bold bg-rose-950/60 border border-rose-800/40 px-2 py-1 rounded">
+        ${isStarter ? 'Kenara Geçecek' : 'Sahaya Girecek'}
+      </span>
+    </div>
+  `;
+
+  headingEl.innerText = isStarter
+    ? `Yerine Sahaya Girecek ${isGK ? 'Yedek Kaleci' : 'Yedek Oyuncu'} Seçin:`
+    : `İlk 11'de Kimin Yerine Oyuna Girecek?`;
+
+  listEl.innerHTML = "";
+
+  // Adayları belirle
+  // Kural: İlk 11'de ASLA 2 Kaleci olamaz! Mutlaka tam 1 Kaleci olmalıdır!
+  let candidates = [];
+  if (isStarter) {
+    // İlk 11'deki oyuncu kenara alınıyor, yerine YEDEKLERDEN biri girecek
+    const benchPlayers = gameState.squad.slice(11).map((p, i) => ({ player: p, actualIdx: 11 + i }));
+    if (isGK) {
+      // Kaleci çıkıyorsa SADECE yedek kaleciler girebilir!
+      candidates = benchPlayers.filter(c => c.player.pos === "KL");
+    } else {
+      // Saha içi oyuncusu çıkıyorsa SADECE saha içi yedekler girebilir (Kaleci YASAK!)
+      candidates = benchPlayers.filter(c => c.player.pos !== "KL");
+    }
   } else {
-    // Saha içi oyuncusu ise ilk 11'deki cezalı/sakat veya en düşük reytingli oyuncuyla değiştir
-    let worstScore = 9999;
-    starters.forEach((p, sIdx) => {
-      if (p.pos !== "KL") {
-        let score = p.overall;
-        if ((p.injured_weeks || 0) > 0 || (p.suspended_weeks || 0) > 0) score -= 100;
-        if (score < worstScore) {
-          worstScore = score;
-          targetIdx = sIdx;
-        }
-      }
+    // Yedek oyuncu ilk 11'e alınıyor, İLK 11'DEN birinin yerine geçecek
+    const starterPlayers = gameState.squad.slice(0, 11).map((p, i) => ({ player: p, actualIdx: i }));
+    if (isGK) {
+      // Yedek kaleci ilk 11'e giriyorsa SADECE ilk 11'deki kalecinin yerine geçebilir!
+      candidates = starterPlayers.filter(c => c.player.pos === "KL");
+    } else {
+      // Saha içi yedek giriyorsa SADECE ilk 11'deki saha içi oyuncularının yerine geçebilir (Kaleci ÇIKARILAMAZ!)
+      candidates = starterPlayers.filter(c => c.player.pos !== "KL");
+    }
+  }
+
+  if (candidates.length === 0) {
+    listEl.innerHTML = `
+      <div class="p-3 text-center bg-slate-900/60 border border-slate-800 rounded-xl text-slate-400 text-xs">
+        ${isGK ? '⚠️ Yedek kulübesinde başka kaleci bulunmuyor. İlk 11 kalecisiz kalamaz!' : 'Uygun mevkide oyuncu bulunamadı.'}
+      </div>
+    `;
+  } else {
+    candidates.forEach(c => {
+      const p = c.player;
+      const targetIdx = c.actualIdx;
+      const cItem = document.createElement("div");
+      cItem.className = "p-2 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 flex items-center justify-between transition-all";
+      cItem.innerHTML = `
+        <div class="flex items-center gap-2 truncate">
+          <span class="text-[9px] font-black px-1.5 py-0.5 rounded ${p.pos === 'KL' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-slate-800 text-slate-300'}">
+            ${shortenPosition(p.pos)}
+          </span>
+          <div class="truncate">
+            <div class="font-bold text-white text-[11px] truncate flex items-center gap-1">
+              <span>${p.name}</span>
+              ${p.is_foreign !== false ? '<span class="text-[8px] text-sky-400 font-bold">🌐 YBN</span>' : '<span class="text-[8px] text-rose-400 font-bold">🇹🇷 TR</span>'}
+            </div>
+            <div class="text-[9px] text-slate-400">
+              ${p.age} yaş • Güç: <strong class="text-white font-bold">${p.overall}</strong> • Sözleşme: ${p.contract_years !== undefined ? p.contract_years : 2} Yıl
+            </div>
+          </div>
+        </div>
+        <button onclick="performSubstitution(${targetIdx})" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1 transition-all shadow-sm flex-shrink-0">
+          <i data-lucide="check" class="w-3 h-3"></i>
+          <span>${isStarter ? 'Sahaya Al' : 'Bununla Değiştir'}</span>
+        </button>
+      `;
+      listEl.appendChild(cItem);
     });
   }
 
-  await swapSquadPlayers(idx, targetIdx);
-  showToast("Oyuncu ilk 11 maç kadrosuna alındı ⭐");
+  if (window.lucide) window.lucide.createIcons();
+  modal.classList.remove("hidden");
+}
+
+function closeSubstitutionModal() {
+  const modal = document.getElementById("modal-player-substitution");
+  if (modal) modal.classList.add("hidden");
+  activeSubSourceIdx = null;
+}
+
+async function performSubstitution(targetIdx) {
+  if (activeSubSourceIdx === null || targetIdx === null) return;
+  const sIdx = activeSubSourceIdx;
+  closeSubstitutionModal();
+  await swapSquadPlayers(sIdx, targetIdx);
+}
+
+// Oyuncuyu İlk 11'den tek tıkla doğrudan yedeğe çekme modalını açar
+function benchStarterPlayer(idx) {
+  openSubstitutionModal(idx, true);
+}
+
+// Yedek oyuncuyu İlk 11'e alma modalını açar
+function promoteBenchPlayer(idx) {
+  openSubstitutionModal(idx, false);
 }
 
 // Teknik Direktörün İdeal İlk 11'i ve Yabancı Kuralını Otomatik Belirlemesi
@@ -534,6 +635,22 @@ function renderUI() {
   document.getElementById("coach-attr-youth").innerText = gameState.coach.youth || 50;
   document.getElementById("coach-attr-moral").innerText = `%${gameState.coach.moral}`;
 
+  // Hoca Karakteristik Özellikleri (Traits)
+  const traits = (gameState.coach && gameState.coach.traits) || [];
+  const renderTraitsHtml = (list) => {
+    if (!list || list.length === 0) return '<span class="text-[9px] text-slate-500 italic">Genel Taktisyen</span>';
+    return list.map(t => `
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30" title="${t.desc}">
+        <span>${t.icon || '⭐'}</span>
+        <span>${t.name}</span>
+      </span>
+    `).join('');
+  };
+  const officeTraitsEl = document.getElementById("office-coach-traits");
+  if (officeTraitsEl) officeTraitsEl.innerHTML = renderTraitsHtml(traits);
+  const squadTraitsEl = document.getElementById("squad-coach-traits");
+  if (squadTraitsEl) squadTraitsEl.innerHTML = renderTraitsHtml(traits);
+
   // Transfer Penceresi Gün Kontrolü
   const curDay = gameState.transfer_day || 1;
   const maxDays = gameState.transfer_max_days || 7;
@@ -542,14 +659,19 @@ function renderUI() {
   const officeWin = document.getElementById("office-window-status");
 
   if (gameState.transfer_window_open !== false) {
-    winTitle.innerText = `Transfer Penceresi: Gün ${curDay}/${maxDays}`;
-    winDesc.innerText = `Pazarlıklar sürüyor. Gün bitiminde yeni teklifler gelebilir.`;
+    winTitle.innerText = `Transfer Penceresi: Açık (Gün ${curDay}/${maxDays})`;
+    winDesc.innerText = `Kulüpler arası bonservis ve serbest oyuncu pazarlıkları aktif.`;
     officeWin.innerText = `Pencere AÇIK (${curDay}/${maxDays})`;
     officeWin.className = "text-xs font-bold text-emerald-400";
   } else {
-    winTitle.innerText = "Transfer Penceresi: KAPALI";
-    winDesc.innerText = "Pencereler kapandı. Ara transfere kadar lig maçlarına odaklanın.";
-    officeWin.innerText = "Pencere KAPALI";
+    const nextWindowMsg = (gameState.week < 18)
+      ? `Süper Lig maçları oynanıyor (Hafta ${gameState.week}/34). Kış/Ara Transfer Penceresi 18. Hafta açılacaktır.`
+      : (gameState.week < 22)
+      ? `Ara transfer dönemi kapandı. Sezon sonuna kadar transfer kapalıdır.`
+      : `Pencereler kapandı. Sezon sonuna kadar kadrolar donduruldu.`;
+    winTitle.innerText = "🛑 Transfer Penceresi: KAPALI (Lig Maçları)";
+    winDesc.innerText = nextWindowMsg;
+    officeWin.innerText = `KAPALI (Hf: ${gameState.week}/34)`;
     officeWin.className = "text-xs font-bold text-slate-400";
   }
 
@@ -1158,6 +1280,7 @@ async function startMatchSimulation() {
   document.getElementById("match-home-score").innerText = "0";
   document.getElementById("match-away-score").innerText = "0";
   document.getElementById("coach-mistake-count").innerText = "0";
+  resetMatchStatsDisplay();
 
   const feed = document.getElementById("match-live-feed");
   feed.innerHTML = `
@@ -1251,6 +1374,69 @@ async function submitHalftimeAction(action) {
   }
 }
 
+function resetMatchStatsDisplay() {
+  const posHomeEl = document.getElementById("stat-pos-home");
+  const posAwayEl = document.getElementById("stat-pos-away");
+  const posBarEl = document.getElementById("stat-pos-bar");
+  const shotsHomeEl = document.getElementById("stat-shots-home");
+  const shotsOppEl = document.getElementById("stat-shots-opp");
+  const xgHomeEl = document.getElementById("stat-xg-home");
+  const xgAwayEl = document.getElementById("stat-xg-away");
+
+  if (posHomeEl) posHomeEl.innerText = "50%";
+  if (posAwayEl) posAwayEl.innerText = "50%";
+  if (posBarEl) posBarEl.style.width = "50%";
+  if (shotsHomeEl) shotsHomeEl.innerText = "0";
+  if (shotsOppEl) shotsOppEl.innerText = "0";
+  if (xgHomeEl) xgHomeEl.innerText = "0.00";
+  if (xgAwayEl) xgAwayEl.innerText = "0.00";
+}
+
+function updateLiveMatchStats(matchData, progressRatio = 1.0) {
+  if (!matchData) return;
+  const stats = matchData.stats || {};
+  const isHome = matchData.is_home !== undefined 
+    ? matchData.is_home 
+    : (matchData.home_name === (gameState ? gameState.club_name : ""));
+
+  const targetPossession = stats.possession || 50;
+  const targetShotsMy = stats.shots_my || Math.max(3, (matchData.home_score || 0) + (matchData.away_score || 0) + 5);
+  const targetShotsOpp = stats.shots_opp || Math.max(2, (matchData.home_score || 0) + (matchData.away_score || 0) + 4);
+  const targetXgMy = stats.xg_my !== undefined ? stats.xg_my : (targetShotsMy * 0.12).toFixed(2);
+  const targetXgOpp = stats.xg_opp !== undefined ? stats.xg_opp : (targetShotsOpp * 0.11).toFixed(2);
+
+  const curPosMy = targetPossession;
+  const curPosOpp = 100 - curPosMy;
+
+  const curShotsMy = Math.max(0, Math.round(targetShotsMy * progressRatio));
+  const curShotsOpp = Math.max(0, Math.round(targetShotsOpp * progressRatio));
+  const curXgMy = (parseFloat(targetXgMy) * progressRatio).toFixed(2);
+  const curXgOpp = (parseFloat(targetXgOpp) * progressRatio).toFixed(2);
+
+  const posHome = isHome ? curPosMy : curPosOpp;
+  const posAway = isHome ? curPosOpp : curPosMy;
+  const shotsHome = isHome ? curShotsMy : curShotsOpp;
+  const shotsAway = isHome ? curShotsOpp : curShotsMy;
+  const xgHome = isHome ? curXgMy : curXgOpp;
+  const xgAway = isHome ? curXgOpp : curXgMy;
+
+  const posHomeEl = document.getElementById("stat-pos-home");
+  const posAwayEl = document.getElementById("stat-pos-away");
+  const posBarEl = document.getElementById("stat-pos-bar");
+  const shotsHomeEl = document.getElementById("stat-shots-home");
+  const shotsOppEl = document.getElementById("stat-shots-opp");
+  const xgHomeEl = document.getElementById("stat-xg-home");
+  const xgAwayEl = document.getElementById("stat-xg-away");
+
+  if (posHomeEl) posHomeEl.innerText = `${posHome}%`;
+  if (posAwayEl) posAwayEl.innerText = `${posAway}%`;
+  if (posBarEl) posBarEl.style.width = `${posHome}%`;
+  if (shotsHomeEl) shotsHomeEl.innerText = shotsHome;
+  if (shotsOppEl) shotsOppEl.innerText = shotsAway;
+  if (xgHomeEl) xgHomeEl.innerText = xgHome;
+  if (xgAwayEl) xgAwayEl.innerText = xgAway;
+}
+
 function runHalfAnimation(matchData, startMin, endMin, durationMs) {
   return new Promise((resolve) => {
     const clockEl = document.getElementById("match-clock");
@@ -1271,6 +1457,10 @@ function runHalfAnimation(matchData, startMin, endMin, durationMs) {
       const currentMinute = Math.min(endMin, Math.floor(startMin + progress * (endMin - startMin)));
 
       clockEl.innerText = `${currentMinute.toString().padStart(2, '0')}:00`;
+
+      // Canlı Maç İstatistiklerini Güncelle (Topla oynama, şutlar, xG)
+      const halfWeight = (startMin === 1) ? (progress * 0.5) : (0.5 + progress * 0.5);
+      updateLiveMatchStats(matchData, halfWeight);
 
       // Bu dakikaya kadar olan olayları bas
       sortedEvents.forEach((ev, idx) => {
@@ -1328,6 +1518,7 @@ function finishMatch(match) {
   clockEl.innerText = "90:00 (BİTTİ)";
   document.getElementById("match-home-score").innerText = match.home_score;
   document.getElementById("match-away-score").innerText = match.away_score;
+  updateLiveMatchStats(match, 1.0);
 
   // Bitiş Düdüğü Mesajı
   const feed = document.getElementById("match-live-feed");
@@ -2500,21 +2691,45 @@ async function loadSponsors() {
       const card = document.createElement("div");
       card.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex items-center justify-between text-xs";
       const isSigned = sp.is_signed === true;
-      const actionBtn = isSigned
-        ? `<span class="px-2.5 py-1.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-600/40 text-[10px] font-bold">✓ Aktif (${sp.remaining_weeks ? sp.remaining_weeks + ' Hf' : 'Sezon Boyu'})</span>`
-        : `<button onclick="signSponsor('${sp.id}')" class="px-2.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] transition-all">
+      const canSign = sp.can_sign !== false;
+
+      let actionBtn = "";
+      if (isSigned) {
+        actionBtn = `<span class="px-2.5 py-1.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-600/40 text-[10px] font-bold">✓ Aktif (${sp.remaining_weeks ? sp.remaining_weeks + ' Hf' : 'Sezonluk'})</span>`;
+      } else if (!canSign) {
+        actionBtn = `<button disabled title="${sp.reason_unmet || 'Kriter karşılanamadı'}" class="px-2.5 py-1.5 rounded bg-slate-800/80 text-slate-500 border border-slate-700/60 font-bold text-[10px] cursor-not-allowed opacity-60">
+             Kriter Karşılanmadı
+           </button>`;
+      } else {
+        actionBtn = `<button onclick="signSponsor('${sp.id}')" class="px-2.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] transition-all shadow-sm">
              İmzala (+${formatMoney(sp.income_season)})
            </button>`;
+      }
+
+      const slotLabel = sp.type_label || (
+        sp.type === 'chest' ? 'Göğüs Sponsoru' :
+        sp.type === 'stadium' ? 'Stadyum İsim Hakkı' :
+        sp.type === 'back' ? 'Forma Sırt & Numara' :
+        sp.type === 'arm' ? 'Forma Kol & Şort' : 'Resmi Sağlık Sponsoru'
+      );
 
       card.innerHTML = `
-        <div>
-          <div class="font-bold text-white text-xs flex items-center gap-1.5">
+        <div class="mr-2">
+          <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
             <span>${sp.name}</span>
-            <span class="text-[9px] text-amber-400 font-semibold">(${sp.slot === 'chest' ? 'Göğüs Sponsoru' : sp.slot === 'stadium' ? 'Stadyum İsim' : 'Sırt / Kol'})</span>
+            <span class="text-[9px] text-amber-400 font-semibold px-1.5 py-0.2 rounded bg-slate-800 border border-slate-700/80">(${slotLabel})</span>
           </div>
-          <div class="text-[9px] text-slate-400">${sp.desc}</div>
+          <div class="text-[9px] text-slate-400 mt-0.5">${sp.desc}</div>
+          <div class="mt-1 text-[9px] flex items-center gap-1.5 flex-wrap">
+            <span class="px-1.5 py-0.2 rounded font-bold ${canSign ? 'bg-blue-950/80 text-blue-300 border border-blue-800/60' : 'bg-red-950/80 text-red-300 border border-red-800/60'}">
+              Gerekçe / Şart: ${sp.req_text || 'Tüm Kulüplere Açık'}
+            </span>
+            ${!canSign && sp.reason_unmet ? `<span class="text-rose-400 font-medium">(${sp.reason_unmet})</span>` : ''}
+          </div>
         </div>
-        ${actionBtn}
+        <div class="flex-shrink-0">
+          ${actionBtn}
+        </div>
       `;
       container.appendChild(card);
     });

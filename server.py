@@ -111,15 +111,96 @@ SCOUT_CANDIDATES = [
 ]
 
 AVAILABLE_SPONSORS = [
-    {"id": "sp1", "type": "chest", "name": "Türk Hava Yolları", "income_season": 65_000_000, "desc": "Göğüs Sponsorluğu - Prestijli ana ortaklık."},
-    {"id": "sp2", "type": "chest", "name": "Global Borsa & Finans", "income_season": 90_000_000, "desc": "Devasa kripto ve fintech sponsorluğu."},
-    {"id": "sp3", "type": "stadium", "name": "Mega Telekom Arena", "income_season": 95_000_000, "desc": "Stadyum İsim Hakkı - 3 yıllık anlaşma."},
-    {"id": "sp4", "type": "back", "name": "Uludağ İçecek", "income_season": 32_000_000, "desc": "Forma Sırt ve Kol Sponsorluğu."}
+    {
+        "id": "sp1",
+        "type": "chest",
+        "type_label": "Göğüs Ana Sponsoru",
+        "name": "Türk Hava Yolları",
+        "income_season": 70_000_000,
+        "req_text": "İlk 6 Sıra & %75+ Taraftar",
+        "req_fan": 75,
+        "req_rank": 6,
+        "desc": "Uluslararası prestij ve Avrupa arenası hedefleyen köklü kulüplerle çalışırlar."
+    },
+    {
+        "id": "sp2",
+        "type": "chest",
+        "type_label": "Göğüs Ana Sponsoru",
+        "name": "Binance Global Finans",
+        "income_season": 95_000_000,
+        "req_text": "İlk 3 Şampiyonluk Adayı & %85+ Güven",
+        "req_fan": 85,
+        "req_rank": 3,
+        "desc": "Yalnızca şampiyonluk kovalayan dev markalara küresel sermaye yatırımı yaparlar."
+    },
+    {
+        "id": "sp3",
+        "type": "stadium",
+        "type_label": "Stadyum İsim Hakkı",
+        "name": "Mega Telekom Arena",
+        "income_season": 110_000_000,
+        "req_text": "35.000+ Stadyum Kapasitesi",
+        "req_stadium": 35000,
+        "desc": "Dev stadyumların teknolojik altyapısını ve 3 sezonluk isim hakkını devralır."
+    },
+    {
+        "id": "sp4",
+        "type": "stadium",
+        "type_label": "Stadyum İsim Hakkı",
+        "name": "Red Bull Park",
+        "income_season": 130_000_000,
+        "req_text": "40.000+ Kapasite & %80+ Taraftar",
+        "req_stadium": 40000,
+        "req_fan": 80,
+        "desc": "Global enerji devi; stadyumu devasa bir şölen merkezine dönüştürmek için rekor bütçe sunar."
+    },
+    {
+        "id": "sp5",
+        "type": "back",
+        "type_label": "Forma Sırt & Numara",
+        "name": "Uludağ Doğal Maden",
+        "income_season": 35_000_000,
+        "req_text": "Tüm Kulüplere Açık",
+        "desc": "Yerli sanayi devi; Süper Lig'in tüm renklerine koşulsuz sırt reklamı sağlar."
+    },
+    {
+        "id": "sp6",
+        "type": "back",
+        "type_label": "Forma Sırt & Numara",
+        "name": "Puma Sportswear",
+        "income_season": 48_000_000,
+        "req_text": "İlk 8 Sıra & %60+ Kongre Güveni",
+        "req_rank": 8,
+        "req_board": 60,
+        "desc": "Avrupa kupaları yolundaki istikrarlı takımların forma sırt tedarikçisi."
+    },
+    {
+        "id": "sp7",
+        "type": "arm",
+        "type_label": "Forma Kol & Şort",
+        "name": "Getir Lojistik",
+        "income_season": 28_000_000,
+        "req_text": "Mali Disiplin (Borç Limitini Aşmama)",
+        "req_no_debt_limit": True,
+        "desc": "Hızlı teslimat devi; mali tablosu temiz olan kulüplerle kol ve şort ortaklığı kurar."
+    },
+    {
+        "id": "sp8",
+        "type": "health",
+        "type_label": "Resmi Sağlık Sponsoru",
+        "name": "Acıbadem Sağlık Grubu",
+        "income_season": 32_000_000,
+        "req_text": "Süper Lig Kulübü Olma",
+        "desc": "Kulübün tüm sporcu sağlık kontrollerini üstlenir ve sakatlık sürelerini kısaltır."
+    }
 ]
 
 # ==================== OYUNCU VE RADAR İSTATİSTİKLERİ ====================
 def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
     pos = str(p.get("pos", "MERKEZ OS")).upper()
+    if pos == "KANAT":
+        pos = random.choice(["SAĞ KANAT", "SOL KANAT"])
+        p["pos"] = pos
     ovr = int(p.get("overall", 75))
 
     skills = p.get("skills")
@@ -386,6 +467,13 @@ def get_state(session_id: Optional[str] = None):
                         state["incoming_bids"] = []
                     if "club_scout" not in state or not state["club_scout"]:
                         state["club_scout"] = CLUB_SCOUTS_DB.get(state.get("team_id"), {"name": "Cemil Kaya", "rating": 74, "salary": 2_000_000, "role": "Scout Şefi", "region": "Türkiye"})
+                    # Hoca özellikleri (traits) tamamla
+                    coach = state.get("coach")
+                    if coach and not coach.get("traits"):
+                        for t in TEAMS_DB:
+                            if t.get("coach", {}).get("name") == coach.get("name"):
+                                coach["traits"] = t["coach"].get("traits", [])
+                                break
                     return state
         except Exception:
             pass
@@ -394,7 +482,14 @@ def get_state(session_id: Optional[str] = None):
     if sid == "default" and os.path.exists(SAVE_FILE):
         try:
             with open(SAVE_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                state = json.load(f)
+                coach = state.get("coach")
+                if coach and not coach.get("traits"):
+                    for t in TEAMS_DB:
+                        if t.get("coach", {}).get("name") == coach.get("name"):
+                            coach["traits"] = t["coach"].get("traits", [])
+                            break
+                return state
         except Exception:
             pass
 
@@ -458,7 +553,16 @@ def api_squad_swap(req: SquadSwapRequest):
     state = get_state()
     squad = state.get("squad", [])
     if 0 <= req.index1 < len(squad) and 0 <= req.index2 < len(squad):
-        squad[req.index1], squad[req.index2] = squad[req.index2], squad[req.index1]
+        temp_squad = list(squad)
+        temp_squad[req.index1], temp_squad[req.index2] = temp_squad[req.index2], temp_squad[req.index1]
+
+        starters_gks = sum(1 for p in temp_squad[:11] if "KL" in p.get("pos", ""))
+        if starters_gks > 1:
+            raise HTTPException(status_code=400, detail="İlk 11'de birden fazla kaleci bulunamaz! Kaleci yalnızca yedek kaleciyle değiştirilebilir.")
+        if starters_gks == 0:
+            raise HTTPException(status_code=400, detail="İlk 11'de mutlaka 1 kaleci yer almalıdır! Kaleciyi saha içi oyuncusuyla değiştiremezsiniz.")
+
+        squad[:] = temp_squad
         state["squad"] = squad
         state["my_radar"] = calculate_team_radar(squad)
         state["team_power"] = round(sum(p["overall"] for p in squad[:11]) / 11)
@@ -731,6 +835,7 @@ def api_match_half1(req: Half1Request):
 
     return {
         "stage": "half1_finished",
+        "is_home": is_home,
         "home_name": home_name,
         "away_name": away_name,
         "home_logo": home_logo,
@@ -742,6 +847,8 @@ def api_match_half1(req: Half1Request):
             "possession": max(35, min(65, 50 + int((my_pwr - opp_pwr) * 0.7))),
             "shots_my": max(2, my_score * 2 + random.randint(3, 7)),
             "shots_opp": max(1, opp_score * 2 + random.randint(2, 6)),
+            "xg_my": round(my_score * 0.45 + random.uniform(0.3, 0.7), 2),
+            "xg_opp": round(opp_score * 0.45 + random.uniform(0.2, 0.6), 2),
             "coach_mistakes": coach_mistakes
         }
     }
@@ -1064,12 +1171,18 @@ def api_match_half2(req: HalftimeActionRequest):
         else:
             state["season_result"] = "mid"
 
-    # Hafta 17 tamamlandığında ARA TRANSFER penceresini aç
-    if state["week"] == 18:
+    # Transfer Pencereleri Takvim Yönetimi
+    if state["week"] == 5 and state.get("transfer_window_open"):
+        state["transfer_window_open"] = False
+        state["news"].insert(0, "🛑 YAZ TRANSFER DÖNEMİ KAPANDI! Transfer tahtası 18. haftaya kadar kapalıdır.")
+    elif state["week"] == 18:
         state["transfer_window_open"] = True
         state["transfer_day"] = 1
         state["transfer_max_days"] = 7
         state["news"].insert(0, "🔥 ARA TRANSFER DÖNEMİ RESMEN AÇILDI! Kulüpler masaya oturuyor!")
+    elif state["week"] == 22 and state.get("transfer_window_open"):
+        state["transfer_window_open"] = False
+        state["news"].insert(0, "🛑 KIŞ / ARA TRANSFER DÖNEMİ KAPANDI! Kadrolar sezon sonuna kadar donduruldu.")
 
     opp_logo = (opp_team.get("logo") if opp_team else "") or ""
     home_name = state["club_name"] if is_home else opponent_name
@@ -1078,6 +1191,7 @@ def api_match_half2(req: HalftimeActionRequest):
     away_logo = opp_logo if is_home else state.get("logo", "")
 
     match_data = {
+        "is_home": is_home,
         "home_name": home_name,
         "away_name": away_name,
         "home_tag": "EV SAHİBİ" if is_home else "DEPLASMAN (BİZ)",
@@ -1319,7 +1433,7 @@ def api_coach_future_vision(req: CoachVisionRequest):
     if req.vision_focus == "youth":
         # Altyapı akademisinden 18 yaşında yüksek potansiyelli (Wonderkid) genç yetenek
         name = random.choice(["Erencan Aktaş", "Baran Yılmaz", "Semih Güler", "Oğuzhan Kaya", "Yusuf Demirbaş"])
-        pos = random.choice(["KANAT", "MERKEZ OS", "STP", "SANTRAFOR"])
+        pos = random.choice(["SAĞ KANAT", "SOL KANAT", "MERKEZ OS", "STP", "SANTRAFOR"])
         academy_star = {
             "name": name,
             "pos": pos,
@@ -1434,6 +1548,11 @@ class ClubBidRequest(BaseModel):
 @app.post("/api/transfer/negotiate-club")
 def api_negotiate_club(req: ClubBidRequest):
     state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır! Yalnızca Yaz Dönemi (1-4. Hafta) ve Kış Dönemi (18-21. Hafta) arasında transfer yapılabilir.")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
     target_team = next((t for t in TEAMS_DB if t["id"] == req.target_team_id), None)
     if not target_team:
         raise HTTPException(status_code=404, detail="Kulüp bulunamadı!")
@@ -1473,6 +1592,11 @@ class PlayerContractRequest(BaseModel):
 @app.post("/api/transfer/sign-negotiated-player")
 def api_sign_negotiated_player(req: PlayerContractRequest):
     state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır! Yalnızca Yaz Dönemi (1-4. Hafta) ve Kış Dönemi (18-21. Hafta) arasında transfer yapılabilir.")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
     total_upfront = req.bid_fee + req.sign_bonus
     if state["budget"] < total_upfront:
         raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Gereken anlık nakit: {total_upfront:,} ₺")
@@ -1715,11 +1839,41 @@ def api_get_sponsors():
     active_sponsors = state.get("finances", {}).get("active_sponsors", [])
     active_types = {s.get("type") for s in active_sponsors}
     active_ids = {s.get("id") for s in active_sponsors}
-    
+
+    # Mevcut lig sıralaması
+    rank = 1
+    for i, s in enumerate(state.get("standings", [])):
+        if s["name"] == state.get("club_name"):
+            rank = i + 1
+            break
+
     result = []
     for sp in AVAILABLE_SPONSORS:
         item = dict(sp)
         item["is_signed"] = (item["id"] in active_ids) or (item["type"] in active_types)
+
+        # Kriter Kontrolü
+        can_sign = True
+        reason_unmet = ""
+
+        if sp.get("req_fan") and state.get("fan_trust", 50) < sp["req_fan"]:
+            can_sign = False
+            reason_unmet = f"Taraftar güveni yetersiz (%{state.get('fan_trust', 50)} / %{sp['req_fan']} gerekli)"
+        elif sp.get("req_rank") and rank > sp["req_rank"]:
+            can_sign = False
+            reason_unmet = f"Lig sıralaması yetersiz ({rank}. sıradasınız, ilk {sp['req_rank']} gerekli)"
+        elif sp.get("req_stadium") and state.get("stadium_capacity", 25000) < sp["req_stadium"]:
+            can_sign = False
+            reason_unmet = f"Stadyum kapasitesi yetersiz ({state.get('stadium_capacity', 25000):,} / {sp['req_stadium']:,} gerekli)"
+        elif sp.get("req_board") and state.get("board_trust", 50) < sp["req_board"]:
+            can_sign = False
+            reason_unmet = f"Kongre güveni yetersiz (%{state.get('board_trust', 50)} / %{sp['req_board']} gerekli)"
+        elif sp.get("req_no_debt_limit") and state.get("budget", 0) < -30_000_000:
+            can_sign = False
+            reason_unmet = "Kulüp borç sınırını aşmış durumda (Transfer/Mali kısıt)"
+
+        item["can_sign"] = can_sign
+        item["reason_unmet"] = reason_unmet
         result.append(item)
     return result
 
@@ -1740,8 +1894,26 @@ def api_sign_sponsor(req: SignSponsorRequest):
         if existing.get("id") == sp["id"]:
             raise HTTPException(status_code=400, detail=f"{sp['name']} anlaşması zaten aktif! Sezon sonuna kadar geçerlidir.")
         if existing.get("type") == sp.get("type"):
-            type_tr = {"chest": "Göğüs", "stadium": "Stadyum", "back": "Forma Sırt"}.get(sp.get("type"), "Bu alanda")
+            type_tr = {"chest": "Göğüs", "stadium": "Stadyum", "back": "Forma Sırt", "arm": "Forma Kol & Şort", "health": "Sağlık"}.get(sp.get("type"), "Bu alanda")
             raise HTTPException(status_code=400, detail=f"{type_tr} sponsoru olarak zaten '{existing.get('name')}' ile sözleşmeniz var! Birden fazla sponsor bağlanamaz.")
+
+    # Kriter doğrulama
+    rank = 1
+    for i, s in enumerate(state.get("standings", [])):
+        if s["name"] == state.get("club_name"):
+            rank = i + 1
+            break
+
+    if sp.get("req_fan") and state.get("fan_trust", 50) < sp["req_fan"]:
+        raise HTTPException(status_code=400, detail=f"Sponsor kriteri karşılanamadı: Taraftar güveni en az %{sp['req_fan']} olmalıdır.")
+    if sp.get("req_rank") and rank > sp["req_rank"]:
+        raise HTTPException(status_code=400, detail=f"Sponsor kriteri karşılanamadı: Takımınız ligde ilk {sp['req_rank']} sırada olmalıdır.")
+    if sp.get("req_stadium") and state.get("stadium_capacity", 25000) < sp["req_stadium"]:
+        raise HTTPException(status_code=400, detail=f"Sponsor kriteri karşılanamadı: Stadyum kapasitesi en az {sp['req_stadium']:,} olmalıdır.")
+    if sp.get("req_board") and state.get("board_trust", 50) < sp["req_board"]:
+        raise HTTPException(status_code=400, detail=f"Sponsor kriteri karşılanamadı: Kongre güveni en az %{sp['req_board']} olmalıdır.")
+    if sp.get("req_no_debt_limit") and state.get("budget", 0) < -30_000_000:
+        raise HTTPException(status_code=400, detail="Sponsor kriteri karşılanamadı: Kulübün mali limit aşımı bulunuyor.")
 
     state["budget"] += sp["income_season"]
     active.append({

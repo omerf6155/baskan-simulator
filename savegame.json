@@ -14,7 +14,7 @@
   "season_result": null,
   "election_pending": false,
   "election_result": null,
-  "team_power": 83,
+  "team_power": 82,
   "budget": 360646197,
   "debt": 250000000,
   "fan_trust": 100,
@@ -35,7 +35,19 @@
     "moral": 100,
     "trust": 75,
     "mistakes_count": 0,
-    "praised_count": 0
+    "praised_count": 0,
+    "traits": [
+      {
+        "name": "Alman Savunma Duvarı",
+        "icon": "🛡️",
+        "desc": "Takımın defans ve fiziksel direncine kalıcı +8 katkı sağlar."
+      },
+      {
+        "name": "Genç Avcısı",
+        "icon": "💎",
+        "desc": "26 yaş altı oyuncuların gelişimini ikiye katlar."
+      }
+    ]
   },
   "scout": {
     "id": "sc1",
@@ -67,237 +79,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Kylian Mbappé",
-      "pos": "SOL KANAT",
-      "age": 27,
-      "overall": 93,
-      "wage": 85000000,
-      "val": 280000000,
-      "contract_years": 3,
-      "morale": 95,
-      "skills": {
-        "pac": 97,
-        "sho": 96,
-        "pas": 86,
-        "dri": 96,
-        "def": 55,
-        "phy": 90
-      },
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Mohamed Salah",
-      "pos": "SAĞ KANAT",
-      "age": 34,
-      "overall": 85,
-      "wage": 14520000,
-      "val": 66000000,
-      "skills": {
-        "pac": 89,
-        "sho": 88,
-        "pas": 78,
-        "dri": 88,
-        "def": 47,
-        "phy": 82
-      },
-      "contract_years": 3,
-      "morale": 76,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Franculino",
-      "pos": "SANTRAFOR",
-      "age": 22,
-      "overall": 85,
-      "wage": 14520000,
-      "val": 66000000,
-      "skills": {
-        "pac": 83,
-        "sho": 88,
-        "pas": 78,
-        "dri": 88,
-        "def": 47,
-        "phy": 82
-      },
-      "contract_years": 4,
-      "morale": 77,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Fabinho",
-      "pos": "ÖN LİBERO",
-      "age": 32,
-      "overall": 83,
-      "wage": 7920000,
-      "val": 36000000,
-      "skills": {
-        "pac": 75,
-        "sho": 78,
-        "pas": 87,
-        "dri": 85,
-        "def": 79,
-        "phy": 78
-      },
-      "contract_years": 4,
-      "morale": 88,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Arseniy Batagov",
-      "pos": "STP",
-      "age": 24,
-      "overall": 81,
-      "wage": 7260000,
-      "val": 33000000,
-      "skills": {
-        "pac": 70,
-        "sho": 55,
-        "pas": 71,
-        "dri": 67,
-        "def": 84,
-        "phy": 83
-      },
-      "contract_years": 1,
-      "morale": 90,
-      "wage_demand": 0,
-      "is_foreign": false,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Chibuike Nwaiwu",
-      "pos": "STP",
-      "age": 23,
-      "overall": 81,
-      "wage": 6600000,
-      "val": 30000000,
-      "skills": {
-        "pac": 70,
-        "sho": 55,
-        "pas": 71,
-        "dri": 67,
-        "def": 84,
-        "phy": 83
-      },
-      "contract_years": 3,
-      "morale": 80,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Sidny Lopes Cabral",
-      "pos": "SOL BEK",
-      "age": 24,
-      "overall": 81,
-      "wage": 6600000,
-      "val": 30000000,
-      "skills": {
-        "pac": 77,
-        "sho": 55,
-        "pas": 71,
-        "dri": 67,
-        "def": 84,
-        "phy": 83
-      },
-      "contract_years": 4,
-      "morale": 86,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Wagner Pina",
-      "pos": "SAĞ BEK",
-      "age": 23,
-      "overall": 81,
-      "wage": 7260000,
-      "val": 33000000,
-      "skills": {
-        "pac": 77,
-        "sho": 55,
-        "pas": 71,
-        "dri": 67,
-        "def": 84,
-        "phy": 83
-      },
-      "contract_years": 2,
-      "morale": 79,
-      "wage_demand": 0,
-      "is_foreign": true,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Aral Şimşir",
-      "pos": "SOL KANAT",
-      "age": 24,
-      "overall": 81,
-      "wage": 6600000,
-      "val": 30000000,
-      "skills": {
-        "pac": 85,
-        "sho": 84,
-        "pas": 74,
-        "dri": 84,
-        "def": 43,
-        "phy": 78
-      },
-      "contract_years": 1,
-      "morale": 95,
-      "wage_demand": 0,
-      "is_foreign": false,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
-    },
-    {
-      "name": "Cenk Özkacar",
-      "pos": "STP",
-      "age": 25,
-      "overall": 79,
-      "wage": 2640000,
-      "val": 12000000,
-      "skills": {
-        "pac": 68,
-        "sho": 53,
-        "pas": 69,
-        "dri": 65,
-        "def": 82,
-        "phy": 81
-      },
-      "contract_years": 4,
-      "morale": 79,
-      "wage_demand": 0,
-      "is_foreign": false,
-      "yellow_cards": 0,
-      "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 81,
+      "is_youth": false
     },
     {
       "name": "Batista Mendy",
@@ -320,7 +104,259 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 81,
+      "is_youth": false
+    },
+    {
+      "name": "Mohamed Salah",
+      "pos": "SAĞ KANAT",
+      "age": 34,
+      "overall": 85,
+      "wage": 14520000,
+      "val": 66000000,
+      "skills": {
+        "pac": 89,
+        "sho": 88,
+        "pas": 78,
+        "dri": 88,
+        "def": 47,
+        "phy": 82
+      },
+      "contract_years": 3,
+      "morale": 76,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 85,
+      "is_youth": false
+    },
+    {
+      "name": "Franculino",
+      "pos": "SANTRAFOR",
+      "age": 22,
+      "overall": 85,
+      "wage": 14520000,
+      "val": 66000000,
+      "skills": {
+        "pac": 83,
+        "sho": 88,
+        "pas": 78,
+        "dri": 88,
+        "def": 47,
+        "phy": 82
+      },
+      "contract_years": 4,
+      "morale": 77,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 94,
+      "is_youth": true
+    },
+    {
+      "name": "Fabinho",
+      "pos": "ÖN LİBERO",
+      "age": 32,
+      "overall": 83,
+      "wage": 7920000,
+      "val": 36000000,
+      "skills": {
+        "pac": 75,
+        "sho": 78,
+        "pas": 87,
+        "dri": 85,
+        "def": 79,
+        "phy": 78
+      },
+      "contract_years": 4,
+      "morale": 88,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 83,
+      "is_youth": false
+    },
+    {
+      "name": "Arseniy Batagov",
+      "pos": "STP",
+      "age": 24,
+      "overall": 81,
+      "wage": 7260000,
+      "val": 33000000,
+      "skills": {
+        "pac": 70,
+        "sho": 55,
+        "pas": 71,
+        "dri": 67,
+        "def": 84,
+        "phy": 83
+      },
+      "contract_years": 1,
+      "morale": 90,
+      "wage_demand": 0,
+      "is_foreign": false,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 87,
+      "is_youth": true
+    },
+    {
+      "name": "Chibuike Nwaiwu",
+      "pos": "STP",
+      "age": 23,
+      "overall": 81,
+      "wage": 6600000,
+      "val": 30000000,
+      "skills": {
+        "pac": 70,
+        "sho": 55,
+        "pas": 71,
+        "dri": 67,
+        "def": 84,
+        "phy": 83
+      },
+      "contract_years": 3,
+      "morale": 80,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 89,
+      "is_youth": true
+    },
+    {
+      "name": "Sidny Lopes Cabral",
+      "pos": "SOL BEK",
+      "age": 24,
+      "overall": 81,
+      "wage": 6600000,
+      "val": 30000000,
+      "skills": {
+        "pac": 77,
+        "sho": 55,
+        "pas": 71,
+        "dri": 67,
+        "def": 84,
+        "phy": 83
+      },
+      "contract_years": 4,
+      "morale": 86,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 87,
+      "is_youth": true
+    },
+    {
+      "name": "Wagner Pina",
+      "pos": "SAĞ BEK",
+      "age": 23,
+      "overall": 81,
+      "wage": 7260000,
+      "val": 33000000,
+      "skills": {
+        "pac": 77,
+        "sho": 55,
+        "pas": 71,
+        "dri": 67,
+        "def": 84,
+        "phy": 83
+      },
+      "contract_years": 2,
+      "morale": 79,
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 89,
+      "is_youth": true
+    },
+    {
+      "name": "Aral Şimşir",
+      "pos": "SOL KANAT",
+      "age": 24,
+      "overall": 81,
+      "wage": 6600000,
+      "val": 30000000,
+      "skills": {
+        "pac": 85,
+        "sho": 84,
+        "pas": 74,
+        "dri": 84,
+        "def": 43,
+        "phy": 78
+      },
+      "contract_years": 1,
+      "morale": 95,
+      "wage_demand": 0,
+      "is_foreign": false,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 87,
+      "is_youth": true
+    },
+    {
+      "name": "Cenk Özkacar",
+      "pos": "STP",
+      "age": 25,
+      "overall": 79,
+      "wage": 2640000,
+      "val": 12000000,
+      "skills": {
+        "pac": 68,
+        "sho": 53,
+        "pas": 69,
+        "dri": 65,
+        "def": 82,
+        "phy": 81
+      },
+      "contract_years": 4,
+      "morale": 79,
+      "wage_demand": 0,
+      "is_foreign": false,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 83,
+      "is_youth": true
+    },
+    {
+      "name": "Kylian Mbappé",
+      "pos": "SOL KANAT",
+      "age": 27,
+      "overall": 93,
+      "wage": 85000000,
+      "val": 280000000,
+      "contract_years": 3,
+      "morale": 95,
+      "skills": {
+        "pac": 97,
+        "sho": 96,
+        "pas": 86,
+        "dri": 96,
+        "def": 55,
+        "phy": 90
+      },
+      "wage_demand": 0,
+      "is_foreign": true,
+      "yellow_cards": 0,
+      "suspended_weeks": 0,
+      "injured_weeks": 0,
+      "potential": 93,
+      "is_youth": false
     },
     {
       "name": "Tim Jabol-Folcarelli",
@@ -343,7 +379,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 81,
+      "is_youth": false
     },
     {
       "name": "Ernest Muci",
@@ -366,7 +404,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 85,
+      "is_youth": true
     },
     {
       "name": "Noah Saviolo",
@@ -389,7 +429,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 91,
+      "is_youth": true
     },
     {
       "name": "Mustafa Eskihellaç",
@@ -412,7 +454,9 @@
       "is_foreign": false,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 79,
+      "is_youth": false
     },
     {
       "name": "Benjamin Bouchouari",
@@ -435,7 +479,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 85,
+      "is_youth": true
     },
     {
       "name": "Paul Onuachu",
@@ -458,7 +504,9 @@
       "is_foreign": true,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 79,
+      "is_youth": false
     },
     {
       "name": "Onuralp Çevikkan",
@@ -481,7 +529,9 @@
       "is_foreign": false,
       "yellow_cards": 0,
       "suspended_weeks": 0,
-      "injured_weeks": 0
+      "injured_weeks": 0,
+      "potential": 89,
+      "is_youth": true
     }
   ],
   "fixtures": [
@@ -1391,11 +1441,11 @@
     "region": "Karadeniz & Doğu Avrupa"
   },
   "my_radar": {
-    "pac": 77,
-    "sho": 68,
+    "pac": 75,
+    "sho": 66,
     "pas": 75,
-    "dri": 76,
-    "def": 70,
-    "phy": 82
+    "dri": 74,
+    "def": 72,
+    "phy": 81
   }
 }
