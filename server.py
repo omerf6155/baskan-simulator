@@ -257,7 +257,7 @@ def to_fifa_pos(pos: str) -> str:
     if "LB" in p.split():
         return "LB"
     # Sağ Bek - SAĞ BEK, SA? BEK (encoding bozuk gelirse)
-    if ("SA" in p and "BEK" in p) or "SGB" in p or p == "RB" or "SB" in p:
+    if ("SA" in p and "BEK" in p) or "SGB" in p or p == "RB" or p == "SB":
         return "RB"
     if "RB" in p.split():
         return "RB"
