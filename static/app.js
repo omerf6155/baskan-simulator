@@ -53,62 +53,92 @@ let currentBgmTrack = localStorage.getItem("baskan_bgm_track") || "track1.mp3";
 let bgmVolume = parseFloat(localStorage.getItem("baskan_bgm_vol") || "0.35");
 let sfxVolume = parseFloat(localStorage.getItem("baskan_sfx_vol") || "0.75");
 let sunoAudio = null;
+let sunoAudioSource = null;
 
 function initAudioSystem() {
-  if (audioCtx) {
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
-    return;
-  }
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) return;
-  audioCtx = new AudioContextClass();
+  if (!audioCtx) {
+    try {
+      audioCtx = new AudioContextClass();
+    } catch (e) {
+      console.warn("AudioContext oluşturulamadı:", e);
+      return;
+    }
 
-  masterBgmGain = audioCtx.createGain();
-  masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
-  masterBgmGain.connect(audioCtx.destination);
+    try {
+      masterBgmGain = audioCtx.createGain();
+      masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
+      masterBgmGain.connect(audioCtx.destination);
+    } catch (e) {
+      console.warn("masterBgmGain hatası:", e);
+    }
 
-  masterSfxGain = audioCtx.createGain();
-  masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
-  masterSfxGain.connect(audioCtx.destination);
+    try {
+      masterSfxGain = audioCtx.createGain();
+      masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
+      masterSfxGain.connect(audioCtx.destination);
+    } catch (e) {
+      console.warn("masterSfxGain hatası:", e);
+    }
+  }
+
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume().catch(() => {});
+  }
+}
+
+function ensureSunoAudio() {
+  initAudioSystem();
+  if (!sunoAudio) {
+    sunoAudio = new Audio();
+    sunoAudio.loop = true;
+    sunoAudio.preload = "auto";
+  }
+  if (audioCtx && masterBgmGain && !sunoAudioSource) {
+    try {
+      sunoAudioSource = audioCtx.createMediaElementSource(sunoAudio);
+      sunoAudioSource.connect(masterBgmGain);
+    } catch (e) {
+      console.warn("MediaElementSource bağlantısı:", e);
+    }
+  }
+  return sunoAudio;
 }
 
 function startBgm() {
   initAudioSystem();
-  if (sunoAudio) {
-    sunoAudio.pause();
-    sunoAudio = null;
-  }
+  ensureSunoAudio();
 
   isBgmPlaying = true;
   localStorage.setItem("baskan_bgm_playing", "true");
   updateMusicUIButtons(true);
 
-  // Doğrudan MP3 dosyasını çal (Sentetik sesler kaldırıldı)
+  applyBgmVolume(bgmVolume * 100);
+
   let trackFile = currentBgmTrack;
   if (!trackFile.endsWith(".mp3")) {
     trackFile = trackFile.replace("suno_", "") + ".mp3";
   }
 
-  try {
-    const musicUrl = `/static/music/${trackFile}`;
-    sunoAudio = new Audio(musicUrl);
-    sunoAudio.loop = true;
-    sunoAudio.volume = bgmVolume;
-    sunoAudio.play().catch(err => {
-      // Fallback olarak doğrudan /static/ altını dene
-      sunoAudio = new Audio(`/static/${trackFile}`);
-      sunoAudio.loop = true;
-      sunoAudio.volume = bgmVolume;
+  const musicUrl = `/static/music/${trackFile}`;
+  const fallbackUrl = `/static/${trackFile}`;
+
+  const curSrc = sunoAudio.getAttribute("src") || sunoAudio.src || "";
+  if (!curSrc.includes(trackFile)) {
+    sunoAudio.src = musicUrl;
+  }
+
+  const playPromise = sunoAudio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(err => {
+      console.warn("Müzik yolu deneniyor (fallback):", err);
+      sunoAudio.src = fallbackUrl;
       sunoAudio.play().catch(e => {
         console.warn("Müzik dosyası çalınamadı:", e);
         stopBgm();
       });
     });
-  } catch (err) {
-    console.warn("Ses motoru hatası:", err);
-    stopBgm();
   }
 }
 
@@ -117,7 +147,6 @@ function stopBgm() {
   localStorage.setItem("baskan_bgm_playing", "false");
   if (sunoAudio) {
     sunoAudio.pause();
-    sunoAudio = null;
   }
   updateMusicUIButtons(false);
 }
@@ -158,26 +187,61 @@ function updateMusicUIButtons(playing) {
   }
 }
 
-function onBgmVolumeChange(val) {
-  bgmVolume = val / 100;
+function applyBgmVolume(val) {
+  const num = Math.max(0, Math.min(100, parseFloat(val) !== undefined ? parseFloat(val) : 35));
+  bgmVolume = num / 100;
   localStorage.setItem("baskan_bgm_vol", bgmVolume.toString());
+
   const txt = document.getElementById("bgm-volume-txt");
-  if (txt) txt.innerText = `${val}%`;
+  if (txt) txt.innerText = `${Math.round(num)}%`;
+  const slider = document.getElementById("bgm-volume-slider");
+  if (slider && parseFloat(slider.value) !== num) slider.value = num;
+
+  initAudioSystem();
+
   if (masterBgmGain && audioCtx) {
-    masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
+    try {
+      masterBgmGain.gain.setValueAtTime(bgmVolume, audioCtx.currentTime);
+    } catch (e) {
+      try { masterBgmGain.gain.value = bgmVolume; } catch (e2) {}
+    }
   }
+
   if (sunoAudio) {
-    sunoAudio.volume = bgmVolume;
+    try {
+      if (bgmVolume === 0) {
+        sunoAudio.volume = 0;
+      } else if (sunoAudioSource) {
+        // Web Audio GainNode ses kontrolünü üstlendiği için audio elementini 1.0 tutuyoruz (çift kısılmayı önler)
+        sunoAudio.volume = 1.0;
+      } else {
+        sunoAudio.volume = bgmVolume;
+      }
+    } catch (e) {}
   }
 }
 
+function onBgmVolumeChange(val) {
+  applyBgmVolume(val);
+}
+
 function onSfxVolumeChange(val) {
-  sfxVolume = val / 100;
+  const num = Math.max(0, Math.min(100, parseFloat(val) !== undefined ? parseFloat(val) : 75));
+  sfxVolume = num / 100;
   localStorage.setItem("baskan_sfx_vol", sfxVolume.toString());
   const txt = document.getElementById("sfx-volume-txt");
-  if (txt) txt.innerText = `${val}%`;
+  if (txt) txt.innerText = `${Math.round(num)}%`;
+  const slider = document.getElementById("sfx-volume-slider");
+  if (slider && parseFloat(slider.value) !== num) slider.value = num;
+
+  initAudioSystem();
+
   if (masterSfxGain && audioCtx) {
-    masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
+    try {
+      masterSfxGain.gain.setValueAtTime(sfxVolume, audioCtx.currentTime);
+    } catch (e) {
+      try { masterSfxGain.gain.value = sfxVolume; } catch (e2) {}
+    }
   }
 }
 
@@ -185,7 +249,19 @@ function onBgmTrackChange(val) {
   currentBgmTrack = val;
   localStorage.setItem("baskan_bgm_track", val);
   if (isBgmPlaying) {
-    startBgm();
+    let trackFile = currentBgmTrack;
+    if (!trackFile.endsWith(".mp3")) {
+      trackFile = trackFile.replace("suno_", "") + ".mp3";
+    }
+    if (sunoAudio) {
+      sunoAudio.src = `/static/music/${trackFile}`;
+      sunoAudio.play().catch(e => {
+        sunoAudio.src = `/static/${trackFile}`;
+        sunoAudio.play().catch(() => stopBgm());
+      });
+    } else {
+      startBgm();
+    }
   }
 }
 

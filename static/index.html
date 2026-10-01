@@ -1561,7 +1561,7 @@
             <span>Müzik Seviyesi:</span>
             <strong class="text-amber-400" id="bgm-volume-txt">35%</strong>
           </div>
-          <input type="range" id="bgm-volume-slider" min="0" max="100" value="35" oninput="onBgmVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
+          <input type="range" id="bgm-volume-slider" min="0" max="100" value="35" oninput="onBgmVolumeChange(this.value)" onchange="onBgmVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500" />
         </div>
 
         <!-- Müzik Teması / Parça Seçimi -->
@@ -1600,7 +1600,7 @@
             <span>Efekt Seviyesi:</span>
             <strong class="text-emerald-400" id="sfx-volume-txt">75%</strong>
           </div>
-          <input type="range" id="sfx-volume-slider" min="0" max="100" value="75" oninput="onSfxVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
+          <input type="range" id="sfx-volume-slider" min="0" max="100" value="75" oninput="onSfxVolumeChange(this.value)" onchange="onSfxVolumeChange(this.value)" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500" />
         </div>
       </div>
 
