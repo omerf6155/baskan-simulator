@@ -92,13 +92,19 @@ function startBgm() {
   }
 
   try {
-    sunoAudio = new Audio(`/static/music/${trackFile}`);
+    const musicUrl = `/static/music/${trackFile}`;
+    sunoAudio = new Audio(musicUrl);
     sunoAudio.loop = true;
     sunoAudio.volume = bgmVolume;
     sunoAudio.play().catch(err => {
-      console.warn("Müzik dosyası bulunamadı veya otomatik oynatma engellendi:", err);
-      showToast("Müzik için static/music/ klasörüne MP3 ekleyebilirsiniz 🎵");
-      stopBgm();
+      // Fallback olarak doğrudan /static/ altını dene
+      sunoAudio = new Audio(`/static/${trackFile}`);
+      sunoAudio.loop = true;
+      sunoAudio.volume = bgmVolume;
+      sunoAudio.play().catch(e => {
+        console.warn("Müzik dosyası çalınamadı:", e);
+        stopBgm();
+      });
     });
   } catch (err) {
     console.warn("Ses motoru hatası:", err);
