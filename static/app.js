@@ -11,6 +11,8 @@ function normalizeNameSlug(name) {
 }
 
 function getSessionId() {
+  // Kullanıcı adı varsa onu kullan, yoksa sabit "player1" — böylece
+  // tarayıcı kapanıp açılsa da aynı kayıt dosyasına gidilir.
   const customUser = localStorage.getItem("baskan_username");
   if (customUser && customUser.trim()) {
     const slug = normalizeNameSlug(customUser.trim());
@@ -18,9 +20,11 @@ function getSessionId() {
     localStorage.setItem("baskan_session_id", userSid);
     return userSid;
   }
+  // localStorage'da sabit bir SID varsa onu kullan
   let sid = localStorage.getItem("baskan_session_id");
   if (!sid) {
-    sid = "sid_" + Math.random().toString(36).substring(2, 9) + "_" + Date.now().toString(36);
+    // İlk kez: sabit "player1" SID ata (random değil!)
+    sid = "player1";
     localStorage.setItem("baskan_session_id", sid);
   }
   return sid;

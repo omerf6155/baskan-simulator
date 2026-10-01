@@ -784,6 +784,24 @@ def get_state(session_id: Optional[str] = None):
         except Exception:
             pass
 
+    # Son çare: saves/ klasöründeki en son kaydedilen oyunu bul (eski random SID'li kayıtlar)
+    try:
+        all_saves = [
+            os.path.join(SAVES_DIR, f)
+            for f in os.listdir(SAVES_DIR)
+            if f.endswith(".json")
+        ]
+        if all_saves:
+            latest = max(all_saves, key=os.path.getmtime)
+            with open(latest, "r", encoding="utf-8") as f:
+                state = json.load(f)
+            if state.get("is_started") and state.get("team_id") in [t["id"] for t in TEAMS_DB]:
+                # Bu kaydı artık doğru SID'e taşı
+                save_state(state, sid)
+                return state
+    except Exception:
+        pass
+
     state = default_career_state("trabzonspor", is_started=False)
     save_state(state, sid)
     return state
