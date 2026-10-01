@@ -641,6 +641,48 @@ function renderUI() {
   const polCard = document.getElementById("pol-card-score");
   if (polCard) polCard.innerText = `%${gameState.political_power}`;
 
+  // Bankalar Birliği Borç Paneli UI
+  const bankDebtEl = document.getElementById("bank-debt-display");
+  const bankIntEl = document.getElementById("bank-weekly-interest");
+  const bankStatusEl = document.getElementById("bank-sanction-status");
+  if (bankDebtEl) {
+    const curDebt = gameState.debt || 0;
+    bankDebtEl.innerText = formatMoney(curDebt) + " Borç";
+    if (bankIntEl) bankIntEl.innerText = formatMoney(Math.floor(curDebt * 0.003)) + " / Hafta";
+    if (bankStatusEl) {
+      const bc = gameState.bank_consortium || {};
+      const sLevel = bc.sanction_level || 0;
+      if (sLevel === 0) {
+        bankStatusEl.className = "font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.innerText = "Normal (Temiz)";
+      } else if (sLevel === 1) {
+        bankStatusEl.className = "font-bold text-amber-400 bg-amber-950/60 border border-amber-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.innerText = "İHTAR: Transfer Yasağı!";
+      } else if (sLevel === 2) {
+        bankStatusEl.className = "font-bold text-orange-400 bg-orange-950/60 border border-orange-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.innerText = "AĞIR: %40 Gelir Blokesi!";
+      } else {
+        bankStatusEl.className = "font-bold text-rose-400 bg-rose-950/60 border border-rose-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.innerText = "KRİTİK: TFF -3 Puan Cezası!";
+      }
+    }
+  }
+
+  // Rakip Kulüpten Şike / Teşvik Teklifi Kutusu UI
+  const bribeBox = document.getElementById("incoming-bribe-box");
+  if (bribeBox) {
+    if (gameState.incoming_bribe_offer) {
+      bribeBox.classList.remove("hidden");
+      const bo = gameState.incoming_bribe_offer;
+      const bTitle = document.getElementById("bribe-offer-title");
+      const bDesc = document.getElementById("bribe-offer-desc");
+      if (bTitle) bTitle.innerText = bo.title || "Karanlık Çanta Teklifi";
+      if (bDesc) bDesc.innerText = bo.desc || "";
+    } else {
+      bribeBox.classList.add("hidden");
+    }
+  }
+
   // Haber Ticker
   if (gameState.news && gameState.news.length > 0) {
     document.getElementById("breaking-news-ticker").innerText = gameState.news[0];
@@ -1906,6 +1948,7 @@ async function openCaptainReportModal() {
       data.wage_demands.forEach(p => {
         const item = document.createElement("div");
         item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-xl space-y-2";
+        item.id = "wage-demand-card-" + p.name;
         const potBadge = (p.age < 26) ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-bold">⚡ POT: ${p.potential}</span>` : '';
         item.innerHTML = `
           <div class="flex justify-between items-center text-xs">
@@ -1965,9 +2008,74 @@ async function respondWageNegotiation(playerName, decision) {
     showToast(data.message);
     gameState = data.state;
     renderUI();
-    openCaptainReportModal(); // Listeyi yenile
+
+    // Kartı anında arayüzden kaldır (üst üste zam olmasın, tek seferde silinsin)
+    const card = document.getElementById("wage-demand-card-" + playerName);
+    if (card) {
+      card.style.transition = "all 0.3s ease";
+      card.style.opacity = "0";
+      card.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        card.remove();
+        const list = document.getElementById("captain-wage-demands-list");
+        if (list && list.children.length === 0) {
+          list.innerHTML = '<div class="text-slate-400 text-xs text-center py-3 italic">Tüm zam talepleri sonuçlandırıldı. Aktif talep kalmadı ✓</div>';
+        }
+      }, 300);
+    } else {
+      openCaptainReportModal();
+    }
   } catch (e) {
     console.error(e);
+  }
+}
+
+// ==================== BANKALAR BİRLİĞİ BORÇ ÖDEME ====================
+async function payClubDebt(amount) {
+  if (!gameState) return;
+  if (gameState.budget < amount && amount < 999999999) {
+    showToast("Kasada bu kadar nakit yok!");
+    return;
+  }
+  try {
+    const res = await apiFetch("/api/finances/pay-debt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: amount })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Borç ödemesi başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
+  }
+}
+
+// ==================== ŞİKE / TEŞVİK TEKLİFİ YANITI ====================
+async function respondBribeOffer(decision) {
+  try {
+    const res = await apiFetch("/api/underground/bribe-response", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ decision: decision })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
   }
 }
 
@@ -3124,65 +3232,37 @@ async function loadUndergroundOdds() {
 
 function renderUndergroundBetMarkets() {
   if (!currentUndergroundOdds || !currentUndergroundOdds.markets) return;
+  const grid = document.getElementById("underground-bet-markets-grid");
+  if (!grid) return;
+  grid.innerHTML = "";
+
   const markets = currentUndergroundOdds.markets;
+  markets.forEach(m => {
+    const isSelected = (selectedBetType === m.type);
+    const btn = document.createElement("button");
+    btn.dataset.type = m.type;
+    btn.className = `bet-opt-btn ${isSelected ? 'selected-bet border-amber-400 bg-amber-950/40' : 'border-slate-800 bg-black/60 hover:border-slate-600'} p-2 rounded-lg border text-left transition-all`;
+    btn.onclick = () => selectBetOption(m.type, m.odds, m.risk_pct, m.title);
 
-  const btnWin = document.querySelector('.bet-opt-btn[data-type="win"]');
-  const btnOver = document.querySelector('.bet-opt-btn[data-type="over35"]');
-  const btnHtFt = document.querySelector('.bet-opt-btn[data-type="ht_ft"]');
-  const btnOpp = document.querySelector('.bet-opt-btn[data-type="opponent_win"]');
+    const isOppWin = (m.type === "opponent_win");
+    const titleColor = isOppWin ? "text-rose-400" : "text-white";
+    const oddsColor = isOppWin ? "text-rose-400" : "text-amber-400";
 
-  const mWin = markets.find(m => m.type === "win");
-  const mOver = markets.find(m => m.type === "over35");
-  const mHtFt = markets.find(m => m.type === "ht_ft");
-  const mOpp = markets.find(m => m.type === "opponent_win");
-
-  if (btnWin && mWin) {
-    btnWin.setAttribute("onclick", `selectBetOption('win', ${mWin.odds}, ${mWin.risk_pct}, '${mWin.title}')`);
-    btnWin.innerHTML = `
+    btn.innerHTML = `
       <div class="flex justify-between items-center">
-        <span class="text-[11px] font-bold text-white">🟢 ${mWin.title}</span>
-        <span class="text-[10px] font-black text-amber-400 font-mono">${mWin.odds}x</span>
+        <span class="text-[10px] font-bold ${titleColor} truncate max-w-[120px]">${m.title}</span>
+        <span class="text-[10px] font-black ${oddsColor} font-mono">${m.odds}x</span>
       </div>
-      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mWin.risk_pct} • ${mWin.desc}</div>
+      <div class="text-[8px] text-slate-400 mt-0.5 truncate">Risk: %${m.risk_pct} • ${m.desc}</div>
     `;
-    if (selectedBetType === "win") selectedBetOdds = mWin.odds;
-  }
+    grid.appendChild(btn);
 
-  if (btnOver && mOver) {
-    btnOver.setAttribute("onclick", `selectBetOption('over35', ${mOver.odds}, ${mOver.risk_pct}, '${mOver.title}')`);
-    btnOver.innerHTML = `
-      <div class="flex justify-between items-center">
-        <span class="text-[11px] font-bold text-white">⚽ 3.5 Gol Üstü</span>
-        <span class="text-[10px] font-black text-amber-400 font-mono">${mOver.odds}x</span>
-      </div>
-      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mOver.risk_pct} • ${mOver.desc}</div>
-    `;
-    if (selectedBetType === "over35") selectedBetOdds = mOver.odds;
-  }
-
-  if (btnHtFt && mHtFt) {
-    btnHtFt.setAttribute("onclick", `selectBetOption('ht_ft', ${mHtFt.odds}, ${mHtFt.risk_pct}, '${mHtFt.title}')`);
-    btnHtFt.innerHTML = `
-      <div class="flex justify-between items-center">
-        <span class="text-[11px] font-bold text-white">⚡ Şikeli Çevirme (İY/MS)</span>
-        <span class="text-[10px] font-black text-amber-400 font-mono">${mHtFt.odds}x</span>
-      </div>
-      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mHtFt.risk_pct} • ${mHtFt.desc}</div>
-    `;
-    if (selectedBetType === "ht_ft") selectedBetOdds = mHtFt.odds;
-  }
-
-  if (btnOpp && mOpp) {
-    btnOpp.setAttribute("onclick", `selectBetOption('opponent_win', ${mOpp.odds}, ${mOpp.risk_pct}, '${mOpp.title}')`);
-    btnOpp.innerHTML = `
-      <div class="flex justify-between items-center">
-        <span class="text-[11px] font-bold text-rose-300">💀 ${mOpp.title}</span>
-        <span class="text-[10px] font-black text-rose-400 font-mono">${mOpp.odds}x</span>
-      </div>
-      <div class="text-[8px] text-slate-400 mt-0.5">Risk: %${mOpp.risk_pct} • ${mOpp.desc}</div>
-    `;
-    if (selectedBetType === "opponent_win") selectedBetOdds = mOpp.odds;
-  }
+    if (isSelected) {
+      selectedBetOdds = m.odds;
+      selectedBetRisk = m.risk_pct;
+      selectedBetTitle = m.title;
+    }
+  });
 
   updateBetSummaryUI();
 }

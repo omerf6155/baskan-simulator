@@ -634,6 +634,56 @@
           </div>
         </div>
 
+        <!-- BANKALAR BİRLİĞİ KONSORSİYUMU & BORÇ YAPILANDIRMA -->
+        <div class="bg-gradient-to-b from-[#161b26] to-[#0d111a] border border-amber-600/60 rounded-xl p-3.5 space-y-3 shadow-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-sm">🏦</div>
+              <div>
+                <div class="text-xs font-black text-amber-400">BANKALAR BİRLİĞİ KONSORSİYUMU</div>
+                <div class="text-[9px] text-slate-400">Finansal Yeniden Yapılandırma & Borç Yönetimi</div>
+              </div>
+            </div>
+            <span class="text-[10px] font-black px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-amber-300 font-mono" id="bank-debt-display">500M ₺ Borç</span>
+          </div>
+
+          <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800 space-y-1.5 text-[10px]">
+            <div class="flex justify-between items-center text-slate-300">
+              <span>Haftalık Faiz Yükü:</span>
+              <strong class="text-rose-400 font-mono" id="bank-weekly-interest">~1.5M ₺ / Hafta</strong>
+            </div>
+            <div class="flex justify-between items-center text-slate-300">
+              <span>Mali Disiplin Durumu:</span>
+              <span id="bank-sanction-status" class="font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.2 rounded text-[9px]">Normal (Düzenli)</span>
+            </div>
+            <div class="text-[9px] text-slate-400 leading-tight pt-1 border-t border-slate-800" id="bank-warning-text">
+              Kasa -15M ₺ altına düşerse sırasıyla Transfer Yasağı, Gelir Blokesi ve -3 Puan silme yaptırımları uygulanır! Borcunuzu ödeyerek kulübü faiz yükünden kurtarın.
+            </div>
+          </div>
+
+          <!-- Borç Ödeme Butonları -->
+          <div class="space-y-1.5">
+            <div class="text-[10px] font-bold text-slate-300 flex items-center justify-between">
+              <span>Kasadan Anapara Borcu Öde:</span>
+              <span class="text-[9px] text-emerald-400">Faiz & Taksit Düşer</span>
+            </div>
+            <div class="grid grid-cols-4 gap-1.5">
+              <button onclick="payClubDebt(10000000)" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-[10px] border border-slate-700 hover:border-amber-500 transition-all">
+                10M ₺ Öde
+              </button>
+              <button onclick="payClubDebt(25000000)" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-[10px] border border-slate-700 hover:border-amber-500 transition-all">
+                25M ₺ Öde
+              </button>
+              <button onclick="payClubDebt(50000000)" class="py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-[10px] border border-slate-700 hover:border-amber-500 transition-all">
+                50M ₺ Öde
+              </button>
+              <button onclick="payClubDebt(999999999)" class="py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-emerald-600 hover:from-amber-500 hover:to-emerald-500 text-slate-950 font-black text-[10px] shadow-sm transition-all">
+                Tümünü Kapat
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3 space-y-2">
           <div class="flex justify-between items-center text-xs font-bold text-white">
             <span>Sponsorluk Anlaşmaları</span>
@@ -744,61 +794,98 @@
       <!-- ==================== TAB 7: YERALTI, ARSA & SİYASET ==================== -->
       <section id="tab-underground" class="tab-pane hidden space-y-3">
         
-        <!-- SİYASET VE CUMHURBAŞKANLIĞI HİBE SİSTEMİ -->
-        <div class="bg-[#19152b] border border-purple-800/80 rounded-xl p-3.5 space-y-2.5 shadow-md">
+        <!-- GİZLİ TEKLİF & ŞİKE / TEŞVİK MEKTUBU (Varsa) -->
+        <div id="incoming-bribe-box" class="hidden bg-gradient-to-b from-[#1f0a0a] to-[#0d0404] border-2 border-rose-600 rounded-xl p-3.5 space-y-2.5 shadow-2xl animate-pulse">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-purple-300">
-              <i data-lucide="landmark" class="w-4 h-4 text-purple-400"></i>
-              <span>Siyaset & Cumhurbaşkanlığı Nüfuzu</span>
+            <div class="flex items-center gap-2">
+              <span class="text-lg">📩</span>
+              <div>
+                <div class="text-xs font-black text-rose-400" id="bribe-offer-title">Karanlık Çanta Teklifi</div>
+                <div class="text-[9px] text-slate-400">Kapalı Zarf & Gizli Kurye</div>
+              </div>
             </div>
-            <span class="text-xs font-black text-purple-400 px-2 py-0.5 rounded bg-purple-950 border border-purple-800/60" id="pol-card-score">%50</span>
+            <span class="text-[9px] font-black bg-rose-950 text-rose-300 border border-rose-700 px-2 py-0.5 rounded">GİZLİ</span>
           </div>
-          <p class="text-[10px] text-slate-300 leading-relaxed">
-            Ankara temasları ve bakanlık projeleriyle siyasi gücünüzü yükseltin. %50 üstünde <strong class="text-amber-300">120M ₺ Nakit Hibe</strong>, %90 üstünde <strong class="text-emerald-300">35 Dönüm Hazine Arazisi</strong> talep edebilirsiniz!
+          <p class="text-[10px] text-slate-200 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-rose-950" id="bribe-offer-desc">
+            Rakip başkan gizli kuryeyle haber gönderdi...
+          </p>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="respondBribeOffer('accept')" class="py-2 rounded-lg bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-600 hover:to-emerald-500 text-white font-extrabold text-[11px] shadow-md flex items-center justify-center gap-1">
+              <span>🤝 Çantayı Kabul Et</span>
+            </button>
+            <button onclick="respondBribeOffer('reject')" class="py-2 rounded-lg bg-gradient-to-r from-rose-800 to-rose-700 hover:from-rose-700 hover:to-rose-600 text-white font-extrabold text-[11px] shadow-md flex items-center justify-center gap-1">
+              <span>🛡️ Reddet! "Onurumuz Satılık Değil"</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SİYASET VE CUMHURBAŞKANLIĞI HİBE SİSTEMİ (KARANLIK DERİN DEVLET TEMASI) -->
+        <div class="bg-gradient-to-b from-[#0e0f14] via-[#090a0e] to-[#040406] border border-amber-600/40 rounded-xl p-3.5 space-y-3 shadow-2xl relative overflow-hidden">
+          <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-600/5 rounded-full blur-2xl pointer-events-none"></div>
+
+          <div class="flex items-center justify-between border-b border-amber-900/30 pb-2.5">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded bg-amber-950/80 border border-amber-600/50 flex items-center justify-center text-sm shadow-inner">🏛️</div>
+              <div>
+                <div class="text-xs font-black text-amber-200 tracking-wider">DERİN SİYASET & ANKARA KULİSLERİ</div>
+                <div class="text-[9px] text-amber-500/70 font-mono">KAPALI KAPILAR ARDI PROTOKOLÜ</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-black text-amber-400 font-mono px-2 py-0.5 rounded bg-black/80 border border-amber-700/60 shadow-sm" id="pol-card-score">%50</span>
+              <div class="text-[8px] text-slate-500 mt-0.5">Siyasi Nüfuz</div>
+            </div>
+          </div>
+
+          <p class="text-[10px] text-slate-300 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-slate-900">
+            Külliye koridorları, bürokrasi ve lobi görüşmeleriyle siyasi ağırlığınızı perçinleyin. %65 üstünde <strong class="text-amber-400">35M ₺ Acil Nakit Hibe</strong>, %85 üstünde <strong class="text-emerald-400">15 Dönüm Hazine Arazisi + 30M ₺ Fon</strong> talep hakkı doğar. Ancak saray kapısından ret yerseniz ağır siyasi bedel ödersiniz!
           </p>
 
-          <div class="grid grid-cols-3 gap-1.5 pt-1">
-            <button onclick="doPoliticsAction('ankara_visit')" class="p-2 rounded-lg bg-slate-900 border border-purple-800/50 hover:border-purple-400 text-left">
-              <div class="text-[10px] font-bold text-white">Ankara Ziyareti</div>
-              <div class="text-[8px] text-purple-400">+10 Siyaset • 4M ₺</div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button onclick="doPoliticsAction('ankara_visit')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
+              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Ankara Teması</div>
+              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+10 Nüfuz • 4M ₺</div>
             </button>
-            <button onclick="doPoliticsAction('gov_project')" class="p-2 rounded-lg bg-slate-900 border border-purple-800/50 hover:border-purple-400 text-left">
-              <div class="text-[10px] font-bold text-white">Sosyal Proje</div>
-              <div class="text-[8px] text-purple-400">+16 Siyaset • 15M ₺</div>
+            <button onclick="doPoliticsAction('gov_project')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
+              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Sosyal Protokol</div>
+              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+16 Nüfuz • 15M ₺</div>
             </button>
-            <button onclick="doPoliticsAction('pro_statement')" class="p-2 rounded-lg bg-slate-900 border border-purple-800/50 hover:border-purple-400 text-left">
-              <div class="text-[10px] font-bold text-white">Hükümet Demeci</div>
-              <div class="text-[8px] text-purple-400">+8 Siyaset • Bedava</div>
+            <button onclick="doPoliticsAction('pro_statement')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
+              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Lobi Demeci</div>
+              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+8 Nüfuz • Bedava</div>
             </button>
           </div>
 
           <!-- Cumhurbaşkanlığı Hibe Başvuru Butonu -->
-          <div class="pt-1 border-t border-purple-900/60">
-            <button onclick="requestPresidentialGrant()" id="btn-pres-grant" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-purple-700 to-amber-600 hover:from-purple-600 hover:to-amber-500 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md">
-              <i data-lucide="crown" class="w-4 h-4 text-amber-300"></i> Cumhurbaşkanlığı Hibe Talebinde Bulun
+          <div class="pt-2 border-t border-amber-900/30">
+            <button onclick="requestPresidentialGrant()" id="btn-pres-grant" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-900 via-amber-700 to-yellow-600 hover:from-amber-800 hover:to-yellow-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-xl transition-all border border-amber-500/60">
+              <span>📜</span> <span>Cumhurbaşkanlığı Hibe Protokolü İmzala</span>
             </button>
-            <div class="text-[9px] text-purple-300/80 text-center mt-1" id="pres-grant-hint">
-              Siyasi Nüfuzunuz %50+ ise Nakit Hibe (%35 şans), %90+ ise Mega Arazi Hibesi (%80 şans) açılır.
+            <div class="text-[9px] text-amber-400/70 text-center mt-1" id="pres-grant-hint">
+              Sezonda 1 başvuru hakkı! (En az %65 Siyasi Nüfuz şartı).
             </div>
           </div>
         </div>
 
-        <!-- YASADIŞI MERDİVENALTI BAHİS ŞEBEKESİ & KUPON -->
-        <div class="bg-gradient-to-b from-[#1c1322] to-[#120c18] border border-amber-500/50 rounded-xl p-3.5 space-y-2.5 shadow-lg">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5 text-xs font-black text-amber-400">
-              <span class="text-sm">🎰</span>
-              <span>YASADIŞI MERDİVENALTI BAHİS ŞEBEKESİ</span>
+        <!-- YASADIŞI MERDİVENALTI BAHİS ŞEBEKESİ & DETAYLI KUPON -->
+        <div class="bg-gradient-to-b from-[#130b1c] via-[#0b0710] to-[#050308] border border-amber-500/60 rounded-xl p-3.5 space-y-3 shadow-xl">
+          <div class="flex items-center justify-between border-b border-purple-950 pb-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🎰</span>
+              <div>
+                <div class="text-xs font-black text-amber-400">YASADIŞI MERDİVENALTI BAHİS MASASI</div>
+                <div class="text-[9px] text-slate-400">Karanlık Kasa & Detaylı Maç Kuponları</div>
+              </div>
             </div>
-            <span class="text-[9px] bg-red-950 text-red-300 border border-red-700/60 px-1.5 py-0.5 rounded font-bold animate-pulse">HIZLI PARA & YÜKSEK RİSK</span>
+            <span class="text-[9px] bg-rose-950 text-rose-300 border border-rose-700 px-2 py-0.5 rounded font-bold animate-pulse">MASAK RİSKİ</span>
           </div>
 
           <p class="text-[10px] text-slate-300 leading-relaxed">
-            Kulüp kasasındaki nakitle sıradaki maça el altından illegal kupon yapın. Maç bittiğinde kazanç doğrudan kasaya yatar. Ancak <strong class="text-rose-400">MASAK ve Polis baskını</strong> olursa -3 puan silme ve 25M ₺ ceza riski vardır!
+            Kulüp kasasındaki nakitle sıradaki maça el altından illegal kupon yapın. <strong class="text-rose-400">Kendi takımınızın mağlubiyetine</strong> de oynayabilirsiniz; tutarsa dev para kazandırır ancak taraftar isyanı ve şike soruşturması riski tavan yapar!
           </p>
 
           <!-- Aktif Kupon Kutusu (Varsa) -->
-          <div id="active-bet-box" class="hidden p-2.5 rounded-lg bg-slate-900 border border-amber-500/60 flex items-center justify-between">
+          <div id="active-bet-box" class="hidden p-2.5 rounded-lg bg-black/80 border border-amber-500/60 flex items-center justify-between">
             <div>
               <div class="text-[10px] text-amber-300 font-bold" id="active-bet-title">Kupon: Kendi Takımına Galibiyet</div>
               <div class="text-[9px] text-slate-400 mt-0.5">Yatırılan: <span id="active-bet-amt" class="text-white font-mono">10M ₺</span> • Olası Kazanç: <strong id="active-bet-payout" class="text-emerald-400 font-mono">18.5M ₺</strong></div>
@@ -808,44 +895,10 @@
             </button>
           </div>
 
-          <!-- Kupon Yapma Seçenekleri -->
+          <!-- Kupon Yapma Seçenekleri (Dinamik JS ile doldurulacak) -->
           <div id="place-bet-box" class="space-y-2">
-            <div class="grid grid-cols-2 gap-1.5">
-              <!-- 1. Kendi Takımına Galibiyet -->
-              <button onclick="selectBetOption('win', 1.85, 12, 'Kendi Takımına Temiz Galibiyet')" class="bet-opt-btn selected-bet p-2 rounded-lg bg-slate-900 border border-amber-400 text-left transition-all" data-type="win">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] font-bold text-white">🟢 Takımına Galibiyet</span>
-                  <span class="text-[10px] font-black text-amber-400 font-mono">1.85x</span>
-                </div>
-                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %12 • Maçı kazanırsak</div>
-              </button>
-
-              <!-- 2. 3.5 Üst -->
-              <button onclick="selectBetOption('over35', 2.40, 18, '3.5 Gol Üstü (En az 4 Gol)')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-amber-400 text-left transition-all" data-type="over35">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] font-bold text-white">⚽ 3.5 Gol Üstü</span>
-                  <span class="text-[10px] font-black text-amber-400 font-mono">2.40x</span>
-                </div>
-                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %18 • En az 4 gol olursa</div>
-              </button>
-
-              <!-- 3. Şikeli Çevirme (İY/MS) -->
-              <button onclick="selectBetOption('ht_ft', 3.60, 25, 'İY/MS Şikeli Geri Dönüş')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-amber-400 text-left transition-all" data-type="ht_ft">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] font-bold text-white">⚡ Şikeli Çevirme (İY/MS)</span>
-                  <span class="text-[10px] font-black text-amber-400 font-mono">3.60x</span>
-                </div>
-                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %25 • İY Beraber/Mağlup, MS Galip</div>
-              </button>
-
-              <!-- 4. Ters Şike: Rakip Kazanır -->
-              <button onclick="selectBetOption('opponent_win', 4.80, 35, 'Karanlık Kasa: Rakip Takım Kazanır')" class="bet-opt-btn p-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-rose-400 text-left transition-all" data-type="opponent_win">
-                <div class="flex justify-between items-center">
-                  <span class="text-[11px] font-bold text-rose-300">💣 Rakip Kazanır (Ters Şike)</span>
-                  <span class="text-[10px] font-black text-rose-400 font-mono">4.80x</span>
-                </div>
-                <div class="text-[8px] text-slate-400 mt-0.5">Risk: %35 • Rakip kazanırsa dev kasa</div>
-              </button>
+            <div class="grid grid-cols-2 gap-1.5" id="underground-bet-markets-grid">
+              <!-- JS dinamik doldurur -->
             </div>
 
             <!-- Bahis Tutarı Seçimi -->
@@ -1252,9 +1305,45 @@
         <button onclick="submitCoachVision('wage_discipline')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-rose-500 text-left transition-all">
           <div class="flex justify-between items-center">
             <span class="text-xs font-bold text-rose-400 flex items-center gap-1.5">💼 Maaş Disiplini & Bütçe Reformu</span>
-            <span class="text-[9px] bg-rose-950 text-rose-300 border border-rose-800 px-1 rounded font-bold">%10 Maaş İndirimi</span>
+            <span class="text-[9px] bg-rose-950 text-rose-300 border border-rose-800 px-1 rounded font-bold">%10 Tasarruf</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Hoca otoritesiyle tüm kadro fedakarlık yapar; yıllık kulüp maaş yükünden %10 tasarruf sağlanır.</div>
+          <div class="text-[9px] text-slate-300 mt-1">Hoca otoritesiyle kadro fedakarlık yapar; yıllık kulüp maaş yükünden %10 tasarruf sağlanır.</div>
+        </button>
+
+        <!-- 6. Tiki-Taka -->
+        <button onclick="submitCoachVision('tiki_taka')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-cyan-500 text-left transition-all">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">🌀 İspanyol Tiki-Taka & Pas Doktrini</span>
+            <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-1 rounded font-bold">+5 Pas • +3 Dripling</span>
+          </div>
+          <div class="text-[9px] text-slate-300 mt-1">Takıma topa sahip olma üstünlüğü aşılar; maçlarda topla oynama oranını ve pas akıcılığını zirveye çıkarır.</div>
+        </button>
+
+        <!-- 7. Kontra-Atak -->
+        <button onclick="submitCoachVision('counter_attack')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500 text-left transition-all">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">⚡ Şimşek Geçiş & Kontra-Atak</span>
+            <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1 rounded font-bold">+5 Hız • Deplasman Silahı</span>
+          </div>
+          <div class="text-[9px] text-slate-300 mt-1">Özellikle zorlu derbi ve deplasman maçlarında savunma arkasına sarkan ölümcül hücum silahı kazandırır.</div>
+        </button>
+
+        <!-- 8. Global Scout -->
+        <button onclick="submitCoachVision('scout_revolution')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-indigo-500 text-left transition-all">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">🌍 Global Scout Operasyonu (19 Yaş Yabancı Wonderkid)</span>
+            <span class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-1 rounded font-bold">POT: 91</span>
+          </div>
+          <div class="text-[9px] text-slate-300 mt-1">Hocanın Avrupa bağlantılarıyla Fransa/Brezilya'dan 19 yaşındaki süper potansiyel genç yıldız A Takıma bedelsiz katılır!</div>
+        </button>
+
+        <!-- 9. Şampiyonluk Karakteri -->
+        <button onclick="submitCoachVision('mental_resilience')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-yellow-500 text-left transition-all">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">🧠 Şampiyonluk Karakteri & Kriz Yönetimi</span>
+            <span class="text-[9px] bg-yellow-950 text-yellow-300 border border-yellow-800 px-1 rounded font-bold">%100 Moral & Ahenk</span>
+          </div>
+          <div class="text-[9px] text-slate-300 mt-1">Soyunma odasındaki tüm kırgınlıkları bitirir, geriye düşülen maçlarda geri dönüş inancını ve taraftar bağını ateşler.</div>
         </button>
       </div>
     </div>
