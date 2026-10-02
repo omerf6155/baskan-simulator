@@ -140,9 +140,14 @@
             </div>
           </div>
 
-          <button onclick="switchTab('match')" class="w-full mt-3 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
-            <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i> Protokol Tribününe Geç (Radar & Maç)
-          </button>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 mt-3">
+            <button onclick="openPreMatchEventModal()" id="btn-pre-match-event" class="w-full py-2 rounded-lg bg-purple-900/60 hover:bg-purple-800/80 border border-purple-500/50 text-purple-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i> Konser & Taraftar Festivali
+            </button>
+            <button onclick="switchTab('match')" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i> Protokol Tribünü (Maç)
+            </button>
+          </div>
         </div>
 
         <!-- Hoca Bilgisi & İstatistikleri -->
@@ -213,8 +218,17 @@
             <div class="text-xs font-bold text-blue-300 flex items-center gap-1.5">
               <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-400"></i> Hoca Vizyonu
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Altyapı Yıldızı & Kamplar</div>
+          <button onclick="openClubUpgradesModal()" class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-left hover:bg-emerald-900/40 col-span-2">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                <i data-lucide="wrench" class="w-3.5 h-3.5 text-emerald-400"></i> Kulüp Tesisleri & Pasif Gelir Geliştirmeleri (Skill Ağacı)
+              </div>
+              <span class="text-[9px] bg-emerald-900/80 text-emerald-200 px-1.5 py-0.5 rounded font-bold border border-emerald-600/50">5 ALAN</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Stadyum • Şehir Ulaşımı • Forma Tasarımı • Akademi • TV Yayını</div>
           </button>
+        </div>
+
         <!-- Hoca Transfer Raporu & Zayıf Bölge Analizi -->
         <div id="office-coach-recommendation-card" class="bg-[#151c2e] border border-blue-900/60 rounded-xl p-3 space-y-2">
           <div class="flex items-center justify-between">
@@ -515,13 +529,47 @@
           </div>
         </div>
 
+        <!-- BAŞKAN BASIN TOPLANTISI & AÇIKLAMA KUTUSU (MAĞLUBİYET / BERABERLİK DURUMUNDA) -->
+        <div id="post-match-press-box" class="hidden bg-[#161c2d] border border-amber-500/50 rounded-xl p-3 space-y-2.5 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+            <span class="text-xs font-black text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i> Başkan Basın Toplantısı (Canlı Yayın)
+            </span>
+            <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded font-bold">KAMUOYU AÇIKLAMASI</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            Maçtan sonra kameralar karşısına geçip camiayı ve kamuoyunu yönlendirebilirsiniz. Tavrınız taraftar, basın ve takım dengelerini değiştirecektir.
+          </p>
+          <div class="grid grid-cols-2 gap-1.5" id="post-match-press-buttons">
+            <button onclick="submitPressStatement('blame_referee')" class="p-2 rounded-lg bg-rose-950/60 hover:bg-rose-900 border border-rose-800 text-left transition-all">
+              <div class="font-bold text-[11px] text-rose-300">🔥 Hakeme Yüklen</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">+6 Taraftar, -8 Basın / TFF</div>
+            </button>
+            <button onclick="submitPressStatement('support_team')" class="p-2 rounded-lg bg-blue-950/60 hover:bg-blue-900 border border-blue-800 text-left transition-all">
+              <div class="font-bold text-[11px] text-blue-300">🛡️ Takıma Sahip Çık</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">+10 Hoca Morali, +6 Takım</div>
+            </button>
+            <button onclick="submitPressStatement('promise_transfer')" class="p-2 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 border border-emerald-800 text-left transition-all">
+              <div class="font-bold text-[11px] text-emerald-300">⭐ Yıldız Transfer Sözü</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">+8 Taraftar Güveni</div>
+            </button>
+            <button onclick="submitPressStatement('criticize_coach')" class="p-2 rounded-lg bg-amber-950/60 hover:bg-amber-900 border border-amber-800 text-left transition-all">
+              <div class="font-bold text-[11px] text-amber-300">⚠️ Hocayı Açıkça Uyar</div>
+              <div class="text-[9px] text-slate-400 mt-0.5">-15 Hoca Morali, +4 Taraftar</div>
+            </button>
+          </div>
+        </div>
+
         <!-- Maç Sonu Aksiyonları (Soyunma Odası + Sonraki Maç) -->
-        <div id="post-match-action" class="hidden grid grid-cols-2 gap-2">
+        <div id="post-match-action" class="hidden grid grid-cols-3 gap-2">
           <button onclick="openCoachModal()" class="py-2.5 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="door-open" class="w-3.5 h-3.5 text-amber-400"></i> Hoca ile Görüş
           </button>
+          <button onclick="togglePostMatchPressBox()" id="btn-toggle-press" class="py-2.5 rounded-lg bg-amber-600/80 border border-amber-500 hover:bg-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
+            <i data-lucide="mic" class="w-3.5 h-3.5 text-slate-950"></i> Basın Demeci
+          </button>
           <button onclick="prepareNextMatch()" class="py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md">
-            <span>Sonraki Maça Geç</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            <span>Sonraki Maç</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </button>
         </div>
 
@@ -1747,6 +1795,80 @@
       <button onclick="closeHudInfoModal()" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors">
         Anladım, Kapat
       </button>
+    </div>
+  </div>
+
+  <!-- KULÜP TESİSLERİ VE PASİF GELİR GELİŞTİRMELERİ MODALI (SKILL TREE) -->
+  <div id="modal-club-upgrades" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-md rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+            <i data-lucide="wrench" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm text-white">Kulüp Yatırımları & Skill Ağacı</h3>
+            <span class="text-[10px] text-slate-400">Pasif Gelir & Tesis Geliştirmeleri</span>
+          </div>
+        </div>
+        <button onclick="closeClubUpgradesModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+        Kulübün altyapısını ve gelir kollarını geliştirerek her maç daha yüksek bilet, mağaza ve TV hasılatı elde edin; oyuncularınızın kondisyon toparlanmasını hızlandırın.
+      </div>
+
+      <div id="club-upgrades-list" class="space-y-2.5">
+        <!-- JS ile 5 skill dalı render edilir -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MAÇ ÖNCESİ ETKİNLİK & KONSER DÜZENLEME MODALI -->
+  <div id="modal-pre-match-event" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-sm rounded-2xl p-4 space-y-3 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-purple-400">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm text-white">Maç Öncesi Festival & Konser</h3>
+            <span class="text-[10px] text-slate-400">Tribünleri Doldur & Taraftarı Ateşle</span>
+          </div>
+        </div>
+        <button onclick="closePreMatchEventModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <p class="text-[11px] text-slate-300 leading-relaxed">
+        Taraftar güveni %60 altına düştüğünde tribünler boş kalır. Maç öncesi stadyumda konser ve festival düzenleyerek taraftarı maça çekebilir ve bilet hasılatını garantiye alabilirsiniz!
+      </p>
+
+      <div class="space-y-2">
+        <div onclick="organizePreMatchEvent('fan_carnival')" class="bg-slate-900/90 hover:bg-slate-850 p-2.5 rounded-xl border border-slate-700 cursor-pointer transition-colors">
+          <div class="flex justify-between items-center text-xs font-bold text-white">
+            <span>🎪 Taraftar Karnavalı & Ateş Şovu</span>
+            <span class="text-amber-400">5.000.000 ₺</span>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1">+8 Taraftar Güveni • Aile & Genç Tribün Doluluğu</div>
+        </div>
+
+        <div onclick="organizePreMatchEvent('celebrity_show')" class="bg-slate-900/90 hover:bg-slate-850 p-2.5 rounded-xl border border-slate-700 cursor-pointer transition-colors">
+          <div class="flex justify-between items-center text-xs font-bold text-white">
+            <span>🌟 Ünlüler Gösteri Maçı & DJ Performansı</span>
+            <span class="text-amber-400">8.000.000 ₺</span>
+          </div>
+          <div class="text-[10px] text-slate-400 mt-1">+11 Taraftar Güveni • Ulusal Basın İlgisi</div>
+        </div>
+
+        <div onclick="organizePreMatchEvent('rock_concert')" class="bg-purple-950/40 hover:bg-purple-900/50 p-2.5 rounded-xl border border-purple-500/40 cursor-pointer transition-colors">
+          <div class="flex justify-between items-center text-xs font-bold text-purple-200">
+            <span>🎸 Dev Stadyum Rock Konseri</span>
+            <span class="text-amber-400">10.000.000 ₺</span>
+          </div>
+          <div class="text-[10px] text-purple-300 mt-1">+14 Taraftar Güveni • Kapalı Gişe Tribün Desteği</div>
+        </div>
+      </div>
     </div>
   </div>
 

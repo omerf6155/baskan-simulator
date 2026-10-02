@@ -60,35 +60,43 @@ def format_money_val(amount: int) -> str:
 
 # ==================== DÜNYA YILDIZLARI & TRANSFER HAVUZU ====================
 WORLD_SUPERSTARS = [
-    {"name": "Erling Haaland", "age": 26, "pos": "ST", "claimed_pot": 92, "real_pot": 92, "price": 260_000_000, "salary": 75_000_000, "is_star": True, "desc": "Manchester City'nin gol makinesi. Süper Lig'e gelirse yer yerinden oynar."},
-    {"name": "Kylian Mbappé", "age": 27, "pos": "LW", "claimed_pot": 93, "real_pot": 93, "price": 280_000_000, "salary": 85_000_000, "is_star": True, "desc": "Dünyanın en hızlı ve durdurulamaz hücumcusu."},
-    {"name": "Jude Bellingham", "age": 23, "pos": "CAM", "claimed_pot": 91, "real_pot": 91, "price": 230_000_000, "salary": 68_000_000, "is_star": True, "desc": "Real Madrid'in genç lideri, tam saha maestro ve skorer."},
-    {"name": "Lamine Yamal", "age": 19, "pos": "RW", "claimed_pot": 93, "real_pot": 93, "price": 210_000_000, "salary": 55_000_000, "is_star": True, "desc": "Barselona mucizesi! Geleceğin Ballon d'Or favorisi."},
-    {"name": "Mohamed Salah", "age": 34, "pos": "RW", "claimed_pot": 89, "real_pot": 89, "price": 120_000_000, "salary": 52_000_000, "is_star": True, "desc": "Mısır Kralı. Sağ kanatta ölümcül bitirici ve ikon."},
-    {"name": "Kevin De Bruyne", "age": 35, "pos": "CM", "claimed_pot": 90, "real_pot": 90, "price": 130_000_000, "salary": 58_000_000, "is_star": True, "desc": "Miras bırakacak bir pas dehası ve oyun kurucu."},
-    {"name": "Harry Kane", "age": 33, "pos": "ST", "claimed_pot": 90, "real_pot": 90, "price": 150_000_000, "salary": 56_000_000, "is_star": True, "desc": "Dünya futbolunun en komple forveti, pasör ve golcü."},
-    {"name": "Victor Osimhen", "age": 27, "pos": "ST", "claimed_pot": 89, "real_pot": 89, "price": 170_000_000, "salary": 52_000_000, "is_star": True, "desc": "Fiziksel güç, hava hakimiyeti ve bitiricilik abidesi."},
-    {"name": "Vinícius Júnior", "age": 26, "pos": "LW", "claimed_pot": 92, "real_pot": 92, "price": 250_000_000, "salary": 72_000_000, "is_star": True, "desc": "Sambacı dripling cambazı, savunmaları darmadağın eder."},
-    {"name": "Rodri", "age": 30, "pos": "CDM", "claimed_pot": 91, "real_pot": 91, "price": 200_000_000, "salary": 62_000_000, "is_star": True, "desc": "Ballon d'Or sahibi kusursuz orta saha çimentosu."},
-    {"name": "Florian Wirtz", "age": 23, "pos": "CAM", "claimed_pot": 90, "real_pot": 90, "price": 185_000_000, "salary": 50_000_000, "is_star": True, "desc": "Alman harikası; dar alanda sihirbaz, asist ve gol makinesi."},
-    {"name": "Alphonso Davies", "age": 25, "pos": "LB", "claimed_pot": 87, "real_pot": 87, "price": 110_000_000, "salary": 38_000_000, "is_star": True, "desc": "Sol kanadın hızlı treni, savunma ve bindirme ustası."},
-    {"name": "Achraf Hakimi", "age": 27, "pos": "RB", "claimed_pot": 88, "real_pot": 88, "price": 125_000_000, "salary": 42_000_000, "is_star": True, "desc": "Dünyanın en modern ve skorer sağ beki."},
-    {"name": "Rúben Dias", "age": 29, "pos": "CB", "claimed_pot": 89, "real_pot": 89, "price": 145_000_000, "salary": 48_000_000, "is_star": True, "desc": "Kusursuz pozisyon bilgisine sahip lider stoper."},
-    {"name": "Alessandro Bastoni", "age": 27, "pos": "CB", "claimed_pot": 88, "real_pot": 88, "price": 130_000_000, "salary": 44_000_000, "is_star": True, "desc": "Modern sol ayaklı oyun kurucu İtalyan savunma generali."},
-    {"name": "Thibaut Courtois", "age": 34, "pos": "GK", "claimed_pot": 89, "real_pot": 89, "price": 85_000_000, "salary": 40_000_000, "is_star": True, "desc": "Kalesinde devleşen dünyanın sayılı eldivenlerinden."}
+    {"name": "Erling Haaland", "age": 26, "pos": "ST", "current_club": "Manchester City", "claimed_pot": 92, "real_pot": 92, "price": 260_000_000, "salary": 75_000_000, "is_star": True, "desc": "Manchester City'nin gol makinesi. Süper Lig'e gelirse yer yerinden oynar."},
+    {"name": "Kylian Mbappé", "age": 27, "pos": "LW", "current_club": "Real Madrid", "claimed_pot": 93, "real_pot": 93, "price": 280_000_000, "salary": 85_000_000, "is_star": True, "desc": "Dünyanın en hızlı ve durdurulamaz hücumcusu."},
+    {"name": "Jude Bellingham", "age": 23, "pos": "CAM", "current_club": "Real Madrid", "claimed_pot": 91, "real_pot": 91, "price": 230_000_000, "salary": 68_000_000, "is_star": True, "desc": "Real Madrid'in genç lideri, tam saha maestro ve skorer."},
+    {"name": "Lamine Yamal", "age": 19, "pos": "RW", "current_club": "FC Barcelona", "claimed_pot": 93, "real_pot": 93, "price": 210_000_000, "salary": 55_000_000, "is_star": True, "desc": "Barselona mucizesi! Geleceğin Ballon d'Or favorisi."},
+    {"name": "Mohamed Salah", "age": 34, "pos": "RW", "current_club": "Liverpool", "claimed_pot": 89, "real_pot": 89, "price": 120_000_000, "salary": 52_000_000, "is_star": True, "desc": "Mısır Kralı. Sağ kanatta ölümcül bitirici ve ikon."},
+    {"name": "Kevin De Bruyne", "age": 35, "pos": "CM", "current_club": "Manchester City", "claimed_pot": 90, "real_pot": 90, "price": 130_000_000, "salary": 58_000_000, "is_star": True, "desc": "Miras bırakacak bir pas dehası ve oyun kurucu."},
+    {"name": "Harry Kane", "age": 33, "pos": "ST", "current_club": "Bayern Münih", "claimed_pot": 90, "real_pot": 90, "price": 150_000_000, "salary": 56_000_000, "is_star": True, "desc": "Dünya futbolunun en komple forveti, pasör ve golcü."},
+    {"name": "Victor Osimhen", "age": 27, "pos": "ST", "current_club": "Galatasaray / Napoli", "claimed_pot": 89, "real_pot": 89, "price": 170_000_000, "salary": 52_000_000, "is_star": True, "desc": "Fiziksel güç, hava hakimiyeti ve bitiricilik abidesi."},
+    {"name": "Vinícius Júnior", "age": 26, "pos": "LW", "current_club": "Real Madrid", "claimed_pot": 92, "real_pot": 92, "price": 250_000_000, "salary": 72_000_000, "is_star": True, "desc": "Sambacı dripling cambazı, savunmaları darmadağın eder."},
+    {"name": "Rodri", "age": 30, "pos": "CDM", "current_club": "Manchester City", "claimed_pot": 91, "real_pot": 91, "price": 200_000_000, "salary": 62_000_000, "is_star": True, "desc": "Ballon d'Or sahibi kusursuz orta saha çimentosu."},
+    {"name": "Florian Wirtz", "age": 23, "pos": "CAM", "current_club": "Bayer Leverkusen", "claimed_pot": 90, "real_pot": 90, "price": 185_000_000, "salary": 50_000_000, "is_star": True, "desc": "Alman harikası; dar alanda sihirbaz, asist ve gol makinesi."},
+    {"name": "Alphonso Davies", "age": 25, "pos": "LB", "current_club": "Bayern Münih", "claimed_pot": 87, "real_pot": 87, "price": 110_000_000, "salary": 38_000_000, "is_star": True, "desc": "Sol kanadın hızlı treni, savunma ve bindirme ustası."},
+    {"name": "Achraf Hakimi", "age": 27, "pos": "RB", "current_club": "Paris Saint-Germain", "claimed_pot": 88, "real_pot": 88, "price": 125_000_000, "salary": 42_000_000, "is_star": True, "desc": "Dünyanın en modern ve skorer sağ beki."},
+    {"name": "Rúben Dias", "age": 29, "pos": "CB", "current_club": "Manchester City", "claimed_pot": 89, "real_pot": 89, "price": 145_000_000, "salary": 48_000_000, "is_star": True, "desc": "Kusursuz pozisyon bilgisine sahip lider stoper."},
+    {"name": "Alessandro Bastoni", "age": 27, "pos": "CB", "current_club": "Inter", "claimed_pot": 88, "real_pot": 88, "price": 130_000_000, "salary": 44_000_000, "is_star": True, "desc": "Modern sol ayaklı oyun kurucu İtalyan savunma generali."},
+    {"name": "Thibaut Courtois", "age": 34, "pos": "GK", "current_club": "Real Madrid", "claimed_pot": 89, "real_pot": 89, "price": 85_000_000, "salary": 40_000_000, "is_star": True, "desc": "Kalesinde devleşen dünyanın sayılı eldivenlerinden."},
+    {"name": "Bukayo Saka", "age": 24, "pos": "RW", "current_club": "Arsenal", "claimed_pot": 89, "real_pot": 89, "price": 140_000_000, "salary": 46_000_000, "is_star": True, "desc": "Arsenal'in dahi çocuğu, asist ve gol tehlikesi."},
+    {"name": "Federico Valverde", "age": 28, "pos": "CM", "current_club": "Real Madrid", "claimed_pot": 89, "real_pot": 89, "price": 150_000_000, "salary": 48_000_000, "is_star": True, "desc": "Uruguaylı fırtına, iki yönlü orta saha dinamosu."},
+    {"name": "Rafael Leão", "age": 26, "pos": "LW", "current_club": "AC Milan", "claimed_pot": 88, "real_pot": 88, "price": 135_000_000, "salary": 44_000_000, "is_star": True, "desc": "Durdurulamaz sürat ve estetik çalımlar ustası."},
+    {"name": "William Saliba", "age": 24, "pos": "CB", "current_club": "Arsenal", "claimed_pot": 89, "real_pot": 89, "price": 140_000_000, "salary": 45_000_000, "is_star": True, "desc": "Premier Lig'in en sağlam ve soğukkanlı stoperi."},
+    {"name": "Gianluigi Donnarumma", "age": 27, "pos": "GK", "current_club": "Paris Saint-Germain", "claimed_pot": 89, "real_pot": 89, "price": 95_000_000, "salary": 42_000_000, "is_star": True, "desc": "İtalyan dev kaleci, inanılmaz refleksler."}
 ]
 
 FREE_AGENTS = [
-    {"name": "N'Golo Kanté", "age": 35, "pos": "CDM", "claimed_pot": 84, "real_pot": 84, "price": 0, "salary": 26_000_000, "sign_bonus": 12_000_000, "is_free": True, "desc": "Sözleşmesi bitti. Ciğersiz pres ustası, bedelsiz imza fırsatı."},
-    {"name": "Adrien Rabiot", "age": 31, "pos": "CM", "claimed_pot": 83, "real_pot": 83, "price": 0, "salary": 24_000_000, "sign_bonus": 10_000_000, "is_free": True, "desc": "Fransız milli maestro. Fiziksel ve teknik denge abidesi."},
-    {"name": "Memphis Depay", "age": 32, "pos": "ST", "claimed_pot": 82, "real_pot": 82, "price": 0, "salary": 22_000_000, "sign_bonus": 10_000_000, "is_free": True, "desc": "Serbest oyuncu. Bire birde etkili forvet ve kanat forvet."},
-    {"name": "Sergio Ramos", "age": 40, "pos": "CB", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 16_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Efsane lider stoper. Soyunma odasına karakter katar."},
-    {"name": "Keylor Navas", "age": 39, "pos": "GK", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "3 Şampiyonlar Ligi şampiyonu refleks panteri tecrübeli kaleci."},
-    {"name": "Joel Matip", "age": 35, "pos": "CB", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 15_000_000, "sign_bonus": 7_000_000, "is_free": True, "desc": "Liverpool tecrübesine sahip soğukkanlı, uzun boylu kule stoper."},
-    {"name": "James Rodríguez", "age": 35, "pos": "CAM", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 15_000_000, "sign_bonus": 7_000_000, "is_free": True, "desc": "Usta sol ayak, ölümcül frikikler ve kilit paslar."},
-    {"name": "Wissam Ben Yedder", "age": 35, "pos": "ST", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 18_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Ceza sahası tilkisi, her iki ayağıyla affetmeyen gol ustası."},
-    {"name": "Anthony Martial", "age": 30, "pos": "ST", "claimed_pot": 79, "real_pot": 79, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "Serbest kaldı. Yüksek potansiyelli hamle santraforu."},
-    {"name": "Miralem Pjanić", "age": 36, "pos": "CM", "claimed_pot": 79, "real_pot": 79, "price": 0, "salary": 12_000_000, "sign_bonus": 5_000_000, "is_free": True, "desc": "Frikik ve duran top üstadı, oyun görüşü yüksek eski Juventus beyni."}
+    {"name": "N'Golo Kanté", "age": 35, "pos": "CDM", "current_club": "Serbest", "claimed_pot": 84, "real_pot": 84, "price": 0, "salary": 26_000_000, "sign_bonus": 12_000_000, "is_free": True, "desc": "Sözleşmesi bitti. Ciğersiz pres ustası, bedelsiz imza fırsatı."},
+    {"name": "Adrien Rabiot", "age": 31, "pos": "CM", "current_club": "Serbest", "claimed_pot": 83, "real_pot": 83, "price": 0, "salary": 24_000_000, "sign_bonus": 10_000_000, "is_free": True, "desc": "Fransız milli maestro. Fiziksel ve teknik denge abidesi."},
+    {"name": "Memphis Depay", "age": 32, "pos": "ST", "current_club": "Serbest", "claimed_pot": 82, "real_pot": 82, "price": 0, "salary": 22_000_000, "sign_bonus": 10_000_000, "is_free": True, "desc": "Serbest oyuncu. Bire birde etkili forvet ve kanat forvet."},
+    {"name": "Sergio Ramos", "age": 40, "pos": "CB", "current_club": "Serbest", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 16_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Efsane lider stoper. Soyunma odasına karakter katar."},
+    {"name": "Keylor Navas", "age": 39, "pos": "GK", "current_club": "Serbest", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "3 Şampiyonlar Ligi şampiyonu refleks panteri tecrübeli kaleci."},
+    {"name": "David de Gea", "age": 34, "pos": "GK", "current_club": "Serbest", "claimed_pot": 83, "real_pot": 83, "price": 0, "salary": 18_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Eski Manchester United efsanesi, refleksleriyle maç kurtaran eldiven."},
+    {"name": "Joel Matip", "age": 35, "pos": "CB", "current_club": "Serbest", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 15_000_000, "sign_bonus": 7_000_000, "is_free": True, "desc": "Liverpool tecrübesine sahip soğukkanlı, uzun boylu kule stoper."},
+    {"name": "James Rodríguez", "age": 35, "pos": "CAM", "current_club": "Serbest", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 15_000_000, "sign_bonus": 7_000_000, "is_free": True, "desc": "Usta sol ayak, ölümcül frikikler ve kilit paslar."},
+    {"name": "Wissam Ben Yedder", "age": 35, "pos": "ST", "current_club": "Serbest", "claimed_pot": 81, "real_pot": 81, "price": 0, "salary": 18_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Ceza sahası tilkisi, her iki ayağıyla affetmeyen gol ustası."},
+    {"name": "Anthony Martial", "age": 30, "pos": "ST", "current_club": "Serbest", "claimed_pot": 79, "real_pot": 79, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "Serbest kaldı. Yüksek potansiyelli hamle santraforu."},
+    {"name": "Miralem Pjanić", "age": 36, "pos": "CM", "current_club": "Serbest", "claimed_pot": 79, "real_pot": 79, "price": 0, "salary": 12_000_000, "sign_bonus": 5_000_000, "is_free": True, "desc": "Frikik ve duran top üstadı, oyun görüşü yüksek eski Juventus beyni."},
+    {"name": "Mats Hummels", "age": 36, "pos": "CB", "current_club": "Serbest", "claimed_pot": 82, "real_pot": 82, "price": 0, "salary": 17_000_000, "sign_bonus": 8_000_000, "is_free": True, "desc": "Dünya Kupası şampiyonu, pasör lider stoper."},
+    {"name": "Yusuf Yazıcı", "age": 28, "pos": "CAM", "current_club": "Serbest", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "Ligue 1 şampiyonu yerli maestro, uzaktan şut ustası."}
 ]
 
 CLUB_SCOUTS_DB = {
@@ -417,6 +425,12 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
     if "injured_weeks" not in p:
         p["injured_weeks"] = 0
 
+    # Kondisyon & Yorgunluk Düzeyi (0 - 100)
+    if "stamina" not in p:
+        p["stamina"] = 100
+    else:
+        p["stamina"] = max(20, min(100, int(p["stamina"])))
+
     return p
 
 def calculate_team_radar(squad: List[Dict]) -> Dict[str, int]:
@@ -453,16 +467,30 @@ def get_realistic_market_wage(overall: int) -> int:
     else:
         return max(1_500_000, 2_000_000 + (overall - 70) * 200_000)
 
-GEN_YOUTH_NAMES = [
-    ("Emirhan Yılmaz", "CB"), ("Kerem Öztürk", "CM"), 
-    ("Batuhan Kaya", "GK"), ("Arda Çelik", "LB"), 
-    ("Yusuf Demir", "RB"), ("Mert Koç", "ST"), 
-    ("Caner Aydın", "LW"), ("Furkan Şahin", "RW"),
-    ("Onur Keskin", "CDM"), ("Burak Doğan", "CAM")
+TURKISH_YOUTH_FIRST_NAMES = [
+    "Arda", "Eren", "Semih", "Emirhan", "Kerem", "Barış", "Yusuf", "Mert", "Batuhan", "Caner",
+    "Furkan", "Onur", "Burak", "Kaan", "Enes", "Umut", "Oğuzhan", "Yiğit", "Berkay", "Doruk",
+    "Yağız", "Efe", "Hamza", "Taha", "Melih", "Ali İhsan", "Emre", "Salih", "Taylan", "İsmail",
+    "Deniz", "Cem", "Alperen", "Volkan", "Gökhan", "Tolga", "Sinan", "Okan", "Uğur", "Ferdi"
 ]
+TURKISH_YOUTH_LAST_NAMES = [
+    "Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Yıldız", "Öztürk", "Aydın", "Özdemir", "Arslan",
+    "Doğan", "Kılıç", "Aslan", "Çetin", "Kara", "Koç", "Kurt", "Özkan", "Şimşek", "Polat",
+    "Erdoğan", "Güler", "Yavuz", "Aksoy", "Korkmaz", "Önal", "Bozkurt", "Keskin", "Toprak", "Bulut"
+]
+
+def generate_random_youth_name(existing_names: set) -> str:
+    for _ in range(100):
+        fn = random.choice(TURKISH_YOUTH_FIRST_NAMES)
+        ln = random.choice(TURKISH_YOUTH_LAST_NAMES)
+        full = f"{fn} {ln} (Altyapı)"
+        if full not in existing_names:
+            return full
+    return f"{random.choice(TURKISH_YOUTH_FIRST_NAMES)} {random.choice(TURKISH_YOUTH_LAST_NAMES)} Jr. (Altyapı)"
 
 def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "", force_auto_pick: bool = False) -> List[Dict]:
     squad_copy = [dict(p) for p in squad]
+    existing_names = {p.get("name", "") for p in squad_copy}
 
     # Bozuk veya uçuk maaşları gerçekçi piyasaya normalize et
     for p in squad_copy:
@@ -476,55 +504,65 @@ def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "", force_a
 
     # Kaleci yoksa altyapıdan kaleci çağır
     if not gks:
+        gk_name = generate_random_youth_name(existing_names)
+        existing_names.add(gk_name)
         new_gk = enrich_player({
-            "name": "Burak Özdemir (Altyapı)",
+            "name": gk_name,
             "pos": "GK",
-            "age": 19,
-            "overall": 73,
-            "potential": 85,
+            "age": random.randint(18, 20),
+            "overall": random.randint(72, 75),
+            "potential": random.randint(84, 88),
             "wage": 2_000_000,
             "val": 15_000_000,
             "is_youth": True,
             "is_foreign": False,
             "contract_years": 4,
-            "morale": 90
+            "morale": 90,
+            "stamina": 100
         })
         gks.append(new_gk)
 
     # Yedek kaleci yoksa 2. kaleci ekle
     if len(gks) < 2:
+        gk2_name = generate_random_youth_name(existing_names)
+        existing_names.add(gk2_name)
         backup_gk = enrich_player({
-            "name": "Eren Kılıç (Altyapı)",
+            "name": gk2_name,
             "pos": "GK",
-            "age": 18,
-            "overall": 71,
-            "potential": 84,
+            "age": random.randint(18, 19),
+            "overall": random.randint(70, 73),
+            "potential": random.randint(83, 86),
             "wage": 1_800_000,
             "val": 12_000_000,
             "is_youth": True,
             "is_foreign": False,
             "contract_years": 5,
-            "morale": 90
+            "morale": 90,
+            "stamina": 100
         })
         gks.append(backup_gk)
 
-    # Saha içi oyuncu sayısı 12'den azsa altyapıdan takviye yap
-    youth_idx = 0
+    # Saha içi oyuncu sayısı 12'den azsa altyapıdan çeşitli mevkilerde takviye yap
+    youth_positions_pool = ["CB", "CM", "LB", "RB", "ST", "LW", "RW", "CDM", "CAM"]
+    pos_idx = 0
     while len(outfield) < 13:
-        y_name, y_pos = GEN_YOUTH_NAMES[youth_idx % len(GEN_YOUTH_NAMES)]
-        youth_idx += 1
+        y_name = generate_random_youth_name(existing_names)
+        existing_names.add(y_name)
+        y_pos = youth_positions_pool[pos_idx % len(youth_positions_pool)]
+        pos_idx += 1
         new_youth = enrich_player({
-            "name": f"{y_name} (Altyapı)",
+            "name": y_name,
             "pos": y_pos,
             "age": random.randint(18, 20),
-            "overall": random.randint(70, 75),
-            "potential": random.randint(84, 89),
+            "overall": random.randint(71, 76),
+            "potential": random.randint(84, 90),
             "wage": 2_200_000,
             "val": 18_000_000,
             "is_youth": True,
             "is_foreign": False,
             "contract_years": 4,
-            "morale": 90
+            "morale": 90,
+            "stamina": 100
         })
         outfield.append(new_youth)
 
@@ -782,6 +820,16 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
             "under_investigation": False,
             "caught_count": 0
         },
+        "club_upgrades": {
+            "stadium": 1,
+            "transit": 1,
+            "merch": 1,
+            "academy": 1,
+            "broadcast": 1
+        },
+        "last_daily_claim": 0,
+        "stadium_concert_active": False,
+        "last_pro_statement_week": -99,
         "coach_dialog_pending": False,
         "last_match": None,
         "news": [
@@ -810,8 +858,17 @@ def get_state(session_id: Optional[str] = None):
                         state["political_power"] = 55
                     if "media_trust" not in state:
                         state["media_trust"] = 70
-                    if "captain_name" not in state:
+                    # Kaptan kadroda yoksa (satıldıysa) otomatik yeni kaptan belirle
+                    if "captain_name" not in state or not any(p["name"] == state.get("captain_name") for p in state.get("squad", [])):
                         state["captain_name"] = get_captain_name(state.get("squad", []))
+                    if "club_upgrades" not in state:
+                        state["club_upgrades"] = {"stadium": 1, "transit": 1, "merch": 1, "academy": 1, "broadcast": 1}
+                    if "last_daily_claim" not in state:
+                        state["last_daily_claim"] = 0
+                    if "stadium_concert_active" not in state:
+                        state["stadium_concert_active"] = False
+                    if "last_pro_statement_week" not in state:
+                        state["last_pro_statement_week"] = -99
                     if "incoming_bids" not in state:
                         state["incoming_bids"] = []
                     if "club_scout" not in state or not state["club_scout"]:
@@ -1171,12 +1228,31 @@ def api_match_half1(req: Half1Request):
         opp_attackers = [f"{opponent_name} Forveti"]
         opp_mids = [f"{opponent_name} Yıldızı"]
 
-    for m in range(5, 46, 5):
-        roll = random.randint(1, 100)
-        goal_chance_my = 12 + int((my_pwr - opp_pwr) * 0.9) + ref_bonus
-        goal_chance_opp = 12 - int((my_pwr - opp_pwr) * 0.5)
+    # Oyuncu Kondisyon/Yorgunluk Etkisi: İlk 11'in ortalama kondisyonu 70'in altındaysa güç düşer
+    avg_starter_stamina = sum(p.get("stamina", 100) for p in healthy_squad[:11]) / 11.0
+    if avg_starter_stamina < 70:
+        my_pwr -= int((70 - avg_starter_stamina) * 0.25)
 
-        if roll < goal_chance_my:
+    # Şike / Maçı Satma Kontrolü: Eğer 'opponent_win' bahsi aktifse veya maçı satma anlaşması varsa
+    active_bet = state.get("underground", {}).get("active_bet", {})
+    throw_match = (active_bet and active_bet.get("bet_type") == "opponent_win")
+
+    # 1. Devre Gol Simülasyonu - Gerçekçi Futbol Skorları (4 şans penceresi)
+    # Gol sıklığı dengelendi; skorlar 1-0, 0-0, 1-1 civarında tutulur
+    minute_slots = [12, 24, 35, 43]
+    for m in minute_slots:
+        roll = random.randint(1, 100)
+        # Dengeli gol olasılığı: ~9-14%
+        pwr_diff = max(-20, min(20, my_pwr - opp_pwr))
+        goal_chance_my = max(4, min(18, 9 + int(pwr_diff * 0.45) + ref_bonus))
+        goal_chance_opp = max(4, min(18, 9 - int(pwr_diff * 0.35)))
+
+        if throw_match:
+            # Maçı satıyoruz: Bizim gol şansı bastırılır, rakibin şansı artırılır
+            goal_chance_my = 2
+            goal_chance_opp = max(16, goal_chance_opp + 8)
+
+        if roll < goal_chance_my and my_score < 2:
             my_score += 1
             attacker = random.choice(my_attackers) if random.random() < 0.75 else random.choice(my_midfielders)
             scorers.append(attacker)
@@ -1193,7 +1269,7 @@ def api_match_half1(req: Half1Request):
                 "home_score": home_curr,
                 "away_score": away_curr
             })
-        elif roll > (100 - goal_chance_opp):
+        elif roll > (100 - goal_chance_opp) and opp_score < 3:
             opp_score += 1
             opp_scorer = random.choice(opp_attackers) if random.random() < 0.75 else random.choice(opp_mids)
             home_curr = my_score if is_home else opp_score
@@ -1323,13 +1399,25 @@ def api_match_half2(req: HalftimeActionRequest):
         opp_attackers = [f"{opponent_name} Forveti"]
         opp_mids = [f"{opponent_name} Yıldızı"]
 
-    # 2. Devre Gol Simülasyonu (Dakika 50 - 90)
-    for m in range(50, 91, 5):
-        roll = random.randint(1, 100)
-        goal_chance_my = 12 + int((my_pwr - opp_pwr) * 0.9) + h1["ref_bonus"]
-        goal_chance_opp = 12 - int((my_pwr - opp_pwr) * 0.5)
+    # Şike / Maçı Satma Kontrolü: Eğer 'opponent_win' bahsi aktifse veya maçı satma anlaşması varsa
+    active_bet = state.get("underground", {}).get("active_bet", {})
+    throw_match = (active_bet and active_bet.get("bet_type") == "opponent_win")
 
-        if roll < goal_chance_my:
+    # 2. Devre Gol Simülasyonu (Dakika 50 - 90) - Gerçekçi 4 Şans Penceresi
+    # Toplam maç golleri dengelenir (ortalama 1-2 gol)
+    minute_slots_h2 = [55, 68, 79, 87]
+    for m in minute_slots_h2:
+        roll = random.randint(1, 100)
+        pwr_diff = max(-20, min(20, my_pwr - opp_pwr))
+        goal_chance_my = max(4, min(18, 9 + int(pwr_diff * 0.45) + h1["ref_bonus"]))
+        goal_chance_opp = max(4, min(18, 9 - int(pwr_diff * 0.35)))
+
+        if throw_match:
+            goal_chance_my = 1
+            goal_chance_opp = max(20, goal_chance_opp + 10)
+
+        # Gol tavanı kontrolü (tek yarıda 2'den fazla gol olmasın)
+        if roll < goal_chance_my and (my_score - h1["my_score"]) < 2:
             my_score += 1
             attacker = random.choice(my_attackers) if random.random() < 0.75 else random.choice(my_midfielders)
             scorers.append(attacker)
@@ -1346,7 +1434,7 @@ def api_match_half2(req: HalftimeActionRequest):
                 "home_score": home_curr,
                 "away_score": away_curr
             })
-        elif roll > (100 - goal_chance_opp):
+        elif roll > (100 - goal_chance_opp) and (opp_score - h1["opp_score"]) < 2:
             opp_score += 1
             opp_scorer = random.choice(opp_attackers) if random.random() < 0.75 else random.choice(opp_mids)
             home_curr = my_score if is_home else opp_score
@@ -1363,9 +1451,24 @@ def api_match_half2(req: HalftimeActionRequest):
                 "away_score": away_curr
             })
 
+    # Eğer rakip galibiyetine bahis yapılmışsa ve hala berabere veya öndeysek maçı satma uzatması
+    if throw_match and my_score >= opp_score:
+        opp_score = my_score + 1
+        opp_scorer = random.choice(opp_attackers)
+        events.append({
+            "minute": 90,
+            "type": "goal_opp",
+            "is_my_goal": False,
+            "scorer": opp_scorer,
+            "club": opponent_name,
+            "text": f"🚨 90+4' ŞÜPHELİ HATA! Kalecimiz ve stoperler boşa çıktı, {opp_scorer} topu boş kaleye yuvarladı! ({my_score if is_home else opp_score}-{opp_score if is_home else my_score})",
+            "home_score": my_score if is_home else opp_score,
+            "away_score": opp_score if is_home else my_score
+        })
+
     # 2. Devre Kart ve Sakatlık Olayları
     healthy_starters = [p for p in state["squad"] if p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0][:11]
-    if healthy_starters and random.random() < 0.45:
+    if healthy_starters and random.random() < 0.40:
         cp = random.choice(healthy_starters)
         cp["yellow_cards"] = cp.get("yellow_cards", 0) + 1
         m_min = random.randint(52, 86)
@@ -1376,12 +1479,12 @@ def api_match_half2(req: HalftimeActionRequest):
         else:
             events.append({"minute": m_min, "type": "coach_action", "text": f"🟨 SARI KART: {cp['name']} sert faul yaptı ({cp['yellow_cards']}/4 kart)."})
 
-    if healthy_starters and random.random() < 0.04:
+    if healthy_starters and random.random() < 0.03:
         rp = random.choice(healthy_starters)
         rp["suspended_weeks"] = 2
         events.append({"minute": random.randint(65, 88), "type": "coach_mistake", "text": f"🟥 DOĞRUDAN KIRMIZI KART! {rp['name']} hakemi protesto ettiği için atıldı (2 maç ceza)!"})
 
-    if healthy_starters and random.random() < 0.12:
+    if healthy_starters and random.random() < 0.10:
         ip = random.choice(healthy_starters)
         iw = random.randint(1, 3)
         ip["injured_weeks"] = iw
@@ -1394,25 +1497,72 @@ def api_match_half2(req: HalftimeActionRequest):
         if p.get("injured_weeks", 0) > 0:
             p["injured_weeks"] -= 1
 
-    # Hasılat ve Finans Hesaplamaları (Gerçekçi & Dengeli Standartlar)
+    # ==================== OYUNCU YORGUNLUK VE KONDİSYON (STAMINA) GÜNCELLEMESİ ====================
+    # İlk 11'deki oyuncular yorulur (-14 ile -18 kondisyon)
+    # Yedek kulübesi ve oynamayanlar dinlenir (+20 ile +25 kondisyon, Akademi seviyesine göre ek yenilenme)
+    upgrades = state.setdefault("club_upgrades", {"stadium": 1, "transit": 1, "merch": 1, "academy": 1, "broadcast": 1})
+    academy_lvl = upgrades.get("academy", 1)
+    academy_recovery_bonus = (academy_lvl - 1) * 3  # Her seviye +3 ekstra kondisyon yenilenmesi
+
+    for idx, p in enumerate(state["squad"]):
+        cur_stam = p.get("stamina", 100)
+        if idx < 11:
+            fatigue = random.randint(13, 17)
+            p["stamina"] = max(25, cur_stam - fatigue)
+        else:
+            recovery = random.randint(20, 26) + academy_recovery_bonus
+            p["stamina"] = min(100, cur_stam + recovery)
+
+    # Hasılat ve Finans Hesaplamaları (Tesis Geliştirmeleri ve Konser/Etkinlik Bonusu Dahil)
     ticket_income = 0
     store_income = 0
+    fan_trust = state.get("fan_trust", 50)
+    concert_active = state.get("stadium_concert_active", False)
+    stadium_lvl = upgrades.get("stadium", 1)
+    transit_lvl = upgrades.get("transit", 1)
+    merch_lvl = upgrades.get("merch", 1)
+    broadcast_lvl = upgrades.get("broadcast", 1)
+
     if is_home:
-        ticket_price = 750 if is_derby else 320
-        occupancy = min(1.0, (state["fan_trust"] + (20 if is_derby else 0)) / 100.0)
+        # Bilet Fiyatı & Stadyum Seviyesi Çarpanı
+        ticket_price = (750 if is_derby else 350) + ((stadium_lvl - 1) * 50)
+        
+        # Taraftar Güveni %60 Altındaysa Maça İlgi Ciddi Düşer!
+        if fan_trust < 60 and not concert_active:
+            # Taraftar boykotu: %60 altındaki her puan doluluğu %1.2 düşürür
+            penalty = (60 - fan_trust) * 0.012
+            base_occ = max(0.25, (fan_trust / 100.0) - penalty)
+        else:
+            base_occ = min(1.0, (fan_trust + (20 if is_derby else 0)) / 100.0)
+
+        # Şehir Ulaşım Altyapısı minimum doluluk tabanı sağlar (seviye başına +%3 doluluk garantisi)
+        transit_min_occ = 0.35 + ((transit_lvl - 1) * 0.05)
+        occupancy = min(1.0, max(transit_min_occ, base_occ))
+
+        # Öncesinde konser/festival düzenlendiyse ek doluluk
+        if concert_active:
+            occupancy = min(1.0, occupancy + 0.15)
+            state["stadium_concert_active"] = False  # Etkinlik kullanıldı
+
         ticket_income = int(state["stadium_capacity"] * ticket_price * occupancy)
-        store_income = int(state["fan_trust"] * (150_000 if is_derby else 65_000))
+
+        # Forma Satış & Mağaza Geliri (Forma Tasarım & Kalite Seviyesi Çarpanı)
+        merch_multiplier = 1.0 + ((merch_lvl - 1) * 0.25)
+        store_income = int(fan_trust * (160_000 if is_derby else 70_000) * merch_multiplier)
     else:
         travel_cost = 2_500_000 if is_derby else 1_400_000
         state["budget"] = max(0, state["budget"] - travel_cost)
-        store_income = int(state["fan_trust"] * 35_000)
+        store_income = int(fan_trust * 35_000 * (1.0 + ((merch_lvl - 1) * 0.15)))
 
-    tv_income = 5_000_000 if is_derby else 2_500_000
+    # TV Yayın Geliri (Yayın & Medya Gücü Seviyesi Bonusu: Seviye başına +%15)
+    base_tv = 5_000_000 if is_derby else 2_500_000
+    tv_income = int(base_tv * (1.0 + ((broadcast_lvl - 1) * 0.15)))
+
     weekly_wage_expense = sum(p["wage"] for p in state["squad"]) // 34 + (state["coach"]["salary"] // 34)
 
     # Sabit Pasif Masraflar: Stadyum & Tesis Bakımı + İdari Personel/Sağlık/Lojistik
-    facility_maintenance = 2_500_000
-    staff_and_travel = 1_800_000
+    facility_maintenance = 2_200_000
+    staff_and_travel = 1_600_000
 
     # Bankalar Birliği Borç Faizi Kesintisi
     debt_interest = int(state.get("debt", 200_000_000) * 0.003)
@@ -1590,6 +1740,22 @@ def api_match_half2(req: HalftimeActionRequest):
     if ug.get("active_deal"):
         ug["active_deal"] = None
 
+    # Rakip Kulüp Şike Anlaşması İhlali Kontrolü (Parayı alıp maçı satmayan başkan cezalandırılır)
+    active_bribe = state.get("active_bribe_deal")
+    if active_bribe:
+        bribe_club = active_bribe.get("from_club", "Rakip Kulüp")
+        bribe_amt = active_bribe.get("amount", 50_000_000)
+        # Eğer maçı satmadık ve kazandıysak veya berabere kaldıysak:
+        if my_score >= opp_score:
+            retaliation_cost = int(bribe_amt * 1.5)
+            state["budget"] -= retaliation_cost
+            state["fan_trust"] = max(10, state["fan_trust"] - 15)
+            state["board_trust"] = max(10, state["board_trust"] - 15)
+            state["news"].insert(0, f"🩸 MAFYA & KARANLIK İNTİKAM: {bribe_club} başkanından aldığınız {format_money_val(bribe_amt)} şike parasının gereğini yapmayıp maçı kazandınız! Karşı tarafın karanlık bağlantıları kulüp hesaplarına ve kasaya el koyup {format_money_val(retaliation_cost)} ceza kesti!")
+        else:
+            state["news"].insert(0, f"🤝 KARANLIK DOSYA KAPANDI: {bribe_club} ile yapılan kirli anlaşma gereği maç kaybedildi, ses çıkarılmadı.")
+        state["active_bribe_deal"] = None
+
     # ==================== BANKALAR BİRLİĞİ VE BORÇ DENETİMİ ====================
     bc = state.setdefault("bank_consortium", {
         "total_debt": state.get("debt", 500_000_000),
@@ -1631,21 +1797,21 @@ def api_match_half2(req: HalftimeActionRequest):
             rival = random.choice(other_rivals)
             offer_type = random.choice(["match_fixing", "incentive"])
             if offer_type == "match_fixing":
-                bribe_amt = random.randint(25_000_000, 45_000_000)
+                bribe_amt = random.randint(55_000_000, 110_000_000)
                 state["incoming_bribe_offer"] = {
                     "from_club": rival["name"],
                     "type": "match_fixing",
                     "amount": bribe_amt,
-                    "title": f"🤫 {rival['name']} Başkanından Gizli Çanta Teklifi",
-                    "desc": f"'{rival['name']} Başkanı özel kuryeyle haber gönderdi: Önümüzdeki maçta as oyuncuları dinlendirip maçı bize bırakırsanız, kulüp hesabına geçmeyecek {format_money_val(bribe_amt)} nakit bavul hazır.'"
+                    "title": f"🤫 {rival['name']} Başkanından Reddedilemez Çanta Teklifi",
+                    "desc": f"'{rival['name']} Başkanı özel kuryeyle haber gönderdi: Önümüzdeki maçta as oyuncuları dinlendirip maçı bize bırakırsanız, kulüp kasasına el altından tam {format_money_val(bribe_amt)} nakit bavul aktaracağız! (Not: Anlaşmayı kabul edip as kadroyla çıkıp maçı kazanırsanız mafya ve camia bedel ödetir!)'"
                 }
             else:
-                incentive_amt = random.randint(18_000_000, 32_000_000)
+                incentive_amt = random.randint(35_000_000, 75_000_000)
                 state["incoming_bribe_offer"] = {
                     "from_club": rival["name"],
                     "type": "incentive",
                     "amount": incentive_amt,
-                    "title": f"💼 {rival['name']} Başkanından Teşvik Primi",
+                    "title": f"💼 {rival['name']} Başkanından Dev Teşvik Primi",
                     "desc": f"'{rival['name']} Başkanı şampiyonluk yolundaki rakipleri için aracı gönderdi: Sıradaki maçta rakibinizden puan koparırsanız kulübünüze el altından {format_money_val(incentive_amt)} teşvik primi aktaracağız.'"
                 }
             state["news"].insert(0, f"📩 GİZLİ MEKTUP: {rival['name']} cephesinden kulüp binasına kapalı zarf içinde gizli bir teklif ulaştı!")
@@ -1761,6 +1927,11 @@ def api_politics_action(req: PoliticsActionRequest):
         state["fan_trust"] = min(100, state["fan_trust"] + 8)
         msg = "🤝 Devlet Destekli Sosyal Proje: Kulüp gençlik akademisi protokolü imzalandı (+16 Siyaset, +8 Taraftar)!"
     elif req.action_type == "pro_statement":
+        cur_week = state.get("week", 1)
+        last_week = state.get("last_pro_statement_week", -99)
+        if cur_week - last_week < 2:
+            raise HTTPException(status_code=400, detail="Lobi demeci çok sık verilemez! Kamuoyunu inandırıcı kılmak için en az 2 hafta ara vermelisiniz.")
+        state["last_pro_statement_week"] = cur_week
         state["political_power"] = min(100, pol + 8)
         state["fan_trust"] = max(10, state["fan_trust"] - 4)
         msg = "📢 Hükümet & TFF Lehine Basın Açıklaması: Siyasi kanatta memnuniyet yarattı (+8 Siyaset, -4 Muhalif Taraftar)."
@@ -1998,7 +2169,13 @@ def api_bribe_response(req: BribeResponseRequest):
         state["fan_trust"] = max(10, state["fan_trust"] - 15)
         state["board_trust"] = max(10, state["board_trust"] - 10)
         state["media_trust"] = max(10, state.get("media_trust", 70) - 12)
-        msg = f"🤝 KARANLIK ANLAŞMA: {from_club} başkanının çantası kabul edildi! Kasaya el altından +{format_money_val(amt)} girdi."
+        if b_type == "match_fixing":
+            state["active_bribe_deal"] = {
+                "from_club": from_club,
+                "amount": amt,
+                "target_week": state.get("week", 1)
+            }
+        msg = f"🤝 KARANLIK ANLAŞMA: {from_club} başkanının çantası kabul edildi! Kasaya el altından +{format_money_val(amt)} girdi. (Gereği yerine getirilmezse mafya ve karşı kulüp hesap sorar!)"
     else:
         state["fan_trust"] = min(100, state["fan_trust"] + 12)
         state["board_trust"] = min(100, state["board_trust"] + 6)
@@ -2364,6 +2541,10 @@ def api_respond_incoming_bid(req: RespondBidRequest):
         state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
         state["my_radar"] = calculate_team_radar(state["squad"])
         state["incoming_bids"] = []
+        if state.get("captain_name") == player["name"]:
+            new_captain = get_captain_name(state["squad"])
+            state["captain_name"] = new_captain
+            state["news"].insert(0, f"🎖️ YENİ KAPTAN: {player['name']}'ın takımdan ayrılmasıyla kaptanlık pazubandı {new_captain}'a devredildi.")
         msg = f"💰 OYUNCU SATILDI: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında {bid['club']} kulübüne transfer oldu!"
     elif req.action == "counter":
         # %50 şansla karşı kulüp ekstra %25 kabul eder
@@ -2375,6 +2556,10 @@ def api_respond_incoming_bid(req: RespondBidRequest):
             state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
             state["my_radar"] = calculate_team_radar(state["squad"])
             state["incoming_bids"] = []
+            if state.get("captain_name") == player["name"]:
+                new_captain = get_captain_name(state["squad"])
+                state["captain_name"] = new_captain
+                state["news"].insert(0, f"🎖️ YENİ KAPTAN: {player['name']}'ın takımdan ayrılmasıyla kaptanlık pazubandı {new_captain}'a devredildi.")
             msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle satıldı!"
         else:
             state["incoming_bids"] = []
@@ -2387,18 +2572,32 @@ def api_respond_incoming_bid(req: RespondBidRequest):
     save_state(state)
     return {"message": msg, "state": state}
 
-# ==================== TRANSFER MARKİKET (DÜNYA YILDIZLARI & SERBESTLER) ====================
+# ==================== TRANSFER MARKET (DÜNYA YILDIZLARI, SCOUT & SERBESTLER) ====================
 @app.get("/api/transfer/market")
 def api_transfer_market():
-    # Klasik yetenekler + Serbest Oyuncular + Dünya Yıldızları (FIFA standardında pozisyonlar)
+    state = get_state()
+    squad_names = {p["name"] for p in state.get("squad", [])}
+
+    # Kendi kadromuzdaki oyuncuları pazardan filtrele (Salah vs. kadrodaysa pazarda görünmesin!)
+    filtered_stars = [p for p in WORLD_SUPERSTARS if p["name"] not in squad_names]
+    filtered_free = [p for p in FREE_AGENTS if p["name"] not in squad_names]
+
+    scout_list = [
+        {"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "ST", "overall": 80, "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "current_club": "Santos FC", "desc": "Brezilya'da 18 maçta 16 gol attı."},
+        {"name": "Lamine Diallo", "age": 23, "pos": "CB", "overall": 79, "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "current_club": "Le Havre", "desc": "Fransa Ligue 2'den kaya gibi genç stoper."},
+        {"name": "Kerem Eren", "age": 18, "pos": "RW", "overall": 75, "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "current_club": "Bucaspor 1928", "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu."},
+        {"name": "Ousmane Toure", "age": 21, "pos": "CDM", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 28_000_000, "salary": 9_000_000, "current_club": "ASEC Mimosas", "desc": "Fildişili ciğersiz pres ve top kapma ustası."},
+        {"name": "Valentin Barco", "age": 22, "pos": "LB", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 32_000_000, "salary": 10_000_000, "current_club": "Boca Juniors", "desc": "Hücumcu Arjantinli modern sol bek."},
+        {"name": "Miloš Kerkez", "age": 22, "pos": "LB", "overall": 80, "claimed_pot": 87, "real_pot": 87, "price": 42_000_000, "salary": 14_000_000, "current_club": "Bournemouth", "desc": "Tempolu bindirmeleriyle sol kanadı domine eden genç yıldız."},
+        {"name": "Javi Guerra", "age": 23, "pos": "CM", "overall": 81, "claimed_pot": 88, "real_pot": 88, "price": 45_000_000, "salary": 15_000_000, "current_club": "Valencia", "desc": "İki ceza sahası arasını mekik dokuyan İspanyol maestro."},
+        {"name": "Alejandro Garnacho", "age": 22, "pos": "LW", "overall": 82, "claimed_pot": 89, "real_pot": 89, "price": 65_000_000, "salary": 20_000_000, "current_club": "Manchester United", "desc": "Patlayıcı sürat ve bire birde durdurulamaz kanat."}
+    ]
+    filtered_scouts = [p for p in scout_list if p["name"] not in squad_names]
+
     return {
-        "world_stars": [enrich_player(dict(p)) for p in WORLD_SUPERSTARS],
-        "free_agents": [enrich_player(dict(p)) for p in FREE_AGENTS],
-        "scout_picks": [
-            enrich_player({"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "ST", "overall": 80, "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "desc": "Brezilya'da 18 maçta 16 gol attı."}),
-            enrich_player({"name": "Lamine Diallo", "age": 23, "pos": "CB", "overall": 79, "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "desc": "Fransa Ligue 2'den kaya gibi genç stoper."}),
-            enrich_player({"name": "Kerem Eren", "age": 18, "pos": "RW", "overall": 75, "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu."})
-        ]
+        "world_stars": [enrich_player(dict(p)) for p in filtered_stars],
+        "free_agents": [enrich_player(dict(p)) for p in filtered_free],
+        "scout_picks": [enrich_player(dict(p)) for p in filtered_scouts]
     }
 
 # ==================== SEZON GEÇİŞİ & SEÇİM ====================
@@ -2914,7 +3113,104 @@ def api_coach_transfer_recommendation():
     state = get_state()
     squad = state.get("squad", [])
     coach = state.get("coach", {})
+    squad_names = {p.get("name", "") for p in squad}
 
+    # Mevkilere göre analiz ve derinlik tespiti
+    pos_map = {
+        "GK": [p for p in squad if is_gk(p)],
+        "CB": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "CB"],
+        "LB": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "LB"],
+        "RB": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "RB"],
+        "CDM": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "CDM"],
+        "CM": [p for p in squad if to_fifa_pos(p.get("pos", "")) in ["CM", "MERKEZ OS", "OS"]],
+        "CAM": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "CAM"],
+        "LW": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "LW"],
+        "RW": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "RW"],
+        "ST": [p for p in squad if to_fifa_pos(p.get("pos", "")) == "ST"]
+    }
+
+    # Her mevki için eksiklik puanı hesapla (Hedef minimum güç ve derinlik)
+    deficiency = {}
+    target_thresholds = {
+        "GK": (80, 2), "CB": (81, 3), "LB": (79, 2), "RB": (79, 2),
+        "CDM": (80, 2), "CM": (81, 3), "CAM": (80, 2),
+        "LW": (81, 2), "RW": (81, 2), "ST": (82, 2)
+    }
+
+    for pos, (ideal_ovr, ideal_cnt) in target_thresholds.items():
+        players = pos_map[pos]
+        best_ovr = max((p.get("overall", 65) for p in players), default=65)
+        cnt = len(players)
+        # Eksiklik puanı: En iyi oyuncunun yetersizliği (x2) + Derinlik azlığı (x3)
+        ovr_gap = max(0, ideal_ovr - best_ovr)
+        cnt_gap = max(0, ideal_cnt - cnt)
+        deficiency[pos] = (ovr_gap * 2.5) + (cnt_gap * 3.5)
+
+    # En çok ihtiyacı olan mevkiyi seç
+    sorted_needs = sorted(deficiency.items(), key=lambda x: x[1], reverse=True)
+    target_pos, top_gap = sorted_needs[0]
+
+    reasons_dict = {
+        "GK": "Kalede güven veren, refleksleri üst düzey bir file bekçisi önceliğimiz olmalı.",
+        "CB": "Stoper hattımız hava toplarında ve rakip kontra ataklarda çok açık veriyor.",
+        "LB": "Sol bekte savunmayı toparlayacak ve çizgiye inecek tempolu bir isme ihtiyacımız var.",
+        "RB": "Sağ bekte hücum bindirmesi yapacak ve kanadı kapatacak modern bir bek şart.",
+        "CDM": "Savunma önünde rakip atakları süpürecek fizikli bir 6 numara (Ön Libero) gerekiyor.",
+        "CM": "Orta sahada pas trafiğini yönetecek ve oyunu iki yönlü oynayacak bir maestroya ihtiyacımız var.",
+        "CAM": "Forvet arkasında kilit pas atacak ve skor yükünü çekecek bir 10 numara eksikliği çekiyoruz.",
+        "LW": "Sol kanatta adam eksiltecek ve ceza sahasına sokulacak patlayıcı bir kanat forvet lazım.",
+        "RW": "Sağ kanatta bire birde etkili, içeri kat edip şut çeken bir kanat hücumcusu arıyoruz.",
+        "ST": "Gol yollarında tıkanıyoruz. Bitirici ve güçlü bir santrafor şart."
+    }
+
+    reason = reasons_dict.get(target_pos, "Takımımızın derinliği için bu mevkiye takviye öneriyorum.")
+    if top_gap < 1.0:
+        reason = "Kadro dengemiz çok iyi durumda. Ancak uzun maratonda sakatlık riskine karşı kulübe derinliği sağlayacak bu takviyeyi değerlendirebiliriz."
+
+    # Aday havuzu (Avrupa pazarı, Serbestler, Dünya yıldızları arasından henüz kadromuzda olmayanları bul)
+    all_potential_candidates = []
+    for club, p_list in EUROPEAN_CLUBS_MARKET.items():
+        for p in p_list:
+            if to_fifa_pos(p.get("pos", "")) == target_pos and p.get("name") not in squad_names:
+                all_potential_candidates.append({
+                    "name": p["name"],
+                    "club": club,
+                    "pos": target_pos,
+                    "overall": p.get("overall", 80),
+                    "val": p.get("val", 35_000_000),
+                    "wage": p.get("wage", 10_000_000)
+                })
+
+    for p in FREE_AGENTS:
+        if to_fifa_pos(p.get("pos", "")) == target_pos and p.get("name") not in squad_names:
+            all_potential_candidates.append({
+                "name": p["name"],
+                "club": "Serbest",
+                "pos": target_pos,
+                "overall": p.get("real_pot", p.get("claimed_pot", 80)),
+                "val": 0,
+                "wage": p.get("salary", 15_000_000)
+            })
+
+    for p in WORLD_SUPERSTARS:
+        if to_fifa_pos(p.get("pos", "")) == target_pos and p.get("name") not in squad_names:
+            all_potential_candidates.append({
+                "name": p["name"],
+                "club": p.get("current_club", "Avrupa Devi"),
+                "pos": target_pos,
+                "overall": p.get("real_pot", 88),
+                "val": p.get("price", 100_000_000),
+                "wage": p.get("salary", 40_000_000)
+            })
+
+    # En uygun 2-3 adayı seç
+    rec_players = sorted(all_potential_candidates, key=lambda x: x["overall"], reverse=True)[:3]
+    if not rec_players:
+        rec_players = [
+            {"name": f"Avrupa Radarı {target_pos} Keşfi", "club": "Scout Portföyü", "pos": target_pos, "overall": 81, "val": 30_000_000, "wage": 9_500_000}
+        ]
+
+    # Mevki güç ortalamaları
     gk_ovr = max((p.get("overall", 70) for p in squad if is_gk(p)), default=70)
     defs = [p.get("overall", 70) for p in squad if to_fifa_pos(p.get("pos", "")) in ["CB", "LB", "RB"]]
     def_avg = (sum(defs) / len(defs)) if defs else 70
@@ -2922,34 +3218,6 @@ def api_coach_transfer_recommendation():
     mid_avg = (sum(mids) / len(mids)) if mids else 70
     fwds = [p.get("overall", 70) for p in squad if to_fifa_pos(p.get("pos", "")) in ["LW", "RW", "ST"]]
     fwd_avg = (sum(fwds) / len(fwds)) if fwds else 70
-
-    target_pos = "ST"
-    reason = "Gol yollarında tıkanıyoruz. Bitirici ve güçlü bir santrafor şart."
-    rec_players = [
-        {"name": "Brian Brobbey", "club": "Ajax", "pos": "ST", "overall": 83, "val": 42_000_000, "wage": 14_000_000},
-        {"name": "Jhon Durán", "club": "Aston Villa", "pos": "ST", "overall": 83, "val": 45_000_000, "wage": 15_000_000}
-    ]
-
-    if gk_ovr < 78:
-        target_pos = "GK"
-        reason = "Kalede güven veren, refleksleri üst düzey bir file bekçisi önceliğimiz olmalı."
-        rec_players = [
-            {"name": "Mateo 'El Nino' Silva", "club": "Serbest", "pos": "GK", "overall": 82, "val": 30_000_000, "wage": 9_000_000}
-        ]
-    elif def_avg < mid_avg and def_avg < fwd_avg:
-        target_pos = "CB"
-        reason = "Defans hattımız hava toplarında ve rakip kontra ataklarda çok açık veriyor."
-        rec_players = [
-            {"name": "Jorrel Hato", "club": "Ajax", "pos": "CB", "overall": 82, "val": 40_000_000, "wage": 9_000_000},
-            {"name": "Lamine Diallo", "club": "Scout Keşfi", "pos": "CB", "overall": 85, "val": 38_000_000, "wage": 12_000_000}
-        ]
-    elif mid_avg < fwd_avg:
-        target_pos = "MERKEZ OS"
-        reason = "Orta sahada pas trafiğini yönetecek ve oyunu iki yönlü oynayacak bir maestroya ihtiyacımız var."
-        rec_players = [
-            {"name": "Kenneth Taylor", "club": "Ajax", "pos": "MERKEZ OS", "overall": 83, "val": 35_000_000, "wage": 11_000_000},
-            {"name": "Jacob Ramsey", "club": "Aston Villa", "pos": "MERKEZ OS", "overall": 83, "val": 38_000_000, "wage": 13_500_000}
-        ]
 
     return {
         "coach_name": coach.get("name", "Teknik Direktör"),
@@ -3110,6 +3378,190 @@ def api_coach_dialog(req: CoachDialogAction):
         msg = f"{coach['name']} görevden alındı! Yeni teknik direktör: {new_coach['name']}!"
 
     state["coach_dialog_pending"] = False
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== GÜNLÜK GİRİŞ ÖDÜLÜ (5.000.000 ₺) ====================
+@app.post("/api/daily-reward/claim")
+def api_claim_daily_reward():
+    state = get_state()
+    now_ts = int(time.time())
+    last_claim = state.get("last_daily_claim", 0)
+    cooldown = 24 * 3600  # 24 saat
+
+    if now_ts - last_claim < cooldown:
+        remaining_hours = max(1, int((cooldown - (now_ts - last_claim)) / 3600))
+        raise HTTPException(status_code=400, detail=f"Bugünkü başkanlık ödülünüzü zaten aldınız! Kalan süre: ~{remaining_hours} saat.")
+
+    reward_amt = 5_000_000
+    state["budget"] += reward_amt
+    state["last_daily_claim"] = now_ts
+    msg = f"🎁 DÜZENLİ GİRİŞ ÖDÜLÜ: Sadık Başkanlık Desteği olarak kasaya +{format_money_val(reward_amt)} hibe aktarıldı!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "reward": reward_amt, "state": state}
+
+# ==================== KULÜP GELİŞTİRME & PASİF GELİR SKILL AĞACI ====================
+class ClubUpgradeRequest(BaseModel):
+    branch: str  # 'stadium', 'transit', 'merch', 'academy', 'broadcast'
+
+FACILITY_UPGRADE_CONFIG = {
+    "stadium": {
+        "title": "Stadyum & VIP Loca Kapasitesi",
+        "costs": [0, 25_000_000, 45_000_000, 75_000_000, 120_000_000],
+        "cap_boost": [0, 3000, 5000, 8000, 12000],
+        "desc": "Bilet başına +50 ₺ ek gelir ve tribün genişletmesi."
+    },
+    "transit": {
+        "title": "Şehir Raylı Sistem & Maç Günü Ulaşımı",
+        "costs": [0, 20_000_000, 35_000_000, 60_000_000, 95_000_000],
+        "desc": "Stadyum doluluğunda taban garantisi (+%5) ve ulaşım konforu."
+    },
+    "merch": {
+        "title": "Global Lisanslı Forma & Tasarım Atölyesi",
+        "costs": [0, 18_000_000, 32_000_000, 55_000_000, 85_000_000],
+        "desc": "Kulüp mağazası forma satış gelirlerine +%25 pasif çarpan."
+    },
+    "academy": {
+        "title": "Futbol Gelişim Akademisi & Sağlık Merkezi",
+        "costs": [0, 22_000_000, 40_000_000, 65_000_000, 100_000_000],
+        "desc": "Yedek oyuncuların kondisyon yenilenmesine +3 hız ve genç oyuncu gelişimi."
+    },
+    "broadcast": {
+        "title": "Kulüp Televizyonu & Dijital Medya Ağı",
+        "costs": [0, 20_000_000, 38_000_000, 62_000_000, 90_000_000],
+        "desc": "Maç başı TV yayın haklarına +%15 ek yayın geliri."
+    }
+}
+
+@app.get("/api/club/upgrades")
+def api_get_club_upgrades():
+    state = get_state()
+    upgrades = state.setdefault("club_upgrades", {"stadium": 1, "transit": 1, "merch": 1, "academy": 1, "broadcast": 1})
+    result = {}
+    for k, conf in FACILITY_UPGRADE_CONFIG.items():
+        cur_lvl = upgrades.get(k, 1)
+        next_cost = conf["costs"][cur_lvl] if cur_lvl < 5 else None
+        result[k] = {
+            "title": conf["title"],
+            "level": cur_lvl,
+            "max_level": 5,
+            "next_cost": next_cost,
+            "desc": conf["desc"],
+            "can_upgrade": (cur_lvl < 5 and state["budget"] >= (next_cost or 0))
+        }
+    return {"upgrades": result, "budget": state["budget"]}
+
+@app.post("/api/club/upgrade")
+def api_club_upgrade(req: ClubUpgradeRequest):
+    state = get_state()
+    upgrades = state.setdefault("club_upgrades", {"stadium": 1, "transit": 1, "merch": 1, "academy": 1, "broadcast": 1})
+    conf = FACILITY_UPGRADE_CONFIG.get(req.branch)
+    if not conf:
+        raise HTTPException(status_code=400, detail="Geçersiz tesis/proje dalı!")
+
+    cur_lvl = upgrades.get(req.branch, 1)
+    if cur_lvl >= 5:
+        raise HTTPException(status_code=400, detail="Bu tesis dalı maksimum seviyeye (5. Seviye) ulaşmıştır!")
+
+    cost = conf["costs"][cur_lvl]
+    if state["budget"] < cost:
+        raise HTTPException(status_code=400, detail=f"Yetersiz bütçe! Bu seviye için {format_money_val(cost)} gereklidir.")
+
+    state["budget"] -= cost
+    upgrades[req.branch] = cur_lvl + 1
+
+    if req.branch == "stadium":
+        cap_add = conf["cap_boost"][cur_lvl]
+        state["stadium_capacity"] = state.get("stadium_capacity", 25000) + cap_add
+        msg = f"🏟️ STADYUM GELİŞTİRİLDİ: Kapasite +{cap_add:,} artırıldı ({state['stadium_capacity']:,} koltuk)! Seviye {cur_lvl + 1}'e yükseltildi."
+    elif req.branch == "transit":
+        msg = f"🚇 ULAŞIM REFORMU: Metro ve metrobüs hatları stada bağlandı! Maç günü taban doluluk garantisi yükseldi (Seviye {cur_lvl + 1})."
+    elif req.branch == "merch":
+        msg = f"👕 FORMA & MAĞAZA REFORMU: Elit forma tedarik anlaşması yapıldı! Mağaza hasılatı çarpanı arttı (Seviye {cur_lvl + 1})."
+    elif req.branch == "academy":
+        msg = f"🌱 AKADEMİ & SAĞLIK MERKEZİ: Tesisler yenilendi! Oyuncuların kondisyon toparlanma hızı arttı (Seviye {cur_lvl + 1})."
+    else:
+        msg = f"📡 DİJİTAL YAYIN GELİŞTİRMESİ: Kulüp medya stüdyosu açıldı! Haftalık TV gelirlerine +%15 ek katkı sağlandı (Seviye {cur_lvl + 1})."
+
+    state["board_trust"] = min(100, state["board_trust"] + 4)
+    state["fan_trust"] = min(100, state["fan_trust"] + 5)
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== MAÇ ÖNCESİ ETKİNLİK / KONSER DÜZENLEME ====================
+class OrganizeEventRequest(BaseModel):
+    event_type: str  # 'rock_concert', 'fan_carnival', 'celebrity_show'
+
+@app.post("/api/events/organize")
+def api_organize_event(req: OrganizeEventRequest):
+    state = get_state()
+    cur_fixture = next((f for f in state.get("fixtures", []) if f["week"] == state.get("week", 1)), None)
+    if not cur_fixture or not cur_fixture.get("is_home", True):
+        raise HTTPException(status_code=400, detail="Etkinlik ve konserler yalnızca iç saha maçlarından önce düzenlenebilir!")
+
+    if state.get("stadium_concert_active", False):
+        raise HTTPException(status_code=400, detail="Bu maç için zaten aktif bir stadyum etkinliği organize edildi!")
+
+    cost = 6_000_000
+    if req.event_type == "rock_concert":
+        cost = 10_000_000
+        fan_boost = 14
+        title = "Dev Stadyum Rock Konseri"
+    elif req.event_type == "celebrity_show":
+        cost = 8_000_000
+        fan_boost = 11
+        title = "Ünlüler Gösteri Maçı & Işık Şovu"
+    else:
+        cost = 5_000_000
+        fan_boost = 8
+        title = "Büyük Taraftar Festivali & Karnaval"
+
+    if state["budget"] < cost:
+        raise HTTPException(status_code=400, detail=f"Etkinlik organizasyonu için {format_money_val(cost)} bütçe gereklidir!")
+
+    state["budget"] -= cost
+    state["fan_trust"] = min(100, state["fan_trust"] + fan_boost)
+    state["stadium_concert_active"] = True
+    msg = f"🎉 {title.upper()} ORGANİZE EDİLDİ: Tribün ateşi yeniden alevlendi (+{fan_boost} Taraftar Güveni, Maçta Kapalı Gişe Desteği)!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== MAĞLUBİYET / MAÇ SONRASI BASIN AÇIKLAMASI ====================
+class PostMatchPressRequest(BaseModel):
+    statement_type: str  # 'blame_referee', 'support_team', 'promise_transfer', 'criticize_coach'
+
+@app.post("/api/match/press-statement")
+def api_post_match_press(req: PostMatchPressRequest):
+    state = get_state()
+    last_match = state.get("last_match")
+    if not last_match:
+        raise HTTPException(status_code=400, detail="Henüz tamamlanmış bir maç bulunmuyor!")
+
+    if req.statement_type == "blame_referee":
+        # Hakeme yüklen: Taraftar alkışlar, TFF ve basın ceza riski
+        state["fan_trust"] = min(100, state["fan_trust"] + 6)
+        state["media_trust"] = max(10, state.get("media_trust", 70) - 8)
+        msg = "🎤 SERT BASIN BİLDİRİSİ: 'Bu operasyon çocukları hakemlerle Türk futbolu bir yere varamaz! Hakkımızı kimseye yedirmeyiz!' (+6 Taraftar, -8 Basın)."
+    elif req.statement_type == "support_team":
+        # Takıma sahip çık: Hoca ve takım morali yükselir
+        state["coach"]["moral"] = min(100, state["coach"]["moral"] + 10)
+        state["squad_harmony"] = min(100, state.get("squad_harmony", 80) + 6)
+        msg = "🎤 SAHİP ÇIKMA DEMECİ: 'Futbolcularıma ve teknik heyetime güvenim tam. Bu yolun sonu şampiyonluktur!' (+10 Hoca Morali, +6 Takım Huzuru)."
+    elif req.statement_type == "promise_transfer":
+        # Transfer sözü: Taraftar coşar, beklenti yükselir
+        state["fan_trust"] = min(100, state["fan_trust"] + 8)
+        state["board_trust"] = max(10, state["board_trust"] - 4)
+        msg = "🎤 TRANSFER MÜJDESİ: 'Eksiklerimizi gördük. Taraftarımız müsterih olsun, Avrupa'dan yıldız oyuncuları getireceğiz!' (+8 Taraftar, -4 Kongre Mali Kaygısı)."
+    else:  # criticize_coach
+        # Hocayı açıkça uyar: Hoca ego kırılır, taraftarın bir kısmı destekler
+        state["coach"]["moral"] = max(20, state["coach"]["moral"] - 15)
+        state["fan_trust"] = min(100, state["fan_trust"] + 4)
+        msg = f"🎤 HOCAYA SERT UYARI: 'Sayın {state['coach']['name']} taktiklerini acilen gözden geçirmelidir. Bu kulübün sabrı sonsuz değildir!' (-15 Hoca Morali, +4 Taraftar)."
+
+    state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
 

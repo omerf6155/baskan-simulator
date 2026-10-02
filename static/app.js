@@ -716,11 +716,15 @@ async function fetchState() {
     }
 
     renderUI();
-    // Tutorial: sadece sayfa ilk yüklendiğinde, oyun başlamışsa aç
-    if (!_tutorialShownThisSession && gameState && gameState.is_started) {
+    // Tutorial: Sadece kullanıcı daha önce görmediyse aç
+    const tutorialSeen = localStorage.getItem("baskan_story_tutorial_seen");
+    if (!tutorialSeen && !_tutorialShownThisSession && gameState && gameState.is_started) {
       _tutorialShownThisSession = true;
       setTimeout(() => openStoryTutorial(), 800);
     }
+
+    // Günlük Giriş Ödülü Bildirimi
+    checkDailyRewardClaim();
   } catch (e) {
     console.error("State alinamadi", e);
   }
@@ -1148,6 +1152,11 @@ function renderSquadPlayerCard(p, idx, isStarter) {
   const potVal = p.potential || Math.min(94, p.overall + Math.max(3, (27 - (p.age || 24)) * 2));
   const isYouth = (p.age || 24) < 26;
 
+  const stamVal = p.stamina !== undefined ? p.stamina : 100;
+  let stamColor = "text-emerald-400 bg-emerald-950/70 border-emerald-700/50";
+  if (stamVal < 60) stamColor = "text-rose-400 bg-rose-950/70 border-rose-700/50 animate-pulse";
+  else if (stamVal < 80) stamColor = "text-amber-400 bg-amber-950/70 border-amber-700/50";
+
   card.innerHTML = `
     <div class="flex items-center gap-2 truncate">
       ${getFifaPosBadgeHtml(p.pos)}
@@ -1159,6 +1168,7 @@ function renderSquadPlayerCard(p, idx, isStarter) {
             ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">🌐 YBN</span>' 
             : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">🇹🇷 TR</span>'}
           ${isYouth ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 py-0.2 rounded font-bold" title="Genç Yetenek Potansiyeli">⚡ POT: ${potVal}</span>` : ''}
+          <span class="text-[8px] px-1 py-0.2 rounded border font-black ${stamColor}" title="Kondisyon / Dayanıklılık">⚡ %${stamVal}</span>
           ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse">🩹 Sakat (${p.injured_weeks} Hf)</span>` : ''}
           ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse">🔴 Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
           ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold">${p.yellow_cards}🟨</span>` : ''}
@@ -3806,4 +3816,215 @@ function checkAutoTutorial() {
   } catch (e) {}
 }
 
+// ==================== GÜNLÜK GİRİŞ ÖDÜLÜ SİSTEMİ ====================
+async function checkDailyRewardClaim() {
+  if (!gameState || !gameState.is_started) return;
+  const nowTs = Math.floor(Date.now() / 1000);
+  const lastClaim = gameState.last_daily_claim || 0;
+  // 24 saat = 86400 saniye
+  if (nowTs - lastClaim >= 86400) {
+    setTimeout(() => {
+      promptDailyRewardClaim();
+    }, 1200);
+  }
+}
 
+function promptDailyRewardClaim() {
+  const existing = document.getElementById("daily-reward-banner");
+  if (existing) return;
+
+  const banner = document.createElement("div");
+  banner.id = "daily-reward-banner";
+  banner.className = "fixed top-14 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-sm bg-gradient-to-r from-amber-900 to-amber-700 border-2 border-amber-400 p-3 rounded-2xl shadow-2xl flex items-center justify-between animate-bounce";
+  banner.innerHTML = `
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🎁</span>
+      <div>
+        <div class="font-black text-xs text-white">GÜNLÜK BAŞKANLIK ÖDÜLÜ!</div>
+        <div class="text-[10px] text-amber-200">+5.000.000 ₺ Kasa Desteği Hazır</div>
+      </div>
+    </div>
+    <button onclick="claimDailyReward()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition-all">
+      Hemen Al
+    </button>
+  `;
+  document.body.appendChild(banner);
+}
+
+async function claimDailyReward() {
+  const banner = document.getElementById("daily-reward-banner");
+  if (banner) banner.remove();
+
+  try {
+    const res = await apiFetch("/api/daily-reward/claim", { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Ödül alınamadı!");
+      return;
+    }
+    gameState = data.state;
+    renderUI();
+    showToast(data.message || "🎉 5.000.000 ₺ Günlük Giriş Ödülü Kasaya Eklendi!");
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ==================== KULÜP GELİŞTİRME & PASİF GELİR SKILL AĞACI ====================
+async function openClubUpgradesModal() {
+  const modal = document.getElementById("modal-club-upgrades");
+  const listEl = document.getElementById("club-upgrades-list");
+  if (!modal || !listEl) return;
+
+  listEl.innerHTML = '<div class="text-slate-400 text-xs text-center py-4">Tesis verileri yükleniyor...</div>';
+  modal.classList.remove("hidden");
+
+  try {
+    const res = await apiFetch("/api/club/upgrades");
+    const data = await res.json();
+    const upgrades = data.upgrades;
+
+    listEl.innerHTML = "";
+    Object.keys(upgrades).forEach(branch => {
+      const u = upgrades[branch];
+      const isMax = u.level >= u.max_level;
+      const canAfford = u.can_upgrade;
+
+      let icon = "🏢";
+      if (branch === "stadium") icon = "🏟️";
+      else if (branch === "transit") icon = "🚇";
+      else if (branch === "merch") icon = "👕";
+      else if (branch === "academy") icon = "🌱";
+      else if (branch === "broadcast") icon = "📡";
+
+      // Seviye çubuğu noktaları (5 seviye)
+      const levelDots = Array.from({ length: 5 }, (_, i) => `
+        <span class="w-3 h-3 rounded-full inline-block ${i < u.level ? 'bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]' : 'bg-slate-700'}"></span>
+      `).join("");
+
+      const item = document.createElement("div");
+      item.className = "bg-slate-900 border border-slate-800 p-3 rounded-xl space-y-2";
+      item.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">${icon}</span>
+            <div>
+              <div class="text-xs font-bold text-white">${u.title}</div>
+              <div class="text-[10px] text-slate-400">${u.desc}</div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-[10px] text-emerald-400 font-black">Seviye ${u.level} / ${u.max_level}</div>
+            <div class="flex items-center gap-1 mt-1 justify-end">${levelDots}</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between pt-1 border-t border-slate-800/60">
+          <div class="text-[10px] text-slate-300">
+            ${isMax ? '<span class="text-emerald-400 font-bold">✓ MAKSİMUM SEVİYEYE ULAŞILDI</span>' : `Yükseltme Bedeli: <strong class="text-amber-400 font-bold">${formatMoney(u.next_cost)}</strong>`}
+          </div>
+          ${!isMax ? `
+            <button onclick="upgradeClubBranch('${branch}')" ${!canAfford ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              canAfford ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md' : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+            }">
+              ${canAfford ? 'Seviye Yükselt ⬆' : 'Yetersiz Bütçe'}
+            </button>
+          ` : ''}
+        </div>
+      `;
+      listEl.appendChild(item);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function closeClubUpgradesModal() {
+  const modal = document.getElementById("modal-club-upgrades");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function upgradeClubBranch(branch) {
+  try {
+    const res = await apiFetch("/api/club/upgrade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ branch: branch })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Geliştirme başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+    openClubUpgradesModal(); // Arayüzü yenile
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ==================== MAÇ ÖNCESİ ETKİNLİK & KONSER DÜZENLEME ====================
+function openPreMatchEventModal() {
+  const modal = document.getElementById("modal-pre-match-event");
+  if (modal) modal.classList.remove("hidden");
+}
+
+function closePreMatchEventModal() {
+  const modal = document.getElementById("modal-pre-match-event");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function organizePreMatchEvent(eventType) {
+  closePreMatchEventModal();
+  try {
+    const res = await apiFetch("/api/events/organize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event_type: eventType })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Etkinlik düzenlenemedi!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ==================== MAÇ SONRASI BASIN TOPLANTISI ====================
+function togglePostMatchPressBox() {
+  const box = document.getElementById("post-match-press-box");
+  if (!box) return;
+  box.classList.toggle("hidden");
+  if (!box.classList.contains("hidden")) {
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+async function submitPressStatement(stmtType) {
+  const box = document.getElementById("post-match-press-box");
+  if (box) box.classList.add("hidden");
+
+  try {
+    const res = await apiFetch("/api/match/press-statement", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ statement_type: stmtType })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Açıklama yapılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+  }
+}
