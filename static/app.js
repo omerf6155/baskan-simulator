@@ -1228,6 +1228,11 @@ function renderSquadPlayerCard(p, idx, isStarter) {
   if (stamVal < 60) stamColor = "text-rose-400 bg-rose-950/70 border-rose-700/50 animate-pulse";
   else if (stamVal < 80) stamColor = "text-amber-400 bg-amber-950/70 border-amber-700/50";
 
+  const mins = p.minutes_played || 0;
+  const matches = p.matches_played || 0;
+  const avgRtg = (p.avg_rating && p.avg_rating > 0) ? p.avg_rating.toFixed(1) : "-";
+  const safeName = p.name.replace(/'/g, "\\'");
+
   card.innerHTML = `
     <div class="flex items-center gap-2 truncate">
       ${getFifaPosBadgeHtml(p.pos)}
@@ -1246,6 +1251,15 @@ function renderSquadPlayerCard(p, idx, isStarter) {
         </div>
         <div class="text-[9px] text-slate-400">
           ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${contractYears} Yıl</strong> • Maaş: ${formatMoney(p.wage)}
+        </div>
+        <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2">
+          <span>⏱️ <strong class="text-white font-mono">${mins}</strong> dk (${matches} maç)</span>
+          <span>⭐ Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
+          ${!isStarter && p.overall >= 78 && mins < 90 && (gameState.week || 1) >= 2 ? `
+            <button onclick="confrontCoachAboutPlayer('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700/60 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Teknik Direktöre bu oyuncunun neden oynamadığını sor!">
+              <span>🗣️</span> <span>Hesap Sor</span>
+            </button>
+          ` : ''}
         </div>
       </div>
     </div>
@@ -3182,6 +3196,58 @@ async function submitCoachDialog(action) {
   } catch (e) {
     console.error(e);
   }
+}
+
+async function confrontCoachAboutPlayer(playerName) {
+  try {
+    const res = await apiFetch("/api/coach/confront-playing-time", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_name: playerName })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Görüşme yapılamadı!");
+      return;
+    }
+    openCoachConfrontModal(data);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası oluştu!");
+  }
+}
+
+function openCoachConfrontModal(data) {
+  const modal = document.getElementById("modal-coach-confront");
+  if (!modal) {
+    showToast(data.message);
+    return;
+  }
+  const photoEl = document.getElementById("confront-coach-photo");
+  const nameEl = document.getElementById("confront-coach-name");
+  const speechEl = document.getElementById("confront-president-speech");
+  const respEl = document.getElementById("confront-coach-response");
+
+  if (photoEl) photoEl.src = data.coach_photo || "/static/coach_tekke.png";
+  if (nameEl) nameEl.innerText = data.coach_name || "Teknik Direktör";
+  if (speechEl) {
+    speechEl.innerText = `"Sayın Hocam, ${data.player_name} (${data.overall} Reyting) bu sezon yalnızca ${data.minutes_played} dakika (${data.matches_played} maç) süre alabildi! Neden bu oyuncuyu kenarda çürütüyorsun?"`;
+  }
+  if (respEl) respEl.innerText = data.message;
+
+  modal.classList.remove("hidden");
+}
+
+function closeCoachConfrontModal() {
+  const modal = document.getElementById("modal-coach-confront");
+  if (modal) modal.classList.add("hidden");
+}
+
+function showBenchAccountabilityTab() {
+  switchTab("squad");
+  showToast("👉 Kulübedeki oyuncuların yanındaki '🗣️ Hesap Sor' butonuna tıklayarak hocayla yüzleşebilirsiniz!");
 }
 
 async function fireScout() {

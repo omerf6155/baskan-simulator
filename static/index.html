@@ -1248,9 +1248,56 @@
           <div class="text-[9px] text-slate-400">Hocaya taktiksel hesap sor.</div>
         </button>
 
+        <button onclick="closeCoachModal(); showBenchAccountabilityTab();" class="w-full p-2 rounded-lg bg-indigo-950/40 hover:bg-indigo-900/40 text-left border border-indigo-800/50">
+          <div class="text-xs font-bold text-indigo-300">"Yedeklerin Süresini Sorgula" (Hesap Sor)</div>
+          <div class="text-[9px] text-slate-400">Kulübede az süre alan yıldızları hocanın yüzüne vur.</div>
+        </button>
+
         <button onclick="submitCoachDialog('fire')" class="w-full p-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-left border border-rose-800/50">
           <div class="text-xs font-bold text-rose-400">"KOVULDUN!" (Tazminat Ödenir)</div>
           <div class="text-[9px] text-slate-400">Tazminatını ver ve yeni hoca ata.</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOCAYA HESAP SORMA MODALI -->
+  <div id="modal-coach-confront" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#111726] border border-amber-600/40 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-slate-900 border-2 border-amber-500 overflow-hidden flex-shrink-0 shadow-lg">
+            <img id="confront-coach-photo" src="/static/coach_tekke.png" alt="Teknik Direktör" class="w-full h-full object-cover" />
+          </div>
+          <div>
+            <div class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">Teknik Direktör Odası • Süre Hesabı</div>
+            <div class="text-sm font-black text-white" id="confront-coach-name">Teknik Direktör</div>
+          </div>
+        </div>
+        <button onclick="closeCoachConfrontModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+      </div>
+
+      <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3 space-y-1.5">
+        <div class="text-[11px] text-amber-300 font-bold flex items-center gap-1.5">
+          <span>🏛️</span> <span>Başkanın Hesabı:</span>
+        </div>
+        <div class="text-xs text-slate-200 italic" id="confront-president-speech">
+          "Sayın Hocam, bu oyuncu neden kenarda çürüyor?"
+        </div>
+      </div>
+
+      <div class="bg-amber-950/30 border border-amber-800/40 rounded-xl p-3.5 space-y-1.5">
+        <div class="text-[11px] text-amber-400 font-bold flex items-center gap-1.5">
+          <span>📋</span> <span>Hocanın Yanıtı & Vaadi:</span>
+        </div>
+        <div class="text-xs text-white leading-relaxed font-medium" id="confront-coach-response">
+          ...
+        </div>
+      </div>
+
+      <div class="pt-1">
+        <button onclick="closeCoachConfrontModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-950 font-black text-xs shadow-lg transition-all">
+          Anlaşıldı, Sahada Göreceğim!
         </button>
       </div>
     </div>
