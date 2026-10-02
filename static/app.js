@@ -281,6 +281,20 @@ function openSettingsModal() {
   if (trackSel) trackSel.value = currentBgmTrack;
 
   updateMusicUIButtons(isBgmPlaying);
+
+  // Tema seçimi vurgularını yenile
+  const currentTheme = localStorage.getItem("baskan_selected_theme") || "default";
+  AVAILABLE_THEMES.forEach(t => {
+    const btn = document.getElementById("theme-btn-" + t.id);
+    if (btn) {
+      if (t.id === currentTheme) {
+        btn.classList.add("ring-2", "ring-amber-400", "scale-[1.02]");
+      } else {
+        btn.classList.remove("ring-2", "ring-amber-400", "scale-[1.02]");
+      }
+    }
+  });
+
   modal.classList.remove("hidden");
 }
 
@@ -590,8 +604,65 @@ let currentTransferMarketCategory = "all";
 let marketData = { scout_picks: [], world_stars: [], free_agents: [] };
 let activeNegotiation = null;
 
+// ==================== GÖRSEL TEMA YÖNETİMİ ====================
+const AVAILABLE_THEMES = [
+  { id: "default", name: "Modern Dark", icon: "🌑", label: "Modern Dark" },
+  { id: "cyberpunk", name: "Cyber Neon", icon: "⚡", label: "Cyber Neon" },
+  { id: "gold", name: "Altın Hanedan", icon: "👑", label: "Altın Hanedan" },
+  { id: "emerald", name: "Premier Zümrüt", icon: "🏟️", label: "Premier Zümrüt" }
+];
+
+function initAppTheme() {
+  const saved = localStorage.getItem("baskan_selected_theme") || "default";
+  setAppTheme(saved, false);
+}
+
+function setAppTheme(themeId, notify = true) {
+  // Mevcut tema class'larını temizle
+  document.body.classList.remove("theme-cyberpunk", "theme-gold", "theme-emerald", "theme-arcade");
+  if (themeId !== "default") {
+    document.body.classList.add("theme-" + themeId);
+  }
+  localStorage.setItem("baskan_selected_theme", themeId);
+
+  // Modal içindeki buton seçililik durumlarını güncelle
+  AVAILABLE_THEMES.forEach(t => {
+    const btn = document.getElementById("theme-btn-" + t.id);
+    if (btn) {
+      if (t.id === themeId) {
+        btn.classList.add("ring-2", "ring-amber-400", "scale-[1.02]");
+      } else {
+        btn.classList.remove("ring-2", "ring-amber-400", "scale-[1.02]");
+      }
+    }
+  });
+
+  const activeLabel = document.getElementById("theme-active-label");
+  const found = AVAILABLE_THEMES.find(t => t.id === themeId) || AVAILABLE_THEMES[0];
+  if (activeLabel) {
+    activeLabel.innerText = found.name;
+  }
+
+  const headerThemeLabel = document.getElementById("header-theme-label");
+  const headerThemeIcon = document.getElementById("header-theme-icon");
+  if (headerThemeLabel) headerThemeLabel.innerText = found.name.split(" ")[0];
+  if (headerThemeIcon) headerThemeIcon.innerText = found.icon;
+
+  if (notify) {
+    showToast(`🎨 Tema Değiştirildi: ${found.name}`);
+  }
+}
+
+function cycleAppTheme() {
+  const current = localStorage.getItem("baskan_selected_theme") || "default";
+  const curIdx = AVAILABLE_THEMES.findIndex(t => t.id === current);
+  const nextIdx = (curIdx + 1) % AVAILABLE_THEMES.length;
+  setAppTheme(AVAILABLE_THEMES[nextIdx].id, true);
+}
+
 // ==================== BAŞLANGIÇTA ÇALIŞ ====================
 document.addEventListener("DOMContentLoaded", () => {
+  initAppTheme();
   fetchState();
   loadTeamsList();
   loadScoutCandidates();

@@ -43,6 +43,9 @@
             <span id="header-season">1</span>. Sezon • H<span id="header-week" class="text-amber-400">1</span>/34
           </div>
           <div class="flex items-center gap-1 justify-end">
+            <button onclick="cycleAppTheme()" id="header-theme-btn" title="Temayı Değiştir" class="text-[9px] text-amber-300 hover:text-amber-200 font-bold flex items-center gap-0.5 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
+              <span id="header-theme-icon">🎨</span> <span id="header-theme-label">Tema</span>
+            </button>
             <button onclick="toggleMusicPlayback()" id="header-music-btn" class="text-[9px] text-slate-300 hover:text-amber-400 font-bold flex items-center gap-0.5 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
               <span id="header-music-icon">🎵</span> <span id="header-music-label">Müzik</span>
             </button>
@@ -1586,10 +1589,55 @@
     <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3.5 max-h-[90vh] overflow-y-auto scrollbar-thin">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="text-xs font-black text-white flex items-center gap-1.5">
-          <i data-lucide="settings" class="w-4 h-4 text-amber-400"></i>
-          <span>OYUN & SES AYARLARI</span>
+          <i data-lucide="palette" class="w-4 h-4 text-amber-400"></i>
+          <span>GÖRSEL TEMA & OYUN AYARLARI</span>
         </div>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+      </div>
+
+      <!-- TEMA SEÇİCİ (4 FARKLI GÖRSEL TASARIM) -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs font-black text-white flex items-center gap-1.5">
+            <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Arayüz Tasarımı / Teması:</span>
+          </div>
+          <span id="theme-active-label" class="text-[9px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Modern Dark</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2 pt-1" id="theme-options-grid">
+          <!-- 1. Modern Dark -->
+          <div onclick="setAppTheme('default')" id="theme-btn-default" class="p-2 rounded-xl border border-amber-500/60 bg-slate-950 cursor-pointer hover:border-amber-400 transition-all text-left">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-white">
+              <span>🌑</span> <span>Modern Dark</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-1">Klasik şık gece mavisi & sade spor stili</div>
+          </div>
+
+          <!-- 2. Cyberpunk Neon -->
+          <div onclick="setAppTheme('cyberpunk')" id="theme-btn-cyberpunk" class="p-2 rounded-xl border border-cyan-800 bg-[#090914] cursor-pointer hover:border-cyan-400 transition-all text-left">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
+              <span>⚡</span> <span>Cyber Neon</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-1">Fütüristik neon ışıkları, cam göbeği & mor</div>
+          </div>
+
+          <!-- 3. Altın Hanedan -->
+          <div onclick="setAppTheme('gold')" id="theme-btn-gold" class="p-2 rounded-xl border border-yellow-800 bg-[#141009] cursor-pointer hover:border-yellow-400 transition-all text-left">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-yellow-300">
+              <span>👑</span> <span>Altın Hanedan</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-1">VIP zengin başkanlık ofisi & altın detaylar</div>
+          </div>
+
+          <!-- 4. Premier Emerald -->
+          <div onclick="setAppTheme('emerald')" id="theme-btn-emerald" class="p-2 rounded-xl border border-emerald-800 bg-[#091712] cursor-pointer hover:border-emerald-400 transition-all text-left">
+            <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
+              <span>🏟️</span> <span>Premier Zümrüt</span>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-1">Stadyum çimi, derin yeşil & zümrüt zarafeti</div>
+          </div>
+        </div>
       </div>
 
       <!-- Müzik Kontrolleri -->

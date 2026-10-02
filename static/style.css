@@ -59,3 +59,172 @@ header {
   width: 100% !important;
 }
 
+/* ========================================================
+   TEMALAR: 1) Modern Dark 2) Cyberpunk Neon 3) Altın Hanedan 4) Premier Emerald
+   ======================================================== */
+
+/* 1. TEMA: NEON CYBERPUNK (Gece Kulübü, Fütüristik & Canlı Neon) */
+body.theme-cyberpunk {
+  background: #05050a !important;
+  color: #f8fafc !important;
+}
+body.theme-cyberpunk #app-frame {
+  background: #090914 !important;
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 35px rgba(6, 182, 212, 0.25), 0 0 70px rgba(236, 72, 153, 0.15) !important;
+}
+body.theme-cyberpunk header {
+  background: #06060f !important;
+  border-bottom-color: #06b6d4 !important;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15) !important;
+}
+body.theme-cyberpunk nav {
+  background: #06060f !important;
+  border-top-color: #ec4899 !important;
+}
+body.theme-cyberpunk .nav-item.active {
+  color: #06b6d4 !important;
+  text-shadow: 0 0 8px #06b6d4;
+}
+body.theme-cyberpunk .nav-item.active i {
+  color: #06b6d4 !important;
+}
+body.theme-cyberpunk .bg-\[\#151c2e\],
+body.theme-cyberpunk .bg-\[\#111624\],
+body.theme-cyberpunk .bg-\[\#161c2d\] {
+  background: #0e0e1e !important;
+  border-color: #272744 !important;
+}
+body.theme-cyberpunk .bg-\[\#151c2e\]:hover {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+}
+body.theme-cyberpunk .bg-amber-500 {
+  background: #06b6d4 !important;
+  color: #020617 !important;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.6) !important;
+}
+body.theme-cyberpunk .bg-amber-500:hover {
+  background: #22d3ee !important;
+}
+body.theme-cyberpunk .text-amber-400 {
+  color: #22d3ee !important;
+}
+
+/* 2. TEMA: ALTIN HANEDAN & LUXURY GOLD (VIP Lüks Başkanlık Ofisi) */
+body.theme-gold {
+  background: #0a0805 !important;
+  color: #fefce8 !important;
+}
+body.theme-gold #app-frame {
+  background: #141009 !important;
+  border-color: #eab308 !important;
+  box-shadow: 0 0 35px rgba(234, 179, 8, 0.2), 0 0 60px rgba(161, 98, 7, 0.15) !important;
+}
+body.theme-gold header {
+  background: #0d0a06 !important;
+  border-bottom: 2px solid #ca8a04 !important;
+  box-shadow: 0 4px 18px rgba(202, 138, 4, 0.15) !important;
+}
+body.theme-gold nav {
+  background: #0d0a06 !important;
+  border-top: 1px solid #ca8a04 !important;
+}
+body.theme-gold .nav-item.active {
+  color: #facc15 !important;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
+}
+body.theme-gold .nav-item.active i {
+  color: #facc15 !important;
+}
+body.theme-gold .bg-\[\#151c2e\],
+body.theme-gold .bg-\[\#111624\],
+body.theme-gold .bg-\[\#161c2d\] {
+  background: #1b160e !important;
+  border-color: #3f321d !important;
+}
+body.theme-gold .bg-amber-500 {
+  background: linear-gradient(135deg, #eab308, #ca8a04) !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 14px rgba(234, 179, 8, 0.5) !important;
+}
+body.theme-gold .border-slate-800 {
+  border-color: #382c16 !important;
+}
+
+/* 3. TEMA: PREMIER EMERALD & STADYUM ÇİMİ (Kusursuz Yeşil & Premium Futbol Arenası) */
+body.theme-emerald {
+  background: #040d0a !important;
+  color: #ecfdf5 !important;
+}
+body.theme-emerald #app-frame {
+  background: #091712 !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.25) !important;
+}
+body.theme-emerald header {
+  background: #06110d !important;
+  border-bottom-color: #059669 !important;
+}
+body.theme-emerald nav {
+  background: #06110d !important;
+  border-top-color: #059669 !important;
+}
+body.theme-emerald .nav-item.active {
+  color: #10b981 !important;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+body.theme-emerald .nav-item.active i {
+  color: #10b981 !important;
+}
+body.theme-emerald .bg-\[\#151c2e\],
+body.theme-emerald .bg-\[\#111624\],
+body.theme-emerald .bg-\[\#161c2d\] {
+  background: #0c1f19 !important;
+  border-color: #164e3f !important;
+}
+body.theme-emerald .bg-amber-500 {
+  background: #10b981 !important;
+  color: #022c22 !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5) !important;
+}
+body.theme-emerald .bg-amber-500:hover {
+  background: #34d399 !important;
+}
+
+/* 4. TEMA: RETRO PİXEL ARCADE (Nostaljik 90'lar Arcade Futbol) */
+body.theme-arcade {
+  background: #090014 !important;
+  color: #f5d0fe !important;
+}
+body.theme-arcade #app-frame {
+  background: #130224 !important;
+  border: 3px solid #c026d3 !important;
+  box-shadow: 0 0 30px rgba(192, 38, 211, 0.35) !important;
+}
+body.theme-arcade header {
+  background: #0f011c !important;
+  border-bottom: 2px dashed #a21caf !important;
+}
+body.theme-arcade nav {
+  background: #0f011c !important;
+  border-top: 2px dashed #a21caf !important;
+}
+body.theme-arcade .nav-item.active {
+  color: #e879f9 !important;
+  text-shadow: 0 0 10px #e879f9;
+}
+body.theme-arcade .bg-\[\#151c2e\],
+body.theme-arcade .bg-\[\#111624\],
+body.theme-arcade .bg-\[\#161c2d\] {
+  background: #1e0538 !important;
+  border: 1px solid #701a75 !important;
+}
+body.theme-arcade .bg-amber-500 {
+  background: #d946ef !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 15px rgba(217, 70, 239, 0.7) !important;
+}
+
+
