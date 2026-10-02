@@ -3894,37 +3894,41 @@ async function checkDailyRewardClaim() {
   const lastClaim = gameState.last_daily_claim || 0;
   // 24 saat = 86400 saniye
   if (nowTs - lastClaim >= 86400) {
-    setTimeout(() => {
-      promptDailyRewardClaim();
-    }, 1200);
+    promptDailyRewardClaim();
+  } else {
+    const inlineContainer = document.getElementById("daily-reward-inline-container");
+    if (inlineContainer) {
+      inlineContainer.classList.add("hidden");
+      inlineContainer.innerHTML = "";
+    }
   }
 }
 
 function promptDailyRewardClaim() {
-  const existing = document.getElementById("daily-reward-banner");
-  if (existing) return;
+  const inlineContainer = document.getElementById("daily-reward-inline-container");
+  if (!inlineContainer) return;
 
-  const banner = document.createElement("div");
-  banner.id = "daily-reward-banner";
-  banner.className = "fixed top-14 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-sm bg-gradient-to-r from-amber-900 to-amber-700 border-2 border-amber-400 p-3 rounded-2xl shadow-2xl flex items-center justify-between animate-bounce";
-  banner.innerHTML = `
-    <div class="flex items-center gap-2">
-      <span class="text-2xl">🎁</span>
-      <div>
-        <div class="font-black text-xs text-white">GÜNLÜK BAŞKANLIK ÖDÜLÜ!</div>
-        <div class="text-[10px] text-amber-200">+5.000.000 ₺ Kasa Desteği Hazır</div>
+  inlineContainer.classList.remove("hidden");
+  inlineContainer.innerHTML = `
+    <div id="daily-reward-card" class="w-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-800 border-2 border-amber-400 p-2.5 sm:p-3 rounded-2xl shadow-xl flex items-center justify-between gap-2.5 transition-all">
+      <div class="flex items-center gap-2.5 min-w-0 flex-1">
+        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl flex-shrink-0">
+          🎁
+        </div>
+        <div class="min-w-0">
+          <div class="font-black text-xs text-white uppercase tracking-wide truncate">GÜNLÜK BAŞKANLIK ÖDÜLÜ!</div>
+          <div class="text-[10px] text-amber-200 font-semibold truncate">+5.000.000 ₺ Kasa Desteği Hazır</div>
+        </div>
       </div>
+      <button onclick="claimDailyReward()" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
+        <span>Hemen Al</span> <span>➔</span>
+      </button>
     </div>
-    <button onclick="claimDailyReward()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs shadow-md transition-all">
-      Hemen Al
-    </button>
   `;
-  document.body.appendChild(banner);
 }
 
 async function claimDailyReward() {
-  const banner = document.getElementById("daily-reward-banner");
-  if (banner) banner.remove();
+  const inlineContainer = document.getElementById("daily-reward-inline-container");
 
   try {
     const res = await apiFetch("/api/daily-reward/claim", { method: "POST" });
@@ -3932,6 +3936,10 @@ async function claimDailyReward() {
     if (!res.ok) {
       showToast(data.detail || "Ödül alınamadı!");
       return;
+    }
+    if (inlineContainer) {
+      inlineContainer.classList.add("hidden");
+      inlineContainer.innerHTML = "";
     }
     gameState = data.state;
     renderUI();
