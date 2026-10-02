@@ -290,14 +290,19 @@ function closeSettingsModal() {
 }
 
 async function resetCareerPrompt() {
-  if (!confirm("⚠️ Mevcut kariyerinizi sıfırlamak ve yeni bir kulüp seçmek istediğinize emin misiniz?")) {
+  if (!confirm("⚠️ Mevcut kariyerinizi sıfırlamak ve tüm eski kayıtları silmek istediğinize emin misiniz? Yeni bir kulüp seçerek sıfırdan başlayacaksınız.")) {
     return;
   }
   closeSettingsModal();
   try {
-    const res = await apiFetch("/api/resign", { method: "POST" });
+    // Hem yerel cihaz hafızasını hem sunucudaki kayıtları tamamen temizle
+    localStorage.removeItem("baskan_local_career_save");
+    localStorage.removeItem("baskan_local_career_time");
+    localStorage.removeItem("baskan_story_tutorial_seen");
+
+    const res = await apiFetch("/api/save/reset-all", { method: "POST" });
     if (res.ok) {
-      showToast("Kariyer sıfırlandı. Yeni takımınızı seçin!");
+      showToast("Tüm kayıtlar silindi! Yeni takımınızı seçin 🔄");
       await fetchState();
       openTeamSelectModal();
     } else {
@@ -668,10 +673,48 @@ function toggleStandingsSubTab(sub) {
 // ==================== STATE YÖNETİMİ & RENDER ====================
 let _tutorialShownThisSession = false;
 
+function persistLocalCareerState(state) {
+  if (!state || !state.is_started) return;
+  try {
+    localStorage.setItem("baskan_local_career_save", JSON.stringify(state));
+    localStorage.setItem("baskan_local_career_time", Date.now().toString());
+  } catch (e) {
+    console.warn("Yerel kayıt saklanamadı:", e);
+  }
+}
+
 async function fetchState() {
   try {
     const res = await apiFetch("/api/state");
     gameState = await res.json();
+
+    // RENDER VEYA SUNUCU YENİDEN BAŞLAMA KORUMASI:
+    // Eğer sunucuda kayıt bulunamadıysa/başlamadıysa ama tarayıcının yerel hafızasında kayıtlı aktif kariyer varsa:
+    const localSaved = localStorage.getItem("baskan_local_career_save");
+    if ((!gameState || !gameState.is_started) && localSaved) {
+      try {
+        const parsedLocal = JSON.parse(localSaved);
+        if (parsedLocal && parsedLocal.is_started && parsedLocal.team_id) {
+          console.log("Sunucu sıfırlanmış, yerel kayıt sunucuya aktarılıyor...");
+          const syncRes = await apiFetch("/api/save/sync", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ state: parsedLocal })
+          });
+          if (syncRes.ok) {
+            gameState = await syncRes.json();
+            showToast(`💾 Kayıtlı kariyeriniz otomatik yüklendi! (${gameState.club_name} • ${gameState.season}. Sezon ${gameState.week}. Hafta)`);
+          }
+        }
+      } catch (err) {
+        console.warn("Otomatik senkronizasyon hatası:", err);
+      }
+    }
+
+    if (gameState && gameState.is_started) {
+      persistLocalCareerState(gameState);
+    }
+
     renderUI();
     // Tutorial: sadece sayfa ilk yüklendiğinde, oyun başlamışsa aç
     if (!_tutorialShownThisSession && gameState && gameState.is_started) {
@@ -685,6 +728,10 @@ async function fetchState() {
 
 function renderUI() {
   if (!gameState) return;
+
+  if (gameState.is_started) {
+    persistLocalCareerState(gameState);
+  }
 
   // Başlangıçta kulüp seçilmemişse seçim modalını zorunlu aç
   if (!gameState.is_started) {
@@ -2852,9 +2899,42 @@ async function checkAccountStatus() {
           if (detEl) detEl.innerText = `Başkan ${data.president_name || username} • ${data.season || 1}. Sezon • Hafta ${data.week || 1} • Kasa: ${formatMoney(data.budget || 0)}`;
         }
       } else {
-        verifiedExistingAccount = null;
-        if (careerBox) careerBox.classList.add("hidden");
-        if (teamWrapper) teamWrapper.classList.remove("hidden");
+        // Sunucuda yoksa bile yerel cihazda bu kullanıcıya ait aktif kayıt var mı kontrol et
+        const localSaved = localStorage.getItem("baskan_local_career_save");
+        let foundLocal = false;
+        if (localSaved) {
+          try {
+            const parsed = JSON.parse(localSaved);
+            if (parsed && parsed.is_started && (parsed.president_name === username || normalizeNameSlug(parsed.president_name) === normalizeNameSlug(username))) {
+              foundLocal = true;
+              verifiedExistingAccount = {
+                exists: true,
+                username: username,
+                president_name: parsed.president_name,
+                club_name: parsed.club_name,
+                season: parsed.season || 1,
+                week: parsed.week || 1,
+                budget: parsed.budget || 0,
+                logo: parsed.logo || ""
+              };
+              if (careerBox) {
+                careerBox.classList.remove("hidden");
+                const logoEl = document.getElementById("existing-career-logo");
+                if (logoEl) logoEl.src = parsed.logo ? parsed.logo + "?v=3" : "";
+                const clubEl = document.getElementById("existing-career-club");
+                if (clubEl) clubEl.innerText = parsed.club_name;
+                const detEl = document.getElementById("existing-career-details");
+                if (detEl) detEl.innerText = `Başkan ${parsed.president_name || username} • ${parsed.season || 1}. Sezon • Hafta ${parsed.week || 1} • Kasa: ${formatMoney(parsed.budget || 0)}`;
+              }
+            }
+          } catch(e) {}
+        }
+
+        if (!foundLocal) {
+          verifiedExistingAccount = null;
+          if (careerBox) careerBox.classList.add("hidden");
+          if (teamWrapper) teamWrapper.classList.remove("hidden");
+        }
       }
     }
   } catch (err) {
@@ -2876,6 +2956,21 @@ async function continueExistingCareer() {
   localStorage.setItem("baskan_username", username);
   const sid = "user_" + normalizeNameSlug(username);
   localStorage.setItem("baskan_session_id", sid);
+
+  // Eğer sunucu sıfırlanmışsa ve yerel yedek varsa, hemen senkronize et
+  const localSaved = localStorage.getItem("baskan_local_career_save");
+  if (localSaved) {
+    try {
+      const parsedLocal = JSON.parse(localSaved);
+      if (parsedLocal && parsedLocal.is_started) {
+        await apiFetch("/api/save/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ state: parsedLocal })
+        });
+      }
+    } catch(e) {}
+  }
 
   document.getElementById("modal-team-select").classList.add("hidden");
   showToast(`Hoş geldiniz ${username}! ${verifiedExistingAccount.club_name} kariyeriniz yüklendi 🏆`);
@@ -2967,6 +3062,8 @@ async function promptResign() {
   if (!confirm(`${gameState.club_name} kulübü başkanlığından istifa etmek istediğinize emin misiniz?`)) return;
 
   try {
+    localStorage.removeItem("baskan_local_career_save");
+    localStorage.removeItem("baskan_local_career_time");
     const res = await apiFetch("/api/resign", { method: "POST" });
     const data = await res.json();
     gameState = data.state;

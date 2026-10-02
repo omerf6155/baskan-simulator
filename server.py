@@ -48,8 +48,6 @@ async def session_middleware(request: Request, call_next):
 
 def get_save_path(session_id: Optional[str] = None) -> str:
     sid = sanitize_session_id(session_id or current_session_cv.get())
-    if sid == "default":
-        return SAVE_FILE
     return os.path.join(SAVES_DIR, f"{sid}.json")
 
 def format_money_val(amount: int) -> str:
@@ -842,59 +840,8 @@ def get_state(session_id: Optional[str] = None):
         except Exception:
             pass
 
-    # Eğer varsayılan ana save dosyası varsa ve session default ise oradan yükle
-    if sid == "default" and os.path.exists(SAVE_FILE):
-        try:
-            with open(SAVE_FILE, "r", encoding="utf-8") as f:
-                state = json.load(f)
-                if "squad" in state:
-                    state["squad"] = [enrich_player(p) for p in state["squad"]]
-                    state["squad"] = rebalance_and_validate_squad(state["squad"])
-                    state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
-                    state["my_radar"] = calculate_team_radar(state["squad"])
-                coach = state.get("coach")
-                if coach:
-                    team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
-                    if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
-                        coach["name"] = "Thomas Reis"
-                        coach["style"] = "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı"
-                        coach["photo"] = "/static/coach_thomas_reis.png"
-                        coach["traits"] = [
-                            {"name": "Alman Savunma Duvarı", "icon": "🛡️", "desc": "Yenen gol beklentisini (xGA) %20 düşürür ve savunma disiplini sağlar."},
-                            {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyon ve pres gücünü korur."}
-                        ]
-                    elif team_info and team_info.get("coach"):
-                        db_c = team_info["coach"]
-                        if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
-                            coach["photo"] = db_c.get("photo", "/static/coach_thomas_reis.png")
-                        if not coach.get("traits"):
-                            coach["traits"] = db_c.get("traits", [])
-                    if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
-                        coach["photo"] = "/static/coach_thomas_reis.png"
-                return state
-        except Exception:
-            pass
-
-    # Son çare: saves/ klasöründeki en son kaydedilen oyunu bul (eski random SID'li kayıtlar)
-    try:
-        all_saves = [
-            os.path.join(SAVES_DIR, f)
-            for f in os.listdir(SAVES_DIR)
-            if f.endswith(".json")
-        ]
-        if all_saves:
-            latest = max(all_saves, key=os.path.getmtime)
-            with open(latest, "r", encoding="utf-8") as f:
-                state = json.load(f)
-            if state.get("is_started") and state.get("team_id") in [t["id"] for t in TEAMS_DB]:
-                # Bu kaydı artık doğru SID'e taşı
-                save_state(state, sid)
-                return state
-    except Exception:
-        pass
-
+    # Kayıt dosyası yoksa veya bozuksa: temiz, henüz başlamamış kariyer döndür
     state = default_career_state("trabzonspor", is_started=False)
-    save_state(state, sid)
     return state
 
 def save_state(state, session_id: Optional[str] = None):
@@ -1066,10 +1013,69 @@ def api_get_state():
 
     return state
 
+class SaveSyncRequest(BaseModel):
+    state: Dict[str, Any]
+
+@app.post("/api/save/sync")
+def api_save_sync(req: SaveSyncRequest):
+    sid = sanitize_session_id(current_session_cv.get())
+    client_state = req.state
+    if not isinstance(client_state, dict):
+        raise HTTPException(status_code=400, detail="Geçersiz state formatı.")
+    
+    valid_ids = [t["id"] for t in TEAMS_DB]
+    team_id = client_state.get("team_id")
+    if team_id not in valid_ids or not client_state.get("is_started"):
+        raise HTTPException(status_code=400, detail="Geçersiz veya başlamamış kariyer.")
+    
+    # Kadroyu ve radar verilerini doğrula ve zenginleştir
+    if "squad" in client_state:
+        client_state["squad"] = [enrich_player(p) for p in client_state["squad"]]
+        client_state["squad"] = rebalance_and_validate_squad(client_state["squad"])
+        client_state["team_power"] = round(sum(p["overall"] for p in client_state["squad"][:11]) / 11)
+        client_state["my_radar"] = calculate_team_radar(client_state["squad"])
+    
+    save_state(client_state, sid)
+    return client_state
+
+@app.post("/api/save/reset-all")
+def api_save_reset_all():
+    sid = sanitize_session_id(current_session_cv.get())
+    # 1. saves/ klasöründeki tüm .json kayıtlarını temizle
+    try:
+        if os.path.exists(SAVES_DIR):
+            for fname in os.listdir(SAVES_DIR):
+                if fname.endswith(".json"):
+                    try:
+                        os.remove(os.path.join(SAVES_DIR, fname))
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+
+    # 2. Varsa kök dizindeki savegame.json dosyasını da temizle
+    try:
+        if os.path.exists(SAVE_FILE):
+            os.remove(SAVE_FILE)
+    except Exception:
+        pass
+
+    # 3. Temiz, başlamamış sıfır durum döndür
+    state = default_career_state("trabzonspor", is_started=False)
+    save_state(state, sid)
+    return {"status": "ok", "message": "Tüm kayıtlar başarıyla sıfırlandı.", "state": state}
+
 @app.post("/api/reset")
 def api_reset():
+    sid = sanitize_session_id(current_session_cv.get())
+    path = get_save_path(sid)
+    if os.path.exists(path):
+        try:
+            os.remove(path)
+        except Exception:
+            pass
     state = default_career_state("trabzonspor", is_started=False)
-    save_state(state)
+    save_state(state, sid)
     return state
 
 # ==================== İKİ DEVRELİ MAÇ SİMÜLASYONU & SOYUNMA ODASI ====================
