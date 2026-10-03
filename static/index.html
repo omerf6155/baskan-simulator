@@ -43,16 +43,13 @@
             <span id="header-season">1</span>. Sezon • H<span id="header-week" class="text-amber-400">1</span>/34
           </div>
           <div class="flex items-center gap-1 justify-end">
-            <button onclick="cycleAppTheme()" id="header-theme-btn" title="Temayı Değiştir" class="text-[9px] text-amber-300 hover:text-amber-200 font-bold flex items-center gap-0.5 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
-              <span id="header-theme-icon">🎨</span> <span id="header-theme-label">Tema</span>
-            </button>
-            <button onclick="toggleMusicPlayback()" id="header-music-btn" class="text-[9px] text-slate-300 hover:text-amber-400 font-bold flex items-center gap-0.5 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
+            <button onclick="toggleMusicPlayback()" id="header-music-btn" class="text-[9px] text-slate-300 hover:text-amber-400 font-bold flex items-center gap-0.5 bg-slate-900/90 hover:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700/60 transition-all">
               <span id="header-music-icon">🎵</span> <span id="header-music-label">Müzik</span>
             </button>
-            <button onclick="openSettingsModal()" class="text-[9px] text-slate-300 hover:text-white font-bold flex items-center gap-0.5 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700">
+            <button onclick="openSettingsModal()" class="text-[9px] text-slate-300 hover:text-white font-bold flex items-center gap-0.5 bg-slate-900/90 hover:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700/60 transition-all">
               <i data-lucide="settings" class="w-3 h-3 text-slate-300"></i> Ayar
             </button>
-            <button onclick="promptResign()" class="text-[9px] text-rose-400/90 hover:text-rose-300 font-bold px-1">
+            <button onclick="promptResign()" class="text-[9px] text-rose-400/90 hover:text-rose-300 font-bold px-1.5 py-0.5 hover:bg-rose-950/40 rounded transition-all">
               İstifa
             </button>
           </div>
@@ -112,146 +109,154 @@
         <!-- Günlük Giriş Ödülü Banner Konteynırı (Sayfa İçi Şık & Taşmayan Tasarım) -->
         <div id="daily-reward-inline-container" class="hidden"></div>
 
-        <!-- Sıradaki Maç Paneli -->
-        <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3.5 shadow-sm">
-          <div class="flex items-center justify-between text-xs text-slate-400 font-semibold mb-2.5">
-            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-400"></i> Sıradaki Karşılaşma</span>
+        <!-- Sıradaki Maç Paneli (Matchday Hero Card) -->
+        <div class="match-hero-card rounded-2xl p-4 shadow-xl border border-white/10 relative overflow-hidden">
+          <div class="flex items-center justify-between text-xs text-slate-300 font-semibold mb-3">
+            <span class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <i data-lucide="calendar" class="w-4 h-4 text-amber-400"></i>
+              <span class="uppercase tracking-wider font-extrabold text-[11px] text-amber-400/90">Sıradaki Karşılaşma</span>
+            </span>
             <div class="flex items-center gap-1.5">
-              <span id="office-derby-badge" class="hidden text-[9px] font-black px-1.5 py-0.5 rounded bg-rose-600 text-white animate-pulse">🔥 BÜYÜK DERBİ</span>
-              <span id="office-match-loc" class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-200 border border-slate-700">EV SAHİBİ</span>
+              <span id="office-derby-badge" class="hidden text-[9px] font-black px-2 py-0.5 rounded-full bg-rose-600 text-white shadow-lg shadow-rose-900/50 animate-pulse">🔥 BÜYÜK DERBİ</span>
+              <span id="office-match-loc" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-900/90 text-slate-200 border border-slate-700/80">EV SAHİBİ</span>
             </div>
           </div>
 
-          <div class="flex items-center justify-between my-2">
+          <div class="flex items-center justify-between my-3 px-2">
             <!-- Biz -->
-            <div class="text-center w-5/12">
-              <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center">
-                <img id="office-my-logo" src="" alt="" class="w-full h-full object-contain" onerror="this.style.display='none'" />
+            <div class="text-center w-5/12 flex flex-col items-center">
+              <div class="w-12 h-12 mb-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/10 flex items-center justify-center shadow-inner">
+                <img id="office-my-logo" src="" alt="" class="w-full h-full object-contain filter drop-shadow" onerror="this.style.display='none'" />
               </div>
-              <div class="font-extrabold text-xs text-white truncate" id="office-my-name">Trabzonspor</div>
-              <div class="text-[10px] text-emerald-400 font-semibold mt-0.5">Güç: <span id="office-my-pwr">81</span></div>
+              <div class="font-extrabold text-sm text-white truncate max-w-full" id="office-my-name">Trabzonspor</div>
+              <div class="text-[11px] font-mono text-emerald-400 font-bold mt-0.5 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Güç: <span id="office-my-pwr">81</span></div>
             </div>
 
-            <div class="text-center w-2/12 font-black text-slate-500 text-xs">
-              VS
+            <div class="text-center w-2/12 flex flex-col items-center justify-center">
+              <span class="font-black text-slate-500 text-sm tracking-widest bg-slate-900/60 px-2.5 py-1 rounded-lg border border-slate-800">VS</span>
             </div>
 
             <!-- Rakip -->
-            <div class="text-center w-5/12">
-              <div class="w-8 h-8 mx-auto mb-1 flex items-center justify-center">
-                <img id="office-opp-logo" src="" alt="" class="w-full h-full object-contain" onerror="this.style.display='none'" />
+            <div class="text-center w-5/12 flex flex-col items-center">
+              <div class="w-12 h-12 mb-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/10 flex items-center justify-center shadow-inner">
+                <img id="office-opp-logo" src="" alt="" class="w-full h-full object-contain filter drop-shadow" onerror="this.style.display='none'" />
               </div>
-              <div class="font-extrabold text-xs text-white truncate" id="office-opp-name">Fenerbahçe</div>
-              <div class="text-[10px] text-rose-400 font-semibold mt-0.5">Güç: <span id="office-opp-pwr">86</span></div>
+              <div class="font-extrabold text-sm text-white truncate max-w-full" id="office-opp-name">Fenerbahçe</div>
+              <div class="text-[11px] font-mono text-rose-400 font-bold mt-0.5 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">Güç: <span id="office-opp-pwr">86</span></div>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-1.5 mt-3">
-            <button onclick="openPreMatchEventModal()" id="btn-pre-match-event" class="w-full py-2 rounded-lg bg-purple-900/60 hover:bg-purple-800/80 border border-purple-500/50 text-purple-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i> Konser & Taraftar Festivali
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 pt-3 border-t border-white/5">
+            <button onclick="openPreMatchEventModal()" id="btn-pre-match-event" class="w-full py-2.5 rounded-xl bg-purple-950/70 hover:bg-purple-900/80 border border-purple-500/40 text-purple-200 font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md active:scale-95">
+              <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i> Konser & Taraftar Festivali
             </button>
-            <button onclick="switchTab('match')" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm">
-              <i data-lucide="play" class="w-3.5 h-3.5 fill-slate-950"></i> Protokol Tribünü (Maç)
+            <button onclick="switchTab('match')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/20 border border-amber-300/40 active:scale-95">
+              <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i> Protokol Tribünü (Maça Çık)
             </button>
           </div>
         </div>
 
-        <!-- Hoca Bilgisi & İstatistikleri -->
-        <div id="office-coach-card" class="bg-[#151c2e] border border-slate-800 rounded-xl p-3 flex items-center justify-between transition-all">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="w-12 h-12 rounded-xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-md relative">
+        <!-- Hoca Bilgisi & İstatistikleri (Teknik Heyet Odası) -->
+        <div id="office-coach-card" class="bg-[#121929]/90 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-3.5 flex items-center justify-between transition-all shadow-lg">
+          <div class="flex items-center gap-3.5 min-w-0">
+            <div class="w-13 h-13 rounded-2xl bg-slate-950 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg relative">
               <img id="office-coach-photo" src="/static/coach_thomas_reis.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_thomas_reis.png'" />
-              <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[7px] font-black px-1 rounded-tl">TD</span>
+              <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[8px] font-black px-1.5 py-0.5 rounded-tl">TD</span>
             </div>
             <div class="min-w-0">
-              <div class="text-[10px] text-slate-400">Teknik Direktör</div>
-              <div id="office-coach-name" class="font-bold text-xs text-white truncate">Thomas Reis</div>
-              <div class="text-[10px] text-slate-400 mt-0.5 truncate" id="office-coach-style">4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı</div>
-              <div id="office-coach-traits" class="flex flex-wrap gap-1 mt-1"></div>
+              <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Teknik Direktör</div>
+              <div id="office-coach-name" class="font-black text-sm text-white truncate">Thomas Reis</div>
+              <div class="text-[11px] text-slate-300 mt-0.5 truncate" id="office-coach-style">4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı</div>
+              <div id="office-coach-traits" class="flex flex-wrap gap-1 mt-1.5"></div>
             </div>
           </div>
-          <div class="flex-shrink-0 ml-2" id="office-coach-btn-container">
-            <button onclick="openCoachModal()" class="px-2.5 py-1.5 rounded bg-emerald-600/30 text-[11px] font-bold text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/50">
+          <div class="flex-shrink-0 ml-3 flex flex-col gap-1.5" id="office-coach-btn-container">
+            <button onclick="openCoachModal()" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-xs font-black text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 transition-all text-center">
               Görüş
+            </button>
+            <button onclick="openCoachVisionModal()" class="px-3 py-1 rounded-xl bg-blue-500/20 text-[10px] font-bold text-blue-300 border border-blue-500/40 hover:bg-blue-500/30 transition-all text-center">
+              Vizyon
             </button>
           </div>
         </div>
 
-        <!-- Hızlı Yönetim Düğmeleri: Kaptan Raporu & Siyaset -->
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="openCaptainReportModal()" class="p-2.5 rounded-xl bg-slate-800/90 border border-amber-500/40 text-left hover:border-amber-400 transition-all">
-            <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400"></i> Kaptan Raporu
+        <!-- Hızlı Yönetim Düğmeleri: Kaptan Masası & Siyaset/Hibe -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="openCaptainReportModal()" class="p-3 rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 border border-amber-500/30 text-left hover:border-amber-400/70 hover:shadow-lg hover:shadow-amber-500/5 transition-all group">
+            <div class="text-xs font-black text-amber-300 flex items-center gap-1.5 group-hover:text-amber-200">
+              <i data-lucide="shield" class="w-4 h-4 text-amber-400"></i> Kaptan Zirvesi
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Soyunma odası & zam talepleri</div>
+            <div class="text-[10px] text-slate-400 mt-1 font-medium">Soyunma odası morali & talepler</div>
           </button>
 
-          <button onclick="switchTab('underground')" class="p-2.5 rounded-xl bg-purple-950/40 border border-purple-800/40 text-left hover:border-purple-400 transition-all">
-            <div class="text-xs font-bold text-purple-300 flex items-center gap-1.5">
-              <i data-lucide="landmark" class="w-3.5 h-3.5 text-purple-400"></i> Siyaset & Hibe
+          <button onclick="switchTab('underground')" class="p-3 rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950 border border-purple-500/30 text-left hover:border-purple-400/70 hover:shadow-lg hover:shadow-purple-500/5 transition-all group">
+            <div class="text-xs font-black text-purple-300 flex items-center gap-1.5 group-hover:text-purple-200">
+              <i data-lucide="landmark" class="w-4 h-4 text-purple-400"></i> Siyaset & Hibe
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Cumhurbaşkanlığı Hibe Talebi</div>
+            <div class="text-[10px] text-slate-400 mt-1 font-medium">Cumhurbaşkanlığı Hibe Talebi</div>
           </button>
         </div>
 
-        <!-- Finans ve Transfer Durum Özeti -->
-        <div class="grid grid-cols-2 gap-2">
-          <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-2.5 cursor-pointer hover:border-slate-700" onclick="switchTab('finances')">
-            <div class="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
-              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-emerald-400"></i> Kulüp Finansı
-            </div>
-            <div class="text-xs font-bold text-white">Gelir & Bilet Hasılatı</div>
-            <div class="text-[9px] text-slate-400 mt-0.5">Finans tablosu →</div>
-          </div>
-
-          <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-2.5 cursor-pointer hover:border-slate-700" onclick="switchTab('scout')">
-            <div class="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
-              <i data-lucide="users" class="w-3.5 h-3.5 text-blue-400"></i> Transfer Pazarı
-            </div>
-            <div class="text-xs font-bold text-amber-400" id="office-window-status">Pencere AÇIK</div>
-            <div class="text-[9px] text-slate-400 mt-0.5">Scout & transferler →</div>
-          </div>
-        </div>
-
-        <!-- Hızlı Aksiyonlar -->
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="switchTab('standings')" class="p-2.5 rounded-xl bg-slate-800/80 border border-slate-700 text-left hover:bg-slate-800">
-            <div class="text-xs font-bold text-white flex items-center gap-1.5">
-              <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i> Puan Durumu
-            </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">18 Takım Süper Lig</div>
-          </button>
-
-          <button onclick="openCoachVisionModal()" class="p-2.5 rounded-xl bg-blue-950/40 border border-blue-800/40 text-left hover:bg-blue-900/40">
-            <div class="text-xs font-bold text-blue-300 flex items-center gap-1.5">
-              <i data-lucide="compass" class="w-3.5 h-3.5 text-blue-400"></i> Hoca Vizyonu
-            </div>
-          <button onclick="openClubUpgradesModal()" class="p-2.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-left hover:bg-emerald-900/40 col-span-2">
-            <div class="flex items-center justify-between">
-              <div class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
-                <i data-lucide="wrench" class="w-3.5 h-3.5 text-emerald-400"></i> Kulüp Tesisleri & Pasif Gelir Geliştirmeleri (Skill Ağacı)
+        <!-- Kulüp Tesisleri & Pasif Gelir (Skill Ağacı) Vitrini -->
+        <button onclick="openClubUpgradesModal()" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-slate-900/90 border border-emerald-500/40 text-left hover:border-emerald-400 transition-all hover:shadow-lg hover:shadow-emerald-500/10 group">
+          <div class="flex items-center justify-between">
+            <div class="text-xs font-black text-emerald-300 flex items-center gap-2 group-hover:text-emerald-200">
+              <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                <i data-lucide="wrench" class="w-4 h-4 text-emerald-400"></i>
               </div>
-              <span class="text-[9px] bg-emerald-900/80 text-emerald-200 px-1.5 py-0.5 rounded font-bold border border-emerald-600/50">5 ALAN</span>
+              <div>
+                <div>Kulüp Tesisleri & Pasif Gelir Yatırımları</div>
+                <div class="text-[10px] text-slate-400 font-normal mt-0.5">Stadyum • Şehir Ulaşımı • Forma • Akademi • TV</div>
+              </div>
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Stadyum • Şehir Ulaşımı • Forma Tasarımı • Akademi • TV Yayını</div>
-          </button>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-black border border-emerald-500/40 flex items-center gap-1">
+              GELİR AĞACI →
+            </span>
+          </div>
+        </button>
+
+        <!-- Finans, Transfer & Puan Durumu Özeti -->
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-[#121929]/90 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 transition-all" onclick="switchTab('finances')">
+            <div class="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
+              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-emerald-400"></i> Finans
+            </div>
+            <div class="text-xs font-black text-white">Bütçe & Kasa</div>
+            <div class="text-[9px] text-emerald-400 font-bold mt-1">İncele →</div>
+          </div>
+
+          <div class="bg-[#121929]/90 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-blue-500/50 transition-all" onclick="switchTab('scout')">
+            <div class="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
+              <i data-lucide="users" class="w-3.5 h-3.5 text-blue-400"></i> Transfer
+            </div>
+            <div class="text-xs font-black text-amber-400 truncate" id="office-window-status">Pencere AÇIK</div>
+            <div class="text-[9px] text-blue-400 font-bold mt-1">Pazar →</div>
+          </div>
+
+          <div class="bg-[#121929]/90 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-amber-500/50 transition-all" onclick="switchTab('standings')">
+            <div class="flex items-center gap-1 text-[10px] text-slate-400 mb-1">
+              <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i> Lig
+            </div>
+            <div class="text-xs font-black text-white truncate">Puan Durumu</div>
+            <div class="text-[9px] text-amber-400 font-bold mt-1">Tablo →</div>
+          </div>
         </div>
 
         <!-- Hoca Transfer Raporu & Zayıf Bölge Analizi -->
-        <div id="office-coach-recommendation-card" class="bg-[#151c2e] border border-blue-900/60 rounded-xl p-3 space-y-2">
+        <div id="office-coach-recommendation-card" class="bg-[#121929]/90 border border-blue-900/60 rounded-2xl p-3.5 space-y-2 shadow-lg">
           <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-blue-400">
-              <i data-lucide="crosshair" class="w-3.5 h-3.5 text-blue-400"></i>
-              <span>Hoca Transfer Raporu</span>
+            <div class="flex items-center gap-2 text-xs font-black text-blue-400">
+              <i data-lucide="crosshair" class="w-4 h-4 text-blue-400"></i>
+              <span>Hoca Transfer Raporu & Kadro Analizi</span>
             </div>
-            <span class="text-[9px] bg-blue-950 text-blue-300 border border-blue-700/50 px-1.5 py-0.5 rounded font-bold" id="coach-rec-target-pos">SANTRAFOR GEREKLİ</span>
+            <span class="text-[9px] font-mono bg-blue-950 text-blue-300 border border-blue-700/50 px-2 py-0.5 rounded-full font-bold" id="coach-rec-target-pos">SANTRAFOR GEREKLİ</span>
           </div>
-          <p class="text-[10px] text-slate-300 leading-relaxed" id="coach-rec-reason">
+          <p class="text-[11px] text-slate-300 leading-relaxed font-medium" id="coach-rec-reason">
             Teknik direktör kadroyu analiz ediyor...
           </p>
-          <div id="coach-rec-candidates" class="grid grid-cols-2 gap-1.5 pt-1">
+          <div id="coach-rec-candidates" class="grid grid-cols-2 gap-2 pt-1">
             <!-- JS ile önerilen oyuncular render edilir -->
-          </div>
         </div>
 
         <!-- Tribün Sesi & Sosyal Medya (X / Twitter Akışı) -->
@@ -1721,55 +1726,24 @@
     <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3.5 max-h-[90vh] overflow-y-auto scrollbar-thin">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="text-xs font-black text-white flex items-center gap-1.5">
-          <i data-lucide="palette" class="w-4 h-4 text-amber-400"></i>
-          <span>GÖRSEL TEMA & OYUN AYARLARI</span>
+          <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i>
+          <span>OYUN VE SES AYARLARI</span>
         </div>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
       </div>
 
-      <!-- TEMA SEÇİCİ (4 FARKLI GÖRSEL TASARIM) -->
-      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 space-y-2">
-        <div class="flex items-center justify-between">
-          <div class="text-xs font-black text-white flex items-center gap-1.5">
-            <i data-lucide="layout" class="w-3.5 h-3.5 text-amber-400"></i>
-            <span>Arayüz Tasarımı / Teması:</span>
+      <!-- Arayüz Tasarım Durumu -->
+      <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
           </div>
-          <span id="theme-active-label" class="text-[9px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">Modern Dark</span>
-        </div>
-        
-        <div class="grid grid-cols-2 gap-2 pt-1" id="theme-options-grid">
-          <!-- 1. Modern Dark -->
-          <div onclick="setAppTheme('default')" id="theme-btn-default" class="p-2 rounded-xl border border-amber-500/60 bg-slate-950 cursor-pointer hover:border-amber-400 transition-all text-left">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-white">
-              <span>🌑</span> <span>Modern Dark</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-1">Klasik şık gece mavisi & sade spor stili</div>
-          </div>
-
-          <!-- 2. Cyberpunk Neon -->
-          <div onclick="setAppTheme('cyberpunk')" id="theme-btn-cyberpunk" class="p-2 rounded-xl border border-cyan-800 bg-[#090914] cursor-pointer hover:border-cyan-400 transition-all text-left">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-cyan-300">
-              <span>⚡</span> <span>Cyber Neon</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-1">Fütüristik neon ışıkları, cam göbeği & mor</div>
-          </div>
-
-          <!-- 3. Altın Hanedan -->
-          <div onclick="setAppTheme('gold')" id="theme-btn-gold" class="p-2 rounded-xl border border-yellow-800 bg-[#141009] cursor-pointer hover:border-yellow-400 transition-all text-left">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-yellow-300">
-              <span>👑</span> <span>Altın Hanedan</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-1">VIP zengin başkanlık ofisi & altın detaylar</div>
-          </div>
-
-          <!-- 4. Premier Emerald -->
-          <div onclick="setAppTheme('emerald')" id="theme-btn-emerald" class="p-2 rounded-xl border border-emerald-800 bg-[#091712] cursor-pointer hover:border-emerald-400 transition-all text-left">
-            <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
-              <span>🏟️</span> <span>Premier Zümrüt</span>
-            </div>
-            <div class="text-[9px] text-slate-400 mt-1">Stadyum çimi, derin yeşil & zümrüt zarafeti</div>
+          <div>
+            <div class="text-xs font-bold text-white">Büyük Başkan Yönetim Arayüzü</div>
+            <div class="text-[9px] text-slate-400">Özel Tasarım • Lüks Yönetim Kokpiti</div>
           </div>
         </div>
+        <span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">Aktif</span>
       </div>
 
       <!-- Müzik Kontrolleri -->

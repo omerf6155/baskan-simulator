@@ -284,146 +284,87 @@ button:active {
 }
 
 /* ==========================================================================
-   THEME OVERRIDES (Preserved & Enhanced)
+   IMPECCABLE BESPOKE EXECUTIVE ENHANCEMENTS (No Generic AI Aesthetics)
    ========================================================================== */
 
-/* 1. CYBERPUNK THEME */
-body.theme-cyberpunk {
-  background: #030308 !important;
-  color: #f8fafc !important;
-}
-body.theme-cyberpunk #app-frame {
-  background: #070714 !important;
-  border-color: rgba(6, 182, 212, 0.5) !important;
-  box-shadow: 0 0 40px rgba(6, 182, 212, 0.25), 0 0 80px rgba(236, 72, 153, 0.15) !important;
-}
-body.theme-cyberpunk header {
-  background: rgba(7, 7, 20, 0.9) !important;
-  border-bottom-color: #06b6d4 !important;
-}
-body.theme-cyberpunk nav {
-  background: rgba(7, 7, 20, 0.95) !important;
-  border-top-color: #ec4899 !important;
-}
-body.theme-cyberpunk .nav-item.active {
-  color: #06b6d4 !important;
-  text-shadow: 0 0 10px #06b6d4;
-}
-body.theme-cyberpunk .nav-item.active i {
-  color: #06b6d4 !important;
-  filter: drop-shadow(0 0 8px #06b6d4);
-}
-body.theme-cyberpunk .bg-\[\#151c2e\],
-body.theme-cyberpunk .bg-\[\#111624\],
-body.theme-cyberpunk .bg-\[\#161c2d\] {
-  background: rgba(14, 14, 30, 0.85) !important;
-  border-color: rgba(6, 182, 212, 0.25) !important;
-}
-body.theme-cyberpunk .bg-amber-500 {
-  background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
-  color: #020617 !important;
-  box-shadow: 0 0 16px rgba(6, 182, 212, 0.6) !important;
+/* Matchday Hero Card: VIP Director's Box / Marquee View */
+.match-hero-card {
+  background: radial-gradient(130% 100% at 50% 0%, rgba(30, 41, 67, 0.75) 0%, rgba(10, 15, 26, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
-/* 2. GOLD DYNASTY THEME */
-body.theme-gold {
-  background: #080603 !important;
-  color: #fefce8 !important;
-}
-body.theme-gold #app-frame {
-  background: #110d07 !important;
-  border-color: rgba(234, 179, 8, 0.5) !important;
-  box-shadow: 0 0 40px rgba(234, 179, 8, 0.2), 0 0 70px rgba(161, 98, 7, 0.18) !important;
-}
-body.theme-gold header {
-  background: rgba(17, 13, 7, 0.92) !important;
-  border-bottom: 2px solid #ca8a04 !important;
-}
-body.theme-gold nav {
-  background: rgba(17, 13, 7, 0.95) !important;
-  border-top: 1px solid #ca8a04 !important;
-}
-body.theme-gold .nav-item.active {
-  color: #facc15 !important;
-  text-shadow: 0 0 12px rgba(250, 204, 21, 0.7);
-}
-body.theme-gold .bg-\[\#151c2e\],
-body.theme-gold .bg-\[\#111624\],
-body.theme-gold .bg-\[\#161c2d\] {
-  background: rgba(25, 20, 12, 0.88) !important;
-  border-color: rgba(202, 138, 4, 0.3) !important;
-}
-body.theme-gold .bg-amber-500 {
-  background: linear-gradient(135deg, #facc15, #ca8a04) !important;
-  color: #000000 !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 16px rgba(234, 179, 8, 0.55) !important;
+.match-hero-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.45), transparent);
 }
 
-/* 3. PREMIER EMERALD THEME */
-body.theme-emerald {
-  background: #030a07 !important;
-  color: #ecfdf5 !important;
-}
-body.theme-emerald #app-frame {
-  background: #07140f !important;
-  border-color: rgba(16, 185, 129, 0.5) !important;
-  box-shadow: 0 0 40px rgba(16, 185, 129, 0.25) !important;
-}
-body.theme-emerald header {
-  background: rgba(7, 20, 15, 0.92) !important;
-  border-bottom-color: #059669 !important;
-}
-body.theme-emerald nav {
-  background: rgba(7, 20, 15, 0.95) !important;
-  border-top-color: #059669 !important;
-}
-body.theme-emerald .nav-item.active {
-  color: #10b981 !important;
-  text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
-}
-body.theme-emerald .bg-\[\#151c2e\],
-body.theme-emerald .bg-\[\#111624\],
-body.theme-emerald .bg-\[\#161c2d\] {
-  background: rgba(11, 28, 22, 0.85) !important;
-  border-color: rgba(16, 185, 129, 0.25) !important;
-}
-body.theme-emerald .bg-amber-500 {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  color: #022c22 !important;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.55) !important;
+/* Executive Card Hover Elevation */
+.tab-pane .bg-\[\#121929\]\/90,
+.tab-pane .bg-\[\#151c2e\],
+.tab-pane .bg-\[\#111624\] {
+  background: linear-gradient(180deg, rgba(20, 27, 43, 0.82) 0%, rgba(11, 16, 27, 0.9) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
-/* 4. RETRO ARCADE THEME */
-body.theme-arcade {
-  background: #06000d !important;
-  color: #f5d0fe !important;
+.tab-pane .bg-\[\#121929\]\/90:hover,
+.tab-pane .bg-\[\#151c2e\]:hover {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
 }
-body.theme-arcade #app-frame {
-  background: #10011f !important;
-  border: 2px solid #c026d3 !important;
-  box-shadow: 0 0 35px rgba(192, 38, 211, 0.4) !important;
+
+/* Refined Coach Command Hub */
+#office-coach-card {
+  background: linear-gradient(135deg, rgba(22, 30, 48, 0.9) 0%, rgba(12, 17, 29, 0.95) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.22) !important;
 }
-body.theme-arcade header {
-  background: rgba(16, 1, 31, 0.92) !important;
-  border-bottom: 2px dashed #a21caf !important;
+
+#office-coach-card:hover {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.08) !important;
 }
-body.theme-arcade nav {
-  background: rgba(16, 1, 31, 0.95) !important;
-  border-top: 2px dashed #a21caf !important;
+
+/* Breaking News Ticker (Elite Headline Strip) */
+.bg-\[\#181111\] {
+  background: linear-gradient(90deg, #160f10 0%, #0d0f17 100%) !important;
+  border-bottom: 1px solid rgba(225, 29, 72, 0.25) !important;
 }
-body.theme-arcade .nav-item.active {
-  color: #e879f9 !important;
-  text-shadow: 0 0 12px #e879f9;
+
+/* Modals Precision Glass Overlay */
+.modal-overlay {
+  background: rgba(4, 7, 14, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
-body.theme-arcade .bg-\[\#151c2e\],
-body.theme-arcade .bg-\[\#111624\],
-body.theme-arcade .bg-\[\#161c2d\] {
-  background: rgba(28, 6, 52, 0.85) !important;
-  border: 1px solid #701a75 !important;
+
+/* Micro-polish on Lists and Tables */
+table th {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  font-size: 10px;
 }
-body.theme-arcade .bg-amber-500 {
-  background: linear-gradient(135deg, #d946ef, #a21caf) !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 18px rgba(217, 70, 239, 0.75) !important;
+
+table td {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Pill Badges */
+.badge-executive {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-weight: 800;
+  border-radius: 9999px;
+  padding: 2px 8px;
 }
