@@ -2608,7 +2608,7 @@ async function loadTransferMarket() {
 
 function switchTransferMarketCategory(cat) {
   currentTransferMarketCategory = cat;
-  ["all", "europe", "stars", "free"].forEach(c => {
+  ["all", "turkish", "europe", "stars", "free"].forEach(c => {
     const btn = document.getElementById("btn-tcat-" + c);
     if (btn) {
       btn.className = (c === cat)
@@ -2627,6 +2627,8 @@ function renderTransferMarket() {
   let list = [];
   if (currentTransferMarketCategory === "all") {
     list = (marketData.scout_picks || []).map(p => ({ ...p, type: "scout" }));
+  } else if (currentTransferMarketCategory === "turkish") {
+    list = (marketData.turkish_stars || []).map(p => ({ ...p, club: p.current_club, type: "turkish" }));
   } else if (currentTransferMarketCategory === "europe") {
     list = [];
     Object.keys(europeanMarketData || {}).forEach(club => {
@@ -2646,12 +2648,13 @@ function renderTransferMarket() {
     const cost = (p.price || 0) + (p.salary || p.wage || 0);
     const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.2 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
     const posBadge = getFifaPosBadgeHtml(p.pos);
+    const natBadge = (p.is_foreign === false) ? '<span class="bg-red-950 text-red-300 border border-red-700/60 px-1 py-0.2 rounded font-black text-[9px] mr-1">🇹🇷 TR</span>' : '';
 
     item.innerHTML = `
       <div class="flex justify-between items-start">
         <div>
           <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
-            ${clubBadge}${posBadge}<span class="text-white font-bold">${p.name}</span>
+            ${natBadge}${clubBadge}${posBadge}<span class="text-white font-bold">${p.name}</span>
             <span class="text-[10px] text-slate-400 font-medium">(${p.age} yaş)</span>
           </div>
           <div class="text-[9px] text-slate-400 mt-0.5">Bonservis: <strong>${formatMoney(p.price || 0)}</strong> • Maaş: ${formatMoney(p.salary || p.wage || 0)}</div>
@@ -2659,8 +2662,8 @@ function renderTransferMarket() {
         <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
       </div>
       ${p.desc ? `<p class="text-[9px] text-slate-300 italic">"${p.desc}"</p>` : ''}
-      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}')` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000})`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
-        ${p.type === 'europe' ? `Avrupa Transferini Bitir (${formatMoney(cost)})` : `Transfer Et (${formatMoney(cost)})`}
+      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}')` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000})`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : p.type === 'turkish' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
+        ${p.type === 'europe' ? `Avrupa Transferini Bitir (${formatMoney(cost)})` : p.type === 'turkish' ? `🇹🇷 Yerli Yıldızı Bitir (${formatMoney(cost)})` : `Transfer Et (${formatMoney(cost)})`}
       </button>
     `;
     container.appendChild(item);

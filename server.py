@@ -99,6 +99,37 @@ FREE_AGENTS = [
     {"name": "Yusuf Yazıcı", "age": 28, "pos": "CAM", "current_club": "Serbest", "claimed_pot": 80, "real_pot": 80, "price": 0, "salary": 14_000_000, "sign_bonus": 6_000_000, "is_free": True, "desc": "Ligue 1 şampiyonu yerli maestro, uzaktan şut ustası."}
 ]
 
+# ==================== AVRUPA'DAKİ YERLİ YILDIZLAR (TÜRKİYE MİLLİ TAKIM HAVUZU) ====================
+TURKISH_STARS = [
+    {"name": "Arda Güler", "age": 21, "pos": "CAM", "current_club": "Real Madrid", "claimed_pot": 92, "real_pot": 92, "price": 95_000_000, "salary": 36_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Real Madrid'in 'Türk İncisi' altın çocuğu, olağanüstü sol ayak ve vizyon."},
+    {"name": "Ferdi Kadıoğlu", "age": 26, "pos": "LB", "current_club": "Brighton", "claimed_pot": 87, "real_pot": 87, "price": 65_000_000, "salary": 28_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Premier Lig'de ciğersiz temposu ve iki ayağını kullanan modern kanat beki."},
+    {"name": "Kenan Yıldız", "age": 21, "pos": "LW", "current_club": "Juventus", "claimed_pot": 90, "real_pot": 90, "price": 75_000_000, "salary": 30_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Juventus'un efsanevi 10 numara varisi, müthiş çalımlar ve plase ustası."},
+    {"name": "Merih Demiral", "age": 28, "pos": "CB", "current_club": "Al-Ahli", "claimed_pot": 85, "real_pot": 85, "price": 42_000_000, "salary": 22_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Milli savunmanın savaşçı gladyatörü, hava topları ve sert müdahalelerin ustası."},
+    {"name": "Can Uzun", "age": 20, "pos": "CAM", "current_club": "Eintracht Frankfurt", "claimed_pot": 88, "real_pot": 88, "price": 45_000_000, "salary": 16_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Bundesliga'da parlayan genç forvet arkası, ölümcül bitiricilik ve dripling."},
+    {"name": "Zeki Çelik", "age": 29, "pos": "RB", "current_club": "AS Roma", "claimed_pot": 82, "real_pot": 82, "price": 28_000_000, "salary": 14_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Serie A tecrübesiyle sağ bekte istikrar ve kaya gibi sağlam savunma."},
+    {"name": "Enes Ünal", "age": 29, "pos": "ST", "current_club": "Bournemouth", "claimed_pot": 83, "real_pot": 83, "price": 35_000_000, "salary": 18_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Premier Lig santraforu, güçlü sırtı dönük oyun ve hava hakimiyeti."},
+    {"name": "Ozan Kabak", "age": 26, "pos": "CB", "current_club": "Hoffenheim", "claimed_pot": 83, "real_pot": 83, "price": 32_000_000, "salary": 15_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Bundesliga'da agresif ve fiziksel olarak rakiplere göz açtırmayan stoper."},
+    {"name": "Altay Bayındır", "age": 28, "pos": "GK", "current_club": "Manchester United", "claimed_pot": 82, "real_pot": 82, "price": 22_000_000, "salary": 14_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Manchester United eldiveni, çizgide boy avantajı ve güven veren refleksler."},
+    {"name": "Eren Dinkçi", "age": 24, "pos": "RW", "current_club": "SC Freiburg", "claimed_pot": 83, "real_pot": 83, "price": 28_000_000, "salary": 12_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Bundesliga'nın en yüksek süratlerine ulaşan rekor sprinter yerli kanat."},
+    {"name": "Emirhan İlkhan", "age": 22, "pos": "CM", "current_club": "Torino", "claimed_pot": 84, "real_pot": 84, "price": 25_000_000, "salary": 10_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "İtalya'da gelişen iki yönlü dinamik orta saha, pres ve dikine paslar."},
+    {"name": "Ahmetcan Kaplan", "age": 23, "pos": "CB", "current_club": "Ajax", "claimed_pot": 84, "real_pot": 84, "price": 26_000_000, "salary": 10_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Ajax altyapı ekolüyle yetişen sol ayaklı soğukkanlı savunma lideri."},
+    {"name": "Yunus Emre Konak", "age": 20, "pos": "CDM", "current_club": "Brentford", "claimed_pot": 84, "real_pot": 84, "price": 22_000_000, "salary": 8_500_000, "is_turkish_star": True, "is_foreign": False, "desc": "Premier Lig'e transfer olan genç Türk tankı, süpürücü ön libero."},
+    {"name": "Doğan Alemdar", "age": 23, "pos": "GK", "current_club": "Rennes / Troyes", "claimed_pot": 81, "real_pot": 81, "price": 18_000_000, "salary": 8_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Fransa'da erken yaşta eldiven giyen esnek ve çevik genç milli kaleci."},
+    {"name": "Yasin Özcan", "age": 20, "pos": "CB", "current_club": "Kasımpaşa / Avrupa Radarı", "claimed_pot": 86, "real_pot": 86, "price": 24_000_000, "salary": 8_000_000, "is_turkish_star": True, "is_foreign": False, "desc": "Sol stoper ve bek oynayabilen, Avrupa devlerinin peşinde olduğu yerli mücevher."}
+]
+
+SCOUT_PICKS = [
+    {"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "ST", "overall": 80, "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "current_club": "Santos FC", "desc": "Brezilya'da 18 maçta 16 gol attı."},
+    {"name": "Lamine Diallo", "age": 23, "pos": "CB", "overall": 79, "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "current_club": "Le Havre", "desc": "Fransa Ligue 2'den kaya gibi genç stoper."},
+    {"name": "Kerem Eren", "age": 18, "pos": "RW", "overall": 75, "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "current_club": "Bucaspor 1928", "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu.", "is_foreign": False},
+    {"name": "Ousmane Toure", "age": 21, "pos": "CDM", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 28_000_000, "salary": 9_000_000, "current_club": "ASEC Mimosas", "desc": "Fildişili ciğersiz pres ve top kapma ustası."},
+    {"name": "Valentin Barco", "age": 22, "pos": "LB", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 32_000_000, "salary": 10_000_000, "current_club": "Boca Juniors", "desc": "Hücumcu Arjantinli modern sol bek."},
+    {"name": "Miloš Kerkez", "age": 22, "pos": "LB", "overall": 80, "claimed_pot": 87, "real_pot": 87, "price": 42_000_000, "salary": 14_000_000, "current_club": "Bournemouth", "desc": "Tempolu bindirmeleriyle sol kanadı domine eden genç yıldız."},
+    {"name": "Javi Guerra", "age": 23, "pos": "CM", "overall": 81, "claimed_pot": 88, "real_pot": 88, "price": 45_000_000, "salary": 15_000_000, "current_club": "Valencia", "desc": "İki ceza sahası arasını mekik dokuyan İspanyol maestro."},
+    {"name": "Alejandro Garnacho", "age": 22, "pos": "LW", "overall": 82, "claimed_pot": 89, "real_pot": 89, "price": 65_000_000, "salary": 20_000_000, "current_club": "Manchester United", "desc": "Patlayıcı sürat ve bire birde durdurulamaz kanat."}
+]
+
+
 CLUB_SCOUTS_DB = {
     "galatasaray": {"name": "Erdal Keser", "role": "Avrupa Scout Direktörü", "rating": 86, "salary": 6_000_000, "region": "Almanya & Fransa"},
     "fenerbahce": {"name": "Baki Mercimek", "role": "Global Transfer Başgözlemcisi", "rating": 85, "salary": 6_000_000, "region": "Avrupa & Hollanda"},
@@ -414,9 +445,10 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
         p["is_youth"] = False
 
     # Yabancı / Yerli Kontrolü (Süper Lig Kuralı)
-    name_lower = str(p.get("name", "")).lower()
-    turkish_indicators = ["ç", "ğ", "ı", "ö", "ş", "ü", "ahmet", "mehmet", "ali", "ömer", "can", "kerem", "barış", "uğurcan", "ferdi", "semih", "irfan", "mert", "samet", "eren", "enes", "hakan", "yusuf", "abdülkerim", "okay", "berke", "kaan", "cenk", "ozan", "salih", "taylan", "orhan", "serdar", "batagov", "deniz", "güler", "kaya", "yılmaz", "demir", "çelik", "özkan", "gökhan"]
-    p["is_foreign"] = not (any(c in name_lower for c in ["ç", "ğ", "ı", "ö", "ş", "ü"]) or any(w in name_lower.split() for w in turkish_indicators))
+    if "is_foreign" not in p:
+        name_lower = str(p.get("name", "")).lower()
+        turkish_indicators = ["ç", "ğ", "ı", "ö", "ş", "ü", "ahmet", "mehmet", "ali", "ömer", "can", "kerem", "barış", "uğurcan", "ferdi", "semih", "irfan", "mert", "samet", "eren", "enes", "hakan", "yusuf", "abdülkerim", "okay", "berke", "kaan", "cenk", "ozan", "salih", "taylan", "orhan", "serdar", "batagov", "deniz", "güler", "kaya", "yılmaz", "demir", "çelik", "özkan", "gökhan", "arda", "kenan", "altay", "zeki", "emirhan", "yunus", "ahmetcan", "doğan", "yasin", "merih"]
+        p["is_foreign"] = not (any(c in name_lower for c in ["ç", "ğ", "ı", "ö", "ş", "ü"]) or any(w in name_lower.split() for w in turkish_indicators))
 
     # Sakatlık & Kart Cezaları
     if "yellow_cards" not in p:
@@ -813,6 +845,16 @@ def simulate_cpu_transfers(state: Dict[str, Any], count: int = 1) -> List[str]:
         if not in_squad:
             avail_free.append(fp)
 
+    # Yerli yıldızlar pazarındaki müsait oyuncular
+    avail_turkish = []
+    for tp in TURKISH_STARS:
+        in_squad = any(
+            p.get("name", "").lower() == tp.get("name", "").lower() 
+            for sq in league_squads.values() for p in sq
+        ) or any(p.get("name", "").lower() == tp.get("name", "").lower() for p in state.get("squad", []))
+        if not in_squad:
+            avail_turkish.append(tp)
+
     for _ in range(count):
         # Alıcı kulübü seç (Büyük kulüplerin şansı daha yüksek)
         weights = [4 if t.get("is_big") else 1 for t in cpu_teams]
@@ -841,8 +883,28 @@ def simulate_cpu_transfers(state: Dict[str, Any], count: int = 1) -> List[str]:
             state["news"].insert(0, ev_msg)
             transfer_events.append(ev_msg)
 
-        # 2) %40 İhtimalle AVRUPA KULÜPLERİNDEN TRANSFER YAP
-        elif roll < 0.65 and avail_euro:
+        # 2) %15 İhtimalle AVRUPA'DAKİ YERLİ YILDIZLARIMIZDAN TRANSFER YAP
+        elif roll < 0.40 and avail_turkish:
+            chosen_p = random.choice(avail_turkish)
+            avail_turkish.remove(chosen_p)
+            new_p = enrich_player({
+                "name": chosen_p["name"],
+                "pos": chosen_p["pos"],
+                "age": chosen_p["age"],
+                "overall": chosen_p.get("real_pot", 83),
+                "wage": chosen_p.get("salary", 15_000_000),
+                "val": chosen_p.get("price", 30_000_000),
+                "contract_years": 3,
+                "morale": 90,
+                "is_foreign": False
+            })
+            buyer_squad.append(new_p)
+            ev_msg = f"🇹🇷 MİLLİ BOMBA: {buyer['name']}, {chosen_p.get('current_club', 'Avrupa')}'dan milli gururumuz {chosen_p['name']} ({chosen_p['pos']}, Reyting: {new_p['overall']}) transferini bitirdi!"
+            state["news"].insert(0, ev_msg)
+            transfer_events.append(ev_msg)
+
+        # 3) %30 İhtimalle AVRUPA KULÜPLERİNDEN TRANSFER YAP
+        elif roll < 0.70 and avail_euro:
             c_name, chosen_p = random.choice(avail_euro)
             avail_euro.remove((c_name, chosen_p))
             
@@ -1006,10 +1068,20 @@ def get_state(session_id: Optional[str] = None):
                 valid_ids = [t["id"] for t in TEAMS_DB]
                 if state.get("team_id") in valid_ids and "is_started" in state:
                     if "squad" in state:
+                        if state.get("team_id") == "trabzonspor" and not any(p.get("name") == "Ozan Tufan" for p in state.get("squad", [])):
+                            state["squad"].append(enrich_player({
+                                "name": "Ozan Tufan", "pos": "MERKEZ OS", "age": 31, "overall": 81, "wage": 5280000, "val": 24000000, "is_foreign": False
+                            }))
                         state["squad"] = [enrich_player(p) for p in state["squad"]]
                         state["squad"] = rebalance_and_validate_squad(state["squad"])
                         state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
                         state["my_radar"] = calculate_team_radar(state["squad"])
+                    if "league_squads" in state and "trabzonspor" in state["league_squads"]:
+                        if not any(p.get("name") == "Ozan Tufan" for p in state["league_squads"]["trabzonspor"]):
+                            state["league_squads"]["trabzonspor"].append(enrich_player({
+                                "name": "Ozan Tufan", "pos": "MERKEZ OS", "age": 31, "overall": 81, "wage": 5280000, "val": 24000000, "is_foreign": False
+                            }))
+
                     if "max_weeks" not in state or state["max_weeks"] < 34:
                         state["max_weeks"] = 34
                     if "political_power" not in state:
@@ -2648,6 +2720,22 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
             source_name = "Dünya Yıldızı"
             break
 
+    # 1.5 Yerli Yıldızlar kontrolü
+    if not found_player:
+        for ts in TURKISH_STARS:
+            if ts["name"] == req.player_name:
+                found_player = dict(ts)
+                source_name = ts.get("current_club", "Avrupa Kulübü")
+                break
+
+    # 1.8 Scout Portföyü kontrolü
+    if not found_player:
+        for sc in SCOUT_PICKS:
+            if sc["name"] == req.player_name:
+                found_player = dict(sc)
+                source_name = sc.get("current_club", "Scout Portföyü")
+                break
+
     # 2. Serbest Oyuncular kontrolü
     if not found_player:
         for f in FREE_AGENTS:
@@ -2677,7 +2765,7 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
         raise HTTPException(status_code=400, detail=f"Oyuncu teklifi reddetti: 'Bu maaş seviyesi kariyer planlarıma uymuyor (En az {min_wage:,} ₺ bekliyor)!'")
 
     state["budget"] -= total_upfront
-    new_entry = enrich_player({
+    player_data = {
         "name": found_player["name"],
         "pos": found_player["pos"],
         "age": found_player["age"],
@@ -2686,7 +2774,10 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
         "val": found_player.get("price", found_player.get("val", 30_000_000)),
         "contract_years": 3,
         "morale": 95
-    })
+    }
+    if "is_foreign" in found_player:
+        player_data["is_foreign"] = found_player["is_foreign"]
+    new_entry = enrich_player(player_data)
     state["squad"].append(new_entry)
     state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
     state["my_radar"] = calculate_team_radar(state["squad"])
@@ -2832,30 +2923,21 @@ def api_respond_incoming_bid(req: RespondBidRequest):
     save_state(state)
     return {"message": msg, "state": state}
 
-# ==================== TRANSFER MARKET (DÜNYA YILDIZLARI, SCOUT & SERBESTLER) ====================
+# ==================== TRANSFER MARKET (DÜNYA YILDIZLARI, YERLİ YILDIZLAR, SCOUT & SERBESTLER) ====================
 @app.get("/api/transfer/market")
 def api_transfer_market():
     state = get_state()
     squad_names = {p["name"] for p in state.get("squad", [])}
 
-    # Kendi kadromuzdaki oyuncuları pazardan filtrele (Salah vs. kadrodaysa pazarda görünmesin!)
+    # Kendi kadromuzdaki oyuncuları pazardan filtrele
     filtered_stars = [p for p in WORLD_SUPERSTARS if p["name"] not in squad_names]
+    filtered_turkish = [p for p in TURKISH_STARS if p["name"] not in squad_names]
     filtered_free = [p for p in FREE_AGENTS if p["name"] not in squad_names]
-
-    scout_list = [
-        {"name": "Mateo 'El Nino' Silva", "age": 19, "pos": "ST", "overall": 80, "claimed_pot": 88, "real_pot": 89, "price": 50_000_000, "salary": 16_000_000, "current_club": "Santos FC", "desc": "Brezilya'da 18 maçta 16 gol attı."},
-        {"name": "Lamine Diallo", "age": 23, "pos": "CB", "overall": 79, "claimed_pot": 85, "real_pot": 85, "price": 38_000_000, "salary": 13_000_000, "current_club": "Le Havre", "desc": "Fransa Ligue 2'den kaya gibi genç stoper."},
-        {"name": "Kerem Eren", "age": 18, "pos": "RW", "overall": 75, "claimed_pot": 83, "real_pot": 86, "price": 20_000_000, "salary": 7_000_000, "current_club": "Bucaspor 1928", "desc": "Alt ligden fırlayan yerli pırlanta kanat oyuncusu."},
-        {"name": "Ousmane Toure", "age": 21, "pos": "CDM", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 28_000_000, "salary": 9_000_000, "current_club": "ASEC Mimosas", "desc": "Fildişili ciğersiz pres ve top kapma ustası."},
-        {"name": "Valentin Barco", "age": 22, "pos": "LB", "overall": 78, "claimed_pot": 86, "real_pot": 87, "price": 32_000_000, "salary": 10_000_000, "current_club": "Boca Juniors", "desc": "Hücumcu Arjantinli modern sol bek."},
-        {"name": "Miloš Kerkez", "age": 22, "pos": "LB", "overall": 80, "claimed_pot": 87, "real_pot": 87, "price": 42_000_000, "salary": 14_000_000, "current_club": "Bournemouth", "desc": "Tempolu bindirmeleriyle sol kanadı domine eden genç yıldız."},
-        {"name": "Javi Guerra", "age": 23, "pos": "CM", "overall": 81, "claimed_pot": 88, "real_pot": 88, "price": 45_000_000, "salary": 15_000_000, "current_club": "Valencia", "desc": "İki ceza sahası arasını mekik dokuyan İspanyol maestro."},
-        {"name": "Alejandro Garnacho", "age": 22, "pos": "LW", "overall": 82, "claimed_pot": 89, "real_pot": 89, "price": 65_000_000, "salary": 20_000_000, "current_club": "Manchester United", "desc": "Patlayıcı sürat ve bire birde durdurulamaz kanat."}
-    ]
-    filtered_scouts = [p for p in scout_list if p["name"] not in squad_names]
+    filtered_scouts = [p for p in SCOUT_PICKS if p["name"] not in squad_names]
 
     return {
         "world_stars": [enrich_player(dict(p)) for p in filtered_stars],
+        "turkish_stars": [enrich_player(dict(p)) for p in filtered_turkish],
         "free_agents": [enrich_player(dict(p)) for p in filtered_free],
         "scout_picks": [enrich_player(dict(p)) for p in filtered_scouts]
     }
@@ -3470,6 +3552,17 @@ def api_coach_transfer_recommendation():
                 "overall": p.get("real_pot", 88),
                 "val": p.get("price", 100_000_000),
                 "wage": p.get("salary", 40_000_000)
+            })
+
+    for p in TURKISH_STARS:
+        if to_fifa_pos(p.get("pos", "")) == target_pos and p.get("name") not in squad_names:
+            all_potential_candidates.append({
+                "name": p["name"],
+                "club": p.get("current_club", "Avrupa Kulübü"),
+                "pos": target_pos,
+                "overall": p.get("real_pot", 84),
+                "val": p.get("price", 35_000_000),
+                "wage": p.get("salary", 15_000_000)
             })
 
     # En uygun 2-3 adayı seç
