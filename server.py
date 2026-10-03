@@ -1242,25 +1242,18 @@ def get_state(session_id: Optional[str] = None):
                     if "club_scout" not in state or not state["club_scout"]:
                         state["club_scout"] = CLUB_SCOUTS_DB.get(state.get("team_id"), {"name": "Cemil Kaya", "rating": 74, "salary": 2_000_000, "role": "Scout Şefi", "region": "Türkiye"})
                     # Hoca özellikleri (traits) ve görseli (photo) tamamla
-                    coach = state.get("coach")
-                    if coach:
-                        team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
-                        if state.get("team_id") == "trabzonspor" and coach.get("name") in ["Thomas Reis", "Fatih Tekke", "Şenol Güneş"]:
-                            coach["name"] = "Thomas Reis"
-                            coach["style"] = "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı"
-                            coach["photo"] = "/static/coach_thomas_reis.png"
-                            coach["traits"] = [
-                                {"name": "Alman Savunma Duvarı", "icon": "🛡️", "desc": "Yenen gol beklentisini (xGA) %20 düşürür ve savunma disiplini sağlar."},
-                                {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyon ve pres gücünü korur."}
-                            ]
-                        elif team_info and team_info.get("coach"):
-                            db_c = team_info["coach"]
-                            if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
-                                coach["photo"] = db_c.get("photo", "/static/coach_thomas_reis.png")
+                    if not state.get("coach_vacant", False):
+                        coach = state.get("coach")
+                        if not coach:
+                            team_info = next((t for t in TEAMS_DB if t["id"] == state.get("team_id")), None)
+                            if team_info and team_info.get("coach"):
+                                state["coach"] = dict(team_info["coach"])
+                                coach = state["coach"]
+                        if coach:
+                            if not coach.get("photo"):
+                                coach["photo"] = "/static/coach_thomas_reis.png"
                             if not coach.get("traits"):
-                                coach["traits"] = db_c.get("traits", [])
-                        if not coach.get("photo") or "coach_senol_gunes" in coach.get("photo", ""):
-                            coach["photo"] = "/static/coach_thomas_reis.png"
+                                coach["traits"] = []
                     return state
         except Exception:
             pass
@@ -3880,7 +3873,17 @@ class CoachDialogAction(BaseModel):
 @app.post("/api/coach/dialog")
 def api_coach_dialog(req: CoachDialogAction):
     state = get_state()
-    coach = state["coach"]
+    coach = state.get("coach")
+
+    if not coach or state.get("coach_vacant", False):
+        if req.action == "fire":
+            return {
+                "message": "Kulüpte görevde teknik direktör bulunmuyor! Lütfen yeni hoca seçin.",
+                "state": state,
+                "coach_vacant": True,
+                "coaches": AVAILABLE_COACHES_MARKET
+            }
+        raise HTTPException(status_code=400, detail="Kulüpte görevde bir teknik direktör bulunmuyor!")
 
     msg = ""
     if req.action == "pass":
@@ -3905,6 +3908,7 @@ def api_coach_dialog(req: CoachDialogAction):
         state["budget"] -= tazminat
         old_coach_name = coach["name"]
         state["coach_vacant"] = True
+        state["coach"] = None
         msg = f"⚡ AYRILIK: {old_coach_name} görevden alındı! {format_money_val(tazminat)} tazminat ödendi. Lütfen yeni teknik direktörünüzü seçin."
         state["news"].insert(0, msg)
         state["coach_dialog_pending"] = False

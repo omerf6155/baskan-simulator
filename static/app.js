@@ -951,7 +951,8 @@ function renderUI() {
   }
 
   // Hoca Özeti & Fotoğrafları
-  const coachPhoto = (gameState.coach && gameState.coach.photo) || "/static/coach_thomas_reis.png";
+  const isCoachVacant = !gameState.coach || gameState.coach_vacant;
+  const coachPhoto = (!isCoachVacant && gameState.coach.photo) ? gameState.coach.photo : "/static/coach_terim.png";
   const officeCoachPhotoEl = document.getElementById("office-coach-photo");
   if (officeCoachPhotoEl) officeCoachPhotoEl.src = coachPhoto;
   const squadCoachPhotoEl = document.getElementById("squad-coach-photo");
@@ -963,26 +964,72 @@ function renderUI() {
   const visionCoachPhotoEl = document.getElementById("vision-coach-photo");
   if (visionCoachPhotoEl) visionCoachPhotoEl.src = coachPhoto;
 
-  const briefingNameEl = document.getElementById("briefing-coach-name");
-  if (briefingNameEl) briefingNameEl.innerText = gameState.coach.name;
-  const dialogNameEl = document.getElementById("dialog-coach-name");
-  if (dialogNameEl) dialogNameEl.innerText = gameState.coach.name;
-  const visionNameEl = document.getElementById("vision-coach-name");
-  if (visionNameEl) visionNameEl.innerText = gameState.coach.name;
+  const coachName = isCoachVacant ? "Koltuk Boş (TD Aranıyor)" : gameState.coach.name;
+  const coachStyle = isCoachVacant ? "Kulübün başında bir teknik direktör bulunmuyor" : gameState.coach.style;
+  const coachSalary = isCoachVacant ? "0 ₺ / Sezon" : `${formatMoney(gameState.coach.salary)} / Sezon`;
 
-  document.getElementById("office-coach-name").innerText = gameState.coach.name;
-  document.getElementById("office-coach-style").innerText = gameState.coach.style;
-  document.getElementById("squad-coach-name").innerText = gameState.coach.name;
-  document.getElementById("squad-coach-style").innerText = gameState.coach.style;
-  document.getElementById("squad-coach-salary").innerText = `${formatMoney(gameState.coach.salary)} / Sezon`;
-  document.getElementById("coach-attr-attack").innerText = gameState.coach.attack || 70;
-  document.getElementById("coach-attr-defense").innerText = gameState.coach.defense || 70;
-  document.getElementById("coach-attr-youth").innerText = gameState.coach.youth || 50;
-  document.getElementById("coach-attr-moral").innerText = `%${gameState.coach.moral}`;
+  const briefingNameEl = document.getElementById("briefing-coach-name");
+  if (briefingNameEl) briefingNameEl.innerText = coachName;
+  const dialogNameEl = document.getElementById("dialog-coach-name");
+  if (dialogNameEl) dialogNameEl.innerText = coachName;
+  const visionNameEl = document.getElementById("vision-coach-name");
+  if (visionNameEl) visionNameEl.innerText = coachName;
+
+  document.getElementById("office-coach-name").innerText = coachName;
+  document.getElementById("office-coach-style").innerText = coachStyle;
+  document.getElementById("squad-coach-name").innerText = coachName;
+  document.getElementById("squad-coach-style").innerText = coachStyle;
+  document.getElementById("squad-coach-salary").innerText = coachSalary;
+  document.getElementById("coach-attr-attack").innerText = isCoachVacant ? 60 : (gameState.coach.attack || 70);
+  document.getElementById("coach-attr-defense").innerText = isCoachVacant ? 60 : (gameState.coach.defense || 70);
+  document.getElementById("coach-attr-youth").innerText = isCoachVacant ? 50 : (gameState.coach.youth || 50);
+  document.getElementById("coach-attr-moral").innerText = isCoachVacant ? "%50" : `%${gameState.coach.moral}`;
+
+  // Ofis ve Kadro Hoca Kartı Aksiyon Butonları
+  const officeBtnContainer = document.getElementById("office-coach-btn-container");
+  if (officeBtnContainer) {
+    if (isCoachVacant) {
+      officeBtnContainer.innerHTML = `
+        <button onclick="openSelectCoachModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg animate-pulse">
+          👔 Yeni TD Seç
+        </button>
+      `;
+    } else {
+      officeBtnContainer.innerHTML = `
+        <button onclick="openCoachModal()" class="px-2.5 py-1.5 rounded bg-emerald-600/30 text-[11px] font-bold text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/50">
+          Görüş
+        </button>
+      `;
+    }
+  }
+
+  const squadActionsGrid = document.getElementById("squad-coach-actions-grid");
+  if (squadActionsGrid) {
+    if (isCoachVacant) {
+      squadActionsGrid.innerHTML = `
+        <button onclick="openSelectCoachModal()" class="col-span-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-lg animate-pulse">
+          👔 Yeni Teknik Direktör İmzala (Aday Listesi)
+        </button>
+      `;
+    } else {
+      squadActionsGrid.innerHTML = `
+        <button onclick="openCoachModal()" id="btn-squad-coach-talk" class="py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-[10px] flex items-center justify-center gap-1">
+          <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Hoca ile Konuş
+        </button>
+        <button onclick="openCoachVisionModal()" id="btn-squad-coach-vision" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[10px] flex items-center justify-center gap-1">
+          <i data-lucide="sparkles" class="w-3 h-3 text-blue-400"></i> Hoca Vizyonu
+        </button>
+        <button onclick="openCaptainReportModal()" id="btn-squad-coach-captain" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[10px] flex items-center justify-center gap-1">
+          <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Kaptan & Zam
+        </button>
+      `;
+    }
+  }
 
   // Hoca Karakteristik Özellikleri (Traits)
-  const traits = (gameState.coach && gameState.coach.traits) || [];
+  const traits = (!isCoachVacant && gameState.coach && gameState.coach.traits) ? gameState.coach.traits : [];
   const renderTraitsHtml = (list) => {
+    if (isCoachVacant) return '<span class="text-[9px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60">⚠️ Teknik Direktör Aranıyor</span>';
     if (!list || list.length === 0) return '<span class="text-[9px] text-slate-500 italic">Genel Taktisyen</span>';
     return list.map(t => `
       <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30" title="${t.desc}">
@@ -3228,9 +3275,7 @@ async function submitCoachDialog(action) {
     renderUI();
 
     if (action === "fire" || data.coach_vacant) {
-      setTimeout(() => {
-        openSelectCoachModal(data.coaches);
-      }, 500);
+      openSelectCoachModal(data.coaches);
     }
   } catch (e) {
     console.error(e);
