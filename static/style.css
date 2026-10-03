@@ -1,57 +1,74 @@
-/* Temiz Minimalist Spor Uygulaması Stilleri */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4);
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #334155;
-  border-radius: 9999px;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+/* ==========================================================================
+   IMPECCABLE DESIGN SYSTEM: Büyük Başkan - Süper Lig Simülatörü
+   Aesthetic: Ultra-refined Sports Executive Cockpit (Dark Tactical Glass, 
+   Precision Micro-borders, Golden Executive Accents, Smooth Physical Feedback)
+   ========================================================================== */
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Precision Surfaces */
+  --bg-deep: #080c14;
+  --bg-frame: #0d121f;
+  --bg-surface: #131a2a;
+  --bg-surface-elevated: #182236;
+  --bg-surface-card: rgba(19, 26, 42, 0.72);
+  
+  /* Borders & Highlights */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-card: rgba(255, 255, 255, 0.09);
+  --border-active: rgba(245, 158, 11, 0.45);
+  --border-glow: rgba(245, 158, 11, 0.25);
+  
+  /* Brand & Accents */
+  --accent-gold: #f59e0b;
+  --accent-gold-light: #fbbf24;
+  --accent-gold-glow: rgba(245, 158, 11, 0.35);
+  --accent-emerald: #10b981;
+  --accent-cyan: #06b6d4;
+  --accent-rose: #f43f5e;
+  
+  /* Shadows & Depth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.18);
 }
 
-/* Nav Bar Aktif Eleman */
-.nav-item.active {
-  color: #f59e0b;
-}
-.nav-item.active i {
-  color: #f59e0b;
-}
-
-/* Basın Seçim Butonları */
-.press-opt-btn.selected {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.12);
+/* Base Reset & Typography */
+body {
+  font-family: var(--font-sans) !important;
+  background-color: var(--bg-deep) !important;
+  color: #f1f5f9;
+  letter-spacing: -0.012em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Toast Bildirim */
-#toast-box.show {
-  opacity: 1;
-  transform: translateY(0);
+/* App Frame Elevation */
+#app-frame {
+  background: var(--bg-frame) !important;
+  border: 1px solid var(--border-card) !important;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Şampiyonluk / Tablo Vurgusu */
-.table-leader-row {
-  background: rgba(245, 158, 11, 0.08);
-}
-.table-relegation-row {
-  background: rgba(225, 29, 72, 0.06);
-}
-
-/* Header HUD Yerleşim Güvencesi */
+/* Header HUD Precision Design */
 header {
-  display: block !important;
-  width: 100% !important;
+  background: rgba(10, 15, 26, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-card) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
 }
+
 .header-top-row {
   display: flex !important;
   justify-content: space-between !important;
   align-items: center !important;
   width: 100% !important;
 }
+
 .header-hud-grid {
   display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -59,172 +76,354 @@ header {
   width: 100% !important;
 }
 
-/* ========================================================
-   TEMALAR: 1) Modern Dark 2) Cyberpunk Neon 3) Altın Hanedan 4) Premier Emerald
-   ======================================================== */
+/* Interactive HUD Pill Cards */
+.header-hud-grid > div {
+  background: rgba(18, 25, 40, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 10px !important;
+  padding: 0.45rem !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
 
-/* 1. TEMA: NEON CYBERPUNK (Gece Kulübü, Fütüristik & Canlı Neon) */
+.header-hud-grid > div::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+
+.header-hud-grid > div:hover {
+  transform: translateY(-1px);
+  background: rgba(24, 33, 54, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+.header-hud-grid > div:active {
+  transform: scale(0.97);
+}
+
+/* Monospace Numbers for Financial/Stat Rigor */
+#bar-budget-txt, #bar-fan-txt, #bar-board-txt, #bar-pol-txt,
+.font-mono, [data-stat] {
+  font-family: var(--font-mono), monospace !important;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Premium Navigation Bar (Executive Bottom Tab Bar) */
+nav {
+  background: rgba(10, 15, 26, 0.92) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border-card) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.nav-item {
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 10px;
+}
+
+.nav-item:hover {
+  color: #f8fafc !important;
+  transform: translateY(-1px);
+}
+
+.nav-item:active {
+  transform: scale(0.92);
+}
+
+.nav-item.active {
+  color: #fbbf24 !important;
+  font-weight: 700 !important;
+}
+
+.nav-item.active i {
+  color: #f59e0b !important;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.55));
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+  border-radius: 9999px;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+}
+
+/* Precision Tactical Cards */
+.bg-\[\#151c2e\],
+.bg-\[\#161c2d\],
+.bg-\[\#111624\] {
+  background: rgba(18, 25, 41, 0.78) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-card) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 14px !important;
+  position: relative;
+}
+
+.bg-\[\#151c2e\]::before,
+.bg-\[\#161c2d\]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Buttons with Impeccable Tactile Feedback */
+button {
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+button:active {
+  transform: scale(0.96) !important;
+}
+
+/* Primary Gold Action Buttons */
+.bg-amber-500,
+.bg-amber-600 {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+}
+
+.bg-amber-500:hover,
+.bg-amber-600:hover {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Emerald Positive Buttons */
+.bg-emerald-600,
+.bg-emerald-500 {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+
+/* News Ticker High-Impact Styling */
+#breaking-news-ticker {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Glass Modals (Backdrop Blur & Depth) */
+.fixed.inset-0.z-50 {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.fixed.inset-0.z-50 > div {
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Scrollbars */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: rgba(8, 12, 20, 0.5);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.6);
+}
+
+/* Toast Notifications */
+#toast-box.show {
+  opacity: 1;
+  transform: translateY(0);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* Table Design Hierarchy */
+.table-leader-row {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border-left: 3px solid #f59e0b !important;
+}
+
+.table-relegation-row {
+  background: rgba(244, 63, 94, 0.08) !important;
+  border-left: 3px solid #f43f5e !important;
+}
+
+/* Micro-animations */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.88; transform: scale(1.02); }
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 2.2s infinite ease-in-out;
+}
+
+/* ==========================================================================
+   THEME OVERRIDES (Preserved & Enhanced)
+   ========================================================================== */
+
+/* 1. CYBERPUNK THEME */
 body.theme-cyberpunk {
-  background: #05050a !important;
+  background: #030308 !important;
   color: #f8fafc !important;
 }
 body.theme-cyberpunk #app-frame {
-  background: #090914 !important;
-  border-color: #06b6d4 !important;
-  box-shadow: 0 0 35px rgba(6, 182, 212, 0.25), 0 0 70px rgba(236, 72, 153, 0.15) !important;
+  background: #070714 !important;
+  border-color: rgba(6, 182, 212, 0.5) !important;
+  box-shadow: 0 0 40px rgba(6, 182, 212, 0.25), 0 0 80px rgba(236, 72, 153, 0.15) !important;
 }
 body.theme-cyberpunk header {
-  background: #06060f !important;
+  background: rgba(7, 7, 20, 0.9) !important;
   border-bottom-color: #06b6d4 !important;
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15) !important;
 }
 body.theme-cyberpunk nav {
-  background: #06060f !important;
+  background: rgba(7, 7, 20, 0.95) !important;
   border-top-color: #ec4899 !important;
 }
 body.theme-cyberpunk .nav-item.active {
   color: #06b6d4 !important;
-  text-shadow: 0 0 8px #06b6d4;
+  text-shadow: 0 0 10px #06b6d4;
 }
 body.theme-cyberpunk .nav-item.active i {
   color: #06b6d4 !important;
+  filter: drop-shadow(0 0 8px #06b6d4);
 }
 body.theme-cyberpunk .bg-\[\#151c2e\],
 body.theme-cyberpunk .bg-\[\#111624\],
 body.theme-cyberpunk .bg-\[\#161c2d\] {
-  background: #0e0e1e !important;
-  border-color: #272744 !important;
-}
-body.theme-cyberpunk .bg-\[\#151c2e\]:hover {
-  border-color: #06b6d4 !important;
-  box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+  background: rgba(14, 14, 30, 0.85) !important;
+  border-color: rgba(6, 182, 212, 0.25) !important;
 }
 body.theme-cyberpunk .bg-amber-500 {
-  background: #06b6d4 !important;
+  background: linear-gradient(135deg, #06b6d4, #0891b2) !important;
   color: #020617 !important;
-  box-shadow: 0 0 14px rgba(6, 182, 212, 0.6) !important;
-}
-body.theme-cyberpunk .bg-amber-500:hover {
-  background: #22d3ee !important;
-}
-body.theme-cyberpunk .text-amber-400 {
-  color: #22d3ee !important;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.6) !important;
 }
 
-/* 2. TEMA: ALTIN HANEDAN & LUXURY GOLD (VIP Lüks Başkanlık Ofisi) */
+/* 2. GOLD DYNASTY THEME */
 body.theme-gold {
-  background: #0a0805 !important;
+  background: #080603 !important;
   color: #fefce8 !important;
 }
 body.theme-gold #app-frame {
-  background: #141009 !important;
-  border-color: #eab308 !important;
-  box-shadow: 0 0 35px rgba(234, 179, 8, 0.2), 0 0 60px rgba(161, 98, 7, 0.15) !important;
+  background: #110d07 !important;
+  border-color: rgba(234, 179, 8, 0.5) !important;
+  box-shadow: 0 0 40px rgba(234, 179, 8, 0.2), 0 0 70px rgba(161, 98, 7, 0.18) !important;
 }
 body.theme-gold header {
-  background: #0d0a06 !important;
+  background: rgba(17, 13, 7, 0.92) !important;
   border-bottom: 2px solid #ca8a04 !important;
-  box-shadow: 0 4px 18px rgba(202, 138, 4, 0.15) !important;
 }
 body.theme-gold nav {
-  background: #0d0a06 !important;
+  background: rgba(17, 13, 7, 0.95) !important;
   border-top: 1px solid #ca8a04 !important;
 }
 body.theme-gold .nav-item.active {
   color: #facc15 !important;
-  text-shadow: 0 0 10px rgba(250, 204, 21, 0.6);
-}
-body.theme-gold .nav-item.active i {
-  color: #facc15 !important;
+  text-shadow: 0 0 12px rgba(250, 204, 21, 0.7);
 }
 body.theme-gold .bg-\[\#151c2e\],
 body.theme-gold .bg-\[\#111624\],
 body.theme-gold .bg-\[\#161c2d\] {
-  background: #1b160e !important;
-  border-color: #3f321d !important;
+  background: rgba(25, 20, 12, 0.88) !important;
+  border-color: rgba(202, 138, 4, 0.3) !important;
 }
 body.theme-gold .bg-amber-500 {
-  background: linear-gradient(135deg, #eab308, #ca8a04) !important;
+  background: linear-gradient(135deg, #facc15, #ca8a04) !important;
   color: #000000 !important;
   font-weight: 900 !important;
-  box-shadow: 0 0 14px rgba(234, 179, 8, 0.5) !important;
-}
-body.theme-gold .border-slate-800 {
-  border-color: #382c16 !important;
+  box-shadow: 0 0 16px rgba(234, 179, 8, 0.55) !important;
 }
 
-/* 3. TEMA: PREMIER EMERALD & STADYUM ÇİMİ (Kusursuz Yeşil & Premium Futbol Arenası) */
+/* 3. PREMIER EMERALD THEME */
 body.theme-emerald {
-  background: #040d0a !important;
+  background: #030a07 !important;
   color: #ecfdf5 !important;
 }
 body.theme-emerald #app-frame {
-  background: #091712 !important;
-  border-color: #10b981 !important;
-  box-shadow: 0 0 35px rgba(16, 185, 129, 0.25) !important;
+  background: #07140f !important;
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  box-shadow: 0 0 40px rgba(16, 185, 129, 0.25) !important;
 }
 body.theme-emerald header {
-  background: #06110d !important;
+  background: rgba(7, 20, 15, 0.92) !important;
   border-bottom-color: #059669 !important;
 }
 body.theme-emerald nav {
-  background: #06110d !important;
+  background: rgba(7, 20, 15, 0.95) !important;
   border-top-color: #059669 !important;
 }
 body.theme-emerald .nav-item.active {
   color: #10b981 !important;
-  text-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
-}
-body.theme-emerald .nav-item.active i {
-  color: #10b981 !important;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
 }
 body.theme-emerald .bg-\[\#151c2e\],
 body.theme-emerald .bg-\[\#111624\],
 body.theme-emerald .bg-\[\#161c2d\] {
-  background: #0c1f19 !important;
-  border-color: #164e3f !important;
+  background: rgba(11, 28, 22, 0.85) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
 }
 body.theme-emerald .bg-amber-500 {
-  background: #10b981 !important;
+  background: linear-gradient(135deg, #10b981, #059669) !important;
   color: #022c22 !important;
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5) !important;
-}
-body.theme-emerald .bg-amber-500:hover {
-  background: #34d399 !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.55) !important;
 }
 
-/* 4. TEMA: RETRO PİXEL ARCADE (Nostaljik 90'lar Arcade Futbol) */
+/* 4. RETRO ARCADE THEME */
 body.theme-arcade {
-  background: #090014 !important;
+  background: #06000d !important;
   color: #f5d0fe !important;
 }
 body.theme-arcade #app-frame {
-  background: #130224 !important;
-  border: 3px solid #c026d3 !important;
-  box-shadow: 0 0 30px rgba(192, 38, 211, 0.35) !important;
+  background: #10011f !important;
+  border: 2px solid #c026d3 !important;
+  box-shadow: 0 0 35px rgba(192, 38, 211, 0.4) !important;
 }
 body.theme-arcade header {
-  background: #0f011c !important;
+  background: rgba(16, 1, 31, 0.92) !important;
   border-bottom: 2px dashed #a21caf !important;
 }
 body.theme-arcade nav {
-  background: #0f011c !important;
+  background: rgba(16, 1, 31, 0.95) !important;
   border-top: 2px dashed #a21caf !important;
 }
 body.theme-arcade .nav-item.active {
   color: #e879f9 !important;
-  text-shadow: 0 0 10px #e879f9;
+  text-shadow: 0 0 12px #e879f9;
 }
 body.theme-arcade .bg-\[\#151c2e\],
 body.theme-arcade .bg-\[\#111624\],
 body.theme-arcade .bg-\[\#161c2d\] {
-  background: #1e0538 !important;
+  background: rgba(28, 6, 52, 0.85) !important;
   border: 1px solid #701a75 !important;
 }
 body.theme-arcade .bg-amber-500 {
-  background: #d946ef !important;
+  background: linear-gradient(135deg, #d946ef, #a21caf) !important;
   color: #ffffff !important;
-  box-shadow: 0 0 15px rgba(217, 70, 239, 0.7) !important;
+  box-shadow: 0 0 18px rgba(217, 70, 239, 0.75) !important;
 }
-
-
