@@ -326,12 +326,15 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <button onclick="openCoachVisionModal()" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[11px] flex items-center justify-center gap-1.5">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-400"></i> Hoca Gelecek Vizyonu
+          <div class="grid grid-cols-3 gap-1.5 pt-1">
+            <button onclick="openCoachModal()" class="py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-[10px] flex items-center justify-center gap-1">
+              <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Hoca ile Konuş
             </button>
-            <button onclick="openCaptainReportModal()" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[11px] flex items-center justify-center gap-1.5">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-amber-400"></i> Kaptan & Zam Talepleri
+            <button onclick="openCoachVisionModal()" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[10px] flex items-center justify-center gap-1">
+              <i data-lucide="sparkles" class="w-3 h-3 text-blue-400"></i> Hoca Vizyonu
+            </button>
+            <button onclick="openCaptainReportModal()" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[10px] flex items-center justify-center gap-1">
+              <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Kaptan & Zam
             </button>
           </div>
         </div>
@@ -1214,52 +1217,126 @@
     </div>
   </div>
 
-  <!-- 3. MAÇ SONU HOCA DİYALOĞU MODALI -->
-  <div id="modal-coach-dialog" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
-    <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3">
+  <!-- 3. HOCA ODASI & TAKTİK TALİMATLARI MODALI -->
+  <div id="modal-coach-dialog" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 max-h-[92vh] flex flex-col">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow-md">
+          <div class="w-11 h-11 rounded-xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow-md">
             <img id="dialog-coach-photo" src="/static/coach_thomas_reis.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_thomas_reis.png'" />
           </div>
           <div>
-            <div class="text-[9px] text-amber-400 font-bold uppercase">Teknik Direktör Görüşmesi</div>
+            <div class="text-[9px] text-amber-400 font-bold uppercase tracking-wider">Teknik Direktör Odası</div>
             <div class="text-xs font-black text-white" id="dialog-coach-name">Thomas Reis</div>
+            <div class="text-[9px] text-slate-400" id="dialog-coach-style-label">4-2-3-1 Dinamik Alman Presi</div>
           </div>
         </div>
-        <button onclick="closeCoachModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+        <button onclick="closeCoachModal()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
       </div>
 
-      <p class="text-[11px] text-slate-300">Teknik direktöre karşı tavrınızı belirleyin:</p>
-
-      <div class="space-y-1.5">
-        <button onclick="submitCoachDialog('pass')" class="w-full p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-left border border-slate-700">
-          <div class="text-xs font-bold text-slate-200">"Tebrikler / Görüşürüz" (0 ₺ Masraf)</div>
-          <div class="text-[9px] text-slate-400">Prim vermeden normal şekilde ayrıl.</div>
-        </button>
-
-        <button onclick="submitCoachDialog('praise_bonus')" class="w-full p-2 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/40 text-left border border-emerald-800/50">
-          <div class="text-xs font-bold text-emerald-400 flex justify-between">
-            <span>"Primi Dağıtın!"</span>
-            <span>-4M ₺</span>
+      <div class="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin">
+        <!-- TAKTİKSEL TALİMATLAR -->
+        <div>
+          <div class="text-[10px] text-amber-400 font-extrabold uppercase mb-1.5 flex items-center gap-1">
+            <span>⚔️</span> <span>Sıradaki Maç İçin Taktik Talimatı</span>
           </div>
-          <div class="text-[9px] text-slate-400">Takım ve hoca morali tavan yapar.</div>
-        </button>
+          <div class="grid grid-cols-1 gap-1.5">
+            <button onclick="sendCoachInstruction('rotate_squad')" class="w-full p-2 rounded-lg bg-indigo-950/40 hover:bg-indigo-900/40 text-left border border-indigo-800/50 transition-all">
+              <div class="text-xs font-bold text-indigo-300 flex items-center justify-between">
+                <span>🔄 "As Kadroyu Dinlendir (Rotasyon)"</span>
+                <span class="text-[9px] text-emerald-400">+12 Kondisyon</span>
+              </div>
+              <div class="text-[9px] text-slate-400">Yıldızları koru, yedeklere şans vererek asları diri tut.</div>
+            </button>
 
-        <button onclick="submitCoachDialog('criticize')" class="w-full p-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 text-left border border-amber-800/50">
-          <div class="text-xs font-bold text-amber-400">"O Değişiklikler Neydi?!" (0 ₺ Masraf)</div>
-          <div class="text-[9px] text-slate-400">Hocaya taktiksel hesap sor.</div>
-        </button>
+            <button onclick="sendCoachInstruction('all_out_attack')" class="w-full p-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-left border border-rose-800/50 transition-all">
+              <div class="text-xs font-bold text-rose-300 flex items-center justify-between">
+                <span>⚡ "Topyekün Hücum Oyna!"</span>
+                <span class="text-[9px] text-rose-400">+10 Hücum Gücü</span>
+              </div>
+              <div class="text-[9px] text-slate-400">Önde yoğun baskı kur, rakip kaleyi şut yağmuruna tut.</div>
+            </button>
 
-        <button onclick="closeCoachModal(); showBenchAccountabilityTab();" class="w-full p-2 rounded-lg bg-indigo-950/40 hover:bg-indigo-900/40 text-left border border-indigo-800/50">
-          <div class="text-xs font-bold text-indigo-300">"Yedeklerin Süresini Sorgula" (Hesap Sor)</div>
-          <div class="text-[9px] text-slate-400">Kulübede az süre alan yıldızları hocanın yüzüne vur.</div>
-        </button>
+            <button onclick="sendCoachInstruction('park_the_bus')" class="w-full p-2 rounded-lg bg-sky-950/40 hover:bg-sky-900/40 text-left border border-sky-800/50 transition-all">
+              <div class="text-xs font-bold text-sky-300 flex items-center justify-between">
+                <span>🛡️ "Savunmayı Kilitle / Katı Savunma"</span>
+                <span class="text-[9px] text-sky-400">+12 Savunma</span>
+              </div>
+              <div class="text-[9px] text-slate-400">Arka tarafı sağlama al, kontra atak kovala.</div>
+            </button>
 
-        <button onclick="submitCoachDialog('fire')" class="w-full p-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 text-left border border-rose-800/50">
-          <div class="text-xs font-bold text-rose-400">"KOVULDUN!" (Tazminat Ödenir)</div>
-          <div class="text-[9px] text-slate-400">Tazminatını ver ve yeni hoca ata.</div>
-        </button>
+            <button onclick="sendCoachInstruction('boost_morale')" class="w-full p-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 text-left border border-amber-800/50 transition-all">
+              <div class="text-xs font-bold text-amber-300 flex items-center justify-between">
+                <span>🤝 "Arkandayım Hocam, Güvenim Tam"</span>
+                <span class="text-[9px] text-emerald-400">+12 Moral</span>
+              </div>
+              <div class="text-[9px] text-slate-400">Hocanın stresini düşür, özgüven aşıla.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- MAÇ SONU & YÖNETİM TAVRI -->
+        <div>
+          <div class="text-[10px] text-slate-400 font-extrabold uppercase mb-1.5 flex items-center gap-1">
+            <span>🏛️</span> <span>Yönetim Görüşmesi & Kararları</span>
+          </div>
+          <div class="space-y-1.5">
+            <button onclick="submitCoachDialog('pass')" class="w-full p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-left border border-slate-700 transition-all">
+              <div class="text-xs font-bold text-slate-200">"Tebrikler / Görüşürüz" (0 ₺ Masraf)</div>
+              <div class="text-[9px] text-slate-400">Prim vermeden normal şekilde ayrıl.</div>
+            </button>
+
+            <button onclick="submitCoachDialog('praise_bonus')" class="w-full p-2 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/40 text-left border border-emerald-800/50 transition-all">
+              <div class="text-xs font-bold text-emerald-400 flex justify-between">
+                <span>"Primi Dağıtın!"</span>
+                <span>-4M ₺</span>
+              </div>
+              <div class="text-[9px] text-slate-400">Takım ve hoca morali tavan yapar.</div>
+            </button>
+
+            <button onclick="submitCoachDialog('criticize')" class="w-full p-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 text-left border border-amber-800/50 transition-all">
+              <div class="text-xs font-bold text-amber-400">"O Değişiklikler Neydi?!" (0 ₺ Masraf)</div>
+              <div class="text-[9px] text-slate-400">Hocaya taktiksel hesap sor.</div>
+            </button>
+
+            <button onclick="closeCoachModal(); showBenchAccountabilityTab();" class="w-full p-2 rounded-lg bg-purple-950/40 hover:bg-purple-900/40 text-left border border-purple-800/50 transition-all">
+              <div class="text-xs font-bold text-purple-300">"Yedeklerin Süresini Sorgula" (Hesap Sor)</div>
+              <div class="text-[9px] text-slate-400">Kulübede az süre alan yıldızları hocanın yüzüne vur.</div>
+            </button>
+
+            <button onclick="submitCoachDialog('fire')" class="w-full p-2 rounded-lg bg-rose-950/60 hover:bg-rose-900 text-left border border-rose-800/70 transition-all">
+              <div class="text-xs font-bold text-rose-300 flex items-center justify-between">
+                <span>❌ "GÖREVDEN AL / KOV"</span>
+                <span class="text-[9px] text-rose-400 font-mono">Tazminat Ödenir</span>
+              </div>
+              <div class="text-[9px] text-slate-300">Tazminatını ödeyerek yolları ayır ve yeni hoca seç.</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YENİ TEKNİK DİREKTÖR SEÇİM MODALI -->
+  <div id="modal-select-coach" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#111726] border-2 border-amber-500/80 w-full max-w-md rounded-2xl p-4 shadow-2xl space-y-3 max-h-[92vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">👔</span>
+          <div>
+            <div class="text-xs font-black text-amber-400 uppercase tracking-wide">YENİ TEKNİK DİREKTÖR SEÇİMİ</div>
+            <div class="text-[10px] text-slate-400">Kulübün başına getirmek istediğiniz hocayı belirleyin</div>
+          </div>
+        </div>
+        <button onclick="closeSelectCoachModal()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
+      </div>
+
+      <div class="text-[11px] text-slate-300 bg-amber-950/30 border border-amber-800/40 p-2.5 rounded-xl">
+        ⚡ <strong>Başkanım:</strong> Boşalan teknik direktörlük koltuğu için ligin en tecrübeli ve prestijli isimleri hazır bekliyor. İmza parası: <strong>2.000.000 ₺</strong>.
+      </div>
+
+      <div id="select-coach-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
+        <!-- JS ile dinamik teknik direktör adayları doldurulacak -->
       </div>
     </div>
   </div>

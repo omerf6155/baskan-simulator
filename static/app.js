@@ -1252,9 +1252,14 @@ function renderSquadPlayerCard(p, idx, isStarter) {
         <div class="text-[9px] text-slate-400">
           ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${contractYears} Yıl</strong> • Maaş: ${formatMoney(p.wage)}
         </div>
-        <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2">
+        <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
           <span>⏱️ <strong class="text-white font-mono">${mins}</strong> dk (${matches} maç)</span>
           <span>⭐ Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
+          ${!isStarter ? `
+            <button onclick="terminatePlayerContract('${safeName}')" class="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 text-[8px] font-bold hover:bg-rose-900 transition-all flex items-center gap-0.5" title="Sözleşmeyi tazminat ödeyerek feshet">
+              <span>❌</span> <span>Feshet</span>
+            </button>
+          ` : ''}
           ${!isStarter && p.overall >= 78 && mins < 90 && (gameState.week || 1) >= 2 ? `
             <button onclick="confrontCoachAboutPlayer('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700/60 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Teknik Direktöre bu oyuncunun neden oynamadığını sor!">
               <span>🗣️</span> <span>Hesap Sor</span>
@@ -2662,7 +2667,7 @@ function renderTransferMarket() {
         <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
       </div>
       ${p.desc ? `<p class="text-[9px] text-slate-300 italic">"${p.desc}"</p>` : ''}
-      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}')` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000})`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : p.type === 'turkish' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
+      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}', this)` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : p.type === 'turkish' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
         ${p.type === 'europe' ? `Avrupa Transferini Bitir (${formatMoney(cost)})` : p.type === 'turkish' ? `🇹🇷 Yerli Yıldızı Bitir (${formatMoney(cost)})` : `Transfer Et (${formatMoney(cost)})`}
       </button>
     `;
@@ -2670,8 +2675,12 @@ function renderTransferMarket() {
   });
 }
 
-async function buyEuropeanPlayer(clubName, playerName) {
+async function buyEuropeanPlayer(clubName, playerName, btnEl) {
   if (!confirm(`${clubName} kulübünden ${playerName} transfer edilsin mi?`)) return;
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerText = "İşleniyor...";
+  }
   try {
     const res = await apiFetch("/api/transfer/sign-european-player", {
       method: "POST",
@@ -2681,6 +2690,10 @@ async function buyEuropeanPlayer(clubName, playerName) {
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Transfer yapılamadı!");
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerText = "Transfer Et";
+      }
       return;
     }
     showToast(data.message);
@@ -2688,11 +2701,19 @@ async function buyEuropeanPlayer(clubName, playerName) {
     renderUI();
   } catch (e) {
     console.error(e);
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerText = "Transfer Et";
+    }
     showToast("Bağlantı hatası!");
   }
 }
 
-async function buyMarketPlayer(playerName, price, salary) {
+async function buyMarketPlayer(playerName, price, salary, btnEl) {
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerText = "İşleniyor...";
+  }
   try {
     const res = await apiFetch("/api/transfer/sign-negotiated-player", {
       method: "POST",
@@ -2707,6 +2728,10 @@ async function buyMarketPlayer(playerName, price, salary) {
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Transfer yapılamadı!");
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerText = "Transfer Et";
+      }
       return;
     }
     showToast(data.message);
@@ -2714,6 +2739,11 @@ async function buyMarketPlayer(playerName, price, salary) {
     renderUI();
   } catch (e) {
     console.error(e);
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerText = "Transfer Et";
+    }
+    showToast("Bağlantı hatası!");
   }
 }
 
@@ -3196,8 +3226,156 @@ async function submitCoachDialog(action) {
     showToast(data.message);
     gameState = data.state;
     renderUI();
+
+    if (action === "fire" || data.coach_vacant) {
+      setTimeout(() => {
+        openSelectCoachModal(data.coaches);
+      }, 500);
+    }
   } catch (e) {
     console.error(e);
+  }
+}
+
+async function sendCoachInstruction(instruction) {
+  try {
+    const res = await apiFetch("/api/coach/instruction", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ instruction: instruction })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Talimat iletilemedi!");
+      return;
+    }
+    closeCoachModal();
+    gameState = data.state;
+    renderUI();
+    showToast(data.coach_reply || data.message);
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
+async function openSelectCoachModal(cachedList) {
+  const modal = document.getElementById("modal-select-coach");
+  const listEl = document.getElementById("select-coach-list");
+  if (!modal || !listEl) return;
+
+  modal.classList.remove("hidden");
+
+  let coaches = cachedList;
+  if (!coaches) {
+    listEl.innerHTML = '<div class="text-slate-400 text-xs text-center py-4">Teknik direktör adayları listeleniyor...</div>';
+    try {
+      const res = await apiFetch("/api/coach/market");
+      const data = await res.json();
+      coaches = data.coaches || [];
+    } catch (e) {
+      console.error(e);
+      listEl.innerHTML = '<div class="text-rose-400 text-xs text-center py-4">Adaylar yüklenemedi.</div>';
+      return;
+    }
+  }
+
+  listEl.innerHTML = "";
+  if (!coaches || coaches.length === 0) {
+    listEl.innerHTML = '<div class="text-slate-400 text-xs text-center py-4">Şu an serbestte hoca adayı bulunamadı.</div>';
+    return;
+  }
+
+  coaches.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "p-3 rounded-xl bg-slate-900 border border-slate-700/80 hover:border-amber-500/60 transition-all flex items-center justify-between gap-3 shadow-md";
+    card.innerHTML = `
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-12 h-12 rounded-xl bg-slate-950 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow">
+          <img src="${c.photo}" alt="${c.name}" class="w-full h-full object-cover" onerror="this.src='/static/coach_terim.png'" />
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-white text-xs truncate">${c.name}</span>
+            <span class="text-[9px] bg-amber-500 text-slate-950 font-black px-1.5 py-0.2 rounded font-mono">${c.rating} OVR</span>
+          </div>
+          <div class="text-[10px] text-amber-300/90 font-medium truncate">${c.style}</div>
+          <div class="text-[9px] text-slate-400 mt-0.5">
+            Maaş: <strong class="text-emerald-400">${formatMoney(c.salary)} / Yıl</strong>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-1">
+            ${(c.traits || []).slice(0, 2).map(t => `<span class="text-[8px] bg-slate-800 text-slate-300 px-1.5 py-0.2 rounded border border-slate-700">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <button onclick="hireCoach('${c.id}', this)" class="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 text-slate-950 font-black text-xs shadow-lg transition-all flex-shrink-0 whitespace-nowrap">
+        Göreve Getir
+      </button>
+    `;
+    listEl.appendChild(card);
+  });
+}
+
+function closeSelectCoachModal() {
+  const modal = document.getElementById("modal-select-coach");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function hireCoach(coachId, btnEl) {
+  if (btnEl) {
+    btnEl.disabled = true;
+    btnEl.innerText = "İmzalanıyor...";
+  }
+  try {
+    const res = await apiFetch("/api/coach/hire", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ coach_id: coachId })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Hoca ile anlaşılamadı!");
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.innerText = "Göreve Getir";
+      }
+      return;
+    }
+    closeSelectCoachModal();
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    if (btnEl) {
+      btnEl.disabled = false;
+      btnEl.innerText = "Göreve Getir";
+    }
+    showToast("Bağlantı hatası!");
+  }
+}
+
+async function terminatePlayerContract(playerName) {
+  if (!confirm(`'${playerName}' ile sözleşmeyi karşılıklı feshetmek istiyor musunuz?\n(Yıllık maaşının %25'i kadar fesih tazminatı ödenecektir)`)) {
+    return;
+  }
+  try {
+    const res = await apiFetch("/api/squad/terminate-contract", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_name: playerName })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Fesih işlemi başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
   }
 }
 
@@ -3979,24 +4157,29 @@ function promptDailyRewardClaim() {
 
   inlineContainer.classList.remove("hidden");
   inlineContainer.innerHTML = `
-    <div id="daily-reward-card" class="w-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-800 border-2 border-amber-400 p-2.5 sm:p-3 rounded-2xl shadow-xl flex items-center justify-between gap-2.5 transition-all">
-      <div class="flex items-center gap-2.5 min-w-0 flex-1">
-        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-xl flex-shrink-0">
+    <div id="daily-reward-card" class="w-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-800 border-2 border-amber-400 p-2.5 sm:p-3 rounded-2xl shadow-xl flex flex-row items-center justify-between gap-2 transition-all">
+      <div class="flex items-center gap-2 min-w-0 flex-1">
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
           🎁
         </div>
-        <div class="min-w-0">
-          <div class="font-black text-xs text-white uppercase tracking-wide truncate">GÜNLÜK BAŞKANLIK ÖDÜLÜ!</div>
-          <div class="text-[10px] text-amber-200 font-semibold truncate">+5.000.000 ₺ Kasa Desteği Hazır</div>
+        <div class="min-w-0 flex-1">
+          <div class="font-black text-[11px] sm:text-xs text-white uppercase tracking-wide truncate">GÜNLÜK ÖDÜL!</div>
+          <div class="text-[9px] sm:text-[10px] text-amber-200 font-semibold truncate">+5.000.000 ₺ Kasa Desteği</div>
         </div>
       </div>
-      <button onclick="claimDailyReward()" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
+      <button id="btn-claim-daily" onclick="claimDailyReward(this)" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-[11px] sm:text-xs shadow-md transition-all flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
         <span>Hemen Al</span> <span>➔</span>
       </button>
     </div>
   `;
 }
 
-async function claimDailyReward() {
+async function claimDailyReward(btnEl) {
+  const btn = btnEl || document.getElementById("btn-claim-daily");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = "Alınıyor...";
+  }
   const inlineContainer = document.getElementById("daily-reward-inline-container");
 
   try {
@@ -4004,6 +4187,10 @@ async function claimDailyReward() {
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Ödül alınamadı!");
+      if (btn) {
+        btn.disabled = false;
+        btn.innerText = "Hemen Al ➔";
+      }
       return;
     }
     if (inlineContainer) {
@@ -4015,6 +4202,10 @@ async function claimDailyReward() {
     showToast(data.message || "🎉 5.000.000 ₺ Günlük Giriş Ödülü Kasaya Eklendi!");
   } catch (e) {
     console.error(e);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = "Hemen Al ➔";
+    }
   }
 }
 

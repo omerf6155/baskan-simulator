@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import random
 import contextvars
 from typing import Dict, Any, List, Optional
@@ -157,6 +158,129 @@ SCOUT_CANDIDATES = [
     {"id": "sc3", "name": "Cemil 'Kartal Göz' Kaya", "role": "Yerli Lig Kurdu", "rating": 78, "salary": 3_500_000, "region": "Türkiye & Alt Ligler"},
     {"id": "sc4", "name": "Jean-Pierre Mendy", "role": "Genç Yetenek Kaşifi", "rating": 84, "salary": 6_000_000, "region": "Batı Afrika & Fransa"}
 ]
+
+AVAILABLE_COACHES_MARKET = [
+    {
+        "id": "c_terim",
+        "name": "Fatih Terim",
+        "style": "4-3-3 Total Hücum & 'Biz Bitti Demeden Bitmez' Kaos Baskısı",
+        "rating": 89,
+        "attack": 92,
+        "defense": 79,
+        "youth": 78,
+        "press_rel": 90,
+        "ego": 88,
+        "salary": 45_000_000,
+        "photo": "/static/coach_terim.png",
+        "traits": [
+            {"name": "İmparator Aurası", "icon": "👑", "desc": "Büyük maçlarda takım gücünü +6 artırır."},
+            {"name": "Geri Dönüş Uzmanı", "icon": "🔥", "desc": "Yenikken 2. yarıda gol bulma şansını %35 artırır."}
+        ]
+    },
+    {
+        "id": "c_sergen",
+        "name": "Sergen Yalçın",
+        "style": "4-2-3-1 Pragmatik Hücum & Bireysel Yetenek Özgürlüğü",
+        "rating": 86,
+        "attack": 88,
+        "defense": 80,
+        "youth": 82,
+        "press_rel": 88,
+        "ego": 75,
+        "salary": 36_000_000,
+        "photo": "/static/coach_sergen.png",
+        "traits": [
+            {"name": "Dahi Dokunuş", "icon": "🪄", "desc": "Hücum oyuncularının bireysel bitiricilik yeteneğini yükseltir."},
+            {"name": "Büyük Maç Gurusu", "icon": "⚡", "desc": "Derbi ve zor maçlarda taktik disiplini üst seviyeye çeker."}
+        ]
+    },
+    {
+        "id": "c_senol",
+        "name": "Şenol Güneş",
+        "style": "4-3-3 Klasik Türk Hücum Ekolü & Golcü Patlatıcı",
+        "rating": 85,
+        "attack": 87,
+        "defense": 78,
+        "youth": 80,
+        "press_rel": 86,
+        "ego": 72,
+        "salary": 32_000_000,
+        "photo": "/static/coach_senol_gunes.png",
+        "traits": [
+            {"name": "Forvet Büyücüsü", "icon": "🎯", "desc": "Santraforların maç başına gol atma ihtimalini %25 artırır."},
+            {"name": "Tecrübe Abidesi", "icon": "🏛️", "desc": "Puan kayıplarında soyunma odası krizlerini sakinleştirir."}
+        ]
+    },
+    {
+        "id": "c_kartal",
+        "name": "İsmail Kartal",
+        "style": "4-2-3-1 Yüksek Tempolu Pozisyonel Pres & Hücum Disiplini",
+        "rating": 84,
+        "attack": 85,
+        "defense": 82,
+        "youth": 78,
+        "press_rel": 82,
+        "ego": 68,
+        "salary": 26_000_000,
+        "photo": "/static/coach_ismail_kartal.png",
+        "traits": [
+            {"name": "Hacı İsmail Hırsı", "icon": "🦅", "desc": "Takımın koşu mesafesini ve ikili mücadele kazanımını artırır."},
+            {"name": "Kondisyoner", "icon": "🔋", "desc": "Oyuncuların yorgunluk düşüş hızını %20 azaltır."}
+        ]
+    },
+    {
+        "id": "c_volkan",
+        "name": "Volkan Demirel",
+        "style": "4-4-2 Savaşçı Ruh & Hatay Dayanışması",
+        "rating": 81,
+        "attack": 80,
+        "defense": 84,
+        "youth": 82,
+        "press_rel": 85,
+        "ego": 74,
+        "salary": 20_000_000,
+        "photo": "/static/coach_volkan.png",
+        "traits": [
+            {"name": "Gladyatör Karakteri", "icon": "🛡️", "desc": "Yenilgi durumunda takımın pes etmesini engeller."},
+            {"name": "Liderlik Karizması", "icon": "📢", "desc": "Taraftar güvenini maç başına +1 ekstra besler."}
+        ]
+    },
+    {
+        "id": "c_reis",
+        "name": "Thomas Reis",
+        "style": "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı",
+        "rating": 83,
+        "attack": 82,
+        "defense": 84,
+        "youth": 81,
+        "press_rel": 83,
+        "ego": 66,
+        "salary": 24_000_000,
+        "photo": "/static/coach_thomas_reis.png",
+        "traits": [
+            {"name": "Alman Savunma Duvarı", "icon": "🧱", "desc": "Yenen gol beklentisini (xGA) %20 düşürür."},
+            {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyonunu korur."}
+        ]
+    },
+    {
+        "id": "c_tekke",
+        "name": "Fatih Tekke",
+        "style": "4-3-3 Pas Oyunu & Pozisyon Zenginliği",
+        "rating": 80,
+        "attack": 82,
+        "defense": 78,
+        "youth": 83,
+        "press_rel": 80,
+        "ego": 68,
+        "salary": 20_000_000,
+        "photo": "/static/coach_tekke.png",
+        "traits": [
+            {"name": "Topa Hakimiyet & Pas", "icon": "⚽", "desc": "Topla oynama oranını %10 artırır."},
+            {"name": "Genç Yetenek Kaşifi", "icon": "🌱", "desc": "Altyapı oyuncularının gelişimini hızlandırır."}
+        ]
+    }
+]
+
 
 AVAILABLE_SPONSORS = [
     {
@@ -379,7 +503,11 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
     raw_pos = str(p.get("pos", "CM")).upper()
     fifa_pos = to_fifa_pos(raw_pos)
     p["pos"] = fifa_pos
-    ovr = int(p.get("overall", 75))
+    if "overall" not in p or p["overall"] is None:
+        p["overall"] = int(p.get("real_pot") or p.get("claimed_pot") or 75)
+    else:
+        p["overall"] = int(p["overall"])
+    ovr = p["overall"]
 
     skills = p.get("skills")
     if not skills or len(skills) < 6:
@@ -1068,6 +1196,16 @@ def get_state(session_id: Optional[str] = None):
                 valid_ids = [t["id"] for t in TEAMS_DB]
                 if state.get("team_id") in valid_ids and "is_started" in state:
                     if "squad" in state:
+                        # Yinelenen klon oyuncuları temizle (Pogba vs. çoklu alım hatasını çözer)
+                        seen_p_names = set()
+                        deduped_squad = []
+                        for p in state["squad"]:
+                            pn = p.get("name", "").strip().lower()
+                            if pn and pn not in seen_p_names:
+                                seen_p_names.add(pn)
+                                deduped_squad.append(p)
+                        state["squad"] = deduped_squad
+
                         if state.get("team_id") == "trabzonspor" and not any(p.get("name") == "Ozan Tufan" for p in state.get("squad", [])):
                             state["squad"].append(enrich_player({
                                 "name": "Ozan Tufan", "pos": "MERKEZ OS", "age": 31, "overall": 81, "wage": 5280000, "val": 24000000, "is_foreign": False
@@ -1472,22 +1610,42 @@ def api_match_half1(req: Half1Request):
     active_bet = state.get("underground", {}).get("active_bet", {})
     throw_match = (active_bet and active_bet.get("bet_type") == "opponent_win")
 
-    # 1. Devre Gol Simülasyonu - Gerçekçi Futbol Skorları (4 şans penceresi)
-    # Gol sıklığı dengelendi; skorlar 1-0, 0-0, 1-1 civarında tutulur
-    minute_slots = [12, 24, 35, 43]
+    # Taktiksel Başkan Talimatı ve Rotasyon Kontrolleri
+    if state.get("next_match_rotation"):
+        events.append({
+            "minute": 1,
+            "type": "coach_action",
+            "text": "🔄 ROTASYON KADROSU: Başkan ve hocanın kararıyla as yıldızlar dinlendirildi, yedek ağırlıklı 11 sahada!"
+        })
+        state["next_match_rotation"] = False
+
+    tactic = state.get("next_match_tactic")
+    tactic_bonus_my = 0
+    tactic_bonus_opp = 0
+    if tactic == "all_out_attack":
+        my_pwr += 6
+        tactic_bonus_my = 5
+        events.append({"minute": 2, "type": "coach_action", "text": "⚔️ TOPYEKÜN HÜCUM: Başkanın talimatıyla takım tüm hatlarıyla rakip yarı sahaya yerleşti!"})
+        state["next_match_tactic"] = None
+    elif tactic == "park_the_bus":
+        opp_pwr -= 6
+        tactic_bonus_opp = -6
+        events.append({"minute": 2, "type": "coach_action", "text": "🛡️ SAVUNMA KİLİDİ: Başkanın talimatıyla takım katı savunma bloğuna çekildi!"})
+        state["next_match_tactic"] = None
+
+    # 1. Devre Gol Simülasyonu - Akıcı ve Gerçekçi Futbol Skorları (5 şans penceresi)
+    minute_slots = [14, 23, 33, 41, 45]
     for m in minute_slots:
         roll = random.randint(1, 100)
-        # Dengeli gol olasılığı: ~9-14%
         pwr_diff = max(-20, min(20, my_pwr - opp_pwr))
-        goal_chance_my = max(4, min(18, 9 + int(pwr_diff * 0.45) + ref_bonus))
-        goal_chance_opp = max(4, min(18, 9 - int(pwr_diff * 0.35)))
+        goal_chance_my = max(5, min(25, 11 + int(pwr_diff * 0.50) + ref_bonus + tactic_bonus_my))
+        goal_chance_opp = max(4, min(22, 10 - int(pwr_diff * 0.35) + tactic_bonus_opp))
 
         if throw_match:
-            # Maçı satıyoruz: Bizim gol şansı bastırılır, rakibin şansı artırılır
             goal_chance_my = 2
-            goal_chance_opp = max(16, goal_chance_opp + 8)
+            goal_chance_opp = max(18, goal_chance_opp + 10)
 
-        if roll < goal_chance_my and my_score < 2:
+        if roll < goal_chance_my and my_score < 3:
             my_score += 1
             attacker = random.choice(my_attackers) if random.random() < 0.75 else random.choice(my_midfielders)
             scorers.append(attacker)
@@ -1639,21 +1797,20 @@ def api_match_half2(req: HalftimeActionRequest):
     active_bet = state.get("underground", {}).get("active_bet", {})
     throw_match = (active_bet and active_bet.get("bet_type") == "opponent_win")
 
-    # 2. Devre Gol Simülasyonu (Dakika 50 - 90) - Gerçekçi 4 Şans Penceresi
-    # Toplam maç golleri dengelenir (ortalama 1-2 gol)
-    minute_slots_h2 = [55, 68, 79, 87]
+    # 2. Devre Gol Simülasyonu (Dakika 50 - 90) - Akıcı ve Gerçekçi 5 Şans Penceresi
+    minute_slots_h2 = [53, 65, 74, 83, 89]
     for m in minute_slots_h2:
         roll = random.randint(1, 100)
         pwr_diff = max(-20, min(20, my_pwr - opp_pwr))
-        goal_chance_my = max(4, min(18, 9 + int(pwr_diff * 0.45) + h1["ref_bonus"]))
-        goal_chance_opp = max(4, min(18, 9 - int(pwr_diff * 0.35)))
+        goal_chance_my = max(5, min(25, 12 + int(pwr_diff * 0.50) + h1["ref_bonus"]))
+        goal_chance_opp = max(4, min(22, 11 - int(pwr_diff * 0.35)))
 
         if throw_match:
             goal_chance_my = 1
             goal_chance_opp = max(20, goal_chance_opp + 10)
 
-        # Gol tavanı kontrolü (tek yarıda 2'den fazla gol olmasın)
-        if roll < goal_chance_my and (my_score - h1["my_score"]) < 2:
+        # Gol kontrolü (tek yarıda makul skor dengesi)
+        if roll < goal_chance_my and (my_score - h1["my_score"]) < 3:
             my_score += 1
             attacker = random.choice(my_attackers) if random.random() < 0.75 else random.choice(my_midfielders)
             scorers.append(attacker)
@@ -1670,7 +1827,7 @@ def api_match_half2(req: HalftimeActionRequest):
                 "home_score": home_curr,
                 "away_score": away_curr
             })
-        elif roll > (100 - goal_chance_opp) and (opp_score - h1["opp_score"]) < 2:
+        elif roll > (100 - goal_chance_opp) and (opp_score - h1["opp_score"]) < 3:
             opp_score += 1
             opp_scorer = random.choice(opp_attackers) if random.random() < 0.75 else random.choice(opp_mids)
             home_curr = my_score if is_home else opp_score
@@ -1938,8 +2095,21 @@ def api_match_half2(req: HalftimeActionRequest):
         opp_stand["draws"] += 1
         opp_stand["points"] += 1
         match_result = "Beraberlik"
-        state["fan_trust"] = max(10, state["fan_trust"] - 1)
-        coach_statement = f"{state['coach']['name']}: 'Zorlu bir 90 dakikaydı. 1 puan fena değil ama hatalarımızdan ders çıkarıp önümüze bakacağız.'"
+
+        # Kolay rakibe karşı puan kaybı kontrolü: Güç farkı belirginse ağır fatura!
+        is_underdog = (opp_pwr < my_pwr - 3)
+        if is_underdog:
+            fan_drop = random.randint(4, 7)
+            state["fan_trust"] = max(10, state["fan_trust"] - fan_drop)
+            state["board_trust"] = max(10, state["board_trust"] - 4)
+            if state.get("coach"):
+                state["coach"]["stress"] = min(100, state["coach"].get("stress", 20) + 20)
+                state["coach"]["moral"] = max(20, state["coach"].get("moral", 80) - 12)
+            coach_statement = f"{state['coach']['name']}: 'Zayıf rakibimiz karşısında çok net fırsatları harcadık. Bu 2 puan kaybı bizi yaraladı, üzerimizdeki baskı tavan yaptı.'"
+            state["news"].insert(0, f"⚠️ TARAFTAR VE BASIN İSYANDA: Kolay rakip {opponent_name} karşısında kaybedilen 2 puan sabırları taşırdı! Hoca hedef tahtasında (-%{fan_drop} Güven)!")
+        else:
+            state["fan_trust"] = max(10, state["fan_trust"] - 1)
+            coach_statement = f"{state['coach']['name']}: 'Zorlu bir 90 dakikaydı. 1 puan fena değil ama hatalarımızdan ders çıkarıp önümüze bakacağız.'"
     else:
         my_stand["losses"] += 1
         opp_stand["wins"] += 1
@@ -2704,6 +2874,9 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
         raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır! Yalnızca Yaz Dönemi (1-4. Hafta) ve Kış Dönemi (18-21. Hafta) arasında transfer yapılabilir.")
     if state.get("transfer_ban", False):
         raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
+    if any(p.get("name", "").strip().lower() == req.player_name.strip().lower() for p in state.get("squad", [])):
+        raise HTTPException(status_code=400, detail=f"'{req.player_name}' zaten kadronuzda yer alıyor! Çift transfer yapılamaz.")
 
     total_upfront = req.bid_fee + req.sign_bonus
     if state["budget"] < total_upfront:
@@ -3614,6 +3787,9 @@ def api_sign_european_player(req: SignEuropeanPlayerRequest):
     if state.get("transfer_ban", False):
         raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
 
+    if any(p.get("name", "").strip().lower() == req.player_name.strip().lower() for p in state.get("squad", [])):
+        raise HTTPException(status_code=400, detail=f"'{req.player_name}' zaten kadronuzda yer alıyor! Çift transfer yapılamaz.")
+
     players = EUROPEAN_CLUBS_MARKET.get(req.club_name, [])
     player = next((p for p in players if p["name"] == req.player_name), None)
     if not player:
@@ -3727,21 +3903,157 @@ def api_coach_dialog(req: CoachDialogAction):
         if state["budget"] < tazminat:
             raise HTTPException(status_code=400, detail="Hocayı kovacak tazminat bütçeniz yok!")
         state["budget"] -= tazminat
-        new_coach = random.choice([t["coach"] for t in TEAMS_DB if t["coach"]["name"] != coach["name"]])
-        state["coach"] = {
-            **new_coach,
-            "photo": new_coach.get("photo", "/static/coach_tekke.png"),
-            "moral": 80,
-            "trust": 75,
-            "mistakes_count": 0,
-            "praised_count": 0,
-            "tactical_vision": "Yüksek Tempolu Hücum & Alan Daraltma"
+        old_coach_name = coach["name"]
+        state["coach_vacant"] = True
+        msg = f"⚡ AYRILIK: {old_coach_name} görevden alındı! {format_money_val(tazminat)} tazminat ödendi. Lütfen yeni teknik direktörünüzü seçin."
+        state["news"].insert(0, msg)
+        state["coach_dialog_pending"] = False
+        save_state(state)
+        return {
+            "message": msg,
+            "state": state,
+            "coach_vacant": True,
+            "coaches": [c for c in AVAILABLE_COACHES_MARKET if c["name"] != old_coach_name]
         }
-        msg = f"{coach['name']} görevden alındı! Yeni teknik direktör: {new_coach['name']}!"
 
     state["coach_dialog_pending"] = False
     save_state(state)
     return {"message": msg, "state": state}
+
+@app.get("/api/coach/market")
+def api_get_coach_market():
+    state = get_state()
+    current_name = state.get("coach", {}).get("name") if state.get("coach") else None
+    available = [c for c in AVAILABLE_COACHES_MARKET if c["name"] != current_name]
+    return {
+        "coaches": available,
+        "coach_vacant": state.get("coach_vacant", False),
+        "current_coach": state.get("coach")
+    }
+
+class HireCoachRequest(BaseModel):
+    coach_id: str
+
+@app.post("/api/coach/hire")
+def api_hire_coach(req: HireCoachRequest):
+    state = get_state()
+    candidate = next((c for c in AVAILABLE_COACHES_MARKET if c["id"] == req.coach_id), None)
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Teknik direktör bulunamadı!")
+
+    sign_fee = 2_000_000
+    if state["budget"] < sign_fee:
+        raise HTTPException(status_code=400, detail=f"Hocaya imza parası vermek için en az {format_money_val(sign_fee)} bütçe gereklidir!")
+
+    state["budget"] -= sign_fee
+    state["coach"] = {
+        "name": candidate["name"],
+        "style": candidate["style"],
+        "rating": candidate["rating"],
+        "attack": candidate["attack"],
+        "defense": candidate["defense"],
+        "youth": candidate["youth"],
+        "press_rel": candidate["press_rel"],
+        "ego": candidate["ego"],
+        "salary": candidate["salary"],
+        "photo": candidate["photo"],
+        "traits": candidate["traits"],
+        "moral": 90,
+        "trust": 85,
+        "stress": 10,
+        "mistakes_count": 0,
+        "praised_count": 0,
+        "tactical_vision": candidate["style"]
+    }
+    state["coach_vacant"] = False
+    state["fan_trust"] = min(100, state["fan_trust"] + 8)
+    state["board_trust"] = min(100, state["board_trust"] + 6)
+
+    msg = f"✍️ RESMİ ANLAŞMA: Kulübümüz, tecrübeli teknik direktör {candidate['name']} ile sözleşme imzaladı! ({format_money_val(sign_fee)} imza parası ödendi)"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+class CoachInstructionRequest(BaseModel):
+    instruction: str
+
+@app.post("/api/coach/instruction")
+def api_coach_instruction(req: CoachInstructionRequest):
+    state = get_state()
+    coach = state.get("coach")
+    if not coach:
+        raise HTTPException(status_code=400, detail="Kulüpte görevde bir teknik direktör yok!")
+
+    c_name = coach.get("name", "Teknik Direktör")
+    msg = ""
+
+    if req.instruction == "rotate_squad":
+        state["next_match_rotation"] = True
+        # As kadroya doğrudan dinlenme ve zindelik
+        for p in state.get("squad", [])[:11]:
+            p["stamina"] = min(100, p.get("stamina", 80) + 18)
+        msg = f"Hoca {c_name}: 'Sayın Başkanım, talimatınız başım üstüne. Önümüzdeki maçta as yıldızlarımızı dinlendirip, kulübedeki aç ve hazır oyuncularımıza forma vereceğim. Rotasyon takıma nefes aldıracak.'"
+    
+    elif req.instruction == "all_out_attack":
+        state["next_match_tactic"] = "all_out_attack"
+        coach["attack"] = min(99, coach.get("attack", 80) + 4)
+        msg = f"Hoca {c_name}: 'Hücum futbolu bizim genlerimizde var Başkanım! Rakibin üzerine tüm hatlarımızla gideceğiz, tribünleri coşturacağız!'"
+    
+    elif req.instruction == "park_the_bus":
+        state["next_match_tactic"] = "park_the_bus"
+        coach["defense"] = min(99, coach.get("defense", 80) + 5)
+        msg = f"Hoca {c_name}: 'Çok akıllıca Başkanım. Önümüzdeki maçta savunma bloklarını sıkılaştıracağız, kaleyi gole kapatıp sabırla bekleyeceğiz.'"
+
+    elif req.instruction == "trust_youth":
+        state["next_match_tactic"] = "trust_youth"
+        coach["youth"] = min(99, coach.get("youth", 80) + 5)
+        for p in state.get("squad", []):
+            if p.get("is_youth"):
+                p["morale"] = min(100, p.get("morale", 80) + 15)
+        msg = f"Hoca {c_name}: 'Geleceğimizi inşa ediyoruz Başkanım! Altyapıdan çıkan genç yeteneklere daha fazla şans ve sorumluluk vereceğim.'"
+
+    elif req.instruction == "boost_morale":
+        coach["moral"] = min(100, coach.get("moral", 80) + 12)
+        coach["stress"] = max(5, coach.get("stress", 20) - 15)
+        msg = f"Hoca {c_name}: 'Bu destek ve güveniniz bana güç verdi Başkanım. Siz arkamızda durdukça bu takımı zirveye taşırız!'"
+    
+    else:
+        msg = f"Hoca {c_name}: 'Mesajınızı aldım Başkanım, gereken analizi yapacağız.'"
+
+    state["news"].insert(0, f"🗣️ BAŞKAN - HOCA ZİRVESİ: {msg}")
+    save_state(state)
+    return {"message": msg, "instruction": req.instruction, "state": state}
+
+class TerminateContractRequest(BaseModel):
+    player_name: str
+
+@app.post("/api/squad/terminate-contract")
+def api_terminate_contract(req: TerminateContractRequest):
+    state = get_state()
+    squad = state.get("squad", [])
+    player_idx = next((i for i, p in enumerate(squad) if p["name"].lower() == req.player_name.lower()), None)
+    if player_idx is None:
+        raise HTTPException(status_code=404, detail="Oyuncu kadroda bulunamadı!")
+    
+    player = squad[player_idx]
+    if player_idx < 11:
+        raise HTTPException(status_code=400, detail="İlk 11'deki oyuncunun sözleşmesi doğrudan feshedilemez! Önce yedeğe çekiniz.")
+
+    # Fesih bedeli (Yıllık maaşının %25'i kadar karşılıklı fesih tazminatı)
+    termination_cost = int(player.get("wage", 4_000_000) * 0.25)
+    if state["budget"] < termination_cost:
+        raise HTTPException(status_code=400, detail=f"Fesih tazminatını ödeyecek bütçeniz yok! Gereken: {format_money_val(termination_cost)}")
+
+    state["budget"] -= termination_cost
+    squad.pop(player_idx)
+    state["squad"] = squad
+    state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11) if len(state["squad"]) >= 11 else 70
+    state["my_radar"] = calculate_team_radar(state["squad"])
+
+    msg = f"📄 KARŞILIKLI FESİH: {player['name']} ({player['pos']}) ile olan sözleşme {format_money_val(termination_cost)} tazminat ödenerek feshedildi!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "cost": termination_cost, "state": state}
 
 class CoachConfrontPlayingTimeRequest(BaseModel):
     player_name: str
