@@ -118,73 +118,55 @@ header {
   border-bottom: 1px solid rgba(244, 63, 94, 0.2) !important;
 }
 
-/* Matchday Hero Card: Clean Tactical Panel */
+/* ==========================================================================
+   3-TIER VISUAL HIERARCHY (HIYERARŞİK KATMAN SİSTEMİ)
+   Tier 1 (Hero - Odak): Sıradaki Karşılaşma (Daha aydınlık, derinlikli, hafif altın sınır)
+   Tier 2 (Command - Operasyon): Hoca & Taktik (Dengeli panel yüzeyi, net sınır)
+   Tier 3 (Utility - Alt Butonlar): Tesisler, Kaptan, Finans (Mat yüzey, arka planda sakin)
+   ========================================================================== */
+
+/* Tier 1: Matchday Hero Card (Zirve Odak Noktası) */
 .match-hero-card {
-  background: var(--bg-panel) !important;
-  border: 1px solid var(--border-medium) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  background: linear-gradient(180deg, #162238 0%, #0e1626 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.65), 0 0 20px rgba(14, 22, 38, 0.5) !important;
+  position: relative;
+}
+
+.match-hero-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
 }
 
 .match-hero-card span.font-black.text-slate-500 {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border-light) !important;
-  color: #94a3b8 !important;
+  background: #1a2740 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #e2e8f0 !important;
   font-size: 0.7rem !important;
   font-weight: 800 !important;
-  padding: 0.25rem 0.5rem !important;
+  padding: 0.25rem 0.55rem !important;
   border-radius: 6px !important;
 }
 
-/* Matchday Primary & Secondary Buttons */
-#btn-pre-match-event {
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border-light) !important;
-  color: #cbd5e1 !important;
-  font-size: 0.72rem !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-  transition: all 0.15s ease !important;
-}
-
-#btn-pre-match-event:hover {
-  background: var(--bg-card-hover) !important;
-  border-color: var(--border-medium) !important;
-  color: #ffffff !important;
-}
-
-button[onclick*="switchTab('match')"] {
-  background: #059669 !important; /* FM Matchday Green */
-  color: #ffffff !important;
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  border: 1px solid #10b981 !important;
-  border-radius: 8px !important;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35) !important;
-  transition: all 0.15s ease !important;
-}
-
-button[onclick*="switchTab('match')"]:hover {
-  background: #10b981 !important;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45) !important;
-  transform: translateY(-1px);
-}
-
-button[onclick*="switchTab('match')"].bg-gradient-to-r:active,
-.btn-primary-action:active {
-  transform: scale(0.97);
-}
-
-/* Coach Card & Sub-Cards */
+/* Tier 2: Coach Command Hub (Orta Kademe Yönetim) */
 #office-coach-card {
-  background: var(--bg-panel) !important;
-  border: 1px solid var(--border-light) !important;
+  background: linear-gradient(180deg, #111a2c 0%, #0c121e 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
   transition: all 0.15s ease !important;
 }
 
 #office-coach-card:hover {
-  border-color: var(--border-accent) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 .coach-avatar-box {
@@ -204,26 +186,33 @@ button[onclick*="switchTab('match')"].bg-gradient-to-r:active,
   object-fit: cover !important;
 }
 
-/* Action Tiles & Panels (Kaptan, Siyaset, vb.) */
+/* Tier 3: Action Tiles & Utility Grid (Destek & Kısayol Masası) */
 .grid-cols-2 button,
+.grid-cols-1 button,
+.grid-cols-3 > div,
 .tab-pane .bg-\[\#121929\]\/90,
 .tab-pane .bg-\[\#151c2e\],
 .tab-pane .bg-\[\#111624\] {
-  background: var(--bg-panel) !important;
-  border: 1px solid var(--border-light) !important;
-  border-radius: 12px !important;
+  background: #0d1422 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
   transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease !important;
 }
 
 .grid-cols-2 button:hover,
+.grid-cols-1 button:hover,
+.grid-cols-3 > div:hover,
 .tab-pane .bg-\[\#121929\]\/90:hover,
 .tab-pane .bg-\[\#151c2e\]:hover {
-  background: var(--bg-card) !important;
-  border-color: var(--border-medium) !important;
+  background: #141e32 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
   transform: translateY(-1px);
 }
 
-.grid-cols-2 button:active {
+.grid-cols-2 button:active,
+.grid-cols-1 button:active,
+.grid-cols-3 > div:active {
   transform: scale(0.98);
 }
 
