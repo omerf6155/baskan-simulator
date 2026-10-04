@@ -947,50 +947,51 @@
           </div>
         </div>
 
-        <!-- SİYASET VE CUMHURBAŞKANLIĞI HİBE SİSTEMİ (KARANLIK DERİN DEVLET TEMASI) -->
-        <div class="bg-gradient-to-b from-[#0e0f14] via-[#090a0e] to-[#040406] border border-amber-600/40 rounded-xl p-3.5 space-y-3 shadow-2xl relative overflow-hidden">
-          <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-600/5 rounded-full blur-2xl pointer-events-none"></div>
-
-          <div class="flex items-center justify-between border-b border-amber-900/30 pb-2.5">
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded bg-amber-950/80 border border-amber-600/50 flex items-center justify-center text-sm shadow-inner">🏛️</div>
+        <!-- SİYASET VE CUMHURBAŞKANLIĞI HİBE SİSTEMİ (DEVLET PROTOKOLÜ & ANKARA KULİSİ) -->
+        <div class="bg-[#0f141f] border border-slate-700/80 rounded-xl p-4 space-y-3.5 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shadow-sm">
+                <i data-lucide="landmark" class="w-4 h-4 text-blue-400"></i>
+              </div>
               <div>
-                <div class="text-xs font-black text-amber-200 tracking-wider">DERİN SİYASET & ANKARA KULİSLERİ</div>
-                <div class="text-[9px] text-amber-500/70 font-mono">KAPALI KAPILAR ARDI PROTOKOLÜ</div>
+                <div class="text-xs font-bold text-white tracking-wide">ANKARA KULİSLERİ & PROTOKOL</div>
+                <div class="text-[9px] text-slate-400 font-mono tracking-wider">DEVLET BÜROKRASİSİ VE HİBE MASASI</div>
               </div>
             </div>
             <div class="text-right">
-              <span class="text-xs font-black text-amber-400 font-mono px-2 py-0.5 rounded bg-black/80 border border-amber-700/60 shadow-sm" id="pol-card-score">%50</span>
-              <div class="text-[8px] text-slate-500 mt-0.5">Siyasi Nüfuz</div>
+              <span class="text-xs font-bold text-blue-400 font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 shadow-sm" id="pol-card-score">%50</span>
+              <div class="text-[8px] text-slate-400 mt-0.5">Siyasi Nüfuz</div>
             </div>
           </div>
 
-          <p class="text-[10px] text-slate-300 leading-relaxed bg-black/40 p-2.5 rounded-lg border border-slate-900">
-            Külliye koridorları, bürokrasi ve lobi görüşmeleriyle siyasi ağırlığınızı perçinleyin. %65 üstünde <strong class="text-amber-400">35M ₺ Acil Nakit Hibe</strong>, %85 üstünde <strong class="text-emerald-400">15 Dönüm Hazine Arazisi + 30M ₺ Fon</strong> talep hakkı doğar. Ancak saray kapısından ret yerseniz ağır siyasi bedel ödersiniz!
+          <p class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-3 rounded-lg border border-slate-800/80">
+            Bürokrasi ve federasyon koridorlarında kulübün ağırlığını koruyun. Siyasi nüfuz %65 üzerine çıktığında <strong class="text-blue-300">35M ₺ Acil Nakit Hibe</strong>, %85 üzerine çıktığında <strong class="text-emerald-400">15 Dönüm Hazine Arazisi + 30M ₺ Fon</strong> protokolü açılır. Ret almanız halinde kamuoyu önünde siyasi itibarınız zedelenir.
           </p>
 
-          <div class="grid grid-cols-3 gap-1.5">
-            <button onclick="doPoliticsAction('ankara_visit')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
-              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Ankara Teması</div>
-              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+10 Nüfuz • 4M ₺</div>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="doPoliticsAction('ankara_visit')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
+              <div class="text-[11px] font-bold text-slate-200">Bakanlık Ziyareti</div>
+              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+10 Nüfuz • 4M ₺</div>
             </button>
-            <button onclick="doPoliticsAction('gov_project')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
-              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Sosyal Protokol</div>
-              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+16 Nüfuz • 15M ₺</div>
+            <button onclick="doPoliticsAction('gov_project')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
+              <div class="text-[11px] font-bold text-slate-200">Ortak Protokol</div>
+              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+16 Nüfuz • 15M ₺</div>
             </button>
-            <button onclick="doPoliticsAction('pro_statement')" class="p-2 rounded-lg bg-black/60 border border-slate-800 hover:border-amber-500 text-left transition-all group">
-              <div class="text-[10px] font-bold text-white group-hover:text-amber-300">Lobi Demeci</div>
-              <div class="text-[8px] text-amber-400/90 font-mono mt-0.5">+8 Nüfuz • Bedava</div>
+            <button onclick="doPoliticsAction('pro_statement')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
+              <div class="text-[11px] font-bold text-slate-200">Basın Açıklaması</div>
+              <div class="text-[9px] text-emerald-400 font-mono mt-0.5">+8 Nüfuz • Bedava</div>
             </button>
           </div>
 
           <!-- Cumhurbaşkanlığı Hibe Başvuru Butonu -->
-          <div class="pt-2 border-t border-amber-900/30">
-            <button onclick="requestPresidentialGrant()" id="btn-pres-grant" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-900 via-amber-700 to-yellow-600 hover:from-amber-800 hover:to-yellow-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-xl transition-all border border-amber-500/60">
-              <span>📜</span> <span>Cumhurbaşkanlığı Hibe Protokolü İmzala</span>
+          <div class="pt-2 border-t border-slate-800">
+            <button onclick="requestPresidentialGrant()" id="btn-pres-grant" class="w-full py-2.5 px-4 rounded-lg bg-blue-700 hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all border border-blue-500/50 active:scale-95">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              <span>Cumhurbaşkanlığı Hibe Protokolü İmzala</span>
             </button>
-            <div class="text-[9px] text-amber-400/70 text-center mt-1" id="pres-grant-hint">
-              Sezonda 1 başvuru hakkı! (En az %65 Siyasi Nüfuz şartı).
+            <div class="text-[9px] text-slate-400 text-center mt-1.5" id="pres-grant-hint">
+              Sezonda 1 kez başvurulabilir (Minimum %65 Siyasi Nüfuz şartı aranır).
             </div>
           </div>
         </div>
