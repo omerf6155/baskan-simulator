@@ -1251,7 +1251,7 @@ def get_state(session_id: Optional[str] = None):
                                 coach = state["coach"]
                         if coach:
                             if not coach.get("photo"):
-                                coach["photo"] = "/static/coach_thomas_reis.png"
+                                coach["photo"] = (team_info.get("coach", {}).get("photo") if team_info else None) or "/static/coach_senol_gunes.png"
                             if not coach.get("traits"):
                                 coach["traits"] = []
                     return state
@@ -4105,7 +4105,7 @@ def api_coach_confront_playing_time(req: CoachConfrontPlayingTimeRequest):
         "matches_played": matches,
         "overall": overall,
         "coach_name": coach_name,
-        "coach_photo": coach.get("photo", "/static/coach_tekke.png"),
+        "coach_photo": coach.get("photo", "/static/coach_senol_gunes.png"),
         "state": state
     }
 

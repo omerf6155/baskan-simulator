@@ -916,7 +916,7 @@ function renderUI() {
 
   // Hoca Özeti & Fotoğrafları
   const isCoachVacant = !gameState.coach || gameState.coach_vacant;
-  const coachPhoto = (!isCoachVacant && gameState.coach.photo) ? gameState.coach.photo : "/static/coach_terim.png";
+  const coachPhoto = (!isCoachVacant && gameState.coach.photo) ? gameState.coach.photo : "/static/coach_senol_gunes.png";
   const officeCoachPhotoEl = document.getElementById("office-coach-photo");
   if (officeCoachPhotoEl) officeCoachPhotoEl.src = coachPhoto;
   const squadCoachPhotoEl = document.getElementById("squad-coach-photo");
@@ -3420,7 +3420,9 @@ function openCoachConfrontModal(data) {
   const speechEl = document.getElementById("confront-president-speech");
   const respEl = document.getElementById("confront-coach-response");
 
-  if (photoEl) photoEl.src = data.coach_photo || "/static/coach_tekke.png";
+  if (photoEl) {
+    photoEl.src = data.coach_photo || (gameState && gameState.coach && gameState.coach.photo ? gameState.coach.photo : "/static/coach_senol_gunes.png");
+  }
   if (nameEl) nameEl.innerText = data.coach_name || "Teknik Direktör";
   if (speechEl) {
     speechEl.innerText = `"Sayın Hocam, ${data.player_name} (${data.overall} Reyting) bu sezon yalnızca ${data.minutes_played} dakika (${data.matches_played} maç) süre alabildi! Neden bu oyuncuyu kenarda çürütüyorsun?"`;
