@@ -1053,6 +1053,102 @@ def get_team_squad(state: Dict[str, Any], team_id: str) -> List[Dict[str, Any]]:
     ls = get_league_squads(state)
     return ls.get(team_id, [])
 
+def generate_squad_incoming_bid(state: Dict[str, Any], buyer: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    """
+    Kullanıcının kadrosundaki oyunculara dış kulüplerden veya Süper Lig rakiplerinden
+    Kiralık (özellikle 25 yaş altı gençlere) veya Bonservis transfer teklifi üretir.
+    """
+    squad = state.get("squad", [])
+    if not squad:
+        return None
+
+    # Alıcı kulüp belirle
+    my_club = state.get("club_name", "")
+    if buyer:
+        buyer_name = buyer["name"]
+        buyer_id = buyer.get("id")
+        buyer_logo = buyer.get("logo", "")
+    else:
+        candidates = [
+            {"club": "Sakaryaspor", "id": None, "logo": ""},
+            {"club": "Gençlerbirliği", "id": None, "logo": ""},
+            {"club": "Kocaelispor", "id": None, "logo": ""},
+            {"club": "Göztepe", "id": "goztepe", "logo": ""},
+            {"club": "Kasımpaşa", "id": "kasimpasa", "logo": ""},
+            {"club": "Eyüpspor", "id": "eyupspor", "logo": ""},
+            {"club": "Çaykur Rizespor", "id": "rizespor", "logo": ""},
+            {"club": "Antalyaspor", "id": "antalyaspor", "logo": ""},
+            {"club": "Sivasspor", "id": "sivasspor", "logo": ""},
+            {"club": "Bodrum FK", "id": "bodrum", "logo": ""},
+            {"club": "Westerlo", "id": None, "logo": ""},
+            {"club": "Hull City", "id": None, "logo": ""},
+            {"club": "Rio Ave", "id": None, "logo": ""},
+            {"club": "Lille", "id": None, "logo": ""}
+        ]
+        for rt in [t for t in TEAMS_DB if t["name"] != my_club and t.get("is_big")]:
+            candidates.append({"club": rt["name"], "id": rt["id"], "logo": rt.get("logo", "")})
+        chosen = random.choice(candidates)
+        buyer_name = chosen["club"]
+        buyer_id = chosen["id"]
+        buyer_logo = chosen["logo"]
+
+    # 25 yaş ve altı veya yedek oyunculara öncelik (%70 şansla)
+    young_or_bench = [p for p in squad if p.get("age", 25) <= 25 or p["name"] not in [x["name"] for x in squad[:11]]]
+    if young_or_bench and random.random() < 0.70:
+        target_p = random.choice(young_or_bench)
+    else:
+        target_p = random.choice(squad)
+
+    p_age = target_p.get("age", 24)
+    p_val = target_p.get("val", 25_000_000)
+
+    # 25 yaş altına %75 ihtimalle KİRALIK, diğer oyunculara %45 ihtimalle KİRALIK
+    is_loan = (p_age <= 25 and random.random() < 0.75) or (random.random() < 0.45)
+
+    if is_loan:
+        loan_fee = max(1_500_000, int(p_val * random.uniform(0.08, 0.18)))
+        wage_pct = random.choice([60, 75, 100])
+        buy_opt = int(p_val * random.uniform(1.15, 1.45)) if random.random() < 0.50 else None
+        bid = {
+            "id": f"bid_{random.randint(1000, 9999)}",
+            "bid_type": "loan",
+            "club": buyer_name,
+            "target_team_id": buyer_id,
+            "club_logo": buyer_logo,
+            "player_name": target_p["name"],
+            "pos": target_p["pos"],
+            "age": p_age,
+            "overall": target_p.get("overall", 72),
+            "loan_fee": loan_fee,
+            "offer_val": loan_fee,
+            "wage_coverage_pct": wage_pct,
+            "buy_option": buy_opt,
+            "duration_weeks": 15
+        }
+        opt_str = f", {format_money_val(buy_opt)} opsiyonla" if buy_opt else ""
+        ev_msg = f"💼 KİRALIK TEKLİFİ: {buyer_name}, {target_p['name']} ({target_p['pos']}, {p_age} yaş) için {format_money_val(loan_fee)} kiralama ücreti ve %{wage_pct} maaş karşılama{opt_str} teklif etti!"
+    else:
+        offer_val = int(p_val * random.uniform(1.05, 1.45))
+        bid = {
+            "id": f"bid_{random.randint(1000, 9999)}",
+            "bid_type": "transfer",
+            "club": buyer_name,
+            "target_team_id": buyer_id,
+            "club_logo": buyer_logo,
+            "player_name": target_p["name"],
+            "pos": target_p["pos"],
+            "age": p_age,
+            "overall": target_p.get("overall", 75),
+            "offer_val": offer_val,
+            "loan_fee": 0
+        }
+        ev_msg = f"💼 BONSERVİS TEKLİFİ: {buyer_name}, {target_p['name']} ({target_p['pos']}) için {format_money_val(offer_val)} bonservis teklif etti!"
+
+    state.setdefault("incoming_bids", []).append(bid)
+    state["incoming_bids"] = state["incoming_bids"][-4:]
+    state["news"].insert(0, ev_msg)
+    return bid
+
 def simulate_cpu_transfers(state: Dict[str, Any], count: int = 1) -> List[str]:
     """
     Ligdeki diğer takımların kendi aralarında, Avrupa pazarından veya serbestlerden transfer yapmasını sağlar.
@@ -1112,27 +1208,14 @@ def simulate_cpu_transfers(state: Dict[str, Any], count: int = 1) -> List[str]:
 
         roll = random.random()
 
-        # 1) %25 İhtimalle BİZİM OYUNCUMUZA TEKLİF GETİR!
-        if roll < 0.25 and state.get("squad"):
-            target_p = random.choice(state["squad"][:11] if len(state["squad"]) >= 11 else state["squad"])
-            offer_val = int(target_p.get("val", 30_000_000) * random.uniform(1.05, 1.45))
-            bid = {
-                "id": f"bid_{random.randint(1000, 9999)}",
-                "club": buyer["name"],
-                "target_team_id": buyer["id"],
-                "club_logo": buyer.get("logo", ""),
-                "player_name": target_p["name"],
-                "pos": target_p["pos"],
-                "offer_val": offer_val
-            }
-            state.setdefault("incoming_bids", []).append(bid)
-            state["incoming_bids"] = state["incoming_bids"][-3:]
-            ev_msg = f"💼 SÜPER LİG DEVİ KAPIYI ÇALDI: {buyer['name']}, oyuncumuz {target_p['name']} ({target_p['pos']}) için {format_money_val(offer_val)} teklif etti!"
-            state["news"].insert(0, ev_msg)
-            transfer_events.append(ev_msg)
+        # 1) %30 İhtimalle BİZİM OYUNCUMUZA TEKLİF GETİR (Kiralık veya Bonservis)!
+        if roll < 0.30 and state.get("squad"):
+            bid = generate_squad_incoming_bid(state, buyer)
+            if bid:
+                transfer_events.append(f"💼 {bid['club']}, {bid['player_name']} için resmi teklif yaptı!")
 
         # 2) %15 İhtimalle AVRUPA'DAKİ YERLİ YILDIZLARIMIZDAN TRANSFER YAP
-        elif roll < 0.40 and avail_turkish:
+        elif roll < 0.45 and avail_turkish:
             chosen_p = random.choice(avail_turkish)
             avail_turkish.remove(chosen_p)
             new_p = enrich_player({
@@ -3237,6 +3320,193 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
     save_state(state)
     return {"message": msg, "state": state}
 
+# ==================== KULÜPLERDEN OYUNCU KİRALAMA & PAZARLIK ====================
+class LoanNegotiateRequest(BaseModel):
+    target_team_id: Optional[str] = None
+    club_name: Optional[str] = None
+    player_name: str
+    offered_fee: int
+    wage_coverage_pct: int = 100
+    buy_option: Optional[int] = None
+
+@app.post("/api/transfer/negotiate-loan")
+def api_negotiate_loan(req: LoanNegotiateRequest):
+    state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır!")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
+    target_player = None
+    target_club_name = req.club_name or "Rakip Kulüp"
+    target_squad = None
+    
+    if req.target_team_id:
+        target_team = next((t for t in TEAMS_DB if t["id"] == req.target_team_id), None)
+        if target_team:
+            target_club_name = target_team["name"]
+            target_squad = get_team_squad(state, target_team["id"])
+            p_cand = next((p for p in target_squad if p["name"] == req.player_name), None)
+            if p_cand:
+                target_player = dict(p_cand)
+
+    if not target_player:
+        for s in WORLD_SUPERSTARS + TURKISH_STARS + SCOUT_PICKS:
+            if s["name"] == req.player_name:
+                target_player = dict(s)
+                target_club_name = s.get("current_club", target_club_name)
+                break
+
+    if not target_player:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı!")
+
+    p_val = target_player.get("val", target_player.get("price", 25_000_000))
+    p_age = target_player.get("age", 24)
+    p_ovr = target_player.get("overall", 75)
+    base_wage = target_player.get("salary", target_player.get("wage", 8_000_000))
+
+    # Kural 1: Çok yaşlı ve dokunulmaz süperyıldızlar (29+ yaş ve 84+ güç) kiralık verilmez
+    if p_age >= 29 and p_ovr >= 84 and req.offered_fee < int(p_val * 0.22):
+        return {
+            "status": "rejected",
+            "message": f"{target_club_name} Başkanı: '{target_player['name']} takımımızın dokunulmaz kilit yıldızıdır, kiralık vermeyiz! Yalnızca bonservis satışı görüşebiliriz.'"
+        }
+
+    # Kural 2: Asgari kiralama bedeli kontrolü
+    min_loan_fee = max(800_000, int(p_val * (0.05 if p_age <= 23 else 0.08)))
+    if req.offered_fee < min_loan_fee:
+        counter_fee = max(1_500_000, int(p_val * 0.12))
+        return {
+            "status": "rejected",
+            "message": f"{target_club_name} Başkanı: '{req.offered_fee:,} ₺ kiralama ücreti çok düşük! {target_player['name']} için en az {counter_fee:,} ₺ kiralama bedeli talep ediyoruz.'",
+            "counter_fee": counter_fee
+        }
+
+    if req.wage_coverage_pct < 60:
+        return {
+            "status": "rejected",
+            "message": f"{target_club_name} Başkanı: 'Maaş karşılama oranınız çok düşük! En az %60 maaş karşılama şartımız var.'"
+        }
+
+    wage_to_pay = int(base_wage * (req.wage_coverage_pct / 100.0))
+    return {
+        "status": "loan_accepted",
+        "message": f"{target_club_name} Başkanı: 'Kiralık teklifinizi kabul ediyoruz! Şartlarda anlaştık, oyuncuyu kadronuza katabilirsiniz.'",
+        "player_name": target_player["name"],
+        "loan_fee": req.offered_fee,
+        "wage_coverage_pct": req.wage_coverage_pct,
+        "weekly_wage": wage_to_pay,
+        "buy_option": req.buy_option
+    }
+
+class SignLoanPlayerRequest(BaseModel):
+    target_team_id: Optional[str] = None
+    club_name: Optional[str] = None
+    player_name: str
+    loan_fee: int
+    wage_coverage_pct: int = 100
+    buy_option: Optional[int] = None
+
+@app.post("/api/transfer/sign-loan-player")
+def api_sign_loan_player(req: SignLoanPlayerRequest):
+    state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır!")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
+    if any(p.get("name", "").strip().lower() == req.player_name.strip().lower() for p in state.get("squad", [])):
+        raise HTTPException(status_code=400, detail=f"'{req.player_name}' zaten kadronuzda yer alıyor!")
+
+    if state["budget"] < req.loan_fee:
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Kiralama bedeli: {req.loan_fee:,} ₺")
+
+    target_player = None
+    target_club_name = req.club_name or "Dış Kulüp"
+    
+    if req.target_team_id:
+        target_team = next((t for t in TEAMS_DB if t["id"] == req.target_team_id), None)
+        if target_team:
+            target_club_name = target_team["name"]
+            target_squad = get_team_squad(state, target_team["id"])
+            p_found = next((p for p in target_squad if p["name"] == req.player_name), None)
+            if p_found:
+                target_player = dict(p_found)
+                state.setdefault("league_squads", {})[target_team["id"]] = [x for x in target_squad if x["name"] != req.player_name]
+
+    if not target_player:
+        for s in WORLD_SUPERSTARS + TURKISH_STARS + SCOUT_PICKS:
+            if s["name"] == req.player_name:
+                target_player = dict(s)
+                target_club_name = s.get("current_club", target_club_name)
+                break
+
+    if not target_player:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı!")
+
+    base_wage = target_player.get("salary", target_player.get("wage", 8_000_000))
+    covered_wage = int(base_wage * (req.wage_coverage_pct / 100.0))
+
+    state["budget"] -= req.loan_fee
+
+    loan_p = enrich_player({
+        "name": target_player["name"],
+        "pos": target_player["pos"],
+        "age": target_player["age"],
+        "overall": target_player.get("real_pot", target_player.get("overall", 78)),
+        "wage": covered_wage,
+        "val": target_player.get("price", target_player.get("val", 25_000_000)),
+        "contract_years": 1,
+        "morale": 92,
+        "is_inbound_loan": True,
+        "parent_club": target_club_name,
+        "parent_team_id": req.target_team_id,
+        "loan_weeks_left": 17,
+        "buy_option": req.buy_option
+    })
+    if "is_foreign" in target_player:
+        loan_p["is_foreign"] = target_player["is_foreign"]
+
+    state["squad"].append(loan_p)
+    state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+    state["my_radar"] = calculate_team_radar(state["squad"])
+    state["fan_trust"] = min(100, state["fan_trust"] + 5)
+
+    opt_text = f" ({format_money_val(req.buy_option)} satın alma opsiyonuyla)" if req.buy_option else ""
+    msg = f"🔄 KİRALIK TRANSFER: {loan_p['name']} ({loan_p['pos']}), {target_club_name} kulübünden {format_money_val(req.loan_fee)} bedelle kiralık olarak takımımıza katıldı{opt_text}!"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+class BuyLoanOptionRequest(BaseModel):
+    player_name: str
+
+@app.post("/api/transfer/buy-loan-option")
+def api_buy_loan_option(req: BuyLoanOptionRequest):
+    state = get_state()
+    player = next((p for p in state["squad"] if p["name"] == req.player_name and p.get("is_inbound_loan")), None)
+    if not player:
+        raise HTTPException(status_code=404, detail="Kiralık oyuncu veya satın alma opsiyonu bulunamadı!")
+    buy_opt = player.get("buy_option")
+    if not buy_opt or buy_opt <= 0:
+        raise HTTPException(status_code=400, detail="Bu oyuncunun satın alma opsiyonu bulunmuyor!")
+    if state["budget"] < buy_opt:
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Opsiyon bedeli: {buy_opt:,} ₺")
+
+    state["budget"] -= buy_opt
+    player["is_inbound_loan"] = False
+    player.pop("parent_club", None)
+    player.pop("parent_team_id", None)
+    player.pop("buy_option", None)
+    player["contract_years"] = 3
+    player["morale"] = min(100, player.get("morale", 90) + 10)
+    state["fan_trust"] = min(100, state["fan_trust"] + 6)
+    
+    msg = f"💎 OPSİYON KULLANILDI: {player['name']} için {format_money_val(buy_opt)} ödenerek bonservisi tamamen kulübümüze kazandırıldı! (3 Yıllık Sözleşme)"
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
 # ==================== TRANSFER GÜNÜ İLERLETME & BİZE GELEN TEKLİFLER ====================
 @app.post("/api/transfer/advance-day")
 def api_transfer_advance_day():
@@ -3247,39 +3517,9 @@ def api_transfer_advance_day():
     # Diğer takımların transfer hareketliliği simülasyonu
     simulate_cpu_transfers(state, count=1)
 
-    # Rastgele bir oyuncumuza dış veya yerli kulüplerden transfer teklifi oluştur
-    if state["squad"] and random.random() < 0.70:
-        target_player = random.choice(state["squad"][:11] if len(state["squad"]) >= 11 else state["squad"])
-        
-        # Teklif veren kulüp havuzu (Avrupa kulüpleri + Süper Lig rakipleri)
-        my_club = state.get("club_name", "")
-        rival_teams = [t for t in TEAMS_DB if t["name"] != my_club and t.get("is_big")]
-        offering_candidates = [
-            {"club": "Aston Villa", "id": None, "logo": ""},
-            {"club": "Sevilla", "id": None, "logo": ""},
-            {"club": "Lille", "id": None, "logo": ""},
-            {"club": "Ajax", "id": None, "logo": ""},
-            {"club": "Sporting CP", "id": None, "logo": ""},
-            {"club": "Lazio", "id": None, "logo": ""},
-            {"club": "Bologna", "id": None, "logo": ""}
-        ]
-        for rt in rival_teams:
-            offering_candidates.append({"club": rt["name"], "id": rt["id"], "logo": rt.get("logo", "")})
-
-        chosen_buyer = random.choice(offering_candidates)
-        offer_val = int(target_player.get("val", 30_000_000) * random.uniform(1.05, 1.45))
-        
-        bid = {
-            "id": f"bid_{random.randint(1000, 9999)}",
-            "club": chosen_buyer["club"],
-            "target_team_id": chosen_buyer["id"],
-            "club_logo": chosen_buyer["logo"],
-            "player_name": target_player["name"],
-            "pos": target_player["pos"],
-            "offer_val": offer_val
-        }
-        state["incoming_bids"] = [bid]
-        state["news"].insert(0, f"💼 TRANSFER TEKLİFİ: {chosen_buyer['club']}, {target_player['name']} için {format_money_val(offer_val)} bonservis teklif etti!")
+    # Rastgele bir oyuncumuza dış veya yerli kulüplerden teklif oluştur (Kiralık veya Bonservis)
+    if state.get("squad") and random.random() < 0.70:
+        generate_squad_incoming_bid(state)
 
     if state["transfer_day"] > max_days:
         state["transfer_window_open"] = False
@@ -3316,57 +3556,131 @@ def api_respond_incoming_bid(req: RespondBidRequest):
 
     # Alıcı kulüp Süper Lig takımı mı kontrol et
     buying_team = next((t for t in TEAMS_DB if t["name"] == bid["club"] or t["id"] == bid.get("target_team_id")), None)
+    is_loan = (bid.get("bid_type") == "loan")
 
     if req.action == "accept":
-        state["budget"] += bid["offer_val"]
-        state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+        if is_loan:
+            loan_fee = bid.get("loan_fee") or bid.get("offer_val", 0)
+            state["budget"] += loan_fee
+            state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+            
+            # Kiralık havuzuna kaydet
+            loan_entry = {
+                "name": player["name"],
+                "pos": player["pos"],
+                "age": player.get("age", 22),
+                "overall": player["overall"],
+                "loan_club": bid["club"],
+                "league": "Süper Lig / Dış Lig",
+                "weeks_left": bid.get("duration_weeks", 15),
+                "minutes_played": 0,
+                "matches_played": 0,
+                "growth": 0,
+                "original_wage": player.get("wage", 3_000_000),
+                "saved_wage": int(player.get("wage", 3_000_000) * (bid.get("wage_coverage_pct", 100) / 100.0)),
+                "buy_option": bid.get("buy_option")
+            }
+            state.setdefault("loaned_players", []).append(loan_entry)
+            
+            if buying_team:
+                b_squad = get_team_squad(state, buying_team["id"])
+                b_squad.append(enrich_player(dict(player)))
+                state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
+
+            opt_str = f" ({format_money_val(bid['buy_option'])} opsiyonla)" if bid.get("buy_option") else ""
+            msg = f"🤝 KİRALAMA ANLAŞMASI: {player['name']} ({player['pos']}), {format_money_val(loan_fee)} kiralama bedeliyle {bid['club']} kulübüne kiralandı{opt_str}! (Maaşın %{bid.get('wage_coverage_pct', 100)}'ü karşılanacak)"
+        else:
+            state["budget"] += bid["offer_val"]
+            state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+            if buying_team:
+                b_squad = get_team_squad(state, buying_team["id"])
+                b_squad.append(enrich_player(dict(player)))
+                state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
+                msg = f"🚨 LİG İÇİ FLAŞ SATIŞ: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında doğrudan rakibimiz {buying_team['name']} kadrosuna katıldı!"
+            else:
+                msg = f"💰 OYUNCU SATILDI: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında {bid['club']} kulübüne transfer oldu!"
+
         state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
         state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
         state["my_radar"] = calculate_team_radar(state["squad"])
-        state["incoming_bids"] = []
+        state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
 
         if state.get("captain_name") == player["name"]:
             new_captain = get_captain_name(state["squad"])
             state["captain_name"] = new_captain
             state["news"].insert(0, f"🎖️ YENİ KAPTAN: {player['name']}'ın takımdan ayrılmasıyla kaptanlık pazubandı {new_captain}'a devredildi.")
 
-        if buying_team:
-            b_squad = get_team_squad(state, buying_team["id"])
-            b_squad.append(enrich_player(dict(player)))
-            state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
-            msg = f"🚨 LİG İÇİ FLAŞ SATIŞ: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında doğrudan rakibimiz {buying_team['name']} kadrosuna katıldı!"
-        else:
-            msg = f"💰 OYUNCU SATILDI: {player['name']}, {format_money_val(bid['offer_val'])} karşılığında {bid['club']} kulübüne transfer oldu!"
-
     elif req.action == "counter":
-        # %50 şansla karşı kulüp ekstra %25 kabul eder
-        if random.random() < 0.50:
-            extra = int(bid["offer_val"] * 1.25)
-            state["budget"] += extra
-            state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
-            state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
-            state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
-            state["my_radar"] = calculate_team_radar(state["squad"])
-            state["incoming_bids"] = []
-
-            if state.get("captain_name") == player["name"]:
-                new_captain = get_captain_name(state["squad"])
-                state["captain_name"] = new_captain
-                state["news"].insert(0, f"🎖️ YENİ KAPTAN: {player['name']}'ın takımdan ayrılmasıyla kaptanlık pazubandı {new_captain}'a devredildi.")
-
-            if buying_team:
-                b_squad = get_team_squad(state, buying_team["id"])
-                b_squad.append(enrich_player(dict(player)))
-                state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
-                msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle {buying_team['name']} kadrosuna katıldı!"
+        if is_loan:
+            loan_fee = bid.get("loan_fee") or bid.get("offer_val", 0)
+            # %55 şansla kiralama bedeli artışı kabul edilir (+%30)
+            if random.random() < 0.55:
+                extra = int(loan_fee * 1.30)
+                state["budget"] += extra
+                state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+                loan_entry = {
+                    "name": player["name"],
+                    "pos": player["pos"],
+                    "age": player.get("age", 22),
+                    "overall": player["overall"],
+                    "loan_club": bid["club"],
+                    "league": "Süper Lig / Dış Lig",
+                    "weeks_left": bid.get("duration_weeks", 15),
+                    "minutes_played": 0,
+                    "matches_played": 0,
+                    "growth": 0,
+                    "original_wage": player.get("wage", 3_000_000),
+                    "saved_wage": int(player.get("wage", 3_000_000) * (bid.get("wage_coverage_pct", 100) / 100.0)),
+                    "buy_option": bid.get("buy_option")
+                }
+                state.setdefault("loaned_players", []).append(loan_entry)
+                if buying_team:
+                    b_squad = get_team_squad(state, buying_team["id"])
+                    b_squad.append(enrich_player(dict(player)))
+                    state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
+                state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+                state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+                state["my_radar"] = calculate_team_radar(state["squad"])
+                state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
+                msg = f"🤝 KİRALIK PAZARLIĞI BAŞARILI: {bid['club']} artırdığımız kiralama bedelini kabul etti! {player['name']} {format_money_val(extra)} bedelle kiralandı!"
             else:
-                msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle satıldı!"
+                state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
+                msg = f"❌ {bid['club']} artırılan kiralama bedelini yüksek bularak kiralık teklifini geri çekti."
         else:
-            state["incoming_bids"] = []
-            msg = f"❌ {bid['club']} karşı teklifimizi çok bularak masadan kalktı. Transfer iptal oldu."
+            # Bonservis pazarlığı (%50 şansla kabul)
+            if random.random() < 0.50:
+                extra = int(bid["offer_val"] * 1.25)
+                state["budget"] += extra
+                state["squad"] = [p for p in state["squad"] if p["name"] != player["name"]]
+                state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+                state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+                state["my_radar"] = calculate_team_radar(state["squad"])
+                state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
+
+                if state.get("captain_name") == player["name"]:
+                    new_captain = get_captain_name(state["squad"])
+                    state["captain_name"] = new_captain
+                    state["news"].insert(0, f"🎖️ YENİ KAPTAN: {player['name']}'ın takımdan ayrılmasıyla kaptanlık pazubandı {new_captain}'a devredildi.")
+
+                if buying_team:
+                    b_squad = get_team_squad(state, buying_team["id"])
+                    b_squad.append(enrich_player(dict(player)))
+                    state.setdefault("league_squads", {})[buying_team["id"]] = b_squad
+                    msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle {buying_team['name']} kadrosuna katıldı!"
+                else:
+                    msg = f"🤝 PAZARLIK BAŞARILI: {bid['club']} artırdığımız teklifi kabul etti! {player['name']} {format_money_val(extra)} bedelle satıldı!"
+            else:
+                state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
+                msg = f"❌ {bid['club']} karşı teklifimizi çok bularak masadan kalktı. Transfer iptal oldu."
     else: # reject
-        state["incoming_bids"] = []
-        msg = f"🚫 TEKLİF REDDEDİLDİ: {player['name']} için gelen {format_money_val(bid['offer_val'])} teklif geri çevrildi."
+        state["incoming_bids"] = [b for b in state.get("incoming_bids", []) if b["id"] != bid["id"]]
+        val_name = "kiralık" if is_loan else "bonservis"
+        val_amt = bid.get("loan_fee") if is_loan else bid.get("offer_val")
+        msg = f"🚫 TEKLİF REDDEDİLDİ: {player['name']} için {bid['club']} tarafından iletilen {format_money_val(val_amt)} {val_name} teklifi geri çevrildi."
+
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
 
     state["news"].insert(0, msg)
     save_state(state)
@@ -3506,6 +3820,26 @@ def api_next_season():
     state["loaned_players"] = still_loaned
     if returning_loans:
         state["news"].insert(0, f"🔙 KİRALIKTAN DÖNÜŞ: {', '.join(returning_loans)} gelişimini tamamlayarak as kadroya katıldı!")
+
+    # Bize kiralık gelen oyuncuları ana kulüplerine geri gönder (Opsiyonu kullanılmamış olanlar)
+    returned_inbound = []
+    kept_squad = []
+    for p in state.get("squad", []):
+        if p.get("is_inbound_loan"):
+            parent = p.get("parent_club", "Dış Kulüp")
+            returned_inbound.append(f"{p['name']} ({parent})")
+            if p.get("parent_team_id"):
+                p_clean = dict(p)
+                p_clean.pop("is_inbound_loan", None)
+                p_clean.pop("parent_club", None)
+                p_clean.pop("parent_team_id", None)
+                p_clean.pop("buy_option", None)
+                state.setdefault("league_squads", {}).setdefault(p["parent_team_id"], []).append(enrich_player(p_clean))
+        else:
+            kept_squad.append(p)
+    state["squad"] = kept_squad
+    if returned_inbound:
+        state["news"].insert(0, f"👋 KİRALIK SÖZLEŞMESİ BİTENLER: {', '.join(returned_inbound)} kiralık sözleşmeleri bittiği için ana kulüplerine geri döndüler.")
 
     # Yeni sezon taze sponsor teklifleri
     state["incoming_sponsor_offers"] = generate_incoming_sponsor_offers(state, 3)

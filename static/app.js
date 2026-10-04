@@ -1267,14 +1267,20 @@ function renderSquadPlayerCard(p, idx, isStarter) {
           ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse">🩹 Sakat (${p.injured_weeks} Hf)</span>` : ''}
           ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse">🔴 Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
           ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold">${p.yellow_cards}🟨</span>` : ''}
+          ${p.is_inbound_loan ? `<span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-500/50 px-1 py-0.2 rounded font-bold" title="Kiralık Oyuncu">🔄 Kiralık (${p.parent_club || 'Dış Kulüp'})</span>` : ''}
         </div>
         <div class="text-[9px] text-slate-400">
-          ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${contractYears} Yıl</strong> • Maaş: ${formatMoney(p.wage)}
+          ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${p.is_inbound_loan ? '1 Yıl (Kiralık)' : `${contractYears} Yıl`}</strong> • Maaş: ${formatMoney(p.wage)}
         </div>
         <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
           <span>⏱️ <strong class="text-white font-mono">${mins}</strong> dk (${matches} maç)</span>
           <span>⭐ Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
-          ${!isStarter ? `
+          ${p.is_inbound_loan && p.buy_option ? `
+            <button onclick="buyLoanOption('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-600/50 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Satın Alma Opsiyonunu Kullan">
+              <span>💰</span> <span>Opsiyonu Al (${formatMoney(p.buy_option)})</span>
+            </button>
+          ` : ''}
+          ${!isStarter && !p.is_inbound_loan ? `
             <button onclick="terminatePlayerContract('${safeName}')" class="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 text-[8px] font-bold hover:bg-rose-900 transition-all flex items-center gap-0.5" title="Sözleşmeyi tazminat ödeyerek feshet">
               <span>❌</span> <span>Feshet</span>
             </button>
@@ -2456,10 +2462,13 @@ function onScoutTeamChanged() {
           Hız:${sk.pac || 75} Şut:${sk.sho || 75} Pas:${sk.pas || 75} Def:${sk.def || 75} Fiz:${sk.phy || 75}
         </div>
       </div>
-      <div class="flex items-center gap-2 flex-shrink-0">
+      <div class="flex items-center gap-1.5 flex-shrink-0">
         <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">${p.overall}</span>
-        <button onclick="startClubNegotiation('${team.id}', '${p.name}', ${p.val}, '${p.pos}', ${p.overall})" class="px-2 py-1 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px]">
-          Bonservis İste
+        <button onclick="startClubNegotiation('${team.id}', '${p.name}', ${p.val}, '${p.pos}', ${p.overall}, 'buy')" class="px-2 py-1 rounded bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px]">
+          Bonservis
+        </button>
+        <button onclick="startClubNegotiation('${team.id}', '${p.name}', ${p.val}, '${p.pos}', ${p.overall}, 'loan')" class="px-2 py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
+          Kirala
         </button>
       </div>
     `;
@@ -2467,22 +2476,77 @@ function onScoutTeamChanged() {
   });
 }
 
-function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOverall) {
+function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOverall, defaultMode = 'buy') {
+  const suggestedLoanFee = Math.max(1_500_000, Math.floor(playerVal * 0.10));
   activeNegotiation = {
     teamId: teamId,
     playerName: playerName,
     playerVal: playerVal,
+    playerPos: playerPos,
+    playerOverall: playerOverall,
     bidFee: playerVal,
+    loanFee: suggestedLoanFee,
+    loanWagePct: 100,
+    mode: defaultMode,
     playerWage: 15_000_000
   };
 
   document.getElementById("neg-player-name").innerText = playerName;
   document.getElementById("neg-player-details").innerText = `${playerPos} • ${playerOverall} Güç • Piyasa Değeri: ${formatMoney(playerVal)}`;
   document.getElementById("neg-club-bid-input").value = playerVal;
+  document.getElementById("neg-loan-fee-input").value = suggestedLoanFee;
+  const buyOptInput = document.getElementById("neg-loan-buyopt-input");
+  if (buyOptInput) buyOptInput.value = "";
 
-  document.getElementById("neg-step-club").classList.remove("hidden");
-  document.getElementById("neg-step-player").classList.add("hidden");
+  switchNegotiationMode(defaultMode);
   document.getElementById("modal-transfer-negotiate").classList.remove("hidden");
+}
+
+function switchNegotiationMode(mode) {
+  if (!activeNegotiation) return;
+  activeNegotiation.mode = mode;
+  const btnBuy = document.getElementById("btn-neg-mode-buy");
+  const btnLoan = document.getElementById("btn-neg-mode-loan");
+  const paneBuy = document.getElementById("neg-pane-buy");
+  const paneLoan = document.getElementById("neg-pane-loan");
+  const title = document.getElementById("negotiate-modal-title");
+
+  if (mode === "loan") {
+    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg bg-blue-600 text-white shadow-md transition-all";
+    if (paneBuy) paneBuy.classList.add("hidden");
+    if (paneLoan) paneLoan.classList.remove("hidden");
+    if (title) title.innerText = "Kiralık Sözleşmesi Pazarlığı";
+    
+    document.getElementById("neg-loan-step-offer").classList.remove("hidden");
+    document.getElementById("neg-loan-step-sign").classList.add("hidden");
+    setLoanWagePct(activeNegotiation.loanWagePct || 100);
+  } else {
+    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 shadow-md transition-all";
+    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+    if (paneBuy) paneBuy.classList.remove("hidden");
+    if (paneLoan) paneLoan.classList.add("hidden");
+    if (title) title.innerText = "Bonservis Satın Alma Pazarlığı";
+    
+    document.getElementById("neg-step-club").classList.remove("hidden");
+    document.getElementById("neg-step-player").classList.add("hidden");
+  }
+}
+
+function setLoanWagePct(pct) {
+  if (activeNegotiation) {
+    activeNegotiation.loanWagePct = pct;
+  }
+  [60, 80, 100].forEach(val => {
+    const btn = document.getElementById("btn-loan-pct-" + val);
+    if (btn) {
+      if (val === pct) {
+        btn.className = "py-1 rounded bg-blue-600 text-[10px] text-white font-bold border border-blue-500 shadow-sm";
+      } else {
+        btn.className = "py-1 rounded bg-slate-800 text-[10px] text-slate-400 font-bold border border-slate-700 hover:border-blue-500";
+      }
+    }
+  });
 }
 
 function closeNegotiationModal() {
@@ -2563,6 +2627,106 @@ async function submitPlayerSigning() {
   }
 }
 
+async function submitClubLoanNegotiation() {
+  if (!activeNegotiation) return;
+  const feeInput = document.getElementById("neg-loan-fee-input");
+  const offeredFee = parseInt(feeInput.value) || activeNegotiation.loanFee;
+  const buyOptInput = document.getElementById("neg-loan-buyopt-input");
+  const buyOpt = buyOptInput && buyOptInput.value ? parseInt(buyOptInput.value) : null;
+  const wagePct = activeNegotiation.loanWagePct || 100;
+
+  try {
+    const res = await apiFetch("/api/transfer/negotiate-loan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        target_team_id: activeNegotiation.teamId,
+        player_name: activeNegotiation.playerName,
+        offered_fee: offeredFee,
+        wage_coverage_pct: wagePct,
+        buy_option: buyOpt
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Kiralık teklifi iletilemedi!");
+      return;
+    }
+
+    if (data.status === "loan_accepted") {
+      showToast("✅ Kulüp kiralık teklifinizi kabul etti!");
+      document.getElementById("neg-loan-step-offer").classList.add("hidden");
+      document.getElementById("neg-loan-step-sign").classList.remove("hidden");
+      document.getElementById("neg-loan-accepted-msg").innerText = data.message;
+      activeNegotiation.acceptedLoanFee = data.loan_fee;
+      activeNegotiation.acceptedWageCoveragePct = data.wage_coverage_pct;
+      activeNegotiation.acceptedBuyOption = data.buy_option;
+    } else {
+      showToast("❌ " + data.message);
+      if (data.counter_fee) {
+        feeInput.value = data.counter_fee;
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function submitLoanSigning() {
+  if (!activeNegotiation) return;
+  const loanFee = activeNegotiation.acceptedLoanFee || activeNegotiation.loanFee;
+  const wagePct = activeNegotiation.acceptedWageCoveragePct || activeNegotiation.loanWagePct || 100;
+  const buyOpt = activeNegotiation.acceptedBuyOption || null;
+
+  try {
+    const res = await apiFetch("/api/transfer/sign-loan-player", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        target_team_id: activeNegotiation.teamId,
+        player_name: activeNegotiation.playerName,
+        loan_fee: loanFee,
+        wage_coverage_pct: wagePct,
+        buy_option: buyOpt
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Kiralık sözleşmesi imzalanamadı!");
+      return;
+    }
+
+    closeNegotiationModal();
+    closeLeagueScoutModal();
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function buyLoanOption(playerName) {
+  if (!confirm(`${playerName} için satın alma opsiyonunu kullanıp bonservisini almak istiyor musunuz?`)) return;
+  try {
+    const res = await apiFetch("/api/transfer/buy-loan-option", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_name: playerName })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Opsiyon kullanılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 // ==================== TRANSFER GÜNÜ İLERLETME & GELEN TEKLİFLER ====================
 async function advanceTransferDay() {
   try {
@@ -2597,28 +2761,65 @@ function renderIncomingBids() {
   bids.forEach(bid => {
     const item = document.createElement("div");
     item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-xl space-y-2";
-    item.innerHTML = `
-      <div class="flex justify-between items-center text-xs">
-        <div>
-          <span class="font-extrabold text-white">${bid.player_name}</span>
-          <span class="text-[9px] text-amber-400 font-bold ml-1">(${shortenPosition(bid.pos)})</span>
-          <div class="text-[10px] text-slate-300 mt-0.5">
-            Talip: <strong class="text-amber-400">${bid.club}</strong> • Bonservis: <strong class="text-emerald-400">${formatMoney(bid.offer_val)}</strong>
+    const isLoan = (bid.bid_type === "loan");
+    
+    if (isLoan) {
+      const optText = bid.buy_option ? ` • Opsiyon: <strong class="text-amber-400 font-mono">${formatMoney(bid.buy_option)}</strong>` : '';
+      item.innerHTML = `
+        <div class="flex justify-between items-start text-xs">
+          <div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="bg-blue-900/80 text-blue-300 border border-blue-500/60 px-1.5 py-0.2 rounded font-black text-[9px]">🔄 KİRALIK TEKLİFİ</span>
+              <span class="font-extrabold text-white">${bid.player_name}</span>
+              <span class="text-[9px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
+            </div>
+            <div class="text-[10px] text-slate-300 mt-1">
+              Talip Kulüp: <strong class="text-white">${bid.club}</strong> • Kiralama Bedeli: <strong class="text-emerald-400 font-mono">+${formatMoney(bid.loan_fee || bid.offer_val)}</strong>
+            </div>
+            <div class="text-[9px] text-slate-400 mt-0.5">
+              Maaş Karşılama: <strong class="text-blue-300 font-bold">%${bid.wage_coverage_pct || 100}</strong>${optText}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="grid grid-cols-3 gap-1.5 pt-1">
-        <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px]">
-          Kabul Et (Sat)
-        </button>
-        <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
-          Pazarlık (+%25)
-        </button>
-        <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
-          Reddet
-        </button>
-      </div>
-    `;
+        <div class="grid grid-cols-3 gap-1.5 pt-1">
+          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
+            Kabul Et (Kirala)
+          </button>
+          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px]">
+            Pazarlık (+%30)
+          </button>
+          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
+            Reddet
+          </button>
+        </div>
+      `;
+    } else {
+      item.innerHTML = `
+        <div class="flex justify-between items-start text-xs">
+          <div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="bg-amber-900/80 text-amber-300 border border-amber-500/60 px-1.5 py-0.2 rounded font-black text-[9px]">💰 BONSERVİS SATIŞ</span>
+              <span class="font-extrabold text-white">${bid.player_name}</span>
+              <span class="text-[9px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
+            </div>
+            <div class="text-[10px] text-slate-300 mt-1">
+              Talip Kulüp: <strong class="text-white">${bid.club}</strong> • Bonservis Teklifi: <strong class="text-emerald-400 font-mono">+${formatMoney(bid.offer_val)}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 pt-1">
+          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px]">
+            Kabul Et (Sat)
+          </button>
+          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
+            Pazarlık (+%25)
+          </button>
+          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
+            Reddet
+          </button>
+        </div>
+      `;
+    }
     content.appendChild(item);
   });
 }

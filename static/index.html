@@ -1671,9 +1671,19 @@
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="text-xs font-black text-white flex items-center gap-1.5">
           <i data-lucide="handshake" class="w-4 h-4 text-amber-400"></i>
-          <span id="negotiate-modal-title">Başkanla Bonservis Pazarlığı</span>
+          <span id="negotiate-modal-title">Transfer & Kiralık Pazarlığı</span>
         </div>
         <button onclick="closeNegotiationModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+      </div>
+
+      <!-- Transfer Tipi Seçici: Bonservis Satın Al vs Kiralık Sözleşmesi -->
+      <div class="grid grid-cols-2 gap-1 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs">
+        <button id="btn-neg-mode-buy" onclick="switchNegotiationMode('buy')" class="py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 transition-all">
+          💰 Bonservis Al
+        </button>
+        <button id="btn-neg-mode-loan" onclick="switchNegotiationMode('loan')" class="py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all">
+          🔄 Kiralık Sözleşmesi
+        </button>
       </div>
 
       <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1 text-center">
@@ -1681,25 +1691,73 @@
         <div class="text-[10px] text-amber-400" id="neg-player-details">SANTRAFOR • 88 Güç • 30M ₺ Değer</div>
       </div>
 
-      <!-- 1. Adım: Bonservis Teklifi -->
-      <div id="neg-step-club" class="space-y-2">
-        <label class="block text-[11px] font-semibold text-slate-300">Bonservis Teklifiniz (₺):</label>
-        <input type="number" id="neg-club-bid-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 35000000" />
-        <button onclick="submitClubNegotiation()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md">
-          Kulüp Başkanına Teklifi İlet
-        </button>
+      <!-- BONSERVİS SATIN ALMA BÖLÜMÜ -->
+      <div id="neg-pane-buy" class="space-y-3">
+        <!-- 1. Adım: Bonservis Teklifi -->
+        <div id="neg-step-club" class="space-y-2">
+          <label class="block text-[11px] font-semibold text-slate-300">Bonservis Teklifiniz (₺):</label>
+          <input type="number" id="neg-club-bid-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 35000000" />
+          <button onclick="submitClubNegotiation()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md">
+            Kulüp Başkanına Teklifi İlet
+          </button>
+        </div>
+
+        <!-- 2. Adım: Oyuncuyla Sözleşme ve Maaş Pazarlığı -->
+        <div id="neg-step-player" class="hidden space-y-2">
+          <div class="p-2 rounded-lg bg-emerald-950/60 border border-emerald-800 text-[10px] text-emerald-300" id="neg-club-accepted-msg">
+            Kulüp bonservisi kabul etti! Şimdi oyuncuyu ikna edin.
+          </div>
+          <label class="block text-[11px] font-semibold text-slate-300">Yıllık Maaş Teklifi (₺):</label>
+          <input type="number" id="neg-player-wage-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 20000000" />
+          <button onclick="submitPlayerSigning()" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md">
+            Sözleşmeyi İmzala & Transferi Bitir
+          </button>
+        </div>
       </div>
 
-      <!-- 2. Adım: Oyuncuyla Sözleşme ve Maaş Pazarlığı -->
-      <div id="neg-step-player" class="hidden space-y-2">
-        <div class="p-2 rounded-lg bg-emerald-950/60 border border-emerald-800 text-[10px] text-emerald-300" id="neg-club-accepted-msg">
-          Kulüp bonservisi kabul etti! Şimdi oyuncuyu ikna edin.
+      <!-- KİRALIK SÖZLEŞMESİ BÖLÜMÜ -->
+      <div id="neg-pane-loan" class="hidden space-y-3">
+        <!-- 1. Adım: Kiralık Şartları Teklifi -->
+        <div id="neg-loan-step-offer" class="space-y-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300">Kiralama Bedeli Teklifi (₺):</label>
+            <input type="number" id="neg-loan-fee-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 3000000" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300">Maaş Karşılama Oranı:</label>
+            <div class="grid grid-cols-3 gap-1.5 mt-1">
+              <button type="button" onclick="setLoanWagePct(60)" id="btn-loan-pct-60" class="py-1 rounded bg-slate-800 text-[10px] text-slate-300 font-bold border border-slate-700 hover:border-blue-500">
+                %60
+              </button>
+              <button type="button" onclick="setLoanWagePct(80)" id="btn-loan-pct-80" class="py-1 rounded bg-slate-800 text-[10px] text-slate-300 font-bold border border-slate-700 hover:border-blue-500">
+                %80
+              </button>
+              <button type="button" onclick="setLoanWagePct(100)" id="btn-loan-pct-100" class="py-1 rounded bg-blue-600 text-[10px] text-white font-bold border border-blue-500">
+                %100
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300">Satın Alma Opsiyonu (Opsiyonel ₺):</label>
+            <input type="number" id="neg-loan-buyopt-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="İsteğe bağlı opsiyon (Örn: 25000000)" />
+          </div>
+
+          <button onclick="submitClubLoanNegotiation()" class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md">
+            Kulübe Kiralık Teklifini İlet
+          </button>
         </div>
-        <label class="block text-[11px] font-semibold text-slate-300">Yıllık Maaş Teklifi (₺):</label>
-        <input type="number" id="neg-player-wage-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 20000000" />
-        <button onclick="submitPlayerSigning()" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md">
-          Sözleşmeyi İmzala & Transferi Bitir
-        </button>
+
+        <!-- 2. Adım: Kiralık İmza Onayı -->
+        <div id="neg-loan-step-sign" class="hidden space-y-2">
+          <div class="p-2 rounded-lg bg-emerald-950/60 border border-emerald-800 text-[10px] text-emerald-300" id="neg-loan-accepted-msg">
+            Kulüp kiralık teklifinizi kabul etti!
+          </div>
+          <button onclick="submitLoanSigning()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs shadow-md">
+            Kiralık Sözleşmesini İmzala (Kadronuza Katın)
+          </button>
+        </div>
       </div>
     </div>
   </div>
