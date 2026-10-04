@@ -147,11 +147,11 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4 pt-3 border-t border-white/5">
-            <button onclick="openPreMatchEventModal()" id="btn-pre-match-event" class="w-full py-2.5 rounded-xl bg-purple-950/70 hover:bg-purple-900/80 border border-purple-500/40 text-purple-200 font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md active:scale-95">
-              <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i> Konser & Taraftar Festivali
+          <div class="flex items-center gap-2 mt-4 pt-3 border-t border-white/5">
+            <button onclick="openPreMatchEventModal()" id="btn-pre-match-event" class="py-2 px-3 rounded-xl bg-purple-950/50 hover:bg-purple-900/70 border border-purple-500/30 text-purple-300 font-medium text-[11px] flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 whitespace-nowrap">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-purple-400"></i> Konser & Festival
             </button>
-            <button onclick="switchTab('match')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/20 border border-amber-300/40 active:scale-95">
+            <button onclick="switchTab('match')" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-amber-500/20 border border-amber-300/40 active:scale-95">
               <i data-lucide="play" class="w-4 h-4 fill-slate-950"></i> Protokol Tribünü (Maça Çık)
             </button>
           </div>
@@ -198,23 +198,45 @@
           </button>
         </div>
 
-        <!-- Kulüp Tesisleri & Pasif Gelir (Skill Ağacı) Vitrini -->
-        <button onclick="openClubUpgradesModal()" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-slate-900/90 border border-emerald-500/40 text-left hover:border-emerald-400 transition-all hover:shadow-lg hover:shadow-emerald-500/10 group">
-          <div class="flex items-center justify-between">
-            <div class="text-xs font-black text-emerald-300 flex items-center gap-2 group-hover:text-emerald-200">
-              <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
-                <i data-lucide="wrench" class="w-4 h-4 text-emerald-400"></i>
+        <!-- Kulüp Tesisleri & Taktik Skill Ağacı Bölümü -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button onclick="openClubUpgradesModal()" class="p-3 rounded-2xl bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-slate-900/90 border border-emerald-500/40 text-left hover:border-emerald-400 transition-all hover:shadow-lg hover:shadow-emerald-500/10 group">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-black text-emerald-300 flex items-center gap-2 group-hover:text-emerald-200">
+                <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                  <i data-lucide="wrench" class="w-4 h-4 text-emerald-400"></i>
+                </div>
+                <div>
+                  <div>Kulüp Tesisleri</div>
+                  <div class="text-[10px] text-slate-400 font-normal mt-0.5">Stadyum • Akademi • Gelirler</div>
+                </div>
               </div>
-              <div>
-                <div>Kulüp Tesisleri & Pasif Gelir Yatırımları</div>
-                <div class="text-[10px] text-slate-400 font-normal mt-0.5">Stadyum • Şehir Ulaşımı • Forma • Akademi • TV</div>
-              </div>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-black border border-emerald-500/40">
+                Tesisler →
+              </span>
             </div>
-            <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-black border border-emerald-500/40 flex items-center gap-1">
-              GELİR AĞACI →
-            </span>
-          </div>
-        </button>
+          </button>
+
+          <button onclick="openTacticalSkillsModal()" class="p-3 rounded-2xl bg-gradient-to-r from-amber-950/40 via-slate-900/80 to-slate-900/90 border border-amber-500/40 text-left hover:border-amber-400 transition-all hover:shadow-lg hover:shadow-amber-500/10 group">
+            <div class="flex items-center justify-between">
+              <div class="text-xs font-black text-amber-300 flex items-center gap-2 group-hover:text-amber-200">
+                <div class="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                  <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span>Taktik Skill Ağacı</span>
+                    <span id="badge-mastery-pts" class="text-[9px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded font-black border border-amber-500/40">0 TP</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 font-normal mt-0.5">Cehennem Tribünü • Son Dk</div>
+                </div>
+              </div>
+              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-black border border-amber-500/40">
+                Yetenekler →
+              </span>
+            </div>
+          </button>
+        </div>
 
         <!-- Finans, Transfer & Puan Durumu Özeti -->
         <div class="grid grid-cols-3 gap-2">
@@ -353,10 +375,16 @@
               <i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i>
               <span>A Takım Kadrosu (<span id="squad-player-count">18</span> Oyuncu)</span>
             </span>
-            <button onclick="autoPickSquadByCoach()" class="px-2.5 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-300 font-bold text-[10px] flex items-center gap-1 transition-all shadow-sm">
-              <i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i>
-              <span>Hoca 11'i Belirlesin</span>
-            </button>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openPlayerLoanModal()" class="px-2.5 py-1 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-300 font-bold text-[10px] flex items-center gap-1 transition-all shadow-sm">
+                <i data-lucide="arrow-up-right" class="w-3 h-3 text-blue-400"></i>
+                <span>Oyuncu Kirala</span>
+              </button>
+              <button onclick="autoPickSquadByCoach()" class="px-2.5 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-300 font-bold text-[10px] flex items-center gap-1 transition-all shadow-sm">
+                <i data-lucide="sparkles" class="w-3 h-3 text-emerald-400"></i>
+                <span>Hoca 11'i Belirlesin</span>
+              </button>
+            </div>
           </div>
 
           <div class="space-y-2 max-h-[500px] overflow-y-auto scrollbar-thin pr-1" id="squad-players-list">
@@ -746,16 +774,49 @@
               </button>
             </div>
           </div>
+
+          <!-- Bankalar Birliği Acil Kredi Çekme -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-800/80">
+            <div class="text-[10px] font-bold text-blue-300 flex items-center justify-between">
+              <span>Bankalar Birliği Acil Kredi Çek:</span>
+              <span class="text-[9px] text-blue-400">Kasaya Nakit Eklenir</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+              <button onclick="takeClubLoan(25000000)" class="py-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900/80 text-blue-200 font-bold text-[10px] border border-blue-700/50 hover:border-blue-500 transition-all">
+                +25M ₺ Kredi
+              </button>
+              <button onclick="takeClubLoan(50000000)" class="py-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900/80 text-blue-200 font-bold text-[10px] border border-blue-700/50 hover:border-blue-500 transition-all">
+                +50M ₺ Kredi
+              </button>
+              <button onclick="takeClubLoan(100000000)" class="py-1.5 rounded-lg bg-blue-950/60 hover:bg-blue-900/80 text-blue-200 font-bold text-[10px] border border-blue-700/50 hover:border-blue-500 transition-all">
+                +100M ₺ Kredi
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3 space-y-2">
+        <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3 space-y-3">
           <div class="flex justify-between items-center text-xs font-bold text-white">
-            <span>Sponsorluk Anlaşmaları</span>
-            <span class="text-[10px] text-slate-400">Sezonluk Sıcak Para</span>
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="handshake" class="w-4 h-4 text-amber-400"></i> Gelen Sponsorluk Teklifleri & Masası
+            </span>
+            <span class="text-[10px] text-amber-400 font-medium">Dinamik Pazarlık</span>
           </div>
 
-          <div class="space-y-2" id="available-sponsors-list">
-            <!-- JS ile doldurulur -->
+          <!-- Gelen Teklifler Havuzu -->
+          <div class="space-y-2" id="incoming-sponsors-container">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kulübe Ulaşan Yeni Teklifler</div>
+            <div class="space-y-2" id="incoming-sponsors-list">
+              <!-- JS ile teklifler render edilir -->
+            </div>
+          </div>
+
+          <!-- Mevcut İmzalanmış Sponsorlar -->
+          <div class="pt-2 border-t border-slate-800 space-y-2">
+            <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Aktif Sezonluk Sponsorlar</div>
+            <div class="space-y-1.5" id="available-sponsors-list">
+              <!-- JS ile doldurulur -->
+            </div>
           </div>
         </div>
       </section>
@@ -1008,40 +1069,81 @@
         </div>
 
         <!-- Gayrimenkul & Arsa Projeleri -->
-        <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3.5 space-y-2">
+        <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3.5 space-y-3">
           <div class="flex justify-between items-center text-xs font-bold text-white">
-            <span>Kulüp Hazine Arazisi</span>
-            <span class="text-[10px] text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/50" id="re-land-acres">250 Dönüm</span>
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="building-2" class="w-4 h-4 text-emerald-400"></i> Kulüp Hazine Arazisi Projeleri
+            </span>
+            <span class="text-[10px] text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/50 font-bold" id="re-land-acres">250 Dönüm</span>
           </div>
 
-          <div class="space-y-2">
-            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-              <div>
-                <div class="text-xs font-bold text-white">Kulüp Rezidans & AVM</div>
-                <div class="text-[10px] text-slate-400">Maliyet: 60M ₺ • 4 Hafta</div>
+          <!-- Aktif İnşaat / Proje Durum Kartı -->
+          <div id="re-active-project-card" class="hidden p-3 rounded-xl bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/40 space-y-2">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="relative flex h-2.5 w-2.5">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                </span>
+                <span class="text-xs font-black text-amber-300" id="re-active-title">İnşaat Sürüyor</span>
               </div>
-              <button onclick="startRealEstateProject('mall')" class="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold">
+              <span class="text-[10px] font-mono font-bold text-amber-200 bg-amber-900/40 px-2 py-0.5 rounded border border-amber-600/40" id="re-active-weeks-left">Kalan: 2 Hafta</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+              <div id="re-active-progress-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full rounded-full transition-all duration-500" style="width: 50%;"></div>
+            </div>
+            <div class="text-[10px] text-slate-300 flex justify-between">
+              <span id="re-active-desc">Haftalık maçlar oynandıkça inşaat ilerler.</span>
+              <span id="re-active-reward" class="text-emerald-400 font-bold">Ödül: Bekleniyor</span>
+            </div>
+          </div>
+
+          <!-- Tamamlanan Projeler Listesi -->
+          <div id="re-completed-box" class="hidden text-[10px] text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 p-2 rounded-lg">
+            <span class="font-bold">Tamamlanan Tesisler:</span> <span id="re-completed-list" class="text-slate-300 font-medium">Yok</span>
+          </div>
+
+          <!-- Başlatılabilir Projeler -->
+          <div class="space-y-2" id="re-projects-list">
+            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center" id="re-card-mall">
+              <div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Kulüp Rezidans & AVM</span>
+                  <span class="text-[9px] text-amber-400 bg-amber-950/60 px-1 rounded">Dev Gelir</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Maliyet: 60M ₺ • Süre: 4 Hafta</div>
+                <div class="text-[9px] text-emerald-400 font-medium">Bittiğinde: +150.000.000 ₺ peşin sıcak para!</div>
+              </div>
+              <button onclick="startRealEstateProject('mall')" id="btn-re-mall" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-sm">
                 Başlat (+150M ₺)
               </button>
             </div>
 
-            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center" id="re-card-academy">
               <div>
-                <div class="text-xs font-bold text-white">Futbol Altyapı Kampüsü</div>
-                <div class="text-[10px] text-slate-400">Maliyet: 40M ₺ • 3 Hafta</div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Futbol Altyapı Kampüsü</span>
+                  <span class="text-[9px] text-blue-400 bg-blue-950/60 px-1 rounded">Gençlik Patlaması</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Maliyet: 40M ₺ • Süre: 3 Hafta</div>
+                <div class="text-[9px] text-blue-400 font-medium">Bittiğinde: Tüm altyapı & genç oyunculara kalıcı +5 OVR!</div>
               </div>
-              <button onclick="startRealEstateProject('academy')" class="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold">
+              <button onclick="startRealEstateProject('academy')" id="btn-re-academy" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-sm">
                 Başlat (+5 Güç)
               </button>
             </div>
 
-            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+            <div class="bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center" id="re-card-stadium">
               <div>
-                <div class="text-xs font-bold text-white">Mega Arena Genişletme</div>
-                <div class="text-[10px] text-slate-400">Maliyet: 85M ₺ • 5 Hafta</div>
+                <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Mega Arena Genişletme</span>
+                  <span class="text-[9px] text-purple-400 bg-purple-950/60 px-1 rounded">Kapasite</span>
+                </div>
+                <div class="text-[10px] text-slate-400">Maliyet: 85M ₺ • Süre: 5 Hafta</div>
+                <div class="text-[9px] text-purple-300 font-medium">Bittiğinde: +15.000 Stadyum Kapasitesi & Tribün Hasılatı!</div>
               </div>
-              <button onclick="startRealEstateProject('stadium')" class="px-3 py-1.5 rounded bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold">
-                İnşa Et (+20K Stat)
+              <button onclick="startRealEstateProject('stadium')" id="btn-re-stadium" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold transition-all shadow-sm">
+                İnşa Et (+15K Stat)
               </button>
             </div>
           </div>
@@ -2022,6 +2124,84 @@
           </div>
           <div class="text-[10px] text-purple-300 mt-1">+14 Taraftar Güveni • Kapalı Gişe Tribün Desteği</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAKTİK & KÜLTÜR SKILL AĞACI MODALI -->
+  <div id="modal-tactical-skills" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#121929] border border-amber-500/40 w-full max-w-lg rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-inner">
+            <i data-lucide="zap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm text-white">Taktik & Kültür Skill Ağacı</h3>
+            <span class="text-[10px] text-slate-400">Maç Baskısı, Tribün Gücü & Kriz Yönetimi</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 font-black text-xs flex items-center gap-1">
+            <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span id="tactical-tp-badge">0 TP</span>
+          </div>
+          <button onclick="closeTacticalSkillsModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-start gap-2.5">
+        <i data-lucide="info" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
+        <span>
+          <strong>Taktik Puanı (TP):</strong> Maç galibiyetlerinden (+2 TP), derbi zaferlerinden (+3 TP) ve beraberliklerden (+1 TP) kazanılır. Bu ağaçtaki yetenekler kulübe pasif para değil; maç anında <strong>%10 ev sahibi baskısı, deplasman direnci ve 80-90. dakikalarda derbi mucizeleri</strong> kazandırır!
+        </span>
+      </div>
+
+      <!-- Skill Düğümleri Listesi -->
+      <div id="tactical-skills-tree-list" class="space-y-3">
+        <!-- JS ile render edilir -->
+      </div>
+    </div>
+  </div>
+
+  <!-- GENÇ OYUNCU KİRALAMA MODALI -->
+  <div id="modal-player-loan" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#121929] border border-blue-500/40 w-full max-w-lg rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shadow-inner">
+            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-sm text-white">Genç Oyuncu Kiralama Masası</h3>
+            <span class="text-[10px] text-slate-400">Gelişim, Tecrübe ve OVR Patlaması</span>
+          </div>
+        </div>
+        <button onclick="closePlayerLoanModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <!-- Alt Sekmeler -->
+      <div class="flex gap-2">
+        <button onclick="switchLoanSubTab('eligible')" id="btn-loan-subtab-eligible" class="flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-xs text-center transition-all">
+          Kiralığa Verilebilecekler (<span id="loan-eligible-count">0</span>)
+        </button>
+        <button onclick="switchLoanSubTab('active')" id="btn-loan-subtab-active" class="flex-1 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs text-center hover:bg-slate-700 transition-all">
+          Kiralıktaki Gençlerimiz (<span id="loan-active-count">0</span>)
+        </button>
+      </div>
+
+      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+        Genç yeteneklerinizi 1. Lig ve alt lig kulüplerine kiralayarak düzenli ilk 11 süresi ve maç tecrübesi kazandırabilirsiniz. Kiralıkta forma giyen gençler her hafta tecrübe kazanır ve takıma güçlenerek (+1 ila +3 OVR) döner! Maaşın %60'ını kiralayan kulüp karşılar.
+      </div>
+
+      <!-- Kiralığa Verilebilir Oyuncular -->
+      <div id="loan-eligible-view" class="space-y-2 max-h-[380px] overflow-y-auto scrollbar-thin pr-1">
+        <!-- JS ile render edilir -->
+      </div>
+
+      <!-- Kiralıktaki Oyuncular -->
+      <div id="loan-active-view" class="hidden space-y-2 max-h-[380px] overflow-y-auto scrollbar-thin pr-1">
+        <!-- JS ile render edilir -->
       </div>
     </div>
   </div>

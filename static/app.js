@@ -683,6 +683,11 @@ function switchTab(tabId) {
     renderRadarFromState();
   }
 
+  if (tabId === "finances") {
+    loadSponsors();
+    loadSponsorOffers();
+  }
+
   lucide.createIcons();
 }
 
@@ -1047,10 +1052,13 @@ function renderUI() {
   // Radar Grafiğini Çiz
   renderRadarFromState();
 
-  // Arsa Dönüm Bilgisi
-  const reLand = document.getElementById("re-land-acres");
-  if (reLand && gameState.real_estate) {
-    reLand.innerText = `${gameState.real_estate.land_acres} Dönüm`;
+  // Gayrimenkul & Arsa UI
+  renderRealEstateUI();
+
+  // Taktik Skill Ağacı TP Rozeti
+  const tpBadge = document.getElementById("badge-mastery-pts");
+  if (tpBadge && gameState.tactical_skills) {
+    tpBadge.innerText = `${gameState.tactical_skills.mastery_points || 0} TP`;
   }
 
   // Kulüp Scout Şefi Bilgisi
@@ -2286,6 +2294,28 @@ async function payClubDebt(amount) {
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Borç ödemesi başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
+  }
+}
+
+async function takeClubLoan(amount) {
+  if (!gameState) return;
+  try {
+    const res = await apiFetch("/api/finances/take-loan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: amount })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Kredi başvurusu onaylanmadı!");
       return;
     }
     showToast(data.message);
@@ -3627,6 +3657,87 @@ async function startRealEstateProject(projType) {
   }
 }
 
+function renderRealEstateUI() {
+  if (!gameState) return;
+  const re = gameState.real_estate || { land_acres: 250, active_project: null, completed: [] };
+  const reLand = document.getElementById("re-land-acres");
+  if (reLand) reLand.innerText = `${re.land_acres || 250} Dönüm`;
+
+  const activeCard = document.getElementById("re-active-project-card");
+  const compBox = document.getElementById("re-completed-box");
+  const compList = document.getElementById("re-completed-list");
+
+  if (compBox && compList) {
+    if (re.completed && re.completed.length > 0) {
+      compBox.classList.remove("hidden");
+      compList.innerText = re.completed.join(" • ");
+    } else {
+      compBox.classList.add("hidden");
+    }
+  }
+
+  const activeProj = re.active_project;
+  const btnMall = document.getElementById("btn-re-mall");
+  const btnAcademy = document.getElementById("btn-re-academy");
+  const btnStadium = document.getElementById("btn-re-stadium");
+
+  if (activeProj && activeProj.weeks_left > 0) {
+    if (activeCard) {
+      activeCard.classList.remove("hidden");
+      const titleEl = document.getElementById("re-active-title");
+      if (titleEl) titleEl.innerText = `${activeProj.name || 'Proje'} İnşaatı Sürüyor`;
+      const wEl = document.getElementById("re-active-weeks-left");
+      if (wEl) wEl.innerText = `Kalan: ${activeProj.weeks_left} Hafta`;
+      const totalW = activeProj.total_weeks || 4;
+      const doneW = Math.max(0, totalW - activeProj.weeks_left);
+      const pct = Math.min(100, Math.max(10, Math.round((doneW / totalW) * 100)));
+      const pBar = document.getElementById("re-active-progress-bar");
+      if (pBar) pBar.style.width = `${pct}%`;
+      const rDesc = document.getElementById("re-active-desc");
+      if (rDesc) rDesc.innerText = `Her lig maçı oynandığında inşaat 1 hafta ilerler.`;
+      const rRew = document.getElementById("re-active-reward");
+      if (rRew) rRew.innerText = `Ödül: ${activeProj.reward || 'Tamamlanma Bonusu'}`;
+    }
+
+    [btnMall, btnAcademy, btnStadium].forEach(b => {
+      if (b) {
+        b.disabled = true;
+        b.innerText = "İnşaat Sürüyor...";
+        b.className = "px-3 py-1.5 rounded-lg bg-slate-800 text-slate-500 font-bold text-[10px] cursor-not-allowed border border-slate-700/60";
+      }
+    });
+  } else {
+    if (activeCard) activeCard.classList.add("hidden");
+
+    if (btnMall) {
+      const isMallDone = (re.completed || []).includes("Kulüp Rezidans & AVM");
+      btnMall.disabled = isMallDone;
+      btnMall.innerText = isMallDone ? "✓ Tamamlandı" : "Başlat (+150M ₺)";
+      btnMall.className = isMallDone
+        ? "px-3 py-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 font-bold text-[10px] border border-emerald-800/60 cursor-default"
+        : "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-sm";
+    }
+
+    if (btnAcademy) {
+      const isAcadDone = (re.completed || []).includes("Futbol Altyapı Kampüsü");
+      btnAcademy.disabled = isAcadDone;
+      btnAcademy.innerText = isAcadDone ? "✓ Tamamlandı" : "Başlat (+5 Güç)";
+      btnAcademy.className = isAcadDone
+        ? "px-3 py-1.5 rounded-lg bg-blue-950/60 text-blue-400 font-bold text-[10px] border border-blue-800/60 cursor-default"
+        : "px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-sm";
+    }
+
+    if (btnStadium) {
+      const isStadDone = (re.completed || []).includes("Mega Arena Genişletme");
+      btnStadium.disabled = isStadDone;
+      btnStadium.innerText = isStadDone ? "✓ Tamamlandı" : "İnşa Et (+15K Stat)";
+      btnStadium.className = isStadDone
+        ? "px-3 py-1.5 rounded-lg bg-purple-950/60 text-purple-400 font-bold text-[10px] border border-purple-800/60 cursor-default"
+        : "px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold transition-all shadow-sm";
+    }
+  }
+}
+
 // ==================== YASADIŞI MERDİVENALTI BAHİS SİSTEMİ ====================
 let selectedBetType = "win";
 let selectedBetOdds = 1.85;
@@ -4376,5 +4487,385 @@ async function submitPressStatement(stmtType) {
     renderUI();
   } catch (e) {
     console.error(e);
+  }
+}
+
+// ==================== DİNAMİK SPONSORLUK TEKLİFLERİ ====================
+async function loadSponsorOffers() {
+  const container = document.getElementById("incoming-sponsors-list");
+  if (!container) return;
+  try {
+    const res = await apiFetch("/api/sponsors/offers");
+    const offers = await res.json();
+    container.innerHTML = "";
+    if (!offers || offers.length === 0) {
+      container.innerHTML = '<div class="text-[10px] text-slate-500 italic p-2 bg-slate-900/50 rounded-lg text-center">Şu an masada bekleyen yeni sponsorluk teklifi yok. Her hafta yeni teklifler ulaşabilir.</div>';
+      return;
+    }
+
+    offers.forEach(o => {
+      const card = document.createElement("div");
+      card.className = "bg-gradient-to-r from-slate-900 via-slate-900 to-slate-850 border border-slate-800 hover:border-amber-500/40 p-3 rounded-xl space-y-2 transition-all shadow-sm";
+      const slotName = o.slot === 'chest' ? 'Göğüs Sponsoru' :
+                       o.slot === 'stadium' ? 'Stadyum İsim Hakkı' :
+                       o.slot === 'arm' ? 'Forma Kol / Şort' : 'Sırt / Forma Arkası';
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-extrabold text-white text-xs">${o.brand}</span>
+              <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.2 rounded border border-amber-500/30">${slotName}</span>
+              ${o.is_bargained ? '<span class="text-[8px] bg-blue-900/40 text-blue-300 font-black px-1 rounded border border-blue-700/40">PAZARLIK YAPILDI</span>' : ''}
+            </div>
+            <div class="text-[10px] text-slate-400 mt-0.5">${o.desc || 'Prestijli kurumsal ortaklık'}</div>
+          </div>
+          <div class="text-right">
+            <div class="text-xs font-black text-emerald-400 font-mono">${formatMoney(o.amount)}</div>
+            <div class="text-[9px] text-slate-400 font-medium">+${formatMoney(o.upfront_cash)} Peşin</div>
+          </div>
+        </div>
+        <div class="text-[9px] text-amber-300/90 bg-amber-950/30 p-1.5 rounded border border-amber-800/30">
+          <strong>Özel Madde:</strong> ${o.bonus_clause || 'Lig şampiyonluğunda ek prim'}
+        </div>
+        <div class="flex items-center gap-1.5 pt-1 border-t border-slate-800/60 justify-end">
+          <button onclick="respondSponsorOffer('${o.id}', 'reject')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-rose-950/60 hover:text-rose-300 text-slate-400 font-bold text-[10px] border border-slate-700/60 transition-all">
+            Reddet
+          </button>
+          ${!o.is_bargained ? `
+            <button onclick="respondSponsorOffer('${o.id}', 'bargain')" class="px-2.5 py-1 rounded bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 font-bold text-[10px] border border-blue-500/50 transition-all">
+              Pazarlık Et (+%15)
+            </button>
+          ` : ''}
+          <button onclick="respondSponsorOffer('${o.id}', 'accept')" class="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] shadow-sm transition-all">
+            Kabul Et & İmzala
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  } catch (e) {
+    console.error("loadSponsorOffers error:", e);
+  }
+}
+
+async function respondSponsorOffer(offerId, action) {
+  try {
+    const res = await apiFetch("/api/sponsors/respond", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ offer_id: offerId, action: action })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem başarısız!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+    loadSponsors();
+    loadSponsorOffers();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
+  }
+}
+
+// ==================== TAKTİK & KÜLTÜR SKILL AĞACI ====================
+let _tacticalSkillsData = null;
+
+async function openTacticalSkillsModal() {
+  const modal = document.getElementById("modal-tactical-skills");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  await renderTacticalSkillsTree();
+}
+
+function closeTacticalSkillsModal() {
+  const modal = document.getElementById("modal-tactical-skills");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function renderTacticalSkillsTree() {
+  const listEl = document.getElementById("tactical-skills-tree-list");
+  const tpBadge = document.getElementById("tactical-tp-badge");
+  if (!listEl) return;
+  listEl.innerHTML = '<div class="text-slate-400 text-xs text-center py-4">Taktik yetenekler yükleniyor...</div>';
+
+  try {
+    const res = await apiFetch("/api/skills/tree");
+    const data = await res.json();
+    _tacticalSkillsData = data;
+
+    if (tpBadge) tpBadge.innerText = `${data.mastery_points || 0} TP`;
+    const offBadge = document.getElementById("badge-mastery-pts");
+    if (offBadge) offBadge.innerText = `${data.mastery_points || 0} TP`;
+
+    listEl.innerHTML = "";
+
+    const tiers = [1, 2, 3, 4];
+    const tierTitles = {
+      1: "Tier 1: Tribün & Temel Kültür Yetenekleri",
+      2: "Tier 2: Sahaiçi Taktik & Blok Organizasyonları",
+      3: "Tier 3: Liderlik & Kondisyon Zirvesi",
+      4: "Tier 4: Efsanevi Derbi Zirve Becerisi (Son Dk Canavarı)"
+    };
+
+    tiers.forEach(tier => {
+      const skillsInTier = (data.skills || []).filter(s => s.tier === tier);
+      if (skillsInTier.length === 0) return;
+
+      const groupHeader = document.createElement("div");
+      groupHeader.className = "text-[10px] uppercase font-black text-amber-400/90 tracking-wider pt-2 border-t border-slate-800/80 flex items-center justify-between";
+      groupHeader.innerHTML = `<span>${tierTitles[tier]}</span> <span class="text-[9px] text-slate-500 font-bold">${skillsInTier.length} Yetenek</span>`;
+      listEl.appendChild(groupHeader);
+
+      skillsInTier.forEach(sk => {
+        const isUnlocked = sk.is_unlocked;
+        const canUnlock = sk.can_unlock;
+        const card = document.createElement("div");
+        card.className = `p-3 rounded-xl border transition-all ${
+          isUnlocked
+            ? "bg-amber-950/20 border-amber-500/60 shadow-sm"
+            : canUnlock
+            ? "bg-slate-900/90 border-slate-700 hover:border-amber-400/60"
+            : "bg-slate-950/60 border-slate-800/60 opacity-60"
+        } space-y-2`;
+
+        let actionBtn = "";
+        if (isUnlocked) {
+          actionBtn = `<span class="px-3 py-1 rounded-lg bg-emerald-950/80 text-emerald-400 border border-emerald-600/40 text-[10px] font-black">✓ AKTİF (AÇILDI)</span>`;
+        } else if (canUnlock) {
+          actionBtn = `<button onclick="unlockTacticalSkill('${sk.id}')" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-[10px] shadow-sm transition-all">
+            Yeteneği Aç (${sk.cost} TP)
+          </button>`;
+        } else {
+          actionBtn = `<button disabled class="px-3 py-1 rounded-lg bg-slate-800 text-slate-500 border border-slate-700 font-bold text-[10px] cursor-not-allowed">
+            ${sk.reason_locked || 'Kilitli'}
+          </button>`;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl p-1.5 rounded-lg bg-slate-950 border border-slate-800">${sk.icon || '⚡'}</span>
+              <div>
+                <div class="text-xs font-black text-white flex items-center gap-2">
+                  <span>${sk.name}</span>
+                  <span class="text-[9px] px-1.5 py-0.2 rounded font-bold font-mono ${isUnlocked ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-800 text-slate-400'}">${sk.cost} TP</span>
+                </div>
+                <div class="text-[10px] text-amber-200/90 font-medium mt-0.5">${sk.effect}</div>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              ${actionBtn}
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 pt-1 border-t border-slate-800/40">
+            ${sk.desc}
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    });
+    lucide.createIcons();
+  } catch (e) {
+    console.error("renderTacticalSkillsTree error:", e);
+  }
+}
+
+async function unlockTacticalSkill(skillId) {
+  try {
+    const res = await apiFetch("/api/skills/unlock", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ skill_id: skillId })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Yetenek açılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+    await renderTacticalSkillsTree();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
+  }
+}
+
+// ==================== OYUNCU KİRALAMA SİSTEMİ ====================
+let _loanSubTab = "eligible";
+let _loanListData = null;
+
+async function openPlayerLoanModal() {
+  const modal = document.getElementById("modal-player-loan");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  await loadPlayerLoans();
+}
+
+function closePlayerLoanModal() {
+  const modal = document.getElementById("modal-player-loan");
+  if (modal) modal.classList.add("hidden");
+}
+
+function switchLoanSubTab(tab) {
+  _loanSubTab = tab;
+  const btnEligible = document.getElementById("btn-loan-subtab-eligible");
+  const btnActive = document.getElementById("btn-loan-subtab-active");
+  const viewEligible = document.getElementById("loan-eligible-view");
+  const viewActive = document.getElementById("loan-active-view");
+
+  if (tab === "eligible") {
+    btnEligible.className = "flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-xs text-center transition-all";
+    btnActive.className = "flex-1 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs text-center hover:bg-slate-700 transition-all";
+    viewEligible.classList.remove("hidden");
+    viewActive.classList.add("hidden");
+  } else {
+    btnActive.className = "flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-xs text-center transition-all";
+    btnEligible.className = "flex-1 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs text-center hover:bg-slate-700 transition-all";
+    viewActive.classList.remove("hidden");
+    viewEligible.classList.add("hidden");
+  }
+}
+
+async function loadPlayerLoans() {
+  const eligibleView = document.getElementById("loan-eligible-view");
+  const activeView = document.getElementById("loan-active-view");
+  const eligibleCountEl = document.getElementById("loan-eligible-count");
+  const activeCountEl = document.getElementById("loan-active-count");
+
+  try {
+    const res = await apiFetch("/api/players/loan-list");
+    const data = await res.json();
+    _loanListData = data;
+
+    const eligible = data.eligible || [];
+    const activeLoans = data.active_loans || [];
+    const potClubs = data.potential_clubs || ["Gençlerbirliği", "Sakaryaspor", "Amedspor", "Kocaelispor"];
+
+    if (eligibleCountEl) eligibleCountEl.innerText = eligible.length;
+    if (activeCountEl) activeCountEl.innerText = activeLoans.length;
+
+    // Render Eligible
+    if (eligibleView) {
+      eligibleView.innerHTML = "";
+      if (eligible.length === 0) {
+        eligibleView.innerHTML = '<div class="text-[11px] text-slate-500 italic p-4 text-center">Şu an kiralığa gönderilebilecek genç oyuncu bulunmuyor (İlk 11 as oyuncuları kiralanamaz, 23 yaş ve altı yedekler kiralığa uygundur).</div>';
+      } else {
+        eligible.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3 text-xs";
+          const clubOptions = potClubs.map(c => `<option value="${c}">${c}</option>`).join("");
+          card.innerHTML = `
+            <div class="min-w-0 flex-1">
+              <div class="font-bold text-white flex items-center gap-2">
+                <span>${p.name}</span>
+                <span class="text-[10px] bg-blue-950/80 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.position}</span>
+                <span class="text-[10px] bg-slate-800 text-amber-400 px-1.5 py-0.2 rounded font-black">${p.overall} OVR</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-1">
+                Yaş: <strong class="text-slate-200">${p.age}</strong> • Maaş: <strong class="text-slate-200">${formatMoney(p.salary)}/Hf</strong> • Potansiyel: <strong class="text-emerald-400">+1-3 OVR Gelişim</strong>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <select id="select-loan-club-${p.id}" class="bg-slate-950 border border-slate-700 text-slate-200 text-[10px] rounded px-2 py-1 font-medium focus:outline-none">
+                ${clubOptions}
+              </select>
+              <button onclick="loanOutPlayer(${p.id})" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] transition-all shadow-sm">
+                Kirala →
+              </button>
+            </div>
+          `;
+          eligibleView.appendChild(card);
+        });
+      }
+    }
+
+    // Render Active Loans
+    if (activeView) {
+      activeView.innerHTML = "";
+      if (activeLoans.length === 0) {
+        activeView.innerHTML = '<div class="text-[11px] text-slate-500 italic p-4 text-center">Şu an başka bir kulüpte kiralıkta olan oyuncumuz yok.</div>';
+      } else {
+        activeLoans.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "bg-slate-900 border border-blue-900/60 p-3 rounded-xl flex items-center justify-between gap-3 text-xs";
+          const ovrDiff = (p.overall || 70) - (p.original_ovr || p.overall || 70);
+          const diffText = ovrDiff > 0 ? `<span class="text-emerald-400 font-bold">(+${ovrDiff} OVR)</span>` : '';
+          card.innerHTML = `
+            <div class="min-w-0 flex-1">
+              <div class="font-bold text-white flex items-center gap-2">
+                <span>${p.name}</span>
+                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.position}</span>
+                <span class="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded font-black">${p.overall} OVR ${diffText}</span>
+              </div>
+              <div class="text-[10px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
+                <span>Kulüp: <strong class="text-amber-300">${p.loan_club}</strong></span>
+                <span>• Maç: <strong class="text-white">${p.loan_matches_played || 0}</strong> (${p.loan_minutes_played || 0} Dk)</span>
+                <span>• Kalan: <strong class="text-blue-300">${p.loan_weeks_left || 0} Hafta</strong></span>
+              </div>
+            </div>
+            <div class="flex-shrink-0">
+              <button onclick="recallLoanPlayer(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[10px] border border-amber-500/40 transition-all">
+                Geri Çağır ↩
+              </button>
+            </div>
+          `;
+          activeView.appendChild(card);
+        });
+      }
+    }
+  } catch (e) {
+    console.error("loadPlayerLoans error:", e);
+  }
+}
+
+async function loanOutPlayer(playerId) {
+  const sel = document.getElementById(`select-loan-club-${playerId}`);
+  const clubName = sel ? sel.value : "Sakaryaspor";
+  try {
+    const res = await apiFetch("/api/players/loan-out", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_id: playerId, club: clubName, duration_weeks: 15 })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Oyuncu kiralanamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+    await loadPlayerLoans();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
+  }
+}
+
+async function recallLoanPlayer(playerId) {
+  try {
+    const res = await apiFetch("/api/players/recall-loan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ player_id: playerId })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Oyuncu geri çağrılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+    await loadPlayerLoans();
+  } catch (e) {
+    console.error(e);
+    showToast("Sunucu hatası!");
   }
 }
