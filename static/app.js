@@ -668,9 +668,21 @@ function formatMoney(num) {
 
 // ==================== TAB DEĞİŞTİRME ====================
 function switchTab(tabId) {
-  document.querySelectorAll(".tab-pane").forEach(el => el.classList.add("hidden"));
+  document.querySelectorAll(".tab-pane").forEach(el => {
+    el.classList.add("hidden");
+    el.classList.remove("active");
+  });
   const target = document.getElementById("tab-" + tabId);
-  if (target) target.classList.remove("hidden");
+  if (target) {
+    target.classList.remove("hidden");
+    target.classList.add("active");
+  }
+
+  // Sekme değiştiğinde ana içeriği en üste sar
+  const mainEl = document.getElementById("main-content");
+  if (mainEl) {
+    mainEl.scrollTop = 0;
+  }
 
   document.querySelectorAll(".nav-item").forEach(btn => btn.classList.remove("active", "text-amber-400"));
   const navBtn = document.getElementById("nav-btn-" + tabId);

@@ -235,16 +235,24 @@ header {
   transform: scale(0.97);
 }
 
-/* Ofis Sekmesi Genel Boşluk Ayarı (Yalnızca Aktifken Flex, Gizliyken Kesinlikle Hidden) */
-.tab-pane.hidden,
-#tab-office.hidden {
+/* Sekme Görünürlük Sistemi: Aktif Sekme Dışındaki Tüm Sekmeler Kesinlikle Gizlenir */
+.tab-pane {
   display: none !important;
+}
+
+.tab-pane:not(.hidden) {
+  display: block !important;
 }
 
 #tab-office:not(.hidden) {
   display: flex !important;
   flex-direction: column !important;
   gap: 0.85rem !important;
+}
+
+/* Modallarda Tailwind hidden sınıfını güvenceye al */
+.hidden {
+  display: none !important;
 }
 
 /* ==========================================================================
