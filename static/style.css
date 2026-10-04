@@ -235,8 +235,13 @@ header {
   transform: scale(0.97);
 }
 
-/* Ofis Sekmesi Genel Boşluk Ayarı (Nefes Alan Layout) */
-#tab-office {
+/* Ofis Sekmesi Genel Boşluk Ayarı (Yalnızca Aktifken Flex, Gizliyken Kesinlikle Hidden) */
+.tab-pane.hidden,
+#tab-office.hidden {
+  display: none !important;
+}
+
+#tab-office:not(.hidden) {
   display: flex !important;
   flex-direction: column !important;
   gap: 0.85rem !important;
