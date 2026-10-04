@@ -1704,6 +1704,12 @@ def api_match_half1(req: Half1Request):
         state["political_power"] = min(100, state.get("political_power", 50) + 4)
         state["media_trust"] = min(100, state.get("media_trust", 70) + 5)
 
+    # 1. Devre Başlangıç Durumları ve Olay Listesi
+    events = []
+    my_score = 0
+    opp_score = 0
+    coach_mistakes = 0
+
     # Taktik Yetenek Ağacı Bonusları (1. Devre)
     t_skills = state.get("tactical_skills", {}).get("unlocked", [])
     if "cehennem_tribunu" in t_skills and is_home:
@@ -1725,12 +1731,6 @@ def api_match_half1(req: Half1Request):
         my_pwr += 4
     if "savunma_duvari" in t_skills:
         opp_pwr = max(50, opp_pwr - 4)
-
-    # 1. Devre Gol Simülasyonu (Dakika 5 - 45)
-    events = []
-    my_score = 0
-    opp_score = 0
-    coach_mistakes = 0
 
     opp_team = next((t for t in TEAMS_DB if t["name"] == opponent_name), None)
     healthy_squad = [p for p in state["squad"] if p.get("suspended_weeks", 0) == 0 and p.get("injured_weeks", 0) == 0]

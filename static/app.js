@@ -1743,8 +1743,12 @@ async function startMatchSimulation() {
     });
 
     if (!res.ok) {
-      const err = await res.json();
-      showToast(err.detail || "Maç başlatılamadı!");
+      let errMsg = "Maç başlatılamadı!";
+      try {
+        const err = await res.json();
+        errMsg = err.detail || errMsg;
+      } catch (_) {}
+      showToast(errMsg);
       resetSimButton();
       return;
     }
@@ -1796,8 +1800,12 @@ async function submitHalftimeAction(action) {
     });
 
     if (!res.ok) {
-      const err = await res.json();
-      showToast(err.detail || "2. Devre başlatılamadı!");
+      let errMsg = "2. Devre başlatılamadı!";
+      try {
+        const err = await res.json();
+        errMsg = err.detail || errMsg;
+      } catch (_) {}
+      showToast(errMsg);
       resetSimButton();
       return;
     }
