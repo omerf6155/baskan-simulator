@@ -118,40 +118,55 @@ header {
   border-bottom: 1px solid rgba(244, 63, 94, 0.2) !important;
 }
 
-/* Matchday Hero Card: High Polish & Restraint */
+/* Matchday Hero Card: Clean Tactical Panel */
 .match-hero-card {
-  background: linear-gradient(180deg, #151e30 0%, #0d1422 100%) !important;
+  background: var(--bg-panel) !important;
   border: 1px solid var(--border-medium) !important;
-  border-radius: 14px !important;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
 }
 
 .match-hero-card span.font-black.text-slate-500 {
-  background: var(--bg-panel) !important;
+  background: var(--bg-card) !important;
   border: 1px solid var(--border-light) !important;
-  color: #cbd5e1 !important;
+  color: #94a3b8 !important;
   font-size: 0.7rem !important;
   font-weight: 800 !important;
-  padding: 0.25rem 0.6rem !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 6px !important;
 }
 
-/* Primary Matchday Action Button */
-button[onclick*="switchTab('match')"].bg-gradient-to-r,
-.btn-primary-action {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-  color: #0b0f19 !important;
-  font-size: 0.8rem !important;
-  font-weight: 800 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3) !important;
+/* Matchday Primary & Secondary Buttons */
+#btn-pre-match-event {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light) !important;
+  color: #cbd5e1 !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
   transition: all 0.15s ease !important;
 }
 
-button[onclick*="switchTab('match')"].bg-gradient-to-r:hover,
-.btn-primary-action:hover {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
-  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45) !important;
+#btn-pre-match-event:hover {
+  background: var(--bg-card-hover) !important;
+  border-color: var(--border-medium) !important;
+  color: #ffffff !important;
+}
+
+button[onclick*="switchTab('match')"] {
+  background: #059669 !important; /* FM Matchday Green */
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  border: 1px solid #10b981 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35) !important;
+  transition: all 0.15s ease !important;
+}
+
+button[onclick*="switchTab('match')"]:hover {
+  background: #10b981 !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.45) !important;
   transform: translateY(-1px);
 }
 
