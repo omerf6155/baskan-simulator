@@ -1323,7 +1323,13 @@ function renderSquadList() {
   if (!container || !gameState || !gameState.squad) return;
   container.innerHTML = "";
 
-  document.getElementById("squad-player-count").innerText = gameState.squad.length;
+  const squadCountEl = document.getElementById("squad-player-count");
+  const loanedCount = (gameState.loaned_players || []).length;
+  if (squadCountEl) {
+    squadCountEl.innerHTML = loanedCount > 0 
+      ? `${gameState.squad.length} As/Yedek • <span class="text-blue-400 font-bold">${loanedCount} Kiralıkta</span>` 
+      : `${gameState.squad.length}`;
+  }
 
   const starters = gameState.squad.slice(0, 11).map((p, i) => ({ player: p, actualIdx: i }));
   const bench = gameState.squad.slice(11).map((p, i) => ({ player: p, actualIdx: 11 + i }));
@@ -1420,6 +1426,58 @@ function renderSquadList() {
     if (bOther.length > 0) {
       bOther.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
     }
+  }
+
+  // 3. Grup: 🔄 KİRALIKTAKİ OYUNCULARIMIZ (Dış Kulüplere Kiralananlar)
+  const loanedPlayers = gameState.loaned_players || [];
+  if (loanedPlayers.length > 0) {
+    const loanHeader = document.createElement("div");
+    loanHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-blue-300 bg-blue-950/60 border border-blue-500/40 rounded-xl mt-4 mb-2 shadow-sm";
+    loanHeader.innerHTML = `
+      <span class="flex items-center gap-1.5">
+        <span>🔄</span>
+        <span>KİRALIKTAKİ OYUNCULARIMIZ</span>
+      </span>
+      <span class="text-[9px] text-blue-300 font-bold bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">
+        ${loanedPlayers.length} Oyuncu
+      </span>
+    `;
+    container.appendChild(loanHeader);
+
+    loanedPlayers.forEach(lp => {
+      const card = document.createElement("div");
+      card.className = "p-2.5 rounded-xl border border-blue-900/60 bg-slate-900/90 flex items-center justify-between gap-2.5 text-xs shadow-md transition-all";
+      const safeName = lp.name.replace(/'/g, "\\'");
+      const growthBadge = (lp.growth && lp.growth > 0) 
+        ? `<span class="text-[8px] bg-emerald-950 text-emerald-400 border border-emerald-500/60 px-1 py-0.2 rounded font-black">📈 +${lp.growth} OVR</span>` 
+        : '';
+      const weeksLeft = lp.weeks_left !== undefined ? lp.weeks_left : (lp.loan_weeks_left || 0);
+      
+      card.innerHTML = `
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          ${getFifaPosBadgeHtml(lp.pos || lp.position || 'CM')}
+          <div class="truncate">
+            <div class="font-extrabold text-white text-[11px] flex items-center gap-1.5 flex-wrap">
+              <span>${lp.name}</span>
+              <span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-600/40 px-1 py-0.2 rounded font-bold">🏢 ${lp.loan_club}</span>
+              ${growthBadge}
+              <span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-600/40 px-1 py-0.2 rounded font-bold font-mono">⏳ ${weeksLeft} Hafta Sonra Dönecek</span>
+            </div>
+            <div class="text-[9px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
+              <span>⚽ <strong class="text-white">${lp.matches_played || lp.loan_matches_played || 0}</strong> maç (<strong class="text-white">${lp.minutes_played || lp.loan_minutes_played || 0}</strong> dk)</span>
+              <span>💰 Maaş Tasarrufu: <strong class="text-emerald-400 font-mono">${formatMoney(lp.saved_wage || 0)}</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">${lp.overall} OVR</span>
+          <button onclick="recallLoanPlayer('${safeName}')" title="4M ₺ fesih bedeli ödeyerek oyuncuyu hemen as kadroya geri çağır" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-md flex items-center gap-1 transition-all">
+            <span>↩️</span> <span>Geri Çağır (4M ₺)</span>
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
   }
 }
 
@@ -4964,39 +5022,46 @@ async function loadPlayerLoans() {
     const data = await res.json();
     _loanListData = data;
 
-    const eligible = data.eligible || [];
-    const activeLoans = data.active_loans || [];
-    const potClubs = data.potential_clubs || ["Gençlerbirliği", "Sakaryaspor", "Amedspor", "Kocaelispor"];
+    const eligible = data.candidates || data.eligible || [];
+    const activeLoans = data.loaned || data.active_loans || [];
+    const potClubs = data.clubs || data.potential_clubs || ["Gençlerbirliği", "Sakaryaspor", "Kocaelispor", "Amed SK", "Bodrum FK"];
 
     if (eligibleCountEl) eligibleCountEl.innerText = eligible.length;
     if (activeCountEl) activeCountEl.innerText = activeLoans.length;
 
-    // Render Eligible
+    // Render Eligible (Kiralığa Verilebilecekler)
     if (eligibleView) {
       eligibleView.innerHTML = "";
       if (eligible.length === 0) {
-        eligibleView.innerHTML = '<div class="text-[11px] text-slate-500 italic p-4 text-center">Şu an kiralığa gönderilebilecek genç oyuncu bulunmuyor (İlk 11 as oyuncuları kiralanamaz, 23 yaş ve altı yedekler kiralığa uygundur).</div>';
+        eligibleView.innerHTML = '<div class="text-[11px] text-slate-500 italic p-4 text-center">Şu an kiralığa gönderilebilecek genç veya yedek oyuncu bulunmuyor.</div>';
       } else {
-        eligible.forEach(p => {
+        eligible.forEach((p, idx) => {
           const card = document.createElement("div");
           card.className = "bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3 text-xs";
-          const clubOptions = potClubs.map(c => `<option value="${c}">${c}</option>`).join("");
+          const clubOptions = potClubs.map(c => {
+            const cName = typeof c === 'object' ? c.name : c;
+            const cLeague = (typeof c === 'object' && c.league) ? ` (${c.league})` : '';
+            return `<option value="${cName}">${cName}${cLeague}</option>`;
+          }).join("");
+          const safeName = p.name.replace(/'/g, "\\'");
+          const elKey = `loan_cand_${idx}`;
+
           card.innerHTML = `
             <div class="min-w-0 flex-1">
               <div class="font-bold text-white flex items-center gap-2">
                 <span>${p.name}</span>
-                <span class="text-[10px] bg-blue-950/80 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.position}</span>
+                <span class="text-[10px] bg-blue-950/80 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.pos || p.position}</span>
                 <span class="text-[10px] bg-slate-800 text-amber-400 px-1.5 py-0.2 rounded font-black">${p.overall} OVR</span>
               </div>
               <div class="text-[10px] text-slate-400 mt-1">
-                Yaş: <strong class="text-slate-200">${p.age}</strong> • Maaş: <strong class="text-slate-200">${formatMoney(p.salary)}/Hf</strong> • Potansiyel: <strong class="text-emerald-400">+1-3 OVR Gelişim</strong>
+                Yaş: <strong class="text-slate-200">${p.age}</strong> • Maaş: <strong class="text-slate-200">${formatMoney(p.wage || p.salary)}</strong> • Potansiyel: <strong class="text-emerald-400">+1-3 OVR Gelişim</strong>
               </div>
             </div>
             <div class="flex items-center gap-2 flex-shrink-0">
-              <select id="select-loan-club-${p.id}" class="bg-slate-950 border border-slate-700 text-slate-200 text-[10px] rounded px-2 py-1 font-medium focus:outline-none">
+              <select id="select-loan-club-${elKey}" class="bg-slate-950 border border-slate-700 text-slate-200 text-[10px] rounded px-2 py-1 font-medium focus:outline-none">
                 ${clubOptions}
               </select>
-              <button onclick="loanOutPlayer(${p.id})" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] transition-all shadow-sm">
+              <button onclick="loanOutPlayer('${safeName}', '${elKey}')" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px] transition-all shadow-sm">
                 Kirala →
               </button>
             </div>
@@ -5006,7 +5071,7 @@ async function loadPlayerLoans() {
       }
     }
 
-    // Render Active Loans
+    // Render Active Loans (Kiralıktaki Gençlerimiz)
     if (activeView) {
       activeView.innerHTML = "";
       if (activeLoans.length === 0) {
@@ -5015,24 +5080,27 @@ async function loadPlayerLoans() {
         activeLoans.forEach(p => {
           const card = document.createElement("div");
           card.className = "bg-slate-900 border border-blue-900/60 p-3 rounded-xl flex items-center justify-between gap-3 text-xs";
-          const ovrDiff = (p.overall || 70) - (p.original_ovr || p.overall || 70);
-          const diffText = ovrDiff > 0 ? `<span class="text-emerald-400 font-bold">(+${ovrDiff} OVR)</span>` : '';
+          const ovrDiff = (p.growth || 0);
+          const diffText = ovrDiff > 0 ? `<span class="text-emerald-400 font-bold">(+${ovrDiff} OVR Gelişti)</span>` : '';
+          const weeksLeft = p.weeks_left !== undefined ? p.weeks_left : (p.loan_weeks_left || 0);
+          const safeName = p.name.replace(/'/g, "\\'");
+
           card.innerHTML = `
             <div class="min-w-0 flex-1">
-              <div class="font-bold text-white flex items-center gap-2">
+              <div class="font-bold text-white flex items-center gap-2 flex-wrap">
                 <span>${p.name}</span>
-                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.position}</span>
+                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded font-bold">${p.pos || p.position}</span>
                 <span class="text-[10px] bg-emerald-950 text-emerald-400 px-1.5 py-0.2 rounded font-black">${p.overall} OVR ${diffText}</span>
               </div>
               <div class="text-[10px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
                 <span>Kulüp: <strong class="text-amber-300">${p.loan_club}</strong></span>
-                <span>• Maç: <strong class="text-white">${p.loan_matches_played || 0}</strong> (${p.loan_minutes_played || 0} Dk)</span>
-                <span>• Kalan: <strong class="text-blue-300">${p.loan_weeks_left || 0} Hafta</strong></span>
+                <span>• Maç: <strong class="text-white">${p.matches_played || p.loan_matches_played || 0}</strong> (${p.minutes_played || p.loan_minutes_played || 0} Dk)</span>
+                <span>• Kalan: <strong class="text-blue-300 font-mono">⏳ ${weeksLeft} Hafta Sonra Dönecek</strong></span>
               </div>
             </div>
             <div class="flex-shrink-0">
-              <button onclick="recallLoanPlayer(${p.id})" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[10px] border border-amber-500/40 transition-all">
-                Geri Çağır ↩
+              <button onclick="recallLoanPlayer('${safeName}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-sm transition-all">
+                Geri Çağır (4M ₺) ↩
               </button>
             </div>
           `;
@@ -5045,14 +5113,14 @@ async function loadPlayerLoans() {
   }
 }
 
-async function loanOutPlayer(playerId) {
-  const sel = document.getElementById(`select-loan-club-${playerId}`);
+async function loanOutPlayer(playerName, elKey) {
+  const sel = document.getElementById(`select-loan-club-${elKey}`);
   const clubName = sel ? sel.value : "Sakaryaspor";
   try {
     const res = await apiFetch("/api/players/loan-out", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ player_id: playerId, club: clubName, duration_weeks: 15 })
+      body: JSON.stringify({ player_name: playerName, club_name: clubName, weeks: 17 })
     });
     const data = await res.json();
     if (!res.ok) {
@@ -5069,12 +5137,13 @@ async function loanOutPlayer(playerId) {
   }
 }
 
-async function recallLoanPlayer(playerId) {
+async function recallLoanPlayer(playerName) {
+  if (!confirm(`${playerName} isimli oyuncuyu 4.000.000 ₺ fesih bedeli ödeyerek kiralıktan geri çağırmak istiyor musunuz?`)) return;
   try {
     const res = await apiFetch("/api/players/recall-loan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ player_id: playerId })
+      body: JSON.stringify({ player_name: playerName })
     });
     const data = await res.json();
     if (!res.ok) {

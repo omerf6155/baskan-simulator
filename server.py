@@ -2597,15 +2597,43 @@ def api_match_half2(req: HalftimeActionRequest):
             re_data["active_project"] = None
 
     # 2. Kiralık Oyuncuların Haftalık Maç & Gelişim İlerlemesi
+    still_loaned = []
+    returned_now = []
     for lp in state.setdefault("loaned_players", []):
         lp["weeks_left"] = max(0, lp.get("weeks_left", 17) - 1)
+        lp["loan_weeks_left"] = lp["weeks_left"]
         mins = random.randint(75, 90)
         lp["minutes_played"] = lp.get("minutes_played", 0) + mins
+        lp["loan_minutes_played"] = lp["minutes_played"]
         lp["matches_played"] = lp.get("matches_played", 0) + 1
+        lp["loan_matches_played"] = lp["matches_played"]
         if lp["matches_played"] % 3 == 0 and lp.get("age", 20) <= 23:
             lp["overall"] = min(92, lp.get("overall", 72) + 1)
             lp["growth"] = lp.get("growth", 0) + 1
             state["news"].insert(0, f"📈 KİRALIK GELİŞİMİ: {lp['name']}, {lp.get('loan_club', 'Kiralık Kulübü')} formasıyla haftanın 11'ine seçildi! (+{lp['growth']} OVR, Güncel: {lp['overall']})")
+
+        # Kiralık süresi dolan oyuncu bedelsiz geri döner
+        if lp["weeks_left"] == 0:
+            restored = enrich_player({
+                "name": lp["name"],
+                "pos": lp.get("pos") or lp.get("position", "CM"),
+                "age": lp.get("age", 21),
+                "overall": lp["overall"],
+                "wage": lp.get("original_wage", 3_000_000),
+                "val": int(lp["overall"] * 850_000)
+            })
+            restored["minutes_played"] = lp.get("minutes_played", 0)
+            restored["matches_played"] = lp.get("matches_played", 0)
+            state["squad"].append(restored)
+            returned_now.append(f"{lp['name']} (+{lp.get('growth', 0)} OVR)")
+        else:
+            still_loaned.append(lp)
+    state["loaned_players"] = still_loaned
+    if returned_now:
+        state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
+        state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+        state["my_radar"] = calculate_team_radar(state["squad"])
+        state["news"].insert(0, f"🔙 KİRALIK DÖNÜŞÜ: Kiralık süresi tamamlanan {', '.join(returned_now)} gelişimini tamamlayarak as kadromuza geri döndü!")
 
     # 3. Dinamik Sponsor Teklifleri Taze Tutma
     if len(state.get("incoming_sponsor_offers", [])) < 2:
@@ -4405,85 +4433,127 @@ def api_loan_list():
     loaned = state.get("loaned_players", [])
     candidates = []
     for idx, p in enumerate(squad):
-        is_young = p.get("age", 25) <= 23 or "Altyapı" in p.get("name", "")
+        is_young = p.get("age", 25) <= 24 or "Altyapı" in p.get("name", "")
         is_bench = (idx >= 11)
         if is_young or is_bench:
             candidates.append({
+                "id": idx,
                 "name": p["name"],
                 "pos": p["pos"],
+                "position": p["pos"],
                 "age": p.get("age", 21),
                 "overall": p.get("overall", 72),
                 "wage": p.get("wage", 2_000_000),
+                "salary": p.get("wage", 2_000_000),
                 "is_starter": (idx < 11)
             })
     return {
         "candidates": candidates,
+        "eligible": candidates,
         "loaned": loaned,
-        "clubs": POTENTIAL_LOAN_CLUBS
+        "active_loans": loaned,
+        "clubs": POTENTIAL_LOAN_CLUBS,
+        "potential_clubs": POTENTIAL_LOAN_CLUBS
     }
 
 class LoanOutRequest(BaseModel):
-    player_name: str
-    club_name: str
-    weeks: int = 17
+    player_name: Optional[str] = None
+    player_id: Optional[Any] = None
+    club_name: Optional[str] = None
+    club: Optional[str] = None
+    weeks: Optional[int] = None
+    duration_weeks: Optional[int] = None
 
 @app.post("/api/players/loan-out")
 def api_loan_out(req: LoanOutRequest):
     state = get_state()
     squad = state.get("squad", [])
-    player_idx = next((i for i, p in enumerate(squad) if p["name"] == req.player_name), None)
+    target_name = req.player_name
+    if not target_name and req.player_id is not None:
+        try:
+            p_idx = int(req.player_id)
+            if 0 <= p_idx < len(squad):
+                target_name = squad[p_idx]["name"]
+        except (ValueError, TypeError):
+            pass
+    if not target_name:
+        raise HTTPException(status_code=400, detail="Kiralığa gönderilecek oyuncu belirtilmedi!")
+
+    player_idx = next((i for i, p in enumerate(squad) if p["name"] == target_name), None)
     if player_idx is None:
         raise HTTPException(status_code=404, detail="Oyuncu kadroda bulunamadı!")
-    
+
+    if len(squad) <= 14:
+        raise HTTPException(status_code=400, detail="TFF Asgari Kadro Kuralı: Kadronuzda en az 14 profesyonel futbolcu kalmalıdır!")
+
     player = squad.pop(player_idx)
-    target_club = next((c for c in POTENTIAL_LOAN_CLUBS if c["name"] == req.club_name), POTENTIAL_LOAN_CLUBS[0])
-    
+    target_club_name = req.club_name or req.club or POTENTIAL_LOAN_CLUBS[0]["name"]
+    target_club = next((c for c in POTENTIAL_LOAN_CLUBS if c["name"] == target_club_name), POTENTIAL_LOAN_CLUBS[0])
+    weeks_val = req.weeks or req.duration_weeks or 17
+
     loan_entry = {
         "name": player["name"],
         "pos": player["pos"],
+        "position": player["pos"],
         "age": player.get("age", 20),
         "overall": player["overall"],
+        "original_ovr": player["overall"],
         "loan_club": target_club["name"],
         "league": target_club["league"],
-        "weeks_left": req.weeks,
+        "weeks_left": weeks_val,
+        "loan_weeks_left": weeks_val,
         "minutes_played": 0,
+        "loan_minutes_played": 0,
         "matches_played": 0,
+        "loan_matches_played": 0,
         "growth": 0,
         "original_wage": player.get("wage", 3_000_000),
         "saved_wage": int(player.get("wage", 3_000_000) * target_club.get("wage_cover", 1.0))
     }
-    
+
     state.setdefault("loaned_players", []).append(loan_entry)
     state["squad"] = squad
     state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11) if len(state["squad"]) >= 11 else 70
     state["my_radar"] = calculate_team_radar(state["squad"])
-    
-    msg = f"🤝 KİRALAMA ANLAŞMASI: {player['name']} ({player['pos']}), {req.weeks} haftalığına {target_club['name']} kulübüne kiralandı! Oyuncunun maaş yükünden kurtulduk ve düzenli 90 dk süre alacak."
+
+    msg = f"🤝 KİRALAMA ANLAŞMASI: {player['name']} ({player['pos']}), {weeks_val} haftalığına {target_club['name']} kulübüne kiralandı! Oyuncunun maaş yükünden kurtulduk ve düzenli 90 dk süre alacak."
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
 
 class RecallLoanRequest(BaseModel):
-    player_name: str
+    player_name: Optional[str] = None
+    player_id: Optional[Any] = None
 
 @app.post("/api/players/recall-loan")
 def api_recall_loan(req: RecallLoanRequest):
     state = get_state()
     loaned = state.get("loaned_players", [])
-    lp_idx = next((i for i, p in enumerate(loaned) if p["name"] == req.player_name), None)
+    target_name = req.player_name
+    if not target_name and req.player_id is not None:
+        try:
+            lp_i = int(req.player_id)
+            if 0 <= lp_i < len(loaned):
+                target_name = loaned[lp_i]["name"]
+        except (ValueError, TypeError):
+            pass
+    if not target_name:
+        raise HTTPException(status_code=400, detail="Geri çağrılacak kiralık oyuncu belirtilmedi!")
+
+    lp_idx = next((i for i, p in enumerate(loaned) if p["name"] == target_name), None)
     if lp_idx is None:
-        raise HTTPException(status_code=404, detail="Kiralık oyuncu kaydı bulunamadı!")
-    
+        raise HTTPException(status_code=404, detail=f"'{target_name}' isimli kiralık oyuncu kaydı bulunamadı!")
+
     fee = 4_000_000
     if state["budget"] < fee:
-        raise HTTPException(status_code=400, detail="Kiralıktan erken çağırma fesih bedeli (4M ₺) kasada yok!")
-    
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Kiralıktan erken çağırma fesih bedeli: {format_money_val(fee)} (Mevcut Kasa: {format_money_val(state['budget'])})")
+
     state["budget"] -= fee
     lp = loaned.pop(lp_idx)
-    
+
     restored_p = enrich_player({
         "name": lp["name"],
-        "pos": lp["pos"],
+        "pos": lp.get("pos") or lp.get("position", "CM"),
         "age": lp.get("age", 21),
         "overall": lp["overall"],
         "wage": lp.get("original_wage", 3_000_000),
@@ -4491,13 +4561,13 @@ def api_recall_loan(req: RecallLoanRequest):
     })
     restored_p["minutes_played"] = lp.get("minutes_played", 0)
     restored_p["matches_played"] = lp.get("matches_played", 0)
-    
+
     state["squad"].append(restored_p)
     state["squad"] = rebalance_and_validate_squad(state["squad"], state.get("club_name", ""))
     state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
     state["my_radar"] = calculate_team_radar(state["squad"])
-    
-    msg = f"🔙 GERİ ÇAĞIRMA: {lp['name']}, 4M ₺ fesih bedeli ödenerek {lp['loan_club']} kulübünden geri çağrıldı ve as kadroya katıldı (+{lp.get('growth', 0)} OVR gelişim)!"
+
+    msg = f"🔙 GERİ ÇAĞIRMA: {lp['name']}, 4M ₺ fesih bedeli ödenerek {lp.get('loan_club', 'Kiralık Kulübü')} kulübünden geri çağrıldı ve as kadroya katıldı (+{lp.get('growth', 0)} OVR gelişim)!"
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
