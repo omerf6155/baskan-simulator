@@ -1858,6 +1858,10 @@ def api_match_half1(req: Half1Request):
     throw_match = (active_bet and active_bet.get("bet_type") == "opponent_win")
 
     # Taktiksel Başkan Talimatı ve Rotasyon Kontrolleri
+    tactic = state.get("next_match_tactic")
+    if tactic:
+        state["next_match_rotation"] = False
+
     if state.get("next_match_rotation"):
         events.append({
             "minute": 1,
@@ -1866,7 +1870,6 @@ def api_match_half1(req: Half1Request):
         })
         state["next_match_rotation"] = False
 
-    tactic = state.get("next_match_tactic")
     tactic_bonus_my = 0
     tactic_bonus_opp = 0
     if tactic == "all_out_attack":
@@ -3718,13 +3721,16 @@ def api_respond_incoming_bid(req: RespondBidRequest):
 @app.get("/api/transfer/market")
 def api_transfer_market():
     state = get_state()
-    squad_names = {p["name"] for p in state.get("squad", [])}
+    # Kendi kadromuzdaki ve kiralıktaki oyuncuların normalize edilmiş adları
+    squad_names = {p.get("name", "").strip().lower() for p in state.get("squad", []) if p.get("name")}
+    loaned_names = {p.get("name", "").strip().lower() for p in state.get("loaned_players", []) if p.get("name")}
+    my_names = squad_names | loaned_names
 
-    # Kendi kadromuzdaki oyuncuları pazardan filtrele
-    filtered_stars = [p for p in WORLD_SUPERSTARS if p["name"] not in squad_names]
-    filtered_turkish = [p for p in TURKISH_STARS if p["name"] not in squad_names]
-    filtered_free = [p for p in FREE_AGENTS if p["name"] not in squad_names]
-    filtered_scouts = [p for p in SCOUT_PICKS if p["name"] not in squad_names]
+    # Kendi kadromuzdaki ve kiralıktaki oyuncuları pazardan filtrele
+    filtered_stars = [p for p in WORLD_SUPERSTARS if p.get("name", "").strip().lower() not in my_names]
+    filtered_turkish = [p for p in TURKISH_STARS if p.get("name", "").strip().lower() not in my_names]
+    filtered_free = [p for p in FREE_AGENTS if p.get("name", "").strip().lower() not in my_names]
+    filtered_scouts = [p for p in SCOUT_PICKS if p.get("name", "").strip().lower() not in my_names]
 
     return {
         "world_stars": [enrich_player(dict(p)) for p in filtered_stars],
@@ -4723,9 +4729,14 @@ class SignEuropeanPlayerRequest(BaseModel):
 
 @app.get("/api/transfer/european-market")
 def api_transfer_european_market():
+    state = get_state()
+    squad_names = {p.get("name", "").strip().lower() for p in state.get("squad", []) if p.get("name")}
+    loaned_names = {p.get("name", "").strip().lower() for p in state.get("loaned_players", []) if p.get("name")}
+    my_names = squad_names | loaned_names
+
     out = {}
     for club, players in EUROPEAN_CLUBS_MARKET.items():
-        out[club] = [enrich_player(dict(p)) for p in players]
+        out[club] = [enrich_player(dict(p)) for p in players if p.get("name", "").strip().lower() not in my_names]
     return out
 
 @app.post("/api/transfer/sign-european-player")
@@ -4949,22 +4960,26 @@ def api_coach_instruction(req: CoachInstructionRequest):
 
     if req.instruction == "rotate_squad":
         state["next_match_rotation"] = True
+        state["next_match_tactic"] = None
         # As kadroya doğrudan dinlenme ve zindelik
         for p in state.get("squad", [])[:11]:
             p["stamina"] = min(100, p.get("stamina", 80) + 18)
         msg = f"Hoca {c_name}: 'Sayın Başkanım, talimatınız başım üstüne. Önümüzdeki maçta as yıldızlarımızı dinlendirip, kulübedeki aç ve hazır oyuncularımıza forma vereceğim. Rotasyon takıma nefes aldıracak.'"
     
     elif req.instruction == "all_out_attack":
+        state["next_match_rotation"] = False
         state["next_match_tactic"] = "all_out_attack"
         coach["attack"] = min(99, coach.get("attack", 80) + 4)
         msg = f"Hoca {c_name}: 'Hücum futbolu bizim genlerimizde var Başkanım! Rakibin üzerine tüm hatlarımızla gideceğiz, tribünleri coşturacağız!'"
     
     elif req.instruction == "park_the_bus":
+        state["next_match_rotation"] = False
         state["next_match_tactic"] = "park_the_bus"
         coach["defense"] = min(99, coach.get("defense", 80) + 5)
         msg = f"Hoca {c_name}: 'Çok akıllıca Başkanım. Önümüzdeki maçta savunma bloklarını sıkılaştıracağız, kaleyi gole kapatıp sabırla bekleyeceğiz.'"
 
     elif req.instruction == "trust_youth":
+        state["next_match_rotation"] = False
         state["next_match_tactic"] = "trust_youth"
         coach["youth"] = min(99, coach.get("youth", 80) + 5)
         for p in state.get("squad", []):

@@ -700,6 +700,10 @@ function switchTab(tabId) {
     loadSponsorOffers();
   }
 
+  if (tabId === "transfers") {
+    loadTransferMarket();
+  }
+
   lucide.createIcons();
 }
 
@@ -2967,6 +2971,15 @@ function renderTransferMarket() {
     list = (marketData.free_agents || []).map(p => ({ ...p, type: "free" }));
   }
 
+  // Kullanıcının kadrosunda veya kiralıkta olan oyuncuları pazardan filtrele (çifte görünümü engelle)
+  const myOwnedNames = new Set(
+    (gameState?.squad || [])
+      .concat(gameState?.loaned_players || [])
+      .map(p => (p.name || "").trim().toLowerCase())
+      .filter(Boolean)
+  );
+  list = list.filter(p => !myOwnedNames.has((p.name || "").trim().toLowerCase()));
+
   list.forEach(p => {
     const item = document.createElement("div");
     item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col gap-1.5 text-xs";
@@ -3019,6 +3032,7 @@ async function buyEuropeanPlayer(clubName, playerName, btnEl) {
     showToast(data.message);
     gameState = data.state;
     renderUI();
+    loadTransferMarket();
   } catch (e) {
     console.error(e);
     if (btnEl) {
@@ -3057,6 +3071,7 @@ async function buyMarketPlayer(playerName, price, salary, btnEl) {
     showToast(data.message);
     gameState = data.state;
     renderUI();
+    loadTransferMarket();
   } catch (e) {
     console.error(e);
     if (btnEl) {
@@ -5039,8 +5054,14 @@ async function loadPlayerLoans() {
           const card = document.createElement("div");
           card.className = "bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between gap-3 text-xs";
           const clubOptions = potClubs.map(c => {
-            const cName = typeof c === 'object' ? c.name : c;
-            const cLeague = (typeof c === 'object' && c.league) ? ` (${c.league})` : '';
+            let cName = "";
+            let cLeague = "";
+            if (typeof c === 'object' && c !== null) {
+              cName = c.name || c.club || c.title || "Sakaryaspor";
+              if (c.league) cLeague = ` (${c.league})`;
+            } else {
+              cName = String(c || "Sakaryaspor");
+            }
             return `<option value="${cName}">${cName}${cLeague}</option>`;
           }).join("");
           const safeName = p.name.replace(/'/g, "\\'");
