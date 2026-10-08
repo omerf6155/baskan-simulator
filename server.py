@@ -2,6 +2,7 @@ import os
 import json
 import time
 import random
+import datetime
 import contextvars
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException, Request
@@ -908,11 +909,93 @@ def rebalance_and_validate_squad(squad: List[Dict], club_name: str = "", force_a
     final_squad = [best_gk] + starters_outfield + bench_gks + bench_outfield
     return final_squad
 
+# ==================== OYUN TAKVİMİ & TARİH SİSTEMİ ====================
+TURKISH_MONTHS = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+TURKISH_DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+
+def format_turkish_date(date_str: str) -> str:
+    try:
+        d = datetime.date.fromisoformat(date_str)
+        return f"{d.day} {TURKISH_MONTHS[d.month]} {d.year}"
+    except Exception:
+        return date_str
+
+def format_turkish_date_full(date_str: str) -> str:
+    try:
+        d = datetime.date.fromisoformat(date_str)
+        return f"{d.day} {TURKISH_MONTHS[d.month]} {d.year}, {TURKISH_DAYS[d.weekday()]}"
+    except Exception:
+        return date_str
+
+def build_fixture_dates(season: int = 1) -> Dict[int, str]:
+    base_year = 2026 + (season - 1)
+    d = datetime.date(base_year, 8, 15)  # Hafta 1: 15 Ağustos 2026 Cumartesi
+    dates = {}
+    for w in range(1, 35):
+        dates[w] = d.isoformat()
+        if w == 17:
+            # 3 haftalık kış / devre arası tatili
+            d += datetime.timedelta(days=21)
+        else:
+            d += datetime.timedelta(days=7)
+    return dates
+
+def is_transfer_window_open(date_str: str, season: int = 1) -> bool:
+    try:
+        base_year = 2026 + (season - 1)
+        d = datetime.date.fromisoformat(date_str)
+        summer_start = datetime.date(base_year, 7, 1)
+        summer_end = datetime.date(base_year, 9, 15)
+        winter_start = datetime.date(base_year + 1, 1, 1)
+        winter_end = datetime.date(base_year + 1, 2, 8)
+        return (summer_start <= d <= summer_end) or (winter_start <= d <= winter_end)
+    except Exception:
+        return True
+
+def get_transfer_window_details(date_str: str, season: int = 1) -> Dict[str, Any]:
+    try:
+        base_year = 2026 + (season - 1)
+        d = datetime.date.fromisoformat(date_str)
+        summer_start = datetime.date(base_year, 7, 1)
+        summer_end = datetime.date(base_year, 9, 15)
+        winter_start = datetime.date(base_year + 1, 1, 1)
+        winter_end = datetime.date(base_year + 1, 2, 8)
+        
+        if summer_start <= d <= summer_end:
+            days_left = (summer_end - d).days
+            return {
+                "is_open": True,
+                "name": "Yaz Transfer Dönemi",
+                "deadline": summer_end.isoformat(),
+                "days_left": days_left,
+                "desc": f"Son {days_left} gün (Kapanış: 15 Eylül)"
+            }
+        elif winter_start <= d <= winter_end:
+            days_left = (winter_end - d).days
+            return {
+                "is_open": True,
+                "name": "Kış Transfer Dönemi",
+                "deadline": winter_end.isoformat(),
+                "days_left": days_left,
+                "desc": f"Son {days_left} gün (Kapanış: 8 Şubat)"
+            }
+        else:
+            return {
+                "is_open": False,
+                "name": "Transfer Dönemi Kapalı",
+                "deadline": None,
+                "days_left": 0,
+                "desc": "Transfer penceresi kapalıdır"
+            }
+    except Exception:
+        return {"is_open": True, "name": "Yaz Transfer Dönemi", "deadline": None, "days_left": 0, "desc": ""}
+
 # ==================== 34 HAFTALIK ÇİFT DEVRE FİKSTÜR ====================
-def generate_fixtures(my_team_name: str, teams: List[Dict]):
+def generate_fixtures(my_team_name: str, teams: List[Dict], season: int = 1):
     other_teams = [t for t in teams if t["name"] != my_team_name]
     random.shuffle(other_teams)
     fixtures = []
+    dates = build_fixture_dates(season)
     
     # 1. Devre (17 Hafta: 1 - 17)
     for w in range(1, len(other_teams) + 1):
@@ -923,9 +1006,12 @@ def generate_fixtures(my_team_name: str, teams: List[Dict]):
             "round": 1,
             "opponent": opp["name"],
             "opponent_short": opp.get("short", "RAK"),
+            "opponent_logo": opp.get("logo", ""),
             "opponent_pwr": opp["power"],
             "opponent_is_big": opp.get("is_big", False),
             "is_home": is_home,
+            "date": dates.get(w, "2026-08-15"),
+            "day_name": "Cumartesi",
             "played": False,
             "result": None,
             "my_score": None,
@@ -942,9 +1028,12 @@ def generate_fixtures(my_team_name: str, teams: List[Dict]):
             "round": 2,
             "opponent": opp["name"],
             "opponent_short": opp.get("short", "RAK"),
+            "opponent_logo": opp.get("logo", ""),
             "opponent_pwr": opp["power"],
             "opponent_is_big": opp.get("is_big", False),
             "is_home": is_home,
+            "date": dates.get(week_num, "2027-01-09"),
+            "day_name": "Cumartesi",
             "played": False,
             "result": None,
             "my_score": None,
@@ -1313,6 +1402,7 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "is_big": team.get("is_big", False),
         "season": 1,
         "week": 1,
+        "current_date": "2026-08-10",
         "max_weeks": 34, # 18 takım çift devreli lig = 34 hafta
         "season_finished": False,
         "season_result": None,
@@ -1484,8 +1574,29 @@ def get_state(session_id: Optional[str] = None):
                         elif p_type == "stadium":
                             state["stadium_capacity"] = state.get("stadium_capacity", 25000) + 20000
                             state["fan_trust"] = min(100, state.get("fan_trust", 50) + 15)
-                        re_data.setdefault("completed", []).append(proj)
-                        re_data["active_project"] = None
+                    # Takvim & Tarih Sistemi Entegrasyonu
+                    season = state.get("season", 1)
+                    fixture_dates = build_fixture_dates(season)
+                    if "fixtures" in state:
+                        for f in state["fixtures"]:
+                            if not f.get("date"):
+                                f["date"] = fixture_dates.get(f.get("week", 1), "2026-08-15")
+                            if not f.get("day_name"):
+                                f["day_name"] = "Cumartesi"
+                            if not f.get("opponent_logo"):
+                                opp_t = next((t for t in TEAMS_DB if t["name"] == f.get("opponent")), None)
+                                if opp_t:
+                                    f["opponent_logo"] = opp_t.get("logo", "")
+
+                    if "current_date" not in state or not state["current_date"]:
+                        cur_week = state.get("week", 1)
+                        if cur_week in fixture_dates:
+                            w_dt = datetime.date.fromisoformat(fixture_dates[cur_week])
+                            state["current_date"] = (w_dt - datetime.timedelta(days=5)).isoformat()
+                        else:
+                            state["current_date"] = "2026-08-10"
+
+                    state["transfer_window_open"] = is_transfer_window_open(state["current_date"], season)
                     return state
         except Exception:
             pass
@@ -2568,8 +2679,14 @@ def api_match_half2(req: HalftimeActionRequest):
     cur_fixture["opp_score"] = opp_score
     cur_fixture["result"] = match_result
 
-    # Hafta İlerletme
+    # Hafta İlerletme & Takvim Güncellemesi (Maç tamamlandı, takvim Pazar gününe geçer)
     state["week"] += 1
+    try:
+        cur_dt = datetime.date.fromisoformat(cur_fixture.get("date", state.get("current_date", "2026-08-15")))
+        state["current_date"] = (cur_dt + datetime.timedelta(days=1)).isoformat()
+    except Exception:
+        pass
+    state["transfer_window_open"] = is_transfer_window_open(state.get("current_date", "2026-08-16"), state.get("season", 1))
 
     # 1. Gayrimenkul / Hazine Arazisi Projesi İlerlemesi
     re_data = state.setdefault("real_estate", {"land_acres": 250, "active_project": None, "completed": []})
@@ -3538,29 +3655,179 @@ def api_buy_loan_option(req: BuyLoanOptionRequest):
     save_state(state)
     return {"message": msg, "state": state}
 
-# ==================== TRANSFER GÜNÜ İLERLETME & BİZE GELEN TEKLİFLER ====================
+# ==================== OYUN TAKVİMİ & GÜN İLERLETME ENDPOINTS ====================
+def advance_calendar_day_internal(state: Dict[str, Any]) -> Dict[str, Any]:
+    season = state.get("season", 1)
+    cur_date_str = state.get("current_date", "2026-08-10")
+    try:
+        cur_dt = datetime.date.fromisoformat(cur_date_str)
+    except Exception:
+        cur_dt = datetime.date(2026, 8, 10)
+    
+    next_dt = cur_dt + datetime.timedelta(days=1)
+    state["current_date"] = next_dt.isoformat()
+    
+    # Transfer penceresi kontrolü
+    window_open = is_transfer_window_open(state["current_date"], season)
+    prev_window_open = state.get("transfer_window_open", False)
+    state["transfer_window_open"] = window_open
+
+    # Pencere kapandı mı / açıldı mı bülteni
+    if prev_window_open and not window_open:
+        state["news"].insert(0, f"🛑 TRANSFER DÖNEMİ KAPANDI! ({format_turkish_date(state['current_date'])}) Transfer tahtası kapandı.")
+    elif not prev_window_open and window_open:
+        state["news"].insert(0, f"🔥 ARA TRANSFER DÖNEMİ AÇILDI! ({format_turkish_date(state['current_date'])}) Kulüpler masaya oturuyor.")
+
+    # Transfer penceresi açıksa CPU transferleri & gelen teklif simülasyonu
+    new_bid = None
+    if window_open:
+        if random.random() < 0.25:
+            simulate_cpu_transfers(state, count=1)
+        if state.get("squad") and random.random() < 0.22 and len(state.get("incoming_bids", [])) < 3:
+            new_bid = generate_squad_incoming_bid(state)
+
+    # Sıradaki fikstür kontrolü
+    cur_week = state.get("week", 1)
+    next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
+    
+    is_matchday = False
+    if next_fix and state["current_date"] == next_fix.get("date"):
+        is_matchday = True
+
+    return {
+        "current_date": state["current_date"],
+        "is_matchday": is_matchday,
+        "next_fix": next_fix,
+        "new_bid": new_bid,
+        "window_open": window_open
+    }
+
+@app.get("/api/calendar")
+def api_get_calendar():
+    state = get_state()
+    season = state.get("season", 1)
+    cur_date_str = state.get("current_date", "2026-08-10")
+    cur_week = state.get("week", 1)
+    
+    next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
+    window_details = get_transfer_window_details(cur_date_str, season)
+    is_matchday = bool(next_fix and cur_date_str == next_fix.get("date"))
+
+    return {
+        "current_date": cur_date_str,
+        "current_date_formatted": format_turkish_date(cur_date_str),
+        "current_date_full": format_turkish_date_full(cur_date_str),
+        "season": season,
+        "week": cur_week,
+        "max_weeks": state.get("max_weeks", 34),
+        "transfer_window": window_details,
+        "next_fixture": next_fix,
+        "is_matchday": is_matchday,
+        "fixtures": state.get("fixtures", [])
+    }
+
+@app.post("/api/calendar/advance-day")
+def api_calendar_advance_day():
+    state = get_state()
+    cur_week = state.get("week", 1)
+    next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
+
+    # Eğer bugün zaten maç günüyse ve maç oynanmadıysa durdur
+    if next_fix and state.get("current_date") == next_fix.get("date"):
+        return {
+            "status": "stopped",
+            "stopped_reason": "must_play_match",
+            "message": f"Bugün maç günü! {next_fix['opponent']} karşılaşmasına çıkmadan bir sonraki güne geçemezsiniz.",
+            "state": state
+        }
+
+    res = advance_calendar_day_internal(state)
+    msg = f"📅 Tarih: {format_turkish_date_full(state['current_date'])}"
+    stopped_reason = "normal"
+    
+    if res["is_matchday"]:
+        stopped_reason = "matchday"
+        msg = f"⚽ MAÇ GÜNÜ! {res['next_fix']['opponent']} ile karşılaşma günü geldi!"
+        state["news"].insert(0, msg)
+    elif res["new_bid"]:
+        stopped_reason = "incoming_bid"
+        msg = f"📩 TRANSFER TEKLİFİ! {res['new_bid']['player_name']} için {res['new_bid']['club']} kulübünden teklif var!"
+        state["news"].insert(0, msg)
+
+    save_state(state)
+    return {
+        "status": "ok",
+        "stopped_reason": stopped_reason,
+        "message": msg,
+        "state": state
+    }
+
+class AdvanceToDateReq(BaseModel):
+    target_date: str
+
+@app.post("/api/calendar/advance-to-date")
+def api_calendar_advance_to_date(req: AdvanceToDateReq):
+    state = get_state()
+    cur_dt = datetime.date.fromisoformat(state.get("current_date", "2026-08-10"))
+    try:
+        tgt_dt = datetime.date.fromisoformat(req.target_date)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Geçersiz tarih formatı (YYYY-MM-DD bekleniyor)!")
+
+    if tgt_dt <= cur_dt:
+        raise HTTPException(status_code=400, detail="Hedef tarih bugünden ileri bir tarih olmalıdır!")
+
+    days_to_advance = min((tgt_dt - cur_dt).days, 90)
+    stopped_reason = "target_reached"
+    stop_msg = f"📅 {format_turkish_date(tgt_dt.isoformat())} tarihine ulaşıldı."
+
+    for _ in range(days_to_advance):
+        # Maç günü kontrolü
+        cur_week = state.get("week", 1)
+        next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
+        if next_fix and state.get("current_date") == next_fix.get("date"):
+            stopped_reason = "matchday"
+            stop_msg = f"⚽ MAÇ GÜNÜ GELDİ! ({next_fix['opponent']} karşılaşması)"
+            break
+
+        step_res = advance_calendar_day_internal(state)
+
+        if step_res["new_bid"]:
+            stopped_reason = "incoming_bid"
+            stop_msg = f"📩 TRANSFER TEKLİFİ! {step_res['new_bid']['player_name']} için resmi teklif geldi!"
+            break
+
+        if step_res["is_matchday"]:
+            stopped_reason = "matchday"
+            stop_msg = f"⚽ MAÇ GÜNÜ GELDİ! ({step_res['next_fix']['opponent']} karşılaşması)"
+            break
+
+    save_state(state)
+    return {
+        "status": "ok",
+        "stopped_reason": stopped_reason,
+        "message": stop_msg,
+        "state": state
+    }
+
+@app.post("/api/calendar/advance-to-matchday")
+def api_calendar_advance_to_matchday():
+    state = get_state()
+    cur_week = state.get("week", 1)
+    next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
+    if not next_fix:
+        raise HTTPException(status_code=400, detail="Oynanacak maç bulunamadı!")
+    
+    tgt_date = next_fix.get("date")
+    if not tgt_date or tgt_date <= state.get("current_date", ""):
+        return {"status": "ok", "stopped_reason": "already_matchday", "message": "Zaten maç günündesiniz!", "state": state}
+
+    req = AdvanceToDateReq(target_date=tgt_date)
+    return api_calendar_advance_to_date(req)
+
 @app.post("/api/transfer/advance-day")
 def api_transfer_advance_day():
-    state = get_state()
-    state["transfer_day"] = state.get("transfer_day", 1) + 1
-    max_days = state.get("transfer_max_days", 7)
-
-    # Diğer takımların transfer hareketliliği simülasyonu
-    simulate_cpu_transfers(state, count=1)
-
-    # Rastgele bir oyuncumuza dış veya yerli kulüplerden teklif oluştur (Kiralık veya Bonservis)
-    if state.get("squad") and random.random() < 0.70:
-        generate_squad_incoming_bid(state)
-
-    if state["transfer_day"] > max_days:
-        state["transfer_window_open"] = False
-        msg = "🏁 TRANSFER DÖNEMİ SONA ERDİ! Pencereler kapandı, takımlar lig maçlarına odaklanıyor."
-    else:
-        msg = f"📅 Transfer Penceresinde {state['transfer_day']}. Gün başladı (Son {max_days - state['transfer_day'] + 1} Gün)!"
-
-    state["news"].insert(0, msg)
-    save_state(state)
-    return {"message": msg, "state": state}
+    return api_calendar_advance_day()
 
 class RespondBidRequest(BaseModel):
     bid_id: str

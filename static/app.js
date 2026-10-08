@@ -813,6 +813,10 @@ function renderUI() {
   }
   document.getElementById("header-season").innerText = gameState.season;
   document.getElementById("header-week").innerText = Math.min(gameState.week, gameState.max_weeks || 34);
+  const headerDateEl = document.getElementById("header-current-date");
+  if (headerDateEl) {
+    headerDateEl.innerText = formatTurkishDateShort(gameState.current_date || "2026-08-10");
+  }
 
   // Kasa & Metrikler
   document.getElementById("bar-budget-txt").innerText = formatMoney(gameState.budget);
@@ -901,6 +905,44 @@ function renderUI() {
     if (derbyBadge) {
       if (isDerby) derbyBadge.classList.remove("hidden");
       else derbyBadge.classList.add("hidden");
+    }
+
+    // Tarih, Geri Sayım ve Aksiyon Butonları
+    const dateBadge = document.getElementById("office-match-date-badge");
+    const countBadge = document.getElementById("office-match-countdown-badge");
+    const btnOfficeAdvanceDay = document.getElementById("btn-office-advance-day");
+    const btnOfficeAdvanceMatch = document.getElementById("btn-office-advance-matchday");
+    const btnOfficePlayMatch = document.getElementById("btn-office-play-match");
+
+    const todayStr = gameState.current_date || "2026-08-10";
+    const fixDateStr = curFix.date || "2026-08-15";
+
+    if (dateBadge) {
+      dateBadge.innerText = formatTurkishDateShort(fixDateStr);
+    }
+
+    const isMatchday = (todayStr === fixDateStr);
+    if (countBadge) {
+      if (isMatchday) {
+        countBadge.className = "text-[9.5px] font-black px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 animate-pulse";
+        countBadge.innerText = "🔥 BUGÜN MAÇ GÜNÜ!";
+      } else {
+        const diffDays = Math.max(0, Math.round((new Date(fixDateStr) - new Date(todayStr)) / (1000 * 3600 * 24)));
+        countBadge.className = "text-[9.5px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
+        countBadge.innerText = `${diffDays} Gün Kaldı`;
+      }
+    }
+
+    if (btnOfficePlayMatch && btnOfficeAdvanceDay && btnOfficeAdvanceMatch) {
+      if (isMatchday) {
+        btnOfficePlayMatch.classList.remove("hidden");
+        btnOfficeAdvanceDay.classList.add("hidden");
+        btnOfficeAdvanceMatch.classList.add("hidden");
+      } else {
+        btnOfficePlayMatch.classList.add("hidden");
+        btnOfficeAdvanceDay.classList.remove("hidden");
+        btnOfficeAdvanceMatch.classList.remove("hidden");
+      }
     }
 
     // Maç Ekranı İsimleri & Logoları
@@ -2799,21 +2841,345 @@ async function buyLoanOption(playerName) {
   }
 }
 
-// ==================== TRANSFER GÜNÜ İLERLETME & GELEN TEKLİFLER ====================
-async function advanceTransferDay() {
+// ==================== TAKVİM & TARİH YÖNETİMİ ====================
+let currentCalendarYear = 2026;
+let currentCalendarMonth = 7; // Ağustos (0-indexed)
+let selectedCalendarDate = null;
+
+const TURKISH_MONTH_NAMES = [
+  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+];
+const TURKISH_DAY_NAMES = [
+  "Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"
+];
+
+function formatTurkishDateShort(dateStr) {
+  if (!dateStr) return "";
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return dateStr;
+  const day = parseInt(parts[2], 10);
+  const mIndex = parseInt(parts[1], 10) - 1;
+  const year = parts[0];
+  const shortMonths = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  return `${day} ${shortMonths[mIndex] || ""} ${year}`;
+}
+
+function formatTurkishDateLong(dateStr) {
+  if (!dateStr) return "";
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return dateStr;
+  const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  const day = d.getDate();
+  const month = TURKISH_MONTH_NAMES[d.getMonth()];
+  const year = d.getFullYear();
+  const dayName = TURKISH_DAY_NAMES[d.getDay()];
+  return `${day} ${month} ${year}, ${dayName}`;
+}
+
+function openCalendarModal() {
+  const modal = document.getElementById("modal-calendar");
+  if (!modal) return;
+  
+  if (gameState && gameState.current_date) {
+    const parts = gameState.current_date.split("-");
+    if (parts.length === 3) {
+      currentCalendarYear = parseInt(parts[0], 10);
+      currentCalendarMonth = parseInt(parts[1], 10) - 1;
+      selectedCalendarDate = gameState.current_date;
+    }
+  }
+  
+  renderCalendarView();
+  modal.classList.remove("hidden");
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function closeCalendarModal() {
+  const modal = document.getElementById("modal-calendar");
+  if (modal) modal.classList.add("hidden");
+}
+
+function prevCalendarMonth() {
+  currentCalendarMonth--;
+  if (currentCalendarMonth < 0) {
+    currentCalendarMonth = 11;
+    currentCalendarYear--;
+  }
+  renderCalendarView();
+}
+
+function nextCalendarMonth() {
+  currentCalendarMonth++;
+  if (currentCalendarMonth > 11) {
+    currentCalendarMonth = 0;
+    currentCalendarYear++;
+  }
+  renderCalendarView();
+}
+
+function renderCalendarView() {
+  if (!gameState) return;
+  const todayStr = gameState.current_date || "2026-08-10";
+  const season = gameState.season || 1;
+  const fixtures = gameState.fixtures || [];
+
+  // 1. Bilgi Şeritleri
+  const todayFullEl = document.getElementById("calendar-today-full-txt");
+  if (todayFullEl) todayFullEl.innerText = formatTurkishDateLong(todayStr);
+
+  const swEl = document.getElementById("calendar-season-week-txt");
+  if (swEl) swEl.innerText = `${season}. Sezon • ${gameState.week}. Hafta / ${gameState.max_weeks || 34}`;
+
+  const monthTitle = document.getElementById("calendar-month-title");
+  if (monthTitle) monthTitle.innerText = `${TURKISH_MONTH_NAMES[currentCalendarMonth]} ${currentCalendarYear}`;
+
+  // Transfer dönemi durumu
+  const transBadge = document.getElementById("calendar-transfer-status-badge");
+  const transDaysLeft = document.getElementById("calendar-transfer-days-left");
+  const isTransferOpen = !!gameState.transfer_window_open;
+  if (transBadge) {
+    if (isTransferOpen) {
+      transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      transBadge.innerText = "🟢 Transfer Penceresi Açık";
+      if (transDaysLeft) {
+        const summerEnd = `${currentCalendarYear}-09-15`;
+        const winterEnd = `${currentCalendarYear + 1}-02-08`;
+        let dl = todayStr <= summerEnd ? summerEnd : winterEnd;
+        let diff = Math.max(0, Math.round((new Date(dl) - new Date(todayStr)) / (1000 * 3600 * 24)));
+        transDaysLeft.innerText = `Son ${diff} Gün (Bitiş: ${formatTurkishDateShort(dl)})`;
+      }
+    } else {
+      transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
+      transBadge.innerText = "⚪ Transfer Penceresi Kapalı";
+      if (transDaysLeft) transDaysLeft.innerText = "Lig maçlarına odaklanılıyor";
+    }
+  }
+
+  // 2. Takvim Izgarası
+  const grid = document.getElementById("calendar-month-grid");
+  if (!grid) return;
+  grid.innerHTML = "";
+
+  const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+  const startOffset = (firstDay === 0 ? 6 : firstDay - 1); // Pazartesi=0
+  const totalDays = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+
+  // Boş başlangıç hücreleri
+  for (let i = 0; i < startOffset; i++) {
+    const emptyCell = document.createElement("div");
+    emptyCell.className = "p-1 rounded-lg bg-slate-900/30 border border-slate-800/40 opacity-30 min-h-[46px]";
+    grid.appendChild(emptyCell);
+  }
+
+  // Gün hücreleri
+  for (let d = 1; d <= totalDays; d++) {
+    const dStr = `${currentCalendarYear}-${String(currentCalendarMonth + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const isToday = (dStr === todayStr);
+    const isSelected = (dStr === selectedCalendarDate);
+    
+    const isSummerTrans = (dStr >= `${currentCalendarYear}-07-01` && dStr <= `${currentCalendarYear}-09-15`);
+    const isWinterTrans = (dStr >= `${currentCalendarYear}-01-01` && dStr <= `${currentCalendarYear}-02-08`);
+    const isInTransferWindow = isSummerTrans || isWinterTrans;
+
+    const fix = fixtures.find(f => f.date === dStr);
+    const isDeadline = (dStr === `${currentCalendarYear}-09-15` || dStr === `${currentCalendarYear}-02-08`);
+
+    const cell = document.createElement("div");
+    let cellClasses = "p-1 rounded-xl flex flex-col justify-between transition-all cursor-pointer min-h-[48px] relative text-[10px] ";
+    
+    if (isToday) {
+      cellClasses += "bg-amber-500/20 border-2 border-amber-400 shadow-md shadow-amber-500/10 ring-1 ring-amber-400 ";
+    } else if (isSelected) {
+      cellClasses += "bg-sky-500/20 border-2 border-sky-400 ring-1 ring-sky-400 ";
+    } else if (fix) {
+      cellClasses += "bg-[#18233c] hover:bg-[#202e4f] border border-slate-700/80 ";
+    } else {
+      cellClasses += "bg-[#101726]/80 hover:bg-[#151f33] border border-slate-800/80 ";
+    }
+
+    if (isInTransferWindow && !fix && !isToday && !isSelected) {
+      cellClasses += "border-t-2 border-t-emerald-500/40 ";
+    }
+
+    cell.className = cellClasses;
+    cell.onclick = () => selectCalendarDate(dStr);
+
+    let headerHtml = `<div class="flex items-center justify-between leading-none">
+      <span class="font-extrabold ${isToday ? 'text-amber-300' : 'text-slate-300'}">${d}</span>`;
+    
+    if (isToday) {
+      headerHtml += `<span class="text-[7.5px] font-black bg-amber-400 text-slate-950 px-1 rounded">BUGÜN</span>`;
+    } else if (isDeadline) {
+      headerHtml += `<span class="text-[8px]" title="Transfer Bitiş">⏱️</span>`;
+    }
+    headerHtml += `</div>`;
+
+    let bodyHtml = "";
+    if (fix) {
+      const oppObj = teamsList.find(t => t.name === fix.opponent);
+      const oppShort = oppObj ? oppObj.short : (fix.opponent_short || "RAK");
+      const locLetter = fix.is_home ? "E" : "D";
+
+      if (fix.played) {
+        const isWin = fix.result === "win";
+        const isDraw = fix.result === "draw";
+        const badgeColor = isWin ? "bg-emerald-500 text-white" : (isDraw ? "bg-slate-600 text-slate-100" : "bg-rose-600 text-white");
+        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[8px] font-black ${badgeColor} px-1 py-0.5 rounded truncate">
+          <span>${fix.my_score}-${fix.opp_score}</span>
+          <span class="opacity-75">${oppShort}</span>
+        </div>`;
+      } else {
+        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[8px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 py-0.5 rounded truncate">
+          <span>${locLetter}:${oppShort}</span>
+          <span>⚽</span>
+        </div>`;
+      }
+    }
+
+    cell.innerHTML = headerHtml + bodyHtml;
+    grid.appendChild(cell);
+  }
+
+  // 3. Seçili Gün Kartı
+  renderCalendarSelectedCard();
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function selectCalendarDate(dateStr) {
+  selectedCalendarDate = dateStr;
+  renderCalendarView();
+}
+
+function renderCalendarSelectedCard() {
+  if (!gameState) return;
+  const targetDate = selectedCalendarDate || gameState.current_date;
+  const todayStr = gameState.current_date;
+
+  const dateTxt = document.getElementById("calendar-selected-date-txt");
+  const tagEl = document.getElementById("calendar-selected-tag");
+  const descEl = document.getElementById("calendar-selected-desc");
+  const jumpBtn = document.getElementById("btn-calendar-jump");
+
+  if (!dateTxt || !tagEl || !descEl || !jumpBtn) return;
+
+  dateTxt.innerText = formatTurkishDateLong(targetDate);
+
+  const fix = (gameState.fixtures || []).find(f => f.date === targetDate);
+  const isToday = (targetDate === todayStr);
+  const isPast = (targetDate < todayStr);
+
+  if (isToday) {
+    tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
+    tagEl.innerText = "Bugün";
+    if (fix) {
+      descEl.innerText = `🔥 MAÇ GÜNÜ! ${fix.opponent} ile ${fix.week}. Hafta karşılaşması.`;
+    } else {
+      descEl.innerText = "Ofis ve antrenman günü. Transfer teklifleri ve kulüp yönetimi.";
+    }
+    jumpBtn.classList.add("hidden");
+  } else if (isPast) {
+    tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
+    tagEl.innerText = "Geçmiş";
+    if (fix && fix.played) {
+      descEl.innerText = `${fix.week}. Hafta Maçı: ${gameState.club_name} ${fix.my_score} - ${fix.opp_score} ${fix.opponent}`;
+    } else {
+      descEl.innerText = "Bu tarih geride kaldı.";
+    }
+    jumpBtn.classList.add("hidden");
+  } else {
+    const diffDays = Math.round((new Date(targetDate) - new Date(todayStr)) / (1000 * 3600 * 24));
+    tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/40";
+    tagEl.innerText = `${diffDays} Gün Sonra`;
+
+    if (fix) {
+      descEl.innerText = `⚽ ${fix.week}. Hafta: ${fix.opponent} (${fix.is_home ? 'İç Saha' : 'Deplasman'}) Maçı`;
+    } else {
+      descEl.innerText = `Hafta içi yönetim ve antrenman programı.`;
+    }
+
+    jumpBtn.classList.remove("hidden");
+    jumpBtn.innerHTML = `<i data-lucide="fast-forward" class="w-3.5 h-3.5"></i> <span>${diffDays} Gün İlerlet (${formatTurkishDateShort(targetDate)})</span>`;
+    if (window.lucide) window.lucide.createIcons();
+  }
+}
+
+async function advanceCalendarDay() {
   try {
-    const res = await apiFetch("/api/transfer/advance-day", { method: "POST" });
+    const res = await apiFetch("/api/calendar/advance-day", { method: "POST" });
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || "Gün ilerletilemedi!");
       return;
     }
-    showToast(data.message);
     gameState = data.state;
     renderUI();
+    if (data.message) showToast(data.message);
+    if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
+      renderCalendarView();
+    }
   } catch (e) {
     console.error(e);
   }
+}
+
+async function advanceToSelectedDate() {
+  if (!selectedCalendarDate) return;
+  try {
+    const res = await apiFetch("/api/calendar/advance-to-date", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ target_date: selectedCalendarDate })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İlerletme hatası!");
+      return;
+    }
+    gameState = data.state;
+    renderUI();
+    if (data.message) showToast(data.message);
+    if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
+      renderCalendarView();
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function advanceToMatchday() {
+  try {
+    const res = await apiFetch("/api/calendar/advance-to-matchday", { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Maç gününe ilerlenemedi!");
+      return;
+    }
+    gameState = data.state;
+    renderUI();
+    if (data.message) showToast(data.message);
+    if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
+      renderCalendarView();
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function advanceToTransferDeadline() {
+  if (!gameState) return;
+  const curDate = gameState.current_date || "2026-08-10";
+  const year = parseInt(curDate.split("-")[0], 10);
+  const summerDeadline = `${year}-09-15`;
+  const winterDeadline = `${year + 1}-02-08`;
+  let target = curDate <= summerDeadline ? summerDeadline : winterDeadline;
+
+  selectedCalendarDate = target;
+  await advanceToSelectedDate();
+}
+
+async function advanceTransferDay() {
+  await advanceCalendarDay();
 }
 
 function renderIncomingBids() {
