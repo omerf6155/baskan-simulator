@@ -2293,52 +2293,60 @@
       <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1 text-center relative">
         <div class="text-sm font-extrabold text-white" id="neg-player-name">Victor Osimhen</div>
         <div class="text-[10px] text-amber-400 font-medium" id="neg-player-details">SANTRAFOR • 88 Güç • 30M € Değer</div>
-        <div id="neg-tapped-badge" class="hidden mt-1 text-[9.5px] font-black text-rose-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
-          <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i>
-          <span>Oyuncu Kulübüne İsyan Çıkardı! (%35 Bonservis İndirimi)</span>
+        <div id="neg-tapped-badge" class="hidden mt-1 text-[9.5px] font-black text-emerald-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+          <i data-lucide="handshake" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Oyuncuyla Prensipte Anlaşıldı (%35 Bonservis İndirimi)</span>
         </div>
       </div>
 
       <!-- BONSERVİS SATIN ALMA BÖLÜMÜ -->
       <div id="neg-pane-buy" class="space-y-2.5">
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-semibold text-slate-300">Bonservis Teklifiniz (€):</label>
-          <input type="number" id="neg-club-bid-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 25000000" />
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[11px]">
+            <label class="font-bold text-slate-300">Bonservis Teklifiniz (€):</label>
+            <span id="neg-bid-helper" class="text-[10px] text-amber-400 font-mono font-bold">25M €</span>
+          </div>
+          <input type="text" inputmode="numeric" id="neg-club-bid-input" oninput="onNegotiationCurrencyInput(this, 'neg-bid-helper')" class="w-full bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm tracking-wide transition-colors outline-none" placeholder="Örn: 25.000.000" />
         </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-semibold text-slate-300">Yıllık Maaş Teklifi (€):</label>
-          <input type="number" id="neg-player-wage-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 4500000" />
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[11px]">
+            <label class="font-bold text-slate-300">Yıllık Maaş Teklifi (€):</label>
+            <span id="neg-wage-helper" class="text-[10px] text-emerald-400 font-mono font-bold">4.5M €</span>
+          </div>
+          <input type="text" inputmode="numeric" id="neg-player-wage-input" oninput="onNegotiationCurrencyInput(this, 'neg-wage-helper')" class="w-full bg-slate-900 border border-slate-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm tracking-wide transition-colors outline-none" placeholder="Örn: 4.500.000" />
         </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-semibold text-slate-300">İmza Parası / Menajer Primi (€ - Opsiyonel):</label>
-          <input type="number" id="neg-sign-bonus-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 500000" />
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[11px]">
+            <label class="font-bold text-slate-300">İmza Parası / Menajer Primi (€ - Opsiyonel):</label>
+            <span id="neg-bonus-helper" class="text-[10px] text-sky-400 font-mono font-bold">0 €</span>
+          </div>
+          <input type="text" inputmode="numeric" id="neg-sign-bonus-input" oninput="onNegotiationCurrencyInput(this, 'neg-bonus-helper')" class="w-full bg-slate-900 border border-slate-700 focus:border-sky-500 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm tracking-wide transition-colors outline-none" placeholder="0" />
         </div>
 
-        <div id="neg-feedback-box" class="hidden p-2 rounded-lg text-[10.5px] border leading-snug"></div>
+        <div id="neg-feedback-box" class="hidden p-2.5 rounded-xl text-xs border leading-snug"></div>
 
-        <button onclick="submitCustomNegotiation()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5">
-          <i data-lucide="check-check" class="w-4 h-4 text-slate-950"></i>
-          <span>Pazarlık Teklifini Sun & Transferi Bitir</span>
+        <button onclick="submitCustomNegotiation()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98">
+          <i data-lucide="send" class="w-4 h-4 text-slate-950"></i>
+          <span>Resmi Teklifi İlet & Pazarlığı Başlat</span>
         </button>
 
-        <!-- KÖTÜ BAŞKAN: OYUNCUYU GİZLİCE AYARTMA (TAP-UP) -->
-        <div class="pt-2 border-t border-slate-800 space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-black text-rose-400 flex items-center gap-1">
-              <i data-lucide="skull" class="w-3.5 h-3.5 text-rose-400"></i>
-              Gizli Operasyon (Kulübü By-pass Et)
-            </span>
-            <span class="text-[9px] text-rose-300 font-mono font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded">%35 İndirim Şansı</span>
+        <!-- OYUNCUYU İKNA ETME / ÖN TEMAS (MENÜ BUTONU TARZI KOMPAKT) -->
+        <div class="pt-2 border-t border-slate-800">
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-2.5 rounded-xl border border-slate-700/60 flex items-center justify-between gap-2.5 shadow-sm">
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[11px] font-bold text-slate-200">Menajerle Gizli Ön Temas</span>
+                <span class="text-[9px] text-amber-400 font-mono font-bold bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 rounded">%35 İndirim</span>
+              </div>
+              <p class="text-[9.5px] text-slate-400 leading-tight truncate mt-0.5">Kulübü devreden çıkarıp oyuncuyla anlaşma zemini ara.</p>
+            </div>
+            <button onclick="tapUpCurrentPlayer()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-rose-500/50 text-rose-300 hover:text-rose-200 font-bold text-[10.5px] flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all shrink-0">
+              <i data-lucide="user-x" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Temas Kur (150K €)</span>
+            </button>
           </div>
-          <p class="text-[9.5px] text-slate-400 leading-tight">
-            Kulübe teklif yapmadan menajerle Bodrum'da gizli masaya oturun. Oyuncu isyan edip kulübüne rest çeker. Ancak basına sızarsa TFF ceza keser!
-          </p>
-          <button onclick="tapUpCurrentPlayer()" class="w-full py-2 rounded-xl bg-gradient-to-r from-red-900/80 to-rose-900/80 hover:from-red-800 hover:to-rose-800 border border-red-700/60 text-red-100 font-bold text-[10px] flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all">
-            <i data-lucide="user-x" class="w-3.5 h-3.5 text-red-400"></i>
-            <span>Oyuncuyu Gizlice Ayart (-150K € Gizli Fon)</span>
-          </button>
         </div>
       </div>
 
@@ -2346,9 +2354,12 @@
       <div id="neg-pane-loan" class="hidden space-y-3">
         <!-- 1. Adım: Kiralık Şartları Teklifi -->
         <div id="neg-loan-step-offer" class="space-y-2">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300">Kiralama Bedeli Teklifi (€):</label>
-            <input type="number" id="neg-loan-fee-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 2000000" />
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <label class="font-bold text-slate-300">Kiralama Bedeli Teklifi (€):</label>
+              <span id="neg-loan-fee-helper" class="text-[10px] text-blue-400 font-mono font-bold">2M €</span>
+            </div>
+            <input type="text" inputmode="numeric" id="neg-loan-fee-input" oninput="onNegotiationCurrencyInput(this, 'neg-loan-fee-helper')" class="w-full bg-slate-900 border border-slate-700 focus:border-blue-500 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm tracking-wide transition-colors outline-none" placeholder="Örn: 2.000.000" />
           </div>
 
           <div>
@@ -2366,13 +2377,17 @@
             </div>
           </div>
 
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300">Satın Alma Opsiyonu (Opsiyonel €):</label>
-            <input type="number" id="neg-loan-buyopt-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="İsteğe bağlı opsiyon (Örn: 15000000)" />
+          <div class="space-y-1">
+            <div class="flex items-center justify-between text-[11px]">
+              <label class="font-bold text-slate-300">Satın Alma Opsiyonu (Opsiyonel €):</label>
+              <span id="neg-loan-buyopt-helper" class="text-[10px] text-slate-400 font-mono font-bold">-</span>
+            </div>
+            <input type="text" inputmode="numeric" id="neg-loan-buyopt-input" oninput="onNegotiationCurrencyInput(this, 'neg-loan-buyopt-helper')" class="w-full bg-slate-900 border border-slate-700 focus:border-slate-500 rounded-xl px-3 py-2 text-white font-mono font-bold text-sm tracking-wide transition-colors outline-none" placeholder="İsteğe bağlı opsiyon (Örn: 15.000.000)" />
           </div>
 
-          <button onclick="submitClubLoanNegotiation()" class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md">
-            Kulübe Kiralık Teklifini İlet
+          <button onclick="submitClubLoanNegotiation()" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-98">
+            <i data-lucide="send" class="w-4 h-4 text-white"></i>
+            <span>Kulübe Kiralık Teklifini İlet</span>
           </button>
         </div>
 

@@ -3701,7 +3701,7 @@ def api_negotiate_loan(req: LoanNegotiateRequest):
     if p_age >= 29 and p_ovr >= 84 and req.offered_fee < int(p_val * 0.22):
         return {
             "status": "rejected",
-            "message": f"{target_club_name} Başkanı: '{target_player['name']} takımımızın dokunulmaz kilit yıldızıdır, kiralık vermeyiz! Yalnızca bonservis satışı görüşebiliriz.'"
+            "message": f"{target_club_name} Yönetimi: '{target_player['name']} takımımızın vazgeçilmez oyuncularından biridir, kiralık vermeyi düşünmüyoruz.'"
         }
 
     # Kural 2: Asgari kiralama bedeli kontrolü
@@ -3710,20 +3710,20 @@ def api_negotiate_loan(req: LoanNegotiateRequest):
         counter_fee = max(1_500_000, int(p_val * 0.12))
         return {
             "status": "rejected",
-            "message": f"{target_club_name} Başkanı: '{req.offered_fee:,} ₺ kiralama ücreti çok düşük! {target_player['name']} için en az {counter_fee:,} ₺ kiralama bedeli talep ediyoruz.'",
+            "message": f"{target_club_name} Yönetimi: '{format_money_val(req.offered_fee)} kiralama bedeli yetersiz. {target_player['name']} için en az {format_money_val(counter_fee)} talep ediyoruz.'",
             "counter_fee": counter_fee
         }
 
     if req.wage_coverage_pct < 60:
         return {
             "status": "rejected",
-            "message": f"{target_club_name} Başkanı: 'Maaş karşılama oranınız çok düşük! En az %60 maaş karşılama şartımız var.'"
+            "message": f"{target_club_name} Yönetimi: 'Maaş karşılama oranınız çok düşük! En az %60 maaş karşılama şartımız bulunmaktadır.'"
         }
 
     wage_to_pay = int(base_wage * (req.wage_coverage_pct / 100.0))
     return {
         "status": "loan_accepted",
-        "message": f"{target_club_name} Başkanı: 'Kiralık teklifinizi kabul ediyoruz! Şartlarda anlaştık, oyuncuyu kadronuza katabilirsiniz.'",
+        "message": f"{target_club_name} Yönetimi: 'Kiralık teklifiniz kabul edildi. Sözleşme şartlarında mutabık kaldık.'",
         "player_name": target_player["name"],
         "loan_fee": req.offered_fee,
         "wage_coverage_pct": req.wage_coverage_pct,
@@ -4423,7 +4423,7 @@ def api_custom_negotiate(req: CustomNegotiateRequest):
         state["my_radar"] = calculate_team_radar(state["squad"])
         state["fan_trust"] = min(100, state["fan_trust"] + 8)
 
-        msg = f"🤝 TRANSFER BİTTİ! {new_entry['name']}, {source_club} kulübünden {req.bid_fee:,} € bonservis ve yıllık {req.offered_wage:,} € maaşla takımımıza katıldı!"
+        msg = f"Anlaşma Sağlandı: {new_entry['name']}, {source_club} kulübünden {format_money_val(req.bid_fee)} bonservis ve yıllık {format_money_val(req.offered_wage)} maaşla kadromuza katıldı."
         state["news"].insert(0, msg)
         save_state(state)
         return {
@@ -4434,7 +4434,7 @@ def api_custom_negotiate(req: CustomNegotiateRequest):
     elif req.bid_fee < int(player_val * 0.5):
         return {
             "status": "insult_rejected",
-            "message": f"{source_club} Başkanı: 'Bu teklif kulübümüze hakarettir Sayın Başkan! Masadan kalkıyoruz.'",
+            "message": f"{source_club} Yönetimi: 'Teklifiniz piyasa gerçeklerinden çok uzak. Bu şartlarda masada kalamayız.'",
             "counter_fee": player_val,
             "counter_wage": player_wage
         }
@@ -4443,7 +4443,7 @@ def api_custom_negotiate(req: CustomNegotiateRequest):
         counter_wage = int(player_wage * 1.1) if req.offered_wage < min_acceptable_wage else req.offered_wage
         return {
             "status": "counter_offer",
-            "message": f"{source_club} ve oyuncu menajeri teklifi revize etti: Bonservis için en az {counter_fee:,} €, maaş için en az {counter_wage:,} € talep ediliyor.",
+            "message": f"{source_club} ve oyuncu temsilcisi karşı teklif sundu: Bonservis için {format_money_val(counter_fee)}, yıllık maaş için {format_money_val(counter_wage)} talep ediliyor.",
             "counter_fee": counter_fee,
             "counter_wage": counter_wage
         }
@@ -4457,7 +4457,7 @@ class TapUpPlayerRequest(BaseModel):
 def api_tap_up_player(req: TapUpPlayerRequest):
     state = get_state()
     if not state.get("transfer_window_open", True):
-        raise HTTPException(status_code=400, detail="Transfer penceresi kapalıyken ayartma yapılamaz!")
+        raise HTTPException(status_code=400, detail="Transfer penceresi kapalıyken ön görüşme yapılamaz!")
 
     if not req.target_team_id:
         for t in TEAMS_DB:
@@ -4467,7 +4467,7 @@ def api_tap_up_player(req: TapUpPlayerRequest):
                 break
 
     if state["budget"] < req.bribe_bonus:
-        raise HTTPException(status_code=400, detail=f"Menajere el altından ödenecek gizli fon için bütçe yetersiz ({req.bribe_bonus:,} €)!")
+        raise HTTPException(status_code=400, detail=f"Temsilciyle özel temas ve imza ön ödemesi için bütçe yetersiz ({format_money_val(req.bribe_bonus)})!")
 
     state["budget"] -= req.bribe_bonus
 
@@ -4476,7 +4476,7 @@ def api_tap_up_player(req: TapUpPlayerRequest):
 
     if roll < success_chance:
         state.setdefault("tapped_up_players", {})[req.player_name] = True
-        msg = f"🕵️ GİZLİ OPERASYON BAŞARILI! {req.player_name} menajeriyle anlaştınız. Oyuncu kendi kulübüne: 'Beni satın, antrenmana çıkmıyorum!' resti çekti. Bonservis bedeli %35 düştü!"
+        msg = f"Ön Temas Başarılı: {req.player_name} ve menajeriyle prensipte anlaşıldı. Oyuncunun ayrılık talebi sonrası kulüp bonservis beklentisini %35 indirdi."
         state["news"].insert(0, msg)
         save_state(state)
         return {
@@ -4490,7 +4490,7 @@ def api_tap_up_player(req: TapUpPlayerRequest):
         state["budget"] = max(0, state["budget"] - penalty_fee)
         state["political_power"] = max(0, state.get("political_power", 50) - 12)
         state["fan_trust"] = max(0, state.get("fan_trust", 50) - 6)
-        msg = f"⚠️ YAKALANDIK! {req.player_name} ile gizli temasınız basına sızdı! Rakip kulüp TFF'ye şikayet etti. Kulübümüze {penalty_fee:,} € para cezası kesildi ve saygınlığınız darbe aldı!"
+        msg = f"Usulsüz Görüşme Skandalı: {req.player_name} cephesiyle temas basına sızdı. TFF kulübümüze {format_money_val(penalty_fee)} para cezası kesti."
         state["news"].insert(0, msg)
         save_state(state)
         return {

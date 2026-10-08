@@ -2699,6 +2699,38 @@ function onScoutTeamChanged() {
   });
 }
 
+function formatNumberWithDots(val) {
+  if (val === null || val === undefined || val === "") return "";
+  const num = parseInt(String(val).replace(/\D/g, ""), 10);
+  if (isNaN(num)) return "";
+  return num.toLocaleString("tr-TR");
+}
+
+function parseFormattedNumber(val) {
+  if (!val) return 0;
+  return parseInt(String(val).replace(/\D/g, ""), 10) || 0;
+}
+
+function onNegotiationCurrencyInput(inputEl, helperId) {
+  const raw = inputEl.value.replace(/\D/g, "");
+  if (!raw) {
+    inputEl.value = "";
+    if (helperId) {
+      const helperEl = document.getElementById(helperId);
+      if (helperEl) helperEl.innerText = "0 €";
+    }
+    return;
+  }
+  const num = parseInt(raw, 10);
+  inputEl.value = num.toLocaleString("tr-TR");
+  if (helperId) {
+    const helperEl = document.getElementById(helperId);
+    if (helperEl) {
+      helperEl.innerText = formatMoney(num);
+    }
+  }
+}
+
 function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOverall, defaultMode = 'buy', initialWage = 0) {
   const suggestedLoanFee = Math.max(1_000_000, Math.floor(playerVal * 0.10));
   const suggestedWage = initialWage || Math.max(500_000, Math.floor(playerVal * 0.12));
@@ -2737,24 +2769,44 @@ function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOv
   }
 
   const bidInput = document.getElementById("neg-club-bid-input");
-  if (bidInput) bidInput.value = effectiveVal;
+  if (bidInput) {
+    bidInput.value = formatNumberWithDots(effectiveVal);
+    const helper = document.getElementById("neg-bid-helper");
+    if (helper) helper.innerText = formatMoney(effectiveVal);
+  }
 
   const wageInput = document.getElementById("neg-player-wage-input");
-  if (wageInput) wageInput.value = suggestedWage;
+  if (wageInput) {
+    wageInput.value = formatNumberWithDots(suggestedWage);
+    const helper = document.getElementById("neg-wage-helper");
+    if (helper) helper.innerText = formatMoney(suggestedWage);
+  }
 
   const bonusInput = document.getElementById("neg-sign-bonus-input");
-  if (bonusInput) bonusInput.value = 0;
+  if (bonusInput) {
+    bonusInput.value = "0";
+    const helper = document.getElementById("neg-bonus-helper");
+    if (helper) helper.innerText = "0 €";
+  }
 
   const fbBox = document.getElementById("neg-feedback-box");
   if (fbBox) {
-    fbBox.className = "hidden p-2 rounded-lg text-[10.5px] border leading-snug";
+    fbBox.className = "hidden p-2.5 rounded-xl text-xs border leading-snug";
     fbBox.innerText = "";
   }
 
   const loanFeeInput = document.getElementById("neg-loan-fee-input");
-  if (loanFeeInput) loanFeeInput.value = suggestedLoanFee;
+  if (loanFeeInput) {
+    loanFeeInput.value = formatNumberWithDots(suggestedLoanFee);
+    const helper = document.getElementById("neg-loan-fee-helper");
+    if (helper) helper.innerText = formatMoney(suggestedLoanFee);
+  }
   const buyOptInput = document.getElementById("neg-loan-buyopt-input");
-  if (buyOptInput) buyOptInput.value = "";
+  if (buyOptInput) {
+    buyOptInput.value = "";
+    const helper = document.getElementById("neg-loan-buyopt-helper");
+    if (helper) helper.innerText = "-";
+  }
 
   switchNegotiationMode(defaultMode);
   const modal = document.getElementById("modal-transfer-negotiate");
@@ -2822,9 +2874,9 @@ async function submitCustomNegotiation() {
   const bonusInput = document.getElementById("neg-sign-bonus-input");
   const fbBox = document.getElementById("neg-feedback-box");
 
-  const bidFee = parseInt(bidInput ? bidInput.value : 0) || 0;
-  const offeredWage = parseInt(wageInput ? wageInput.value : 0) || 0;
-  const signBonus = parseInt(bonusInput ? bonusInput.value : 0) || 0;
+  const bidFee = parseFormattedNumber(bidInput ? bidInput.value : 0);
+  const offeredWage = parseFormattedNumber(wageInput ? wageInput.value : 0);
+  const signBonus = parseFormattedNumber(bonusInput ? bonusInput.value : 0);
 
   if (bidFee <= 0 || offeredWage <= 0) {
     showToast("Lütfen geçerli bir bonservis ve maaş teklifi girin!");
@@ -2846,8 +2898,8 @@ async function submitCustomNegotiation() {
     const data = await res.json();
     if (!res.ok) {
       if (fbBox) {
-        fbBox.className = "p-2 rounded-lg text-[10.5px] bg-rose-950/70 border border-rose-800 text-rose-300 leading-snug";
-        fbBox.innerText =  (data.detail || "Teklif iletilemedi!");
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-rose-950/70 border border-rose-800 text-rose-300 leading-snug";
+        fbBox.innerText = (data.detail || "Teklif iletilemedi!");
         fbBox.classList.remove("hidden");
       }
       showToast(data.detail || "Transfer gerçekleşemedi!");
@@ -2863,24 +2915,40 @@ async function submitCustomNegotiation() {
       renderTransferMarket();
     } else if (data.status === "counter_offer") {
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-amber-500 text-slate-200 leading-snug flex items-start gap-2";
-        fbBox.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i><div><strong class="text-amber-400 font-bold">Pazarlık Devam Ediyor:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-amber-500 text-slate-200 leading-snug flex items-start gap-2 shadow-sm";
+        fbBox.innerHTML = `<i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i><div><strong class="text-amber-400 font-bold">Pazarlık Talebi:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
         if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
-      if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
-      if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
-      showToast("Kulüp ve oyuncu karşı teklif sundu.");
+      if (data.counter_fee && bidInput) {
+        bidInput.value = formatNumberWithDots(data.counter_fee);
+        const helper = document.getElementById("neg-bid-helper");
+        if (helper) helper.innerText = formatMoney(data.counter_fee);
+      }
+      if (data.counter_wage && wageInput) {
+        wageInput.value = formatNumberWithDots(data.counter_wage);
+        const helper = document.getElementById("neg-wage-helper");
+        if (helper) helper.innerText = formatMoney(data.counter_wage);
+      }
+      showToast("Kulüp karşı teklifte bulundu.");
     } else if (data.status === "insult_rejected") {
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2";
-        fbBox.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">Masadan Kalktılar:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2 shadow-sm";
+        fbBox.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">Teklif Yetersiz:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
         if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
-      if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
-      if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
-      showToast("Kulüp teklife öfkelendi!");
+      if (data.counter_fee && bidInput) {
+        bidInput.value = formatNumberWithDots(data.counter_fee);
+        const helper = document.getElementById("neg-bid-helper");
+        if (helper) helper.innerText = formatMoney(data.counter_fee);
+      }
+      if (data.counter_wage && wageInput) {
+        wageInput.value = formatNumberWithDots(data.counter_wage);
+        const helper = document.getElementById("neg-wage-helper");
+        if (helper) helper.innerText = formatMoney(data.counter_wage);
+      }
+      showToast("Kulüp teklifi geri çevirdi.");
     }
   } catch (e) {
     console.error(e);
@@ -2892,7 +2960,7 @@ async function tapUpCurrentPlayer() {
   const pName = activeNegotiation.playerName;
   const fbBox = document.getElementById("neg-feedback-box");
 
-  if (!confirm(`Oyuncu ${pName} ve temsilcisiyle gizli buluşma ayarlamak için 150.000 € gizli fon harcanacak. Kulübü by-pass edip isyan çıkartmak istiyor musunuz?`)) {
+  if (!confirm(`${pName} ve temsilcisiyle gizli ön temas kurmak için 150.000 € fon ayrılacak. Görüşmeyi başlatmak istiyor musunuz?`)) {
     return;
   }
 
@@ -2908,7 +2976,7 @@ async function tapUpCurrentPlayer() {
     });
     const data = await res.json();
     if (!res.ok) {
-      showToast(data.detail || "Gizli operasyon gerçekleştirilemedi!");
+      showToast(data.detail || "Görüşme gerçekleştirilemedi!");
       return;
     }
 
@@ -2922,20 +2990,23 @@ async function tapUpCurrentPlayer() {
       if (tappedBadge) tappedBadge.classList.remove("hidden");
       const bidInput = document.getElementById("neg-club-bid-input");
       if (bidInput) {
-        const discounted = Math.floor(parseInt(bidInput.value) * 0.65);
-        bidInput.value = discounted;
+        const curBid = parseFormattedNumber(bidInput.value);
+        const discounted = Math.floor(curBid * 0.65);
+        bidInput.value = formatNumberWithDots(discounted);
+        const helper = document.getElementById("neg-bid-helper");
+        if (helper) helper.innerText = formatMoney(discounted);
       }
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-emerald-500 text-slate-200 leading-snug flex items-start gap-2";
-        fbBox.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i><div><strong class="text-emerald-400 font-bold">İSYAN ÇIKARILDI!</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-emerald-500 text-slate-200 leading-snug flex items-start gap-2 shadow-sm";
+        fbBox.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i><div><strong class="text-emerald-400 font-bold">Ön Temas Olumlu</strong><div class="mt-0.5 text-slate-300 text-[10.5px] leading-relaxed">${data.message}</div></div>`;
         if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
     } else {
       showToast(data.message);
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2";
-        fbBox.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">SKANDAL PATLADI!</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2 shadow-sm";
+        fbBox.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">Görüşme Basına Yansıdı</strong><div class="mt-0.5 text-slate-300 text-[10.5px] leading-relaxed">${data.message}</div></div>`;
         if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
@@ -3085,9 +3156,9 @@ function closeSecretaryInboxModal() {
 async function submitClubLoanNegotiation() {
   if (!activeNegotiation) return;
   const feeInput = document.getElementById("neg-loan-fee-input");
-  const offeredFee = parseInt(feeInput.value) || activeNegotiation.loanFee;
+  const offeredFee = parseFormattedNumber(feeInput ? feeInput.value : 0) || activeNegotiation.loanFee;
   const buyOptInput = document.getElementById("neg-loan-buyopt-input");
-  const buyOpt = buyOptInput && buyOptInput.value ? parseInt(buyOptInput.value) : null;
+  const buyOpt = buyOptInput && buyOptInput.value ? parseFormattedNumber(buyOptInput.value) : null;
   const wagePct = activeNegotiation.loanWagePct || 100;
 
   try {
@@ -3118,8 +3189,10 @@ async function submitClubLoanNegotiation() {
       activeNegotiation.acceptedBuyOption = data.buy_option;
     } else {
       showToast(data.message);
-      if (data.counter_fee) {
-        feeInput.value = data.counter_fee;
+      if (data.counter_fee && feeInput) {
+        feeInput.value = formatNumberWithDots(data.counter_fee);
+        const helper = document.getElementById("neg-loan-fee-helper");
+        if (helper) helper.innerText = formatMoney(data.counter_fee);
       }
     }
   } catch (e) {
