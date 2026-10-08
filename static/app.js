@@ -995,7 +995,8 @@ function renderUI() {
     const fixDateStr = curFix.date || "2026-08-15";
 
     if (dateBadge) {
-      dateBadge.innerText = formatTurkishDateShort(fixDateStr);
+      const daySuffix = curFix.day_name ? ` • ${curFix.day_name}` : "";
+      dateBadge.innerText = `${formatTurkishDateShort(fixDateStr)}${daySuffix}`;
     }
 
     const isMatchday = (todayStr === fixDateStr);
@@ -1154,28 +1155,52 @@ function renderUI() {
   const squadTraitsEl = document.getElementById("squad-coach-traits");
   if (squadTraitsEl) squadTraitsEl.innerHTML = renderTraitsHtml(traits);
 
-  // Transfer Penceresi Gün Kontrolü
-  const curDay = gameState.transfer_day || 1;
-  const maxDays = gameState.transfer_max_days || 7;
+  // Transfer Penceresi Gün Kontrolü & Dinamik Geri Sayım
+  let tw = gameState.transfer_window;
+  if (!tw) {
+    const curDate = gameState.current_date || "2026-08-10";
+    const year = parseInt(curDate.split("-")[0], 10) || 2026;
+    const summerStart = `${year}-07-01`;
+    const summerEnd = `${year}-09-15`;
+    const winterStart = `${year + 1}-01-01`;
+    const winterEnd = `${year + 1}-02-08`;
+    const curDt = new Date(curDate);
+    if (curDate >= summerStart && curDate <= summerEnd) {
+      const diff = Math.max(0, Math.round((new Date(summerEnd) - curDt) / 86400000));
+      tw = { is_open: true, name: "Yaz Transfer Dönemi", days_left: diff, desc: `Son ${diff} gün (Kapanış: 15 Eylül)` };
+    } else if (curDate >= winterStart && curDate <= winterEnd) {
+      const diff = Math.max(0, Math.round((new Date(winterEnd) - curDt) / 86400000));
+      tw = { is_open: true, name: "Kış Transfer Dönemi", days_left: diff, desc: `Son ${diff} gün (Kapanış: 8 Şubat)` };
+    } else {
+      tw = { is_open: false, name: "Transfer Dönemi Kapalı", days_left: 0, desc: "Transfer tahtası kapalıdır." };
+    }
+  }
+
+  const isWindowOpen = (gameState.transfer_window_open !== false) && tw.is_open;
   const winTitle = document.getElementById("transfer-window-title");
   const winDesc = document.getElementById("transfer-window-desc");
   const officeWin = document.getElementById("office-window-status");
 
-  if (gameState.transfer_window_open !== false) {
-    winTitle.innerText = `Transfer Penceresi: Açık (Gün ${curDay}/${maxDays})`;
-    winDesc.innerText = `Kulüpler arası bonservis ve serbest oyuncu pazarlıkları aktif.`;
-    officeWin.innerText = `Pencere AÇIK (${curDay}/${maxDays})`;
-    officeWin.className = "text-xs font-bold text-emerald-400";
+  if (isWindowOpen) {
+    const daysLeftTxt = tw.days_left === 0 ? "Son Gün (Deadline)" : `Son ${tw.days_left} Gün`;
+    if (winTitle) winTitle.innerText = `${tw.name}: Açık (${daysLeftTxt})`;
+    if (winDesc) winDesc.innerText = tw.desc || "Kulüpler arası bonservis ve kiralama pazarlıkları devam ediyor.";
+    if (officeWin) {
+      officeWin.innerText = `${tw.name.split(" ")[0]} Açık (${tw.days_left}g)`;
+      officeWin.className = "text-xs font-bold text-emerald-400";
+    }
   } else {
     const nextWindowMsg = (gameState.week < 18)
-      ? `Süper Lig maçları oynanıyor (Hafta ${gameState.week}/34). Kış/Ara Transfer Penceresi 18. Hafta açılacaktır.`
+      ? `Süper Lig maçları oynanıyor (Hafta ${gameState.week}/34). Kış Transfer Dönemi 1 Ocak'ta açılacaktır.`
       : (gameState.week < 22)
-      ? `Ara transfer dönemi kapandı. Sezon sonuna kadar transfer kapalıdır.`
-      : `Pencereler kapandı. Sezon sonuna kadar kadrolar donduruldu.`;
-    winTitle.innerText = "Transfer Penceresi: KAPALI (Lig Maçları)";
-    winDesc.innerText = nextWindowMsg;
-    officeWin.innerText = `KAPALI (Hf: ${gameState.week}/34)`;
-    officeWin.className = "text-xs font-bold text-slate-400";
+      ? `Ara transfer dönemi kapandı. Sezon sonuna kadar kadrolar donduruldu.`
+      : `Transfer pencereleri kapandı. Sezon sonuna kadar transfer yapılamaz.`;
+    if (winTitle) winTitle.innerText = "Transfer Penceresi: KAPALI";
+    if (winDesc) winDesc.innerText = tw.desc || nextWindowMsg;
+    if (officeWin) {
+      officeWin.innerText = `KAPALI (Hf: ${gameState.week}/34)`;
+      officeWin.className = "text-xs font-bold text-slate-400";
+    }
   }
 
   // Gelen Teklifler Kutusu
@@ -1659,9 +1684,10 @@ function renderFixtures() {
 
     const loc = f.is_home ? "(Ev)" : "(Dep)";
     const res = f.result_score ? `<strong class="font-mono text-amber-400">${f.result_score}</strong>` : `<span class="text-[10px] text-slate-400 font-mono">VS</span>`;
+    const dayTag = f.day_name ? ` • ${f.day_name.substring(0, 3)}` : "";
 
     card.innerHTML = `
-      <span class="font-mono text-[10px] text-slate-400 w-8">H${f.week}</span>
+      <span class="font-mono text-[10px] text-slate-400 w-14 shrink-0">H${f.week}${dayTag}</span>
       <span class="font-bold flex-1 truncate">${f.is_home ? gameState.club_name : f.opponent}</span>
       <span class="mx-2">${res}</span>
       <span class="font-bold flex-1 truncate text-right">${f.is_home ? f.opponent : gameState.club_name}</span>
@@ -3442,12 +3468,12 @@ function renderCalendarView() {
     const isDeadline = (dStr === `${currentCalendarYear}-09-15` || dStr === `${currentCalendarYear}-02-08`);
 
     const cell = document.createElement("div");
-    let cellClasses = "p-1 rounded-xl flex flex-col justify-between transition-all cursor-pointer min-h-[48px] relative text-[10px] ";
+    let cellClasses = "p-1.5 rounded-xl flex flex-col justify-between transition-all cursor-pointer min-h-[50px] relative text-[10px] ";
     
     if (isToday) {
-      cellClasses += "bg-amber-500/15 border-2 border-amber-400 shadow-md shadow-amber-500/10 ring-1 ring-amber-400 ";
+      cellClasses += "bg-gradient-to-b from-amber-500/20 to-amber-950/25 border border-amber-400/80 shadow-[0_0_12px_rgba(251,191,36,0.18)] ";
     } else if (isSelected) {
-      cellClasses += "bg-sky-500/20 border-2 border-sky-400 ring-1 ring-sky-400 ";
+      cellClasses += "bg-sky-500/20 border border-sky-400/80 shadow-[0_0_12px_rgba(56,189,248,0.18)] ";
     } else if (fix) {
       cellClasses += "bg-[#18233c] hover:bg-[#202e4f] border border-slate-700/80 ";
     } else {
@@ -3455,19 +3481,31 @@ function renderCalendarView() {
     }
 
     if (isInTransferWindow && !fix && !isToday && !isSelected) {
-      cellClasses += "border-t-2 border-t-emerald-500/40 ";
+      cellClasses += "border-t-2 border-t-emerald-500/50 ";
     }
 
     cell.className = cellClasses;
     cell.onclick = () => selectCalendarDate(dStr);
 
-    let headerHtml = `<div class="flex items-center justify-between leading-none">
-      <span class="font-extrabold font-mono text-[11px] ${isToday ? 'text-amber-300' : 'text-slate-300'}">${d}</span>`;
-    
+    let headerHtml = `<div class="flex items-center justify-between leading-none w-full">`;
     if (isToday) {
-      headerHtml += `<span class="text-[7px] font-black bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-mono">BUGÜN</span>`;
-    } else if (isDeadline) {
-      headerHtml += `<i data-lucide="clock" class="w-2.5 h-2.5 text-rose-400" title="Transfer Bitiş"></i>`;
+      headerHtml += `
+        <span class="w-5 h-5 rounded-full bg-amber-400 text-slate-950 font-black font-mono text-[10px] flex items-center justify-center shadow-sm shadow-amber-400/50">${d}</span>
+        <span class="relative flex h-2 w-2 mr-0.5" title="Bugün">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+        </span>`;
+    } else if (isSelected) {
+      headerHtml += `
+        <span class="w-5 h-5 rounded-full bg-sky-400 text-slate-950 font-black font-mono text-[10px] flex items-center justify-center shadow-sm shadow-sky-400/50">${d}</span>`;
+      if (isDeadline) {
+        headerHtml += `<i data-lucide="clock" class="w-2.5 h-2.5 text-rose-400 mr-0.5" title="Transfer Bitiş"></i>`;
+      }
+    } else {
+      headerHtml += `<span class="font-bold font-mono text-[11px] text-slate-300 ml-0.5">${d}</span>`;
+      if (isDeadline) {
+        headerHtml += `<i data-lucide="clock" class="w-2.5 h-2.5 text-rose-400 mr-0.5" title="Transfer Bitiş"></i>`;
+      }
     }
     headerHtml += `</div>`;
 
@@ -3481,14 +3519,16 @@ function renderCalendarView() {
         const isWin = fix.result === "win";
         const isDraw = fix.result === "draw";
         const badgeColor = isWin ? "bg-emerald-600 text-white" : (isDraw ? "bg-slate-600 text-slate-100" : "bg-rose-600 text-white");
-        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[7.5px] font-black ${badgeColor} px-1 py-0.5 rounded truncate">
+        bodyHtml = `<div class="mt-1 flex items-center justify-between text-[7.5px] font-black ${badgeColor} px-1.5 py-0.5 rounded truncate shadow-xs">
           <span>${fix.my_score}-${fix.opp_score}</span>
           <span class="opacity-80">${oppShort}</span>
         </div>`;
       } else {
-        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[7.5px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 py-0.5 rounded truncate">
+        const isDerby = fix.opponent_is_big || fix.is_big;
+        const derbyBadgeClass = isDerby ? "bg-amber-500/25 text-amber-300 border-amber-400/60" : "bg-slate-800 text-slate-200 border-slate-700";
+        bodyHtml = `<div class="mt-1 flex items-center justify-between text-[7.5px] font-bold ${derbyBadgeClass} border px-1.5 py-0.5 rounded truncate shadow-xs">
           <span>${locLetter}:${oppShort}</span>
-          <i data-lucide="trophy" class="w-2.5 h-2.5 text-amber-400 shrink-0"></i>
+          <i data-lucide="${isDerby ? 'flame' : 'trophy'}" class="w-2.5 h-2.5 ${isDerby ? 'text-amber-400' : 'text-slate-400'} shrink-0"></i>
         </div>`;
       }
     }

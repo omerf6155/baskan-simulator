@@ -948,17 +948,57 @@ def format_turkish_date_full(date_str: str) -> str:
     except Exception:
         return date_str
 
+# Süper Lig maç haftası gün dağılımı (Cumartesi referansına göre ofsetler: -1: Cuma, 0: Cumartesi, +1: Pazar, +2: Pazartesi)
+WEEK_DAY_OFFSETS = [
+    1,   # W1: Pazar (16 Ağu)
+    0,   # W2: Cumartesi (22 Ağu)
+    1,   # W3: Pazar (30 Ağu)
+    -1,  # W4: Cuma (4 Eyl)
+    1,   # W5: Pazar (13 Eyl)
+    0,   # W6: Cumartesi (19 Eyl)
+    2,   # W7: Pazartesi (28 Eyl)
+    1,   # W8: Pazar (4 Eki)
+    0,   # W9: Cumartesi (10 Eki)
+    -1,  # W10: Cuma (16 Eki)
+    1,   # W11: Pazar (25 Eki)
+    0,   # W12: Cumartesi (31 Eki)
+    1,   # W13: Pazar (8 Kas)
+    0,   # W14: Cumartesi (14 Kas)
+    -1,  # W15: Cuma (20 Kas)
+    1,   # W16: Pazar (29 Kas)
+    2,   # W17: Pazartesi (7 Ara)
+    # Devre arası tatili
+    1,   # W18: Pazar (3 Oca)
+    0,   # W19: Cumartesi (9 Oca)
+    -1,  # W20: Cuma (15 Oca)
+    1,   # W21: Pazar (24 Oca)
+    0,   # W22: Cumartesi (30 Oca)
+    1,   # W23: Pazar (7 Şub)
+    2,   # W24: Pazartesi (15 Şub)
+    1,   # W25: Pazar (21 Şub)
+    0,   # W26: Cumartesi (27 Şub)
+    -1,  # W27: Cuma (5 Mar)
+    1,   # W28: Pazar (14 Mar)
+    0,   # W29: Cumartesi (20 Mar)
+    1,   # W30: Pazar (28 Mar)
+    0,   # W31: Cumartesi (3 Nis)
+    1,   # W32: Pazar (11 Nis)
+    0,   # W33: Cumartesi (17 Nis)
+    1    # W34: Pazar (25 Nis)
+]
+
 def build_fixture_dates(season: int = 1) -> Dict[int, str]:
     base_year = 2026 + (season - 1)
-    d = datetime.date(base_year, 8, 15)  # Hafta 1: 15 Ağustos 2026 Cumartesi
+    sat1 = datetime.date(base_year, 8, 15)
     dates = {}
     for w in range(1, 35):
-        dates[w] = d.isoformat()
-        if w == 17:
-            # 3 haftalık kış / devre arası tatili
-            d += datetime.timedelta(days=21)
+        off = WEEK_DAY_OFFSETS[w - 1]
+        if w <= 17:
+            sat = sat1 + datetime.timedelta(days=7 * (w - 1))
         else:
-            d += datetime.timedelta(days=7)
+            sat = sat1 + datetime.timedelta(days=7 * 16 + 28 + 7 * (w - 18))
+        m_dt = sat + datetime.timedelta(days=off)
+        dates[w] = m_dt.isoformat()
     return dates
 
 def is_transfer_window_open(date_str: str, season: int = 1) -> bool:
@@ -1022,6 +1062,17 @@ def generate_fixtures(my_team_name: str, teams: List[Dict], season: int = 1):
     for w in range(1, len(other_teams) + 1):
         opp = other_teams[w - 1]
         is_home = (w % 2 == 1)
+        f_date = dates.get(w, "2026-08-15")
+        try:
+            f_dt = datetime.date.fromisoformat(f_date)
+            f_day = TURKISH_DAYS[f_dt.weekday()]
+            if (opp.get("is_big") or opp.get("opponent_is_big")) and f_day in ["Cuma", "Pazartesi"]:
+                f_dt = f_dt + datetime.timedelta(days=1 if f_day == "Cuma" else -1)
+                f_date = f_dt.isoformat()
+                f_day = TURKISH_DAYS[f_dt.weekday()]
+        except Exception:
+            f_day = "Cumartesi"
+
         fixtures.append({
             "week": w,
             "round": 1,
@@ -1031,8 +1082,8 @@ def generate_fixtures(my_team_name: str, teams: List[Dict], season: int = 1):
             "opponent_pwr": opp["power"],
             "opponent_is_big": opp.get("is_big", False),
             "is_home": is_home,
-            "date": dates.get(w, "2026-08-15"),
-            "day_name": "Cumartesi",
+            "date": f_date,
+            "day_name": f_day,
             "played": False,
             "result": None,
             "my_score": None,
@@ -1044,6 +1095,17 @@ def generate_fixtures(my_team_name: str, teams: List[Dict], season: int = 1):
         opp = other_teams[w - 1]
         is_home = not (w % 2 == 1) # 1. devrenin tam tersi
         week_num = len(other_teams) + w # 18 to 34
+        f_date = dates.get(week_num, "2027-01-09")
+        try:
+            f_dt = datetime.date.fromisoformat(f_date)
+            f_day = TURKISH_DAYS[f_dt.weekday()]
+            if (opp.get("is_big") or opp.get("opponent_is_big")) and f_day in ["Cuma", "Pazartesi"]:
+                f_dt = f_dt + datetime.timedelta(days=1 if f_day == "Cuma" else -1)
+                f_date = f_dt.isoformat()
+                f_day = TURKISH_DAYS[f_dt.weekday()]
+        except Exception:
+            f_day = "Cumartesi"
+
         fixtures.append({
             "week": week_num,
             "round": 2,
@@ -1053,8 +1115,8 @@ def generate_fixtures(my_team_name: str, teams: List[Dict], season: int = 1):
             "opponent_pwr": opp["power"],
             "opponent_is_big": opp.get("is_big", False),
             "is_home": is_home,
-            "date": dates.get(week_num, "2027-01-09"),
-            "day_name": "Cumartesi",
+            "date": f_date,
+            "day_name": f_day,
             "played": False,
             "result": None,
             "my_score": None,
@@ -1624,10 +1686,29 @@ def get_state(session_id: Optional[str] = None):
                     fixture_dates = build_fixture_dates(season)
                     if "fixtures" in state:
                         for f in state["fixtures"]:
-                            if not f.get("date"):
-                                f["date"] = fixture_dates.get(f.get("week", 1), "2026-08-15")
-                            if not f.get("day_name"):
-                                f["day_name"] = "Cumartesi"
+                            f_week = f.get("week", 1)
+                            # Henüz oynanmamış maçları gerçekçi gün ve tarihlerle güncelle
+                            if not f.get("played"):
+                                if f_week in fixture_dates:
+                                    f_date = fixture_dates[f_week]
+                                    try:
+                                        f_dt = datetime.date.fromisoformat(f_date)
+                                        f_day = TURKISH_DAYS[f_dt.weekday()]
+                                        if (f.get("opponent_is_big") or f.get("is_big")) and f_day in ["Cuma", "Pazartesi"]:
+                                            f_dt = f_dt + datetime.timedelta(days=1 if f_day == "Cuma" else -1)
+                                            f_date = f_dt.isoformat()
+                                            f_day = TURKISH_DAYS[f_dt.weekday()]
+                                        f["date"] = f_date
+                                        f["day_name"] = f_day
+                                    except Exception:
+                                        f["date"] = f_date
+                                        f["day_name"] = "Cumartesi"
+                            elif not f.get("day_name") and f.get("date"):
+                                try:
+                                    f_dt = datetime.date.fromisoformat(f["date"])
+                                    f["day_name"] = TURKISH_DAYS[f_dt.weekday()]
+                                except Exception:
+                                    f["day_name"] = "Cumartesi"
                             if not f.get("opponent_logo"):
                                 opp_t = next((t for t in TEAMS_DB if t["name"] == f.get("opponent")), None)
                                 if opp_t:
@@ -1641,7 +1722,10 @@ def get_state(session_id: Optional[str] = None):
                         else:
                             state["current_date"] = "2026-08-10"
 
-                    state["transfer_window_open"] = is_transfer_window_open(state["current_date"], season)
+                    tw_details = get_transfer_window_details(state["current_date"], season)
+                    state["transfer_window_open"] = tw_details["is_open"]
+                    state["transfer_window"] = tw_details
+                    state["transfer_day"] = tw_details.get("days_left", 1)
                     return state
         except Exception:
             pass
@@ -2825,17 +2909,15 @@ def api_match_half2(req: HalftimeActionRequest):
             state["season_result"] = "mid"
 
     # Transfer Pencereleri Takvim Yönetimi
-    if state["week"] == 5 and state.get("transfer_window_open"):
-        state["transfer_window_open"] = False
-        state["news"].insert(0, "🛑 YAZ TRANSFER DÖNEMİ KAPANDI! Transfer tahtası 18. haftaya kadar kapalıdır.")
-    elif state["week"] == 18:
-        state["transfer_window_open"] = True
-        state["transfer_day"] = 1
-        state["transfer_max_days"] = 7
-        state["news"].insert(0, "🔥 ARA TRANSFER DÖNEMİ RESMEN AÇILDI! Kulüpler masaya oturuyor!")
-    elif state["week"] == 22 and state.get("transfer_window_open"):
-        state["transfer_window_open"] = False
-        state["news"].insert(0, "🛑 KIŞ / ARA TRANSFER DÖNEMİ KAPANDI! Kadrolar sezon sonuna kadar donduruldu.")
+    tw_details = get_transfer_window_details(state.get("current_date", "2026-08-16"), season)
+    prev_tw_open = state.get("transfer_window_open", False)
+    state["transfer_window_open"] = tw_details["is_open"]
+    state["transfer_window"] = tw_details
+    state["transfer_day"] = tw_details.get("days_left", 1)
+    if prev_tw_open and not tw_details["is_open"]:
+        state["news"].insert(0, "🛑 TRANSFER DÖNEMİ KAPANDI! Transfer tahtası kapalıdır.")
+    elif not prev_tw_open and tw_details["is_open"]:
+        state["news"].insert(0, "🔥 TRANSFER DÖNEMİ RESMEN AÇILDI! Kulüpler masaya oturuyor!")
 
     # Transfer penceresi açıksa ligdeki diğer takımlar da transfer hamleleri yapar & bize teklif getirir
     if state.get("transfer_window_open"):
@@ -4079,9 +4161,12 @@ def advance_calendar_day_internal(state: Dict[str, Any]) -> Dict[str, Any]:
         state["exchange_rate"] = round(max(34.0, cur_rate + drift), 2)
     
     # Transfer penceresi kontrolü
-    window_open = is_transfer_window_open(state["current_date"], season)
+    tw_details = get_transfer_window_details(state["current_date"], season)
+    window_open = tw_details["is_open"]
     prev_window_open = state.get("transfer_window_open", False)
     state["transfer_window_open"] = window_open
+    state["transfer_window"] = tw_details
+    state["transfer_day"] = tw_details.get("days_left", 1)
 
     # Pencere kapandı mı / açıldı mı bülteni
     if prev_window_open and not window_open:
