@@ -709,6 +709,10 @@ function formatTL(num) {
 
 // ==================== TAB DEĞİŞTİRME ====================
 function switchTab(tabId) {
+  // Alias yönlendirmeleri
+  if (tabId === "budget") tabId = "finances";
+  if (tabId === "politics" || tabId === "siyaset") tabId = "underground";
+
   document.querySelectorAll(".tab-pane").forEach(el => {
     el.classList.add("hidden");
     el.classList.remove("active");
@@ -747,7 +751,14 @@ function switchTab(tabId) {
     loadTransferMarket();
   }
 
-  lucide.createIcons();
+  if (tabId === "underground") {
+    const polCard = document.getElementById("pol-card-score");
+    if (polCard && gameState) {
+      polCard.innerText = `%${gameState.political_power !== undefined ? gameState.political_power : 50}`;
+    }
+  }
+
+  if (window.lucide) lucide.createIcons();
 }
 
 function toggleStandingsSubTab(sub) {
