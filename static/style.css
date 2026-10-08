@@ -112,8 +112,6 @@ button, a, input, select, [onclick], .nav-item, .cursor-pointer {
    ========================================================================== */
 
 /* 1. ALTIN / BİRİNCİL BUTON (Battle / Kontrol Et / Başla) */
-button.bg-amber-500,
-button.bg-amber-600,
 .btn-royale-gold,
 #btn-control-account {
   background: linear-gradient(180deg, #ffd000 0%, #ff9800 60%, #e67e00 100%) !important;
@@ -128,15 +126,11 @@ button.bg-amber-600,
   transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom-width 0.08s ease, filter 0.08s ease !important;
 }
 
-button.bg-amber-500:hover,
-button.bg-amber-600:hover,
 .btn-royale-gold:hover,
 #btn-control-account:hover {
   filter: brightness(1.1) !important;
 }
 
-button.bg-amber-500:active,
-button.bg-amber-600:active,
 .btn-royale-gold:active,
 #btn-control-account:active {
   transform: translateY(3px) !important;
@@ -145,9 +139,6 @@ button.bg-amber-600:active,
 }
 
 /* 2. ZÜMRÜT YEŞİLİ BUTON (Onayla / Oyna / Devam Et) */
-button.bg-emerald-500,
-button.bg-emerald-600,
-button.bg-green-600,
 .btn-royale-green {
   background: linear-gradient(180deg, #4ade80 0%, #22c55e 60%, #16a34a 100%) !important;
   border: 2px solid #bbf7d0 !important;
@@ -161,14 +152,10 @@ button.bg-green-600,
   transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom-width 0.08s ease, filter 0.08s ease !important;
 }
 
-button.bg-emerald-500:hover,
-button.bg-emerald-600:hover,
 .btn-royale-green:hover {
   filter: brightness(1.1) !important;
 }
 
-button.bg-emerald-500:active,
-button.bg-emerald-600:active,
 .btn-royale-green:active {
   transform: translateY(3px) !important;
   border-bottom-width: 2px !important;
@@ -176,9 +163,6 @@ button.bg-emerald-600:active,
 }
 
 /* 3. SAFİR MAVİSİ BUTON (Detay / Seçim / Taktik) */
-button.bg-sky-500,
-button.bg-sky-600,
-button.bg-blue-600,
 .btn-royale-blue {
   background: linear-gradient(180deg, #38bdf8 0%, #0284c7 60%, #0369a1 100%) !important;
   border: 2px solid #bae6fd !important;
@@ -192,14 +176,10 @@ button.bg-blue-600,
   transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom-width 0.08s ease, filter 0.08s ease !important;
 }
 
-button.bg-sky-500:hover,
-button.bg-sky-600:hover,
 .btn-royale-blue:hover {
   filter: brightness(1.1) !important;
 }
 
-button.bg-sky-500:active,
-button.bg-sky-600:active,
 .btn-royale-blue:active {
   transform: translateY(3px) !important;
   border-bottom-width: 2px !important;
@@ -207,9 +187,6 @@ button.bg-sky-600:active,
 }
 
 /* 4. YAKUT KIRMIZISI BUTON (İstifa / İptal / Ceza) */
-button.bg-rose-500,
-button.bg-rose-600,
-button.bg-red-600,
 .btn-royale-red {
   background: linear-gradient(180deg, #f87171 0%, #ef4444 60%, #dc2626 100%) !important;
   border: 2px solid #fecaca !important;
@@ -223,14 +200,10 @@ button.bg-red-600,
   transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom-width 0.08s ease, filter 0.08s ease !important;
 }
 
-button.bg-rose-500:hover,
-button.bg-rose-600:hover,
 .btn-royale-red:hover {
   filter: brightness(1.1) !important;
 }
 
-button.bg-rose-500:active,
-button.bg-rose-600:active,
 .btn-royale-red:active {
   transform: translateY(3px) !important;
   border-bottom-width: 2px !important;
@@ -238,10 +211,8 @@ button.bg-rose-600:active,
 }
 
 /* 5. TAŞ PLAKA BUTON (Genel Koyu Butonlar / Secondary) */
-button.bg-slate-800,
-button.bg-slate-900,
-.grid-cols-2 button,
-.grid-cols-1 button {
+.btn-royale-slate,
+.btn-royale-dark {
   background: linear-gradient(180deg, #1f2f4e 0%, #141f36 100%) !important;
   border: 2px solid #334d7d !important;
   border-bottom: 4px solid #0b1220 !important;
@@ -252,21 +223,51 @@ button.bg-slate-900,
   transition: transform 0.08s ease, box-shadow 0.08s ease, border-bottom-width 0.08s ease, border-color 0.08s ease !important;
 }
 
-button.bg-slate-800:hover,
-button.bg-slate-900:hover,
-.grid-cols-2 button:hover,
-.grid-cols-1 button:hover {
+.btn-royale-slate:hover,
+.btn-royale-dark:hover {
   border-color: var(--cr-gold) !important;
   transform: translateY(-1px) !important;
 }
 
-button.bg-slate-800:active,
-button.bg-slate-900:active,
-.grid-cols-2 button:active,
-.grid-cols-1 button:active {
+.btn-royale-slate:active,
+.btn-royale-dark:active {
   transform: translateY(2px) !important;
   border-bottom-width: 2px !important;
   box-shadow: 0 1px 0 #050910 !important;
+}
+
+/* Modallar içindeki butonların temiz, modern ve şık görünmesi */
+div[id^="modal-"] button:not([class*="btn-royale-"]) {
+  border-bottom-width: 1px !important;
+  box-shadow: none !important;
+}
+
+/* Temaya Uygun İnce Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #1e293b;
+  border-radius: 9999px;
+  height: 6px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #f59e0b;
+  border: 2px solid #0f172a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+#sfx-volume-slider::-webkit-slider-thumb {
+  background: #10b981;
 }
 
 /* ==========================================================================

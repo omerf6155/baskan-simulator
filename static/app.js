@@ -173,16 +173,16 @@ function updateMusicUIButtons(playing) {
     if (hIcon) hIcon.innerText = "🎵";
     if (hLbl) hLbl.innerText = "Müzik Açık";
     if (mBtn) {
-      mBtn.innerText = "Çalıyor 🎵";
-      mBtn.className = "px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-[10px] shadow-sm";
+      mBtn.innerHTML = `<span>🔊 Çalıyor</span>`;
+      mBtn.className = "px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-500/30 font-black text-[10px] shadow-sm transition-all cursor-pointer";
     }
   } else {
     if (hBtn) hBtn.className = "text-[9px] text-slate-400 font-bold flex items-center gap-1 bg-slate-900/90 px-1.5 py-0.5 rounded border border-slate-700";
     if (hIcon) hIcon.innerText = "🔇";
     if (hLbl) hLbl.innerText = "Müzik";
     if (mBtn) {
-      mBtn.innerText = "Kapalı 🔇";
-      mBtn.className = "px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 font-bold text-[10px] shadow-sm";
+      mBtn.innerHTML = `<span>🔇 Kapalı</span>`;
+      mBtn.className = "px-2.5 py-1 rounded-xl bg-slate-800/80 text-slate-400 border border-slate-700 hover:text-slate-200 font-bold text-[10px] shadow-sm transition-all cursor-pointer";
     }
   }
 }
@@ -245,6 +245,35 @@ function onSfxVolumeChange(val) {
   }
 }
 
+function selectBgmTrack(val) {
+  onBgmTrackChange(val);
+  updateTrackCardsUI(val);
+}
+
+function updateTrackCardsUI(selectedTrack) {
+  const track = selectedTrack || currentBgmTrack || "track1.mp3";
+  const nameEl = document.getElementById("bgm-current-track-name");
+  const trackNames = {
+    "track1.mp3": "Ana Tema (Resmi Marş)",
+    "track2.mp3": "Tribün Coşkusu",
+    "track3.mp3": "Taktik & Ofis"
+  };
+  if (nameEl) nameEl.innerText = trackNames[track] || "Özel Parça";
+
+  const cards = document.querySelectorAll("#settings-track-cards .track-card");
+  cards.forEach(card => {
+    const cardTrack = card.getAttribute("data-track");
+    if (cardTrack === track) {
+      card.className = "track-card p-2 rounded-xl border border-amber-400 bg-amber-500/20 text-amber-300 shadow-md ring-1 ring-amber-400/40 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
+    } else {
+      card.className = "track-card p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-white text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
+    }
+  });
+
+  const trackSel = document.getElementById("bgm-track-select");
+  if (trackSel) trackSel.value = track;
+}
+
 function onBgmTrackChange(val) {
   currentBgmTrack = val;
   localStorage.setItem("baskan_bgm_track", val);
@@ -272,7 +301,6 @@ function openSettingsModal() {
   const bgmTxt = document.getElementById("bgm-volume-txt");
   const sfxSlider = document.getElementById("sfx-volume-slider");
   const sfxTxt = document.getElementById("sfx-volume-txt");
-  const trackSel = document.getElementById("bgm-track-select");
   const presNameEl = document.getElementById("settings-current-username");
   const clubNameEl = document.getElementById("settings-current-clubname");
 
@@ -280,7 +308,8 @@ function openSettingsModal() {
   if (bgmTxt) bgmTxt.innerText = `${Math.round(bgmVolume * 100)}%`;
   if (sfxSlider) sfxSlider.value = Math.round(sfxVolume * 100);
   if (sfxTxt) sfxTxt.innerText = `${Math.round(sfxVolume * 100)}%`;
-  if (trackSel) trackSel.value = currentBgmTrack;
+
+  updateTrackCardsUI(currentBgmTrack);
 
   if (presNameEl && gameState) presNameEl.innerText = gameState.president_name || "Başkan";
   if (clubNameEl && gameState) clubNameEl.innerText = gameState.club_name || "Kulüp";
