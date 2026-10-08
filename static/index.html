@@ -41,6 +41,10 @@
             <span id="header-current-date" class="text-slate-100 font-extrabold text-[11px]">10 Ağu 2026</span>
             <span id="header-season-week-pill" class="text-[9px] bg-amber-400/10 text-amber-300 px-1.5 py-0.5 rounded font-black border border-amber-400/20">S<span id="header-season">1</span>•H<span id="header-week">1</span></span>
           </button>
+          <div class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-[#131b2e] border border-slate-700 text-[10.5px] font-mono font-black text-amber-300 shadow-sm" title="Döviz Kuru: 1 Euro kaç TL?">
+            <span class="text-white text-[9px] font-bold">€</span>
+            <span id="header-exchange-rate">38.50 ₺</span>
+          </div>
           <button onclick="openSettingsModal()" class="w-8 h-8 rounded-xl bg-[#131b2e] hover:bg-[#1a253c] border border-slate-700 hover:border-amber-400/80 flex items-center justify-center text-slate-300 hover:text-white transition-all shadow-sm active:scale-95 cursor-pointer" title="Ayarlar">
             <i data-lucide="settings" class="w-4 h-4"></i>
           </button>
@@ -102,6 +106,36 @@
         
         <!-- Günlük Giriş Ödülü Banner Konteynırı (Sayfa İçi Şık & Taşmayan Tasarım) -->
         <div id="daily-reward-inline-container" class="hidden"></div>
+
+        <!-- ÖZEL KALEM & BAŞKANLIK SEKRETERYASI AJANDASI -->
+        <div class="bg-gradient-to-r from-[#141d33] via-[#10182b] to-[#0c1322] border border-amber-500/40 rounded-2xl p-3 shadow-lg flex items-center justify-between gap-3 relative overflow-hidden group">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border-2 border-amber-500/50 flex items-center justify-center text-amber-400 shrink-0 shadow-md relative">
+              <i data-lucide="user-check" class="w-5 h-5"></i>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900 absolute -top-0.5 -right-0.5"></span>
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[9px] uppercase font-black px-1.5 py-0.2 rounded bg-amber-500 text-slate-950 font-mono tracking-wider">ÖZEL KALEM</span>
+                <span class="text-[10px] text-amber-300 font-bold">Selin Hanım</span>
+                <span class="text-[9px] text-slate-400 font-mono" id="office-secretary-date">10 Ağu 2026</span>
+              </div>
+              <p id="office-secretary-agenda" class="text-xs font-black text-white mt-0.5 leading-snug line-clamp-2">
+                Başkanım, bugün kulüp binasındasınız. TFF ve basın raporları masanızda hazır bekliyor.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1.5 shrink-0">
+            <button onclick="openSecretaryInboxModal()" class="px-2.5 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm" title="Sekreterya gelen evrakları">
+              <i data-lucide="inbox" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Evraklar</span>
+            </button>
+            <button id="btn-secretary-pending-action" onclick="checkSecretaryEventFromCard()" class="hidden px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-[10px] flex items-center justify-center gap-1 shadow-md animate-pulse cursor-pointer">
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+              <span>Karar Ver</span>
+            </button>
+          </div>
+        </div>
 
         <!-- Sıradaki Maç Paneli (Matchday Hero Card) -->
         <div class="match-hero-card rounded-2xl p-4 shadow-xl border border-white/10 relative overflow-hidden">
@@ -698,99 +732,103 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <!-- GELİRLER KUTUSU -->
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-emerald-950/60 shadow-md space-y-2">
-              <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5">
-                <span class="text-xs font-black text-emerald-400 tracking-wider flex items-center gap-1.5 uppercase">
-                  <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> GELİRLER
-                </span>
-                <span class="text-[10px] text-emerald-500/80 font-bold font-mono">Haftalık</span>
-              </div>
-              
-              <div class="space-y-1.5 pt-0.5">
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="ticket" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>Stadyum & Bilet</span>
+          <div class="grid grid-cols-2 gap-2">
+            <!-- GELİRLER KUTUSU (SOL) -->
+            <div class="bg-slate-900/95 p-2 rounded-xl border border-emerald-950/60 shadow-md space-y-1.5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-1 mb-1">
+                  <span class="text-[10.5px] font-black text-emerald-400 tracking-wider flex items-center gap-1 uppercase">
+                    <i data-lucide="trending-up" class="w-3 h-3 text-emerald-400"></i> GELİRLER
                   </span>
-                  <strong class="text-white font-mono font-bold" id="fin-ticket-val">0 ₺</strong>
+                  <span class="text-[9px] text-emerald-500/80 font-bold font-mono">Haftalık</span>
                 </div>
+                
+                <div class="space-y-1">
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="ticket" class="w-3 h-3 text-emerald-400 shrink-0"></i>
+                      <span class="truncate">Stadyum</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-ticket-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>Forma & Mağaza</span>
-                  </span>
-                  <strong class="text-white font-mono font-bold" id="fin-store-val">0 ₺</strong>
-                </div>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="shopping-bag" class="w-3 h-3 text-emerald-400 shrink-0"></i>
+                      <span class="truncate">Mağaza</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-store-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="tv" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>TV Yayın Payı</span>
-                  </span>
-                  <strong class="text-white font-mono font-bold" id="fin-tv-val">2.5M ₺</strong>
-                </div>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="tv" class="w-3 h-3 text-emerald-400 shrink-0"></i>
+                      <span class="truncate">TV Yayın</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-tv-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="award" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span>Sponsor Hakedişi</span>
-                  </span>
-                  <strong class="text-white font-mono font-bold" id="fin-sponsor-val">0 ₺</strong>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="award" class="w-3 h-3 text-emerald-400 shrink-0"></i>
+                      <span class="truncate">Sponsor</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-sponsor-val">0 €</strong>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- GİDERLER KUTUSU -->
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-rose-950/60 shadow-md space-y-2">
-              <div class="flex items-center justify-between border-b border-slate-800/80 pb-1.5">
-                <span class="text-xs font-black text-rose-400 tracking-wider flex items-center gap-1.5 uppercase">
-                  <i data-lucide="trending-down" class="w-3.5 h-3.5 text-rose-400"></i> GİDERLER
-                </span>
-                <span class="text-[10px] text-rose-500/80 font-bold font-mono">Haftalık</span>
-              </div>
-              
-              <div class="space-y-1.5 pt-0.5">
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="users" class="w-3.5 h-3.5 text-rose-400"></i>
-                    <span>Futbolcu & Hoca Maaşları</span>
+            <!-- GİDERLER KUTUSU (SAĞ) -->
+            <div class="bg-slate-900/95 p-2 rounded-xl border border-rose-950/60 shadow-md space-y-1.5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-slate-800/80 pb-1 mb-1">
+                  <span class="text-[10.5px] font-black text-rose-400 tracking-wider flex items-center gap-1 uppercase">
+                    <i data-lucide="trending-down" class="w-3 h-3 text-rose-400"></i> GİDERLER
                   </span>
-                  <strong class="text-white font-mono font-bold" id="fin-wage-val">0 ₺</strong>
+                  <span class="text-[9px] text-rose-500/80 font-bold font-mono">Haftalık</span>
                 </div>
+                
+                <div class="space-y-1">
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="users" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                      <span class="truncate">Maaşlar</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-wage-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="wrench" class="w-3.5 h-3.5 text-rose-400"></i>
-                    <span>Tesis & Altyapı Bakımı</span>
-                  </span>
-                  <strong class="text-rose-300 font-mono font-bold" id="fin-facility-val">2.5M ₺</strong>
-                </div>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="wrench" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                      <span class="truncate">Tesis Bakım</span>
+                    </span>
+                    <strong class="text-rose-300 font-mono font-bold shrink-0 text-[10.5px]" id="fin-facility-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="activity" class="w-3.5 h-3.5 text-rose-400"></i>
-                    <span>Personel & Sağlık</span>
-                  </span>
-                  <strong class="text-rose-300 font-mono font-bold" id="fin-staff-val">1.8M ₺</strong>
-                </div>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="activity" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                      <span class="truncate">Sağlık/Pers</span>
+                    </span>
+                    <strong class="text-rose-300 font-mono font-bold shrink-0 text-[10.5px]" id="fin-staff-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="percent" class="w-3.5 h-3.5 text-rose-400"></i>
-                    <span>Borç Faiz Kesintisi</span>
-                  </span>
-                  <strong class="text-white font-mono font-bold" id="fin-debt-val">600K ₺</strong>
-                </div>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="percent" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                      <span class="truncate">Faiz Borç</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-debt-val">0 €</strong>
+                  </div>
 
-                <div class="flex justify-between items-center p-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-xs">
-                  <span class="text-slate-300 flex items-center gap-2 font-medium">
-                    <i data-lucide="plane" class="w-3.5 h-3.5 text-rose-400"></i>
-                    <span>Seyahat & Deplasman</span>
-                  </span>
-                  <strong class="text-white font-mono font-bold" id="fin-travel-val">0 ₺</strong>
+                  <div class="flex justify-between items-center p-1 px-1.5 rounded-lg bg-slate-950/70 border border-slate-800/70 text-[10px]">
+                    <span class="text-slate-300 flex items-center gap-1 font-medium truncate mr-1">
+                      <i data-lucide="plane" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                      <span class="truncate">Deplasman</span>
+                    </span>
+                    <strong class="text-white font-mono font-bold shrink-0 text-[10.5px]" id="fin-travel-val">0 €</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2198,11 +2236,11 @@
 
   <!-- 7. KULÜP BAŞKANI İLE BONSERVİS VE OYUNCU MAAŞ PAZARLIĞI MODALI -->
   <div id="modal-transfer-negotiate" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#111726] border border-amber-500/80 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3">
+    <div class="bg-[#111726] border border-amber-500/80 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="text-xs font-black text-white flex items-center gap-1.5">
           <i data-lucide="handshake" class="w-4 h-4 text-amber-400"></i>
-          <span id="negotiate-modal-title">Transfer & Kiralık Pazarlığı</span>
+          <span id="negotiate-modal-title">Transfer & Maaş Pazarlığı</span>
         </div>
         <button onclick="closeNegotiationModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
       </div>
@@ -2210,38 +2248,59 @@
       <!-- Transfer Tipi Seçici: Bonservis Satın Al vs Kiralık Sözleşmesi -->
       <div class="grid grid-cols-2 gap-1 p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs">
         <button id="btn-neg-mode-buy" onclick="switchNegotiationMode('buy')" class="py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 transition-all">
-          💰 Bonservis Al
+          💰 Bonservis Pazarlığı
         </button>
         <button id="btn-neg-mode-loan" onclick="switchNegotiationMode('loan')" class="py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all">
           🔄 Kiralık Sözleşmesi
         </button>
       </div>
 
-      <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1 text-center">
+      <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1 text-center relative">
         <div class="text-sm font-extrabold text-white" id="neg-player-name">Victor Osimhen</div>
-        <div class="text-[10px] text-amber-400" id="neg-player-details">SANTRAFOR • 88 Güç • 30M ₺ Değer</div>
+        <div class="text-[10px] text-amber-400 font-medium" id="neg-player-details">SANTRAFOR • 88 Güç • 30M € Değer</div>
+        <div id="neg-tapped-badge" class="hidden mt-1 text-[9.5px] font-black text-rose-300 bg-rose-950/70 border border-rose-700/60 px-2 py-0.5 rounded-md inline-block">
+          🔥 Oyuncu Kulübüne İsyan Çıkardı! (%35 Bonservis İndirimi)
+        </div>
       </div>
 
       <!-- BONSERVİS SATIN ALMA BÖLÜMÜ -->
-      <div id="neg-pane-buy" class="space-y-3">
-        <!-- 1. Adım: Bonservis Teklifi -->
-        <div id="neg-step-club" class="space-y-2">
-          <label class="block text-[11px] font-semibold text-slate-300">Bonservis Teklifiniz (₺):</label>
-          <input type="number" id="neg-club-bid-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 35000000" />
-          <button onclick="submitClubNegotiation()" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md">
-            Kulüp Başkanına Teklifi İlet
-          </button>
+      <div id="neg-pane-buy" class="space-y-2.5">
+        <div class="space-y-1.5">
+          <label class="block text-[11px] font-semibold text-slate-300">Bonservis Teklifiniz (€):</label>
+          <input type="number" id="neg-club-bid-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 25000000" />
         </div>
 
-        <!-- 2. Adım: Oyuncuyla Sözleşme ve Maaş Pazarlığı -->
-        <div id="neg-step-player" class="hidden space-y-2">
-          <div class="p-2 rounded-lg bg-emerald-950/60 border border-emerald-800 text-[10px] text-emerald-300" id="neg-club-accepted-msg">
-            Kulüp bonservisi kabul etti! Şimdi oyuncuyu ikna edin.
+        <div class="space-y-1.5">
+          <label class="block text-[11px] font-semibold text-slate-300">Yıllık Maaş Teklifi (€):</label>
+          <input type="number" id="neg-player-wage-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 4500000" />
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-[11px] font-semibold text-slate-300">İmza Parası / Menajer Primi (€ - Opsiyonel):</label>
+          <input type="number" id="neg-sign-bonus-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-white font-mono font-bold text-sm" placeholder="Örn: 500000" />
+        </div>
+
+        <div id="neg-feedback-box" class="hidden p-2 rounded-lg text-[10.5px] border leading-snug"></div>
+
+        <button onclick="submitCustomNegotiation()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all cursor-pointer">
+          🤝 Pazarlık Teklifini Sun & Transferi Bitir
+        </button>
+
+        <!-- KÖTÜ BAŞKAN: OYUNCUYU GİZLİCE AYARTMA (TAP-UP) -->
+        <div class="pt-2 border-t border-slate-800 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black text-rose-400 flex items-center gap-1">
+              <i data-lucide="skull" class="w-3.5 h-3.5 text-rose-400"></i>
+              Gizli Operasyon (Kulübü By-pass Et)
+            </span>
+            <span class="text-[8.5px] text-rose-300 font-mono font-bold bg-rose-950/80 border border-rose-800 px-1.5 py-0.2 rounded">%35 İndirim Şansı</span>
           </div>
-          <label class="block text-[11px] font-semibold text-slate-300">Yıllık Maaş Teklifi (₺):</label>
-          <input type="number" id="neg-player-wage-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 20000000" />
-          <button onclick="submitPlayerSigning()" class="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md">
-            Sözleşmeyi İmzala & Transferi Bitir
+          <p class="text-[9.5px] text-slate-400 leading-tight">
+            Kulübe teklif yapmadan menajerle Bodrum'da gizli masaya oturun. Oyuncu isyan edip kulübüne rest çeker. Ancak basına sızarsa TFF ceza keser!
+          </p>
+          <button onclick="tapUpCurrentPlayer()" class="w-full py-2 rounded-xl bg-gradient-to-r from-red-900/80 to-rose-900/80 hover:from-red-800 hover:to-rose-800 border border-red-700/60 text-red-100 font-bold text-[10px] flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all">
+            <i data-lucide="user-x" class="w-3.5 h-3.5 text-red-400"></i>
+            <span>Oyuncuyu Gizlice Ayart (-150K € Gizli Fon)</span>
           </button>
         </div>
       </div>
@@ -2251,8 +2310,8 @@
         <!-- 1. Adım: Kiralık Şartları Teklifi -->
         <div id="neg-loan-step-offer" class="space-y-2">
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300">Kiralama Bedeli Teklifi (₺):</label>
-            <input type="number" id="neg-loan-fee-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 3000000" />
+            <label class="block text-[11px] font-semibold text-slate-300">Kiralama Bedeli Teklifi (€):</label>
+            <input type="number" id="neg-loan-fee-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="Örn: 2000000" />
           </div>
 
           <div>
@@ -2271,8 +2330,8 @@
           </div>
 
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300">Satın Alma Opsiyonu (Opsiyonel ₺):</label>
-            <input type="number" id="neg-loan-buyopt-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="İsteğe bağlı opsiyon (Örn: 25000000)" />
+            <label class="block text-[11px] font-semibold text-slate-300">Satın Alma Opsiyonu (Opsiyonel €):</label>
+            <input type="number" id="neg-loan-buyopt-input" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white font-mono font-bold text-sm" placeholder="İsteğe bağlı opsiyon (Örn: 15000000)" />
           </div>
 
           <button onclick="submitClubLoanNegotiation()" class="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md">
@@ -2289,6 +2348,69 @@
             Kiralık Sözleşmesini İmzala (Kadronuza Katın)
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.1 ÖZEL KALEM (SELİN HANIM) BAŞKANLIK OLAYI & KARAR MODALI -->
+  <div id="modal-secretary-event" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#111726] border border-amber-500/80 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 relative">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="text-xs font-black text-white flex items-center gap-2">
+          <div class="w-6 h-6 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i>
+          </div>
+          <div>
+            <div class="text-[9px] text-amber-400 uppercase tracking-wider font-mono font-black">ÖZEL KALEM BİLDİRİMİ</div>
+            <div id="sec-modal-title" class="text-xs font-extrabold text-white">Başkanım Acil Bir Konu Var</div>
+          </div>
+        </div>
+        <button onclick="closeSecretaryEventModal()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
+      </div>
+
+      <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-[10px] text-amber-300 font-bold">Selin Hanım (Özel Kalem)</div>
+            <div class="text-[9px] text-slate-400" id="sec-modal-date">12 Ağu 2026</div>
+          </div>
+        </div>
+        <p id="sec-modal-desc" class="text-xs text-slate-200 leading-relaxed font-medium">
+          Sayın Başkanım, TFF Başkanı yemek davetinde bulundu. Ne yapalım?
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <div class="text-[10px] uppercase font-bold text-amber-400/90 tracking-wider">TALİMATINIZI SEÇİN:</div>
+        <div id="sec-modal-options" class="space-y-2">
+          <!-- Dynamic options loaded via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7.2 ÖZEL KALEM GELEN EVRAKLAR & ARŞİV MODALI -->
+  <div id="modal-secretary-inbox" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#111726] border border-slate-700 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2 shrink-0">
+        <div class="text-xs font-black text-white flex items-center gap-2">
+          <i data-lucide="inbox" class="w-4 h-4 text-amber-400"></i>
+          <span>Özel Kalem Evrak Dosyası & Bildirimler</span>
+        </div>
+        <button onclick="closeSecretaryInboxModal()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
+      </div>
+
+      <div id="sec-inbox-list" class="space-y-2 overflow-y-auto pr-1 flex-1 text-xs">
+        <!-- Rendered items or empty state -->
+      </div>
+
+      <div class="shrink-0 pt-2 border-t border-slate-800 text-center">
+        <button onclick="closeSecretaryInboxModal()" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold">
+          Kapat
+        </button>
       </div>
     </div>
   </div>

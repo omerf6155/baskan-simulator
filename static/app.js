@@ -654,10 +654,27 @@ function showToast(msg) {
 }
 
 function formatMoney(num) {
-  if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(0) + "M ₺";
+  const val = Number(num || 0);
+  if (Math.abs(val) >= 1_000_000) {
+    const formatted = val / 1_000_000;
+    return (formatted % 1 === 0 ? formatted.toFixed(0) : formatted.toFixed(1)) + "M €";
   }
-  return Number(num || 0).toLocaleString("tr-TR") + " ₺";
+  if (Math.abs(val) >= 1_000) {
+    return (val / 1_000).toFixed(0) + "K €";
+  }
+  return val.toLocaleString("tr-TR") + " €";
+}
+
+function formatTL(num) {
+  const val = Number(num || 0);
+  if (Math.abs(val) >= 1_000_000) {
+    const formatted = val / 1_000_000;
+    return (formatted % 1 === 0 ? formatted.toFixed(0) : formatted.toFixed(1)) + "M ₺";
+  }
+  if (Math.abs(val) >= 1_000) {
+    return (val / 1_000).toFixed(0) + "K ₺";
+  }
+  return val.toLocaleString("tr-TR") + " ₺";
 }
 
 // ==================== TAB DEĞİŞTİRME ====================
@@ -817,6 +834,11 @@ function renderUI() {
   if (headerDateEl) {
     headerDateEl.innerText = formatTurkishDateShort(gameState.current_date || "2026-08-10");
   }
+  const exRateEl = document.getElementById("header-exchange-rate");
+  if (exRateEl) {
+    const rate = Number(gameState.exchange_rate || 38.50).toFixed(2);
+    exRateEl.innerText = `${rate} ₺`;
+  }
 
   // Kasa & Metrikler
   document.getElementById("bar-budget-txt").innerText = formatMoney(gameState.budget);
@@ -826,13 +848,33 @@ function renderUI() {
   const polCard = document.getElementById("pol-card-score");
   if (polCard) polCard.innerText = `%${gameState.political_power}`;
 
+  // Özel Kalem & Sekreterya Ajandası UI
+  const secAgendaEl = document.getElementById("office-secretary-agenda");
+  const secDateEl = document.getElementById("office-secretary-date");
+  const secPendingBtn = document.getElementById("btn-secretary-pending-action");
+  if (secAgendaEl) {
+    secAgendaEl.innerText = gameState.secretary_agenda || "Başkanım, bugün kulüp binasındasınız. TFF ve basın raporları masanızda hazır bekliyor.";
+  }
+  if (secDateEl) {
+    secDateEl.innerText = formatTurkishDateShort(gameState.current_date || "2026-08-10");
+  }
+  if (secPendingBtn) {
+    if (gameState.pending_secretary_event) {
+      secPendingBtn.classList.remove("hidden");
+    } else {
+      secPendingBtn.classList.add("hidden");
+    }
+  }
+
   // Bankalar Birliği Borç Paneli UI
   const bankDebtEl = document.getElementById("bank-debt-display");
   const bankIntEl = document.getElementById("bank-weekly-interest");
   const bankStatusEl = document.getElementById("bank-sanction-status");
   if (bankDebtEl) {
     const curDebt = gameState.debt || 0;
-    bankDebtEl.innerText = formatMoney(curDebt) + " Borç";
+    const rate = Number(gameState.exchange_rate || 38.50);
+    const tlDebt = Math.round(curDebt * rate);
+    bankDebtEl.innerText = formatMoney(curDebt) + ` (~${(tlDebt / 1_000_000).toFixed(0)}M ₺)`;
     if (bankIntEl) bankIntEl.innerText = formatMoney(Math.floor(curDebt * 0.003)) + " / Hafta";
     if (bankStatusEl) {
       const bc = gameState.bank_consortium || {};
@@ -2608,30 +2650,69 @@ function onScoutTeamChanged() {
   });
 }
 
-function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOverall, defaultMode = 'buy') {
-  const suggestedLoanFee = Math.max(1_500_000, Math.floor(playerVal * 0.10));
+function startClubNegotiation(teamId, playerName, playerVal, playerPos, playerOverall, defaultMode = 'buy', initialWage = 0) {
+  const suggestedLoanFee = Math.max(1_000_000, Math.floor(playerVal * 0.10));
+  const suggestedWage = initialWage || Math.max(500_000, Math.floor(playerVal * 0.12));
+  
+  const isTappedUp = !!(gameState?.tapped_up_players && gameState.tapped_up_players[playerName]);
+  const effectiveVal = isTappedUp ? Math.floor(playerVal * 0.65) : playerVal;
+
   activeNegotiation = {
-    teamId: teamId,
+    teamId: teamId || null,
     playerName: playerName,
     playerVal: playerVal,
+    effectiveVal: effectiveVal,
     playerPos: playerPos,
     playerOverall: playerOverall,
-    bidFee: playerVal,
+    bidFee: effectiveVal,
+    offeredWage: suggestedWage,
+    signBonus: 0,
     loanFee: suggestedLoanFee,
     loanWagePct: 100,
     mode: defaultMode,
-    playerWage: 15_000_000
+    isTappedUp: isTappedUp
   };
 
-  document.getElementById("neg-player-name").innerText = playerName;
-  document.getElementById("neg-player-details").innerText = `${playerPos} • ${playerOverall} Güç • Piyasa Değeri: ${formatMoney(playerVal)}`;
-  document.getElementById("neg-club-bid-input").value = playerVal;
-  document.getElementById("neg-loan-fee-input").value = suggestedLoanFee;
+  const nameEl = document.getElementById("neg-player-name");
+  if (nameEl) nameEl.innerText = playerName;
+  const detEl = document.getElementById("neg-player-details");
+  if (detEl) detEl.innerText = `${playerPos} • ${playerOverall} Güç • Piyasa Değeri: ${formatMoney(playerVal)}`;
+  
+  const tappedBadge = document.getElementById("neg-tapped-badge");
+  if (tappedBadge) {
+    if (isTappedUp) {
+      tappedBadge.classList.remove("hidden");
+    } else {
+      tappedBadge.classList.add("hidden");
+    }
+  }
+
+  const bidInput = document.getElementById("neg-club-bid-input");
+  if (bidInput) bidInput.value = effectiveVal;
+
+  const wageInput = document.getElementById("neg-player-wage-input");
+  if (wageInput) wageInput.value = suggestedWage;
+
+  const bonusInput = document.getElementById("neg-sign-bonus-input");
+  if (bonusInput) bonusInput.value = 0;
+
+  const fbBox = document.getElementById("neg-feedback-box");
+  if (fbBox) {
+    fbBox.className = "hidden p-2 rounded-lg text-[10.5px] border leading-snug";
+    fbBox.innerText = "";
+  }
+
+  const loanFeeInput = document.getElementById("neg-loan-fee-input");
+  if (loanFeeInput) loanFeeInput.value = suggestedLoanFee;
   const buyOptInput = document.getElementById("neg-loan-buyopt-input");
   if (buyOptInput) buyOptInput.value = "";
 
   switchNegotiationMode(defaultMode);
-  document.getElementById("modal-transfer-negotiate").classList.remove("hidden");
+  const modal = document.getElementById("modal-transfer-negotiate");
+  if (modal) modal.classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 function switchNegotiationMode(mode) {
@@ -2650,18 +2731,17 @@ function switchNegotiationMode(mode) {
     if (paneLoan) paneLoan.classList.remove("hidden");
     if (title) title.innerText = "Kiralık Sözleşmesi Pazarlığı";
     
-    document.getElementById("neg-loan-step-offer").classList.remove("hidden");
-    document.getElementById("neg-loan-step-sign").classList.add("hidden");
+    const offerStep = document.getElementById("neg-loan-step-offer");
+    const signStep = document.getElementById("neg-loan-step-sign");
+    if (offerStep) offerStep.classList.remove("hidden");
+    if (signStep) signStep.classList.add("hidden");
     setLoanWagePct(activeNegotiation.loanWagePct || 100);
   } else {
     if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 shadow-md transition-all";
     if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all";
     if (paneBuy) paneBuy.classList.remove("hidden");
     if (paneLoan) paneLoan.classList.add("hidden");
-    if (title) title.innerText = "Bonservis Satın Alma Pazarlığı";
-    
-    document.getElementById("neg-step-club").classList.remove("hidden");
-    document.getElementById("neg-step-player").classList.add("hidden");
+    if (title) title.innerText = "Transfer & Maaş Pazarlığı";
   }
 }
 
@@ -2682,43 +2762,129 @@ function setLoanWagePct(pct) {
 }
 
 function closeNegotiationModal() {
-  document.getElementById("modal-transfer-negotiate").classList.add("hidden");
+  const modal = document.getElementById("modal-transfer-negotiate");
+  if (modal) modal.classList.add("hidden");
 }
 
-async function submitClubNegotiation() {
+async function submitCustomNegotiation() {
   if (!activeNegotiation) return;
   const bidInput = document.getElementById("neg-club-bid-input");
-  const bidFee = parseInt(bidInput.value) || activeNegotiation.playerVal;
-  activeNegotiation.bidFee = bidFee;
+  const wageInput = document.getElementById("neg-player-wage-input");
+  const bonusInput = document.getElementById("neg-sign-bonus-input");
+  const fbBox = document.getElementById("neg-feedback-box");
+
+  const bidFee = parseInt(bidInput ? bidInput.value : 0) || 0;
+  const offeredWage = parseInt(wageInput ? wageInput.value : 0) || 0;
+  const signBonus = parseInt(bonusInput ? bonusInput.value : 0) || 0;
+
+  if (bidFee <= 0 || offeredWage <= 0) {
+    showToast("Lütfen geçerli bir bonservis ve maaş teklifi girin!");
+    return;
+  }
 
   try {
-    const res = await apiFetch("/api/transfer/negotiate-club", {
+    const res = await apiFetch("/api/transfer/custom-negotiate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        target_team_id: activeNegotiation.teamId,
         player_name: activeNegotiation.playerName,
-        bid_fee: bidFee
+        target_team_id: activeNegotiation.teamId,
+        bid_fee: bidFee,
+        offered_wage: offeredWage,
+        sign_bonus: signBonus
       })
     });
     const data = await res.json();
     if (!res.ok) {
-      showToast(data.detail || "Kulüple anlaşılamadı!");
+      if (fbBox) {
+        fbBox.className = "p-2 rounded-lg text-[10.5px] bg-rose-950/70 border border-rose-800 text-rose-300 leading-snug";
+        fbBox.innerText = "❌ " + (data.detail || "Teklif iletilemedi!");
+        fbBox.classList.remove("hidden");
+      }
+      showToast(data.detail || "Transfer gerçekleşemedi!");
       return;
     }
 
-    if (data.status === "club_accepted") {
-      showToast("✅ Kulüp Başkanı bonservisi kabul etti!");
-      document.getElementById("neg-step-club").classList.add("hidden");
-      document.getElementById("neg-step-player").classList.remove("hidden");
-      document.getElementById("neg-club-accepted-msg").innerText = data.message;
-      document.getElementById("neg-player-wage-input").value = data.required_wage || 15_000_000;
-      activeNegotiation.requiredWage = data.required_wage;
-      activeNegotiation.signBonus = data.sign_bonus || 0;
+    if (data.status === "accepted") {
+      showToast("✅ " + data.message);
+      closeNegotiationModal();
+      if (typeof closeLeagueScoutModal === "function") closeLeagueScoutModal();
+      gameState = data.state;
+      renderUI();
+      renderTransferMarket();
+    } else if (data.status === "counter_offer") {
+      if (fbBox) {
+        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-amber-950/70 border border-amber-700 text-amber-200 leading-snug";
+        fbBox.innerHTML = `⚠️ <strong>Pazarlık Devam Ediyor:</strong><br>${data.message}`;
+        fbBox.classList.remove("hidden");
+      }
+      if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
+      if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
+      showToast("⚠️ Kulüp ve oyuncu karşı teklif sundu!");
+    } else if (data.status === "insult_rejected") {
+      if (fbBox) {
+        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-rose-950/80 border border-rose-700 text-rose-200 leading-snug";
+        fbBox.innerHTML = `🚫 <strong>Masadan Kalktılar:</strong><br>${data.message}`;
+        fbBox.classList.remove("hidden");
+      }
+      if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
+      if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
+      showToast("🚫 Kulüp teklife öfkelendi!");
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function tapUpCurrentPlayer() {
+  if (!activeNegotiation) return;
+  const pName = activeNegotiation.playerName;
+  const fbBox = document.getElementById("neg-feedback-box");
+
+  if (!confirm(`Oyuncu ${pName} ve temsilcisiyle gizli buluşma ayarlamak için 150.000 € gizli fon harcanacak. Kulübü by-pass edip isyan çıkartmak istiyor musunuz?`)) {
+    return;
+  }
+
+  try {
+    const res = await apiFetch("/api/transfer/tap-up-player", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: pName,
+        target_team_id: activeNegotiation.teamId,
+        bribe_bonus: 150_000
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Gizli operasyon gerçekleştirilemedi!");
+      return;
+    }
+
+    gameState = data.state;
+    renderUI();
+
+    if (data.status === "success") {
+      showToast(data.message);
+      activeNegotiation.isTappedUp = true;
+      const tappedBadge = document.getElementById("neg-tapped-badge");
+      if (tappedBadge) tappedBadge.classList.remove("hidden");
+      const bidInput = document.getElementById("neg-club-bid-input");
+      if (bidInput) {
+        const discounted = Math.floor(parseInt(bidInput.value) * 0.65);
+        bidInput.value = discounted;
+      }
+      if (fbBox) {
+        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-emerald-950/80 border border-emerald-700 text-emerald-200 leading-snug";
+        fbBox.innerHTML = `🕵️ <strong>İSYAN ÇIKARILDI!</strong><br>${data.message}`;
+        fbBox.classList.remove("hidden");
+      }
     } else {
-      showToast("❌ " + data.message);
-      if (data.counter_fee) {
-        document.getElementById("neg-club-bid-input").value = data.counter_fee;
+      showToast(data.message);
+      if (fbBox) {
+        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-rose-950/80 border border-rose-700 text-rose-200 leading-snug";
+        fbBox.innerHTML = `⚠️ <strong>SKANDAL PATLADI!</strong><br>${data.message}`;
+        fbBox.classList.remove("hidden");
       }
     }
   } catch (e) {
@@ -2726,37 +2892,141 @@ async function submitClubNegotiation() {
   }
 }
 
-async function submitPlayerSigning() {
-  if (!activeNegotiation) return;
-  const wageInput = document.getElementById("neg-player-wage-input");
-  const offeredWage = parseInt(wageInput.value) || activeNegotiation.requiredWage;
+// ==================== ÖZEL KALEM (SEKRETERYA) SİSTEMİ ====================
+function checkSecretaryEventFromCard() {
+  if (gameState && gameState.pending_secretary_event) {
+    openSecretaryEventModal(gameState.pending_secretary_event);
+  } else {
+    showToast("Şu an bekleyen acil sekreterya bildirimi yok.");
+  }
+}
 
+function openSecretaryEventModal(eventObj) {
+  if (!eventObj) return;
+  const titleEl = document.getElementById("sec-modal-title");
+  const dateEl = document.getElementById("sec-modal-date");
+  const descEl = document.getElementById("sec-modal-desc");
+  const optContainer = document.getElementById("sec-modal-options");
+
+  if (titleEl) titleEl.innerText = eventObj.title || "Özel Kalem Bildirimi";
+  if (dateEl) dateEl.innerText = formatTurkishDateShort(eventObj.date || gameState?.current_date || "2026-08-10");
+  if (descEl) descEl.innerText = eventObj.description || "";
+
+  if (optContainer) {
+    optContainer.innerHTML = "";
+    (eventObj.options || []).forEach((opt, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-amber-500 hover:bg-slate-800 text-left transition-all group cursor-pointer shadow-sm active:scale-[0.99]";
+      btn.onclick = () => respondSecretaryEvent(eventObj.id, opt.id);
+
+      const effects = opt.effects || {};
+      const effBadges = [];
+      if (effects.budget) {
+        const isPos = effects.budget > 0;
+        effBadges.push(`<span class="${isPos ? 'text-emerald-400' : 'text-rose-400'} font-mono">${isPos ? '+' : ''}${formatMoney(effects.budget)}</span>`);
+      }
+      if (effects.fan_trust) {
+        const isPos = effects.fan_trust > 0;
+        effBadges.push(`<span class="${isPos ? 'text-emerald-400' : 'text-rose-400'}">Taraftar ${isPos ? '+' : ''}${effects.fan_trust}%</span>`);
+      }
+      if (effects.political_power) {
+        const isPos = effects.political_power > 0;
+        effBadges.push(`<span class="${isPos ? 'text-blue-400' : 'text-rose-400'}">Nüfuz ${isPos ? '+' : ''}${effects.political_power}%</span>`);
+      }
+      if (effects.media_trust) {
+        const isPos = effects.media_trust > 0;
+        effBadges.push(`<span class="${isPos ? 'text-purple-400' : 'text-rose-400'}">Basın ${isPos ? '+' : ''}${effects.media_trust}%</span>`);
+      }
+
+      const effHtml = effBadges.length > 0 ? `<div class="flex items-center gap-2 mt-1 text-[9.5px] font-bold">${effBadges.join(" • ")}</div>` : '';
+
+      btn.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <span class="text-xs font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">${opt.text}</span>
+          <span class="text-[9px] font-black text-amber-400 bg-amber-500/15 px-1.5 py-0.5 rounded border border-amber-500/30 shrink-0">Seçenek ${idx + 1}</span>
+        </div>
+        ${effHtml}
+      `;
+      optContainer.appendChild(btn);
+    });
+  }
+
+  const modal = document.getElementById("modal-secretary-event");
+  if (modal) modal.classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function closeSecretaryEventModal() {
+  const modal = document.getElementById("modal-secretary-event");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function respondSecretaryEvent(eventId, optionId) {
   try {
-    const res = await apiFetch("/api/transfer/sign-negotiated-player", {
+    const res = await apiFetch("/api/secretary/respond-event", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        target_team_id: activeNegotiation.teamId,
-        player_name: activeNegotiation.playerName,
-        bid_fee: activeNegotiation.bidFee,
-        offered_wage: offeredWage,
-        sign_bonus: activeNegotiation.signBonus || 0
-      })
+      body: JSON.stringify({ event_id: eventId, option_id: optionId })
     });
     const data = await res.json();
     if (!res.ok) {
-      showToast(data.detail || "Oyuncu sözleşmeyi imzalamadı!");
+      showToast(data.detail || "Karar iletilemedi!");
       return;
     }
-
-    closeNegotiationModal();
-    closeLeagueScoutModal();
-    showToast(data.message);
+    closeSecretaryEventModal();
     gameState = data.state;
+    showToast("💼 " + data.message);
     renderUI();
   } catch (e) {
     console.error(e);
   }
+}
+
+function openSecretaryInboxModal() {
+  const modal = document.getElementById("modal-secretary-inbox");
+  const listContainer = document.getElementById("sec-inbox-list");
+  if (!modal || !listContainer) return;
+
+  const inbox = gameState?.secretary_inbox || [];
+  if (inbox.length === 0) {
+    listContainer.innerHTML = `
+      <div class="p-6 text-center text-slate-400 space-y-2">
+        <i data-lucide="mail" class="w-8 h-8 mx-auto text-slate-500"></i>
+        <p class="font-bold text-slate-300">Gelen Evrak Kutusu Boş</p>
+        <p class="text-[10px] text-slate-500">Günler ilerledikçe Sekreterya notları ve TFF evrakları burada birikecektir.</p>
+      </div>
+    `;
+  } else {
+    listContainer.innerHTML = "";
+    inbox.forEach(item => {
+      const el = document.createElement("div");
+      el.className = "p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1";
+      el.innerHTML = `
+        <div class="flex items-center justify-between text-[10px]">
+          <span class="font-black text-amber-400 flex items-center gap-1">
+            <i data-lucide="file-text" class="w-3 h-3"></i>
+            ${item.title || "Evrak"}
+          </span>
+          <span class="text-slate-400 font-mono">${formatTurkishDateShort(item.date || "2026-08-10")}</span>
+        </div>
+        <p class="text-slate-200 text-[11px] leading-snug">${item.text || ""}</p>
+        <div class="text-[9.5px] text-emerald-400 font-mono font-bold">${item.result || ""}</div>
+      `;
+      listContainer.appendChild(el);
+    });
+  }
+
+  modal.classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function closeSecretaryInboxModal() {
+  const modal = document.getElementById("modal-secretary-inbox");
+  if (modal) modal.classList.add("hidden");
 }
 
 async function submitClubLoanNegotiation() {
@@ -3133,6 +3403,9 @@ async function advanceCalendarDay() {
     gameState = data.state;
     renderUI();
     if (data.message) showToast(data.message);
+    if (data.stopped_reason === "secretary_event" && gameState.pending_secretary_event) {
+      openSecretaryEventModal(gameState.pending_secretary_event);
+    }
     if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
       renderCalendarView();
     }
@@ -3157,6 +3430,9 @@ async function advanceToSelectedDate() {
     gameState = data.state;
     renderUI();
     if (data.message) showToast(data.message);
+    if (data.stopped_reason === "secretary_event" && gameState.pending_secretary_event) {
+      openSecretaryEventModal(gameState.pending_secretary_event);
+    }
     if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
       renderCalendarView();
     }
@@ -3176,6 +3452,9 @@ async function advanceToMatchday() {
     gameState = data.state;
     renderUI();
     if (data.message) showToast(data.message);
+    if (data.stopped_reason === "secretary_event" && gameState.pending_secretary_event) {
+      openSecretaryEventModal(gameState.pending_secretary_event);
+    }
     if (!document.getElementById("modal-calendar").classList.contains("hidden")) {
       renderCalendarView();
     }
@@ -3468,29 +3747,24 @@ function renderTransferMarket() {
 
     const potVal = p.real_pot || p.overall || p.claimed_pot || 75;
 
-    let btnActionHtml = '';
-    if (p.type === 'europe') {
-      btnActionHtml = `
-        <button onclick="buyEuropeanPlayer('${p.club}', '${p.name}', this)" class="btn-royale-blue w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
-          <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-300"></i>
-          <span>Avrupa Transferini Bitir <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
+    const clubId = p.club || p.current_club || '';
+    const safePlayerName = (p.name || '').replace(/'/g, "\\'");
+    const pFee = p.price || p.val || 25_000_000;
+    const pWage = p.salary || p.wage || 2_500_000;
+    const pOverall = p.real_pot || p.overall || 80;
+
+    const btnActionHtml = `
+      <div class="grid grid-cols-2 gap-1.5 mt-1">
+        <button onclick="startClubNegotiation('${clubId}', '${safePlayerName}', ${pFee}, '${p.pos}', ${pOverall}, 'buy', ${pWage})" class="py-2 px-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer shadow-md transition-all active:scale-95">
+          <i data-lucide="handshake" class="w-3.5 h-3.5"></i>
+          <span>Pazarlık Masası</span>
         </button>
-      `;
-    } else if (p.type === 'turkish') {
-      btnActionHtml = `
-        <button onclick="buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)" class="btn-royale-red w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
-          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-white"></i>
-          <span>Yerli Yıldızı Bitir <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
+        <button onclick="startClubNegotiation('${clubId}', '${safePlayerName}', ${pFee}, '${p.pos}', ${pOverall}, 'loan', ${pWage})" class="py-2 px-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs text-center flex items-center justify-center gap-1 cursor-pointer shadow-md transition-all active:scale-95">
+          <i data-lucide="repeat" class="w-3.5 h-3.5"></i>
+          <span>Kiralık Teklifi</span>
         </button>
-      `;
-    } else {
-      btnActionHtml = `
-        <button onclick="buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)" class="btn-royale-blue w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
-          <i data-lucide="user-plus" class="w-3.5 h-3.5 text-sky-300"></i>
-          <span>Transfer Et <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
-        </button>
-      `;
-    }
+      </div>
+    `;
 
     item.innerHTML = `
       <div class="flex justify-between items-start gap-2">

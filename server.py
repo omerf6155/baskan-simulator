@@ -3,6 +3,7 @@ import json
 import time
 import random
 import datetime
+import copy
 import contextvars
 from typing import Dict, Any, List, Optional
 from fastapi import FastAPI, HTTPException, Request
@@ -1460,6 +1461,11 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "transfer_day": 1,
         "transfer_max_days": 7,
         "transfer_window_open": True,
+        "exchange_rate": 38.5,
+        "secretary_agenda": "Başkanım, bugün kulüp binasındasınız. TFF ve basın raporları masanızda hazır bekliyor.",
+        "secretary_inbox": [],
+        "pending_secretary_event": None,
+        "tapped_up_players": {},
         "incoming_bids": [],
         "coach_recommendations": [],
         "finances": {
@@ -1552,6 +1558,16 @@ def get_state(session_id: Optional[str] = None):
                         state["last_pro_statement_week"] = -99
                     if "incoming_bids" not in state:
                         state["incoming_bids"] = []
+                    if "exchange_rate" not in state:
+                        state["exchange_rate"] = 38.5
+                    if "secretary_agenda" not in state:
+                        state["secretary_agenda"] = "Başkanım, bugün kulüp binasındasınız. TFF ve basın raporları masanızda hazır bekliyor."
+                    if "secretary_inbox" not in state:
+                        state["secretary_inbox"] = []
+                    if "pending_secretary_event" not in state:
+                        state["pending_secretary_event"] = None
+                    if "tapped_up_players" not in state:
+                        state["tapped_up_players"] = {}
                     if "club_scout" not in state or not state["club_scout"]:
                         state["club_scout"] = CLUB_SCOUTS_DB.get(state.get("team_id"), {"name": "Cemil Kaya", "rating": 74, "salary": 2_000_000, "role": "Scout Şefi", "region": "Türkiye"})
                     # Hoca özellikleri (traits) ve görseli (photo) tamamla
@@ -3687,6 +3703,227 @@ def api_buy_loan_option(req: BuyLoanOptionRequest):
     save_state(state)
     return {"message": msg, "state": state}
 
+# ==================== ÖZEL KALEM & BAŞKANLIK DİLEMMALARI HAVUZU ====================
+SECRETARY_EVENTS_POOL = [
+    {
+        "id": "tff_riva_dinner",
+        "title": "TFF Riva Gala Yemeği Daveti",
+        "secretary_note": "Başkanım, TFF Başkanı ve Kulüpler Birliği sizi Riva Tesisleri'ndeki özel akşam yemeğine davet etti. Hakem atamaları ve yeni yayın ihalesi konuşulacak.",
+        "options": [
+            {
+                "id": "attend",
+                "text": "Bizzat Katıl & Lobi Yap",
+                "desc": "Kulübün haklarını doğrudan masada savunursunuz.",
+                "cost": 15000,
+                "effects": {"political_power": 6, "fan_trust": 3, "budget": -15000},
+                "result": "Riva'daki yemekte TFF yönetimiyle sıcak temas kurdunuz. Kulübün lobi gücü arttı."
+            },
+            {
+                "id": "send_rep",
+                "text": "Asbaşkanı Gönder",
+                "desc": "Yoğunluğunuzu gerekçe gösterip temsilci yollarsınız.",
+                "cost": 2500,
+                "effects": {"budget": -2500},
+                "result": "Asbaşkanınız kulübü temsil etti. Standart bir toplantı geçti."
+            },
+            {
+                "id": "boycott",
+                "text": "Yemeği Boykot Et & Bildiri Yayınla",
+                "desc": "'Adaletsiz düzene alet olmayız!' diyerek gitmezsiniz.",
+                "cost": 0,
+                "effects": {"fan_trust": 8, "political_power": -7, "media_trust": 5},
+                "result": "Boykot kararınız taraftardan büyük alkış aldı! Ancak federasyon yönetimiyle ipler gerildi."
+            }
+        ]
+    },
+    {
+        "id": "press_confrontation",
+        "title": "Tesis Çıkışında Basın Kuşatması",
+        "secretary_note": "Başkanım, antrenman tesisi çıkışında çok sayıda muhabir bekliyor. Son transferler ve hakem kararları hakkında mikrofon uzatıyorlar.",
+        "options": [
+            {
+                "id": "hardline",
+                "text": "Sert Konuş ('Algı Operasyonu Yapmayın!')",
+                "desc": "Medyaya ve rakiplere gözdağı verirsiniz.",
+                "cost": 0,
+                "effects": {"fan_trust": 6, "media_trust": -6},
+                "result": "Açıklamalarınız manşetlere taşındı! Taraftar dik duruşunuzu benimsedi."
+            },
+            {
+                "id": "calm",
+                "text": "Sakin & Profesyonel Mesajlar Ver",
+                "desc": "Şampiyonluk inancını koruyarak güven veren açıklamalar yaparsınız.",
+                "cost": 0,
+                "effects": {"media_trust": 6, "fan_trust": 2},
+                "result": "Basın olgun ve güven veren tavrınızı övdü. Medyayla ilişkiler toparlandı."
+            },
+            {
+                "id": "no_comment",
+                "text": "Gülümse ve 'Yorum Yok' De",
+                "desc": "Aracınıza binip konuşmadan uzaklaşırsınız.",
+                "cost": 0,
+                "effects": {},
+                "result": "Soruları yanıtsız bıraktınız, gündem hızla duruldu."
+            }
+        ]
+    },
+    {
+        "id": "nightclub_scandal",
+        "title": "Yıldız Oyuncunun Gece Kaçamağı",
+        "secretary_note": "Başkanım, özel kalem istihbaratı: Takımın kilit yıldızlarından biri maçtan iki gece önce Boğaz'daki bir gece kulübünde sabah 04:00'e kadar eğlenirken kameralara yakalandı!",
+        "options": [
+            {
+                "id": "fine_player",
+                "text": "60.000 € Ağır Para Cezası Kes",
+                "desc": "Disiplin talimatını uygulayıp kulüp kasasına ceza tahsil edersiniz.",
+                "cost": 0,
+                "effects": {"budget": 60000, "fan_trust": 4},
+                "result": "Oyuncuya 60.000 € para cezası kesildi. Takımda disiplin mesajı net şekilde verildi."
+            },
+            {
+                "id": "cover_up",
+                "text": "Medyayı Arayıp Haberi Sildir",
+                "desc": "Basın danışmanları üzerinden magazin haberini engellersiniz.",
+                "cost": 20000,
+                "effects": {"budget": -20000, "media_trust": -3},
+                "result": "Haber manşetlerden düşürüldü ancak kulüp kasasından 20.000 € basın ilişkileri masrafı çıktı."
+            },
+            {
+                "id": "bench_order",
+                "text": "Hocaya Talimat Ver: 'Kulübeye Çekilsin!'",
+                "desc": "Oyuncuyu sıradaki maçta kulübeye hapsettirirsiniz.",
+                "cost": 0,
+                "effects": {"fan_trust": 3},
+                "result": "Hoca başkanın talimatıyla oyuncuyu yedeğe çekti. Soyunma odasında ciddiyet arttı."
+            }
+        ]
+    },
+    {
+        "id": "vip_sponsor_lunch",
+        "title": "Holding Patronuyla VIP Loca Görüşmesi",
+        "secretary_note": "Başkanım, dev bir holding yönetim kurulu başkanı stadyumun en prestijli locasını kiralamak ve kulübe göğüs/kol desteği vermek için acil öğle yemeği talep ediyor.",
+        "options": [
+            {
+                "id": "agree_deal",
+                "text": "Boğaz'da Ağırla & Anlaşmayı İmzala",
+                "desc": "Sponsoru özel olarak ağırlayıp anlaşmayı bağlarsınız.",
+                "cost": 10000,
+                "effects": {"budget": 240000, "fan_trust": 2},
+                "result": "Yemek harika geçti! Holding kulübe 250.000 € nakit sponsorluk ödedi (10.000 € ziyafet masrafı)."
+            },
+            {
+                "id": "hard_bargain",
+                "text": "Fiyatı Artır (Pazarlık Yap)",
+                "desc": "Yüksekten uçarak daha büyük para koparmaya çalışırsınız.",
+                "cost": 0,
+                "effects": {"budget": 350000},
+                "result": "Holding patronu kulübün büyüklüğüne saygı duyup 350.000 €'ya imza attı!"
+            },
+            {
+                "id": "decline",
+                "text": "Daha İyi Teklif Bekle",
+                "desc": "Teklifi yeterli bulmayıp masadan kalkarsınız.",
+                "cost": 0,
+                "effects": {},
+                "result": "Görüşme sonuçsuz kaldı. Alternatif sponsor arayışı sürüyor."
+            }
+        ]
+    },
+    {
+        "id": "pitch_turf_crisis",
+        "title": "Stadyum Zemininde Acil Çim Krizi",
+        "secretary_note": "Başkanım, stadyum müdüründen acil rapor var: Aşırı yağışlar ve drenaj tıkanması yüzünden zemin balçığa dönüştü. Hoca ve futbolcular sakatlık endişesiyle isyanda.",
+        "options": [
+            {
+                "id": "hybrid_turf",
+                "text": "Hollanda'dan Hibrit Çim Getirt (85.000 €)",
+                "desc": "En üst standart hibrit çim serilir, sakatlık riski sıfırlanır.",
+                "cost": 85000,
+                "effects": {"budget": -85000, "fan_trust": 5},
+                "result": "Yeni hibrit zemin serildi! Oyuncular ve teknik heyet zemine hayran kaldı."
+            },
+            {
+                "id": "patch_up",
+                "text": "Ekonomik Yama ve Havalandırma Yap (20.000 €)",
+                "desc": "Mevcut çimi kurtaracak geçici müdahale yapılır.",
+                "cost": 20000,
+                "effects": {"budget": -20000},
+                "result": "Zemin idare edecek seviyeye getirildi, maliyet düşük tutuldu."
+            },
+            {
+                "id": "ignore",
+                "text": "Masraf Yapma ('Olduğu Gibi Oynansın')",
+                "desc": "Kasadaki parayı harcamayı reddedersiniz.",
+                "cost": 0,
+                "effects": {"fan_trust": -3},
+                "result": "Zemin bozuk kaldı. Maç öncesi teknik direktör basın toplantısında zeminden şikayet etti."
+            }
+        ]
+    },
+    {
+        "id": "referee_assignment_storm",
+        "title": "MHK Tartışmalı Hakemi Atadı!",
+        "secretary_note": "Başkanım, Merkez Hakem Kurulu sıradaki kritik maçımıza taraftarımızın sabıkalı gördüğü hakemi atadı. Sosyal medya ayağa kalktı, kulüpten açıklama bekleniyor.",
+        "options": [
+            {
+                "id": "fire_statement",
+                "text": "Zehir Zemberek Resmi Bildiri Yayınla",
+                "desc": "'Düdüğünü astırırız!' tonunda sert bir bildiri geçer.",
+                "cost": 0,
+                "effects": {"fan_trust": 10, "political_power": -5, "media_trust": 5},
+                "result": "Resmi sitenizdeki bildiri milyonlarca etkileşim aldı! Camia arkanızda kenetlendi."
+            },
+            {
+                "id": "call_federation",
+                "text": "TFF Başkanını Doğrudan Ara",
+                "desc": "Kulislere inip kapalı kapılar ardında hakem hakkında garanti istersiniz.",
+                "cost": 0,
+                "effects": {"political_power": 5},
+                "result": "TFF Başkanı dikkatli olunacağı sözünü verdi. Kulise hakimiyetiniz takdir edildi."
+            },
+            {
+                "id": "stay_silent",
+                "text": "Sessiz Kal & 'Sahada Konuşacağız' De",
+                "desc": "Hakem polemiğine girmeyip takımı motive edersiniz.",
+                "cost": 0,
+                "effects": {"fan_trust": -2, "media_trust": 3},
+                "result": "Polemikten uzak durdunuz, takım maça konsantre oldu."
+            }
+        ]
+    },
+    {
+        "id": "board_opposition_revolt",
+        "title": "Divan Kurulu Muhalefeti Hesap Soruyor",
+        "secretary_note": "Başkanım, kulübün eski yöneticileri ve muhalif divan üyeleri kulüp lokalinde toplanmış. 'Maaş bütçesi ve transfer harcamaları nereye gidiyor?' diye kazan kaldırıyorlar.",
+        "options": [
+            {
+                "id": "host_dinner",
+                "text": "Büyük Bir Ziyafet Verip Gönüllerini Al",
+                "desc": "Lüks restoranda ağırlayıp projelerinizi anlatırsınız.",
+                "cost": 15000,
+                "effects": {"budget": -15000, "political_power": 8},
+                "result": "Muhalifler ziyafetten mest ayrıldı. Başkanlık otoriteniz perçinlendi."
+            },
+            {
+                "id": "show_numbers",
+                "text": "Mali Tabloları Yüzlerine Çarp",
+                "desc": "Kulübün şeffaf hesaplarıyla muhalefeti susturursunuz.",
+                "cost": 0,
+                "effects": {"political_power": 6, "media_trust": 4},
+                "result": "Net finansal sunumunuz muhalefeti susturdu, camiada takdir topladınız."
+            },
+            {
+                "id": "dismiss",
+                "text": "'Biz İşimize Bakıyoruz' Diyerek Muhatap Alma",
+                "desc": "Muhalifleri kale almazsınız.",
+                "cost": 0,
+                "effects": {"political_power": -6},
+                "result": "Muhalif üyeler basına sızdırarak yönetimi eleştirmeye devam etti."
+            }
+        ]
+    }
+]
+
 # ==================== OYUN TAKVİMİ & GÜN İLERLETME ENDPOINTS ====================
 def advance_calendar_day_internal(state: Dict[str, Any]) -> Dict[str, Any]:
     season = state.get("season", 1)
@@ -3698,6 +3935,12 @@ def advance_calendar_day_internal(state: Dict[str, Any]) -> Dict[str, Any]:
     
     next_dt = cur_dt + datetime.timedelta(days=1)
     state["current_date"] = next_dt.isoformat()
+
+    # Döviz Kuru Dalgalanması (1 € = X ₺)
+    cur_rate = state.get("exchange_rate", 38.5)
+    if random.random() < 0.25:
+        drift = round(random.uniform(-0.06, 0.12), 2)
+        state["exchange_rate"] = round(max(34.0, cur_rate + drift), 2)
     
     # Transfer penceresi kontrolü
     window_open = is_transfer_window_open(state["current_date"], season)
@@ -3726,12 +3969,42 @@ def advance_calendar_day_internal(state: Dict[str, Any]) -> Dict[str, Any]:
     if next_fix and state["current_date"] == next_fix.get("date"):
         is_matchday = True
 
+    # Sekreterya & Özel Kalem Olayı (Günün Olayı)
+    secretary_ev = None
+    if not is_matchday and not state.get("pending_secretary_event") and random.random() < 0.28:
+        ev_proto = random.choice(SECRETARY_EVENTS_POOL)
+        secretary_ev = copy.deepcopy(ev_proto)
+        state["pending_secretary_event"] = secretary_ev
+        state["secretary_agenda"] = f"Önemli Görüşme: {secretary_ev['title']}"
+        state.setdefault("secretary_inbox", []).insert(0, {
+            "date": state["current_date"],
+            "title": secretary_ev["title"],
+            "note": secretary_ev["secretary_note"]
+        })
+        if len(state["secretary_inbox"]) > 10:
+            state["secretary_inbox"] = state["secretary_inbox"][:10]
+    elif not state.get("pending_secretary_event"):
+        weekday_num = next_dt.weekday()
+        weekday_names = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
+        day_name = weekday_names[weekday_num]
+        if is_matchday and next_fix:
+            state["secretary_agenda"] = f"MAÇ GÜNÜ: {next_fix['opponent']} karşılaşması için stadyum hazırlandı."
+        else:
+            default_agendas = [
+                f"{day_name} mesaisi: Tesislerde antrenman takibi ve idari işler yürütülüyor.",
+                f"{day_name} mesaisi: Basın bülteni incelendi, sponsor temsilcileriyle iletişim sağlandı.",
+                f"{day_name} mesaisi: Finans departmanı nakit akışını ve döviz kurunu kontrol etti.",
+                f"{day_name} mesaisi: Altyapı antrenörleri genç yetenek gelişim raporunu iletti."
+            ]
+            state["secretary_agenda"] = random.choice(default_agendas)
+
     return {
         "current_date": state["current_date"],
         "is_matchday": is_matchday,
         "next_fix": next_fix,
         "new_bid": new_bid,
-        "window_open": window_open
+        "window_open": window_open,
+        "secretary_event": secretary_ev
     }
 
 @app.get("/api/calendar")
@@ -3755,7 +4028,11 @@ def api_get_calendar():
         "transfer_window": window_details,
         "next_fixture": next_fix,
         "is_matchday": is_matchday,
-        "fixtures": state.get("fixtures", [])
+        "fixtures": state.get("fixtures", []),
+        "exchange_rate": state.get("exchange_rate", 38.5),
+        "secretary_agenda": state.get("secretary_agenda", ""),
+        "pending_secretary_event": state.get("pending_secretary_event"),
+        "secretary_inbox": state.get("secretary_inbox", [])
     }
 
 @app.post("/api/calendar/advance-day")
@@ -3777,7 +4054,10 @@ def api_calendar_advance_day():
     msg = f"📅 Tarih: {format_turkish_date_full(state['current_date'])}"
     stopped_reason = "normal"
     
-    if res["is_matchday"]:
+    if res.get("secretary_event"):
+        stopped_reason = "secretary_event"
+        msg = f"💼 ÖZEL KALEM BİLDİRİMİ: {res['secretary_event']['title']}"
+    elif res["is_matchday"]:
         stopped_reason = "matchday"
         msg = f"⚽ MAÇ GÜNÜ! {res['next_fix']['opponent']} ile karşılaşma günü geldi!"
         state["news"].insert(0, msg)
@@ -3824,6 +4104,11 @@ def api_calendar_advance_to_date(req: AdvanceToDateReq):
 
         step_res = advance_calendar_day_internal(state)
 
+        if step_res.get("secretary_event"):
+            stopped_reason = "secretary_event"
+            stop_msg = f"💼 ÖZEL KALEM BİLDİRİMİ: {step_res['secretary_event']['title']}"
+            break
+
         if step_res["new_bid"]:
             stopped_reason = "incoming_bid"
             stop_msg = f"📩 TRANSFER TEKLİFİ! {step_res['new_bid']['player_name']} için resmi teklif geldi!"
@@ -3856,6 +4141,228 @@ def api_calendar_advance_to_matchday():
 
     req = AdvanceToDateReq(target_date=tgt_date)
     return api_calendar_advance_to_date(req)
+
+# ==================== ÖZEL KALEM & SEKRETERYA ENDPOINTS ====================
+class SecretaryEventResponseReq(BaseModel):
+    event_id: str
+    option_id: str
+
+@app.post("/api/secretary/respond-event")
+def api_secretary_respond_event(req: SecretaryEventResponseReq):
+    state = get_state()
+    ev = state.get("pending_secretary_event")
+    if not ev or ev.get("id") != req.event_id:
+        state["pending_secretary_event"] = None
+        save_state(state)
+        return {"status": "ok", "message": "Karar kayda geçti.", "state": state}
+
+    selected_opt = next((o for o in ev.get("options", []) if o.get("id") == req.option_id), None)
+    if not selected_opt:
+        state["pending_secretary_event"] = None
+        save_state(state)
+        return {"status": "ok", "message": "Karar kayda geçti.", "state": state}
+
+    # Efektleri uygula
+    effects = selected_opt.get("effects", {})
+    if "budget" in effects:
+        state["budget"] += effects["budget"]
+    if "fan_trust" in effects:
+        state["fan_trust"] = max(0, min(100, state["fan_trust"] + effects["fan_trust"]))
+    if "political_power" in effects:
+        state["political_power"] = max(0, min(100, state.get("political_power", 50) + effects["political_power"]))
+    if "media_trust" in effects:
+        state["media_trust"] = max(0, min(100, state.get("media_trust", 50) + effects["media_trust"]))
+
+    result_text = selected_opt.get("result", "Kararınız uygulandı.")
+    state["news"].insert(0, f"💼 BAŞKANLIK KARARI: {result_text}")
+    state["secretary_agenda"] = f"Son Karar: {ev['title']} ({selected_opt['text']})"
+    state["pending_secretary_event"] = None
+
+    save_state(state)
+    return {
+        "status": "ok",
+        "message": result_text,
+        "state": state
+    }
+
+# ==================== GERÇEK TRANSFER PAZARLIĞI & AYARTMA ====================
+class CustomNegotiateRequest(BaseModel):
+    player_name: str
+    target_team_id: Optional[str] = None
+    bid_fee: int
+    offered_wage: int
+    sign_bonus: int = 0
+
+@app.post("/api/transfer/custom-negotiate")
+def api_custom_negotiate(req: CustomNegotiateRequest):
+    state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi şu anda kapalıdır!")
+    if state.get("transfer_ban", False):
+        raise HTTPException(status_code=400, detail="Kulübün transfer tahtası mali limit aşımı sebebiyle kapalıdır!")
+
+    if any(p.get("name", "").strip().lower() == req.player_name.strip().lower() for p in state.get("squad", [])):
+        raise HTTPException(status_code=400, detail=f"'{req.player_name}' zaten kadronuzda yer alıyor!")
+
+    found_player = None
+    source_club = "Transfer Pazarı"
+
+    if req.target_team_id:
+        target_team = next((t for t in TEAMS_DB if t["id"] == req.target_team_id), None)
+        if target_team:
+            target_squad = get_team_squad(state, target_team["id"])
+            p = next((x for x in target_squad if x["name"].strip().lower() == req.player_name.strip().lower()), None)
+            if p:
+                found_player = dict(p)
+                source_club = target_team["name"]
+
+    if not found_player:
+        for t in TEAMS_DB:
+            target_squad = get_team_squad(state, t["id"])
+            p = next((x for x in target_squad if x["name"].strip().lower() == req.player_name.strip().lower()), None)
+            if p:
+                found_player = dict(p)
+                source_club = t["name"]
+                req.target_team_id = t["id"]
+                break
+
+    if not found_player:
+        all_sources = WORLD_SUPERSTARS + TURKISH_STARS + SCOUT_PICKS + FREE_AGENTS
+        for item in all_sources:
+            if item.get("name", "").strip().lower() == req.player_name.strip().lower():
+                found_player = dict(item)
+                source_club = item.get("club") or item.get("current_club") or "Transfer Pazarı"
+                break
+
+    if not found_player:
+        for club, players in EUROPEAN_CLUBS_MARKET.items():
+            for ep in players:
+                if ep.get("name", "").strip().lower() == req.player_name.strip().lower():
+                    found_player = dict(ep)
+                    found_player["price"] = ep.get("val", 30_000_000)
+                    found_player["salary"] = ep.get("wage", 5_000_000)
+                    source_club = club
+                    break
+            if found_player:
+                break
+
+    if not found_player:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı!")
+
+    player_val = found_player.get("price") or found_player.get("val", 25_000_000)
+    player_wage = found_player.get("salary") or found_player.get("wage", 3_000_000)
+
+    # Ayartılmışsa değer %35 düşer
+    if found_player.get("is_tapped_up") or state.get("tapped_up_players", {}).get(found_player["name"]):
+        player_val = int(player_val * 0.65)
+
+    min_acceptable_fee = int(player_val * 0.85)
+    min_acceptable_wage = int(player_wage * 0.85)
+
+    total_upfront = req.bid_fee + req.sign_bonus
+    if state["budget"] < total_upfront:
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Kasada {state['budget']:,} € var, gereken peşinat: {total_upfront:,} €")
+
+    if req.bid_fee >= min_acceptable_fee and req.offered_wage >= min_acceptable_wage:
+        state["budget"] -= total_upfront
+        if req.target_team_id:
+            target_squad = get_team_squad(state, req.target_team_id)
+            state.setdefault("league_squads", {})[req.target_team_id] = [x for x in target_squad if x["name"] != found_player["name"]]
+
+        player_data = {
+            "name": found_player["name"],
+            "pos": found_player["pos"],
+            "age": found_player["age"],
+            "overall": found_player.get("real_pot", found_player.get("overall", 80)),
+            "wage": req.offered_wage,
+            "val": player_val,
+            "contract_years": 3,
+            "morale": 95
+        }
+        if "is_foreign" in found_player:
+            player_data["is_foreign"] = found_player["is_foreign"]
+        new_entry = enrich_player(player_data)
+        state["squad"].append(new_entry)
+        state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
+        state["my_radar"] = calculate_team_radar(state["squad"])
+        state["fan_trust"] = min(100, state["fan_trust"] + 8)
+
+        msg = f"🤝 TRANSFER BİTTİ! {new_entry['name']}, {source_club} kulübünden {req.bid_fee:,} € bonservis ve yıllık {req.offered_wage:,} € maaşla takımımıza katıldı!"
+        state["news"].insert(0, msg)
+        save_state(state)
+        return {
+            "status": "accepted",
+            "message": msg,
+            "state": state
+        }
+    elif req.bid_fee < int(player_val * 0.5):
+        return {
+            "status": "insult_rejected",
+            "message": f"{source_club} Başkanı: 'Bu teklif kulübümüze hakarettir Sayın Başkan! Masadan kalkıyoruz.'",
+            "counter_fee": player_val,
+            "counter_wage": player_wage
+        }
+    else:
+        counter_fee = int(player_val * 1.05) if req.bid_fee < min_acceptable_fee else req.bid_fee
+        counter_wage = int(player_wage * 1.1) if req.offered_wage < min_acceptable_wage else req.offered_wage
+        return {
+            "status": "counter_offer",
+            "message": f"{source_club} ve oyuncu menajeri teklifi revize etti: Bonservis için en az {counter_fee:,} €, maaş için en az {counter_wage:,} € talep ediliyor.",
+            "counter_fee": counter_fee,
+            "counter_wage": counter_wage
+        }
+
+class TapUpPlayerRequest(BaseModel):
+    player_name: str
+    target_team_id: Optional[str] = None
+    bribe_bonus: int = 150_000
+
+@app.post("/api/transfer/tap-up-player")
+def api_tap_up_player(req: TapUpPlayerRequest):
+    state = get_state()
+    if not state.get("transfer_window_open", True):
+        raise HTTPException(status_code=400, detail="Transfer penceresi kapalıyken ayartma yapılamaz!")
+
+    if not req.target_team_id:
+        for t in TEAMS_DB:
+            target_squad = get_team_squad(state, t["id"])
+            if any(x["name"].strip().lower() == req.player_name.strip().lower() for x in target_squad):
+                req.target_team_id = t["id"]
+                break
+
+    if state["budget"] < req.bribe_bonus:
+        raise HTTPException(status_code=400, detail=f"Menajere el altından ödenecek gizli fon için bütçe yetersiz ({req.bribe_bonus:,} €)!")
+
+    state["budget"] -= req.bribe_bonus
+
+    success_chance = 0.65 + (state.get("political_power", 50) - 50) * 0.003
+    roll = random.random()
+
+    if roll < success_chance:
+        state.setdefault("tapped_up_players", {})[req.player_name] = True
+        msg = f"🕵️ GİZLİ OPERASYON BAŞARILI! {req.player_name} menajeriyle anlaştınız. Oyuncu kendi kulübüne: 'Beni satın, antrenmana çıkmıyorum!' resti çekti. Bonservis bedeli %35 düştü!"
+        state["news"].insert(0, msg)
+        save_state(state)
+        return {
+            "status": "success",
+            "message": msg,
+            "discount_pct": 35,
+            "state": state
+        }
+    else:
+        penalty_fee = 450_000
+        state["budget"] = max(0, state["budget"] - penalty_fee)
+        state["political_power"] = max(0, state.get("political_power", 50) - 12)
+        state["fan_trust"] = max(0, state.get("fan_trust", 50) - 6)
+        msg = f"⚠️ YAKALANDIK! {req.player_name} ile gizli temasınız basına sızdı! Rakip kulüp TFF'ye şikayet etti. Kulübümüze {penalty_fee:,} € para cezası kesildi ve saygınlığınız darbe aldı!"
+        state["news"].insert(0, msg)
+        save_state(state)
+        return {
+            "status": "scandal",
+            "message": msg,
+            "penalty_fee": penalty_fee,
+            "state": state
+        }
 
 @app.post("/api/transfer/advance-day")
 def api_transfer_advance_day():
