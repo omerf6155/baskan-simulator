@@ -3332,6 +3332,18 @@ function nextCalendarMonth() {
   renderCalendarView();
 }
 
+function resetCalendarToToday() {
+  if (gameState && gameState.current_date) {
+    const parts = gameState.current_date.split("-");
+    if (parts.length === 3) {
+      currentCalendarYear = parseInt(parts[0], 10);
+      currentCalendarMonth = parseInt(parts[1], 10) - 1;
+      selectedCalendarDate = gameState.current_date;
+    }
+  }
+  renderCalendarView();
+}
+
 function renderCalendarView() {
   if (!gameState) return;
   const todayStr = gameState.current_date || "2026-08-10";
@@ -3348,14 +3360,28 @@ function renderCalendarView() {
   const monthTitle = document.getElementById("calendar-month-title");
   if (monthTitle) monthTitle.innerText = `${TURKISH_MONTH_NAMES[currentCalendarMonth]} ${currentCalendarYear}`;
 
+  // Bugün kısayol butonu kontrolü
+  const todayShortcutBtn = document.getElementById("btn-calendar-today-shortcut");
+  if (todayShortcutBtn) {
+    const todayParts = todayStr.split("-");
+    const todayYear = parseInt(todayParts[0], 10);
+    const todayMonth = parseInt(todayParts[1], 10) - 1;
+    const isDifferentMonth = (currentCalendarYear !== todayYear || currentCalendarMonth !== todayMonth);
+    if (isDifferentMonth) {
+      todayShortcutBtn.classList.remove("hidden");
+    } else {
+      todayShortcutBtn.classList.add("hidden");
+    }
+  }
+
   // Transfer dönemi durumu
   const transBadge = document.getElementById("calendar-transfer-status-badge");
   const transDaysLeft = document.getElementById("calendar-transfer-days-left");
   const isTransferOpen = !!gameState.transfer_window_open;
   if (transBadge) {
     if (isTransferOpen) {
-      transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1.5"></span>Transfer Penceresi Açık`;
+      transBadge.className = "inline-flex items-center gap-1.5 text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1"></span>Transfer Penceresi Açık`;
       if (transDaysLeft) {
         const summerEnd = `${currentCalendarYear}-09-15`;
         const winterEnd = `${currentCalendarYear + 1}-02-08`;
@@ -3364,9 +3390,22 @@ function renderCalendarView() {
         transDaysLeft.innerText = `Son ${diff} Gün (Bitiş: ${formatTurkishDateShort(dl)})`;
       }
     } else {
-      transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
-      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500 inline-block mr-1.5"></span>Transfer Penceresi Kapalı`;
+      transBadge.className = "inline-flex items-center gap-1.5 text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
+      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500 inline-block mr-1"></span>Transfer Penceresi Kapalı`;
       if (transDaysLeft) transDaysLeft.innerText = "Lig maçlarına odaklanılıyor";
+    }
+  }
+
+  // 3. Buton (Dinamik: Transfer Açık ise Transfer Bitişi, Kapalı ise +7 Gün)
+  const btn3Title = document.getElementById("calendar-quick-3rd-btn-title");
+  const btn3Desc = document.getElementById("calendar-quick-3rd-btn-desc");
+  if (btn3Title && btn3Desc) {
+    if (isTransferOpen) {
+      btn3Title.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 text-rose-400"></i><span id="calendar-quick-3rd-btn-label">Son Gün</span>`;
+      btn3Desc.innerText = "Transfer Kapanış";
+    } else {
+      btn3Title.innerHTML = `<i data-lucide="fast-forward" class="w-3.5 h-3.5 text-sky-400"></i><span id="calendar-quick-3rd-btn-label">+7 Gün</span>`;
+      btn3Desc.innerText = "1 Hafta Atla";
     }
   }
 
@@ -3382,7 +3421,7 @@ function renderCalendarView() {
   // Boş başlangıç hücreleri
   for (let i = 0; i < startOffset; i++) {
     const emptyCell = document.createElement("div");
-    emptyCell.className = "p-1 rounded-lg bg-slate-900/30 border border-slate-800/40 opacity-30 min-h-[46px]";
+    emptyCell.className = "p-1 rounded-xl bg-slate-900/20 border border-slate-800/30 opacity-20 min-h-[46px]";
     grid.appendChild(emptyCell);
   }
 
@@ -3403,7 +3442,7 @@ function renderCalendarView() {
     let cellClasses = "p-1 rounded-xl flex flex-col justify-between transition-all cursor-pointer min-h-[48px] relative text-[10px] ";
     
     if (isToday) {
-      cellClasses += "bg-amber-500/20 border-2 border-amber-400 shadow-md shadow-amber-500/10 ring-1 ring-amber-400 ";
+      cellClasses += "bg-amber-500/15 border-2 border-amber-400 shadow-md shadow-amber-500/10 ring-1 ring-amber-400 ";
     } else if (isSelected) {
       cellClasses += "bg-sky-500/20 border-2 border-sky-400 ring-1 ring-sky-400 ";
     } else if (fix) {
@@ -3420,12 +3459,12 @@ function renderCalendarView() {
     cell.onclick = () => selectCalendarDate(dStr);
 
     let headerHtml = `<div class="flex items-center justify-between leading-none">
-      <span class="font-extrabold ${isToday ? 'text-amber-300' : 'text-slate-300'}">${d}</span>`;
+      <span class="font-extrabold font-mono text-[11px] ${isToday ? 'text-amber-300' : 'text-slate-300'}">${d}</span>`;
     
     if (isToday) {
-      headerHtml += `<span class="text-[7.5px] font-black bg-amber-400 text-slate-950 px-1 rounded">BUGÜN</span>`;
+      headerHtml += `<span class="text-[7px] font-black bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-mono">BUGÜN</span>`;
     } else if (isDeadline) {
-      headerHtml += `<i data-lucide="clock" class="w-3 h-3 text-slate-400" title="Transfer Bitiş"></i>`;
+      headerHtml += `<i data-lucide="clock" class="w-2.5 h-2.5 text-rose-400" title="Transfer Bitiş"></i>`;
     }
     headerHtml += `</div>`;
 
@@ -3438,15 +3477,15 @@ function renderCalendarView() {
       if (fix.played) {
         const isWin = fix.result === "win";
         const isDraw = fix.result === "draw";
-        const badgeColor = isWin ? "bg-emerald-500 text-white" : (isDraw ? "bg-slate-600 text-slate-100" : "bg-rose-600 text-white");
-        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[8px] font-black ${badgeColor} px-1 py-0.5 rounded truncate">
+        const badgeColor = isWin ? "bg-emerald-600 text-white" : (isDraw ? "bg-slate-600 text-slate-100" : "bg-rose-600 text-white");
+        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[7.5px] font-black ${badgeColor} px-1 py-0.5 rounded truncate">
           <span>${fix.my_score}-${fix.opp_score}</span>
-          <span class="opacity-75">${oppShort}</span>
+          <span class="opacity-80">${oppShort}</span>
         </div>`;
       } else {
-        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[8px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 py-0.5 rounded truncate">
+        bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[7.5px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 py-0.5 rounded truncate">
           <span>${locLetter}:${oppShort}</span>
-          <i data-lucide="trophy" class="w-3 h-3 text-amber-400"></i>
+          <i data-lucide="trophy" class="w-2.5 h-2.5 text-amber-400 shrink-0"></i>
         </div>`;
       }
     }
@@ -3485,18 +3524,21 @@ function renderCalendarSelectedCard() {
 
   if (isToday) {
     tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
-    tagEl.innerText = "Bugün";
+    tagEl.innerText = "Bugün (Aktif Gün)";
     if (fix) {
       descEl.innerText = `MAÇ GÜNÜ! ${fix.opponent} ile ${fix.week}. Hafta karşılaşması.`;
     } else {
-      descEl.innerText = "Ofis ve antrenman günü. Transfer teklifleri ve kulüp yönetimi.";
+      descEl.innerText = "Ofis ve antrenman günü. Transfer teklifleri ve kulüp yönetimi aktif.";
     }
-    jumpBtn.classList.add("hidden");
+    jumpBtn.className = "w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-300 font-black text-xs transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer";
+    jumpBtn.innerHTML = `<i data-lucide="step-forward" class="w-3.5 h-3.5 text-amber-400"></i> <span>Günü Tamamla & Yarın'a Geç (+1 Gün)</span>`;
+    jumpBtn.onclick = () => advanceCalendarDay();
+    jumpBtn.classList.remove("hidden");
   } else if (isPast) {
     tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
     tagEl.innerText = "Geçmiş";
     if (fix && fix.played) {
-      descEl.innerText = `${fix.week}. Hafta Maçı: ${gameState.club_name} ${fix.my_score} - ${fix.opp_score} ${fix.opponent}`;
+      descEl.innerText = `${fix.week}. Hafta Karşılaşması: ${gameState.club_name} ${fix.my_score} - ${fix.opp_score} ${fix.opponent}`;
     } else {
       descEl.innerText = "Bu tarih geride kaldı.";
     }
@@ -3508,14 +3550,17 @@ function renderCalendarSelectedCard() {
 
     if (fix) {
       descEl.innerText = `${fix.week}. Hafta: ${fix.opponent} (${fix.is_home ? 'İç Saha' : 'Deplasman'}) Maçı`;
+      jumpBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5"></i> <span>Maç Gününe Kadar Simüle Et (${diffDays} Gün)</span>`;
     } else {
       descEl.innerText = `Hafta içi yönetim ve antrenman programı.`;
+      jumpBtn.innerHTML = `<i data-lucide="fast-forward" class="w-3.5 h-3.5"></i> <span>Bu Güne Kadar İlerlet (${diffDays} Gün Simüle Et)</span>`;
     }
 
+    jumpBtn.className = "w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer";
+    jumpBtn.onclick = () => advanceToSelectedDate();
     jumpBtn.classList.remove("hidden");
-    jumpBtn.innerHTML = `<i data-lucide="fast-forward" class="w-3.5 h-3.5"></i> <span>${diffDays} Gün İlerlet (${formatTurkishDateShort(targetDate)})</span>`;
-    if (window.lucide) window.lucide.createIcons();
   }
+  if (window.lucide) window.lucide.createIcons();
 }
 
 async function advanceCalendarDay() {
@@ -3599,6 +3644,21 @@ async function advanceToTransferDeadline() {
 
   selectedCalendarDate = target;
   await advanceToSelectedDate();
+}
+
+async function advanceContextualCalendar() {
+  if (!gameState) return;
+  const isTransferOpen = !!gameState.transfer_window_open;
+  if (isTransferOpen) {
+    await advanceToTransferDeadline();
+  } else {
+    // 7 gün ileri simüle et
+    const curDate = gameState.current_date || "2026-08-10";
+    const curDt = new Date(curDate);
+    curDt.setDate(curDt.getDate() + 7);
+    selectedCalendarDate = curDt.toISOString().split("T")[0];
+    await advanceToSelectedDate();
+  }
 }
 
 async function advanceTransferDay() {
@@ -6154,7 +6214,7 @@ async function openClubUpgradesModal() {
             <button onclick="upgradeClubBranch('${branch}')" ${!canAfford ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               canAfford ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md' : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
             }">
-              ${canAfford ? 'Seviye Yükselt ⬆' : 'Yetersiz Bütçe'}
+              ${canAfford ? 'Seviye Yükselt' : 'Yetersiz Bütçe'}
             </button>
           ` : ''}
         </div>
@@ -6621,7 +6681,7 @@ async function loadPlayerLoans() {
             </div>
             <div class="flex-shrink-0">
               <button onclick="recallLoanPlayer('${safeName}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-sm transition-all">
-                Geri Çağır (4M ₺) ↩
+                Geri Çağır (4M ₺)
               </button>
             </div>
           `;
