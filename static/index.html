@@ -51,17 +51,17 @@
         </div>
       </div>
 
-      <!-- 4 Temel Metrik (HUD) - Tıklanabilir Bilgi Kartları -->
+      <!-- 4 Temel Metrik (HUD) - Tıklanabilir Yönetim Kartları -->
       <div class="header-hud-grid grid grid-cols-4 gap-1.5 w-full">
-        <div onclick="openHudInfoModal('budget')" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-emerald-500/50 shadow-sm" title="Bütçe detayları için tıkla">
+        <div onclick="switchTab('budget')" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-emerald-500/50 shadow-sm" title="Kasa ve Bütçe Yönetimi">
           <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium">
             <span>Kasa</span>
             <i data-lucide="wallet" class="w-3 h-3 text-emerald-400"></i>
           </div>
-          <div id="bar-budget-txt" class="font-black text-[11.5px] text-emerald-300 truncate mt-0.5">560M ₺</div>
+          <div id="bar-budget-txt" class="font-black text-[11.5px] text-emerald-300 truncate mt-0.5">560M €</div>
         </div>
 
-        <div onclick="openHudInfoModal('fan')" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-amber-500/50 shadow-sm" title="Taraftar desteği detayları">
+        <div onclick="openFanManagementModal()" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-amber-500/50 shadow-sm" title="Taraftar İlişkileri ve Tribün Yönetimi">
           <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium">
             <span>Taraftar</span>
             <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i>
@@ -69,7 +69,7 @@
           <div id="bar-fan-txt" class="font-black text-[11.5px] text-amber-300 truncate mt-0.5">%92</div>
         </div>
 
-        <div onclick="openHudInfoModal('board')" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-sky-500/50 shadow-sm" title="Yönetim/Kongre desteği detayları">
+        <div onclick="openBoardManagementModal()" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-sky-500/50 shadow-sm" title="Kongre & Divan Kurulu Yönetimi">
           <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium">
             <span>Kongre</span>
             <i data-lucide="users" class="w-3 h-3 text-sky-400"></i>
@@ -77,7 +77,7 @@
           <div id="bar-board-txt" class="font-black text-[11.5px] text-sky-300 truncate mt-0.5">%75</div>
         </div>
 
-        <div onclick="openHudInfoModal('politics')" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-purple-500/50 shadow-sm" title="Siyaset/Bürokrasi ilişkisi">
+        <div onclick="openPoliticsManagementModal()" class="bg-[#12192c] hover:bg-[#18223a] cursor-pointer transition-colors rounded-xl p-1.5 px-2 border border-slate-850 hover:border-purple-500/50 shadow-sm" title="Siyasi Lobi ve Bürokrasi Masası">
           <div class="flex justify-between items-center text-[10px] text-slate-400 font-medium">
             <span>Siyaset</span>
             <i data-lucide="landmark" class="w-3 h-3 text-purple-400"></i>
@@ -2704,7 +2704,20 @@
           </div>
         </div>
 
-        <!-- 3. Kulüp Yönetimi / İstifa Bölümü -->
+        <!-- 3. Oyun Kılavuzu & Rehber -->
+        <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-md">
+          <button onclick="closeSettingsModal(); openHowToPlayModal('budget');" class="w-full py-2.5 px-3 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-slate-100 font-bold text-xs border border-slate-700 hover:border-amber-400/60 transition-all flex items-center justify-between gap-2 cursor-pointer shadow-sm active:scale-95">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+              </div>
+              <span class="font-bold">Nasıl Oynanır & Oyun Kılavuzu</span>
+            </div>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+          </button>
+        </div>
+
+        <!-- 4. Kulüp Yönetimi / İstifa Bölümü -->
         <div class="bg-gradient-to-r from-rose-950/30 via-red-950/20 to-slate-900/40 p-3 rounded-2xl border border-rose-800/40 space-y-2 shadow-sm">
           <div class="flex items-center gap-1.5 text-[10px] text-rose-300 font-medium leading-tight">
             <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400 shrink-0"></i>
@@ -2902,64 +2915,512 @@
     </div>
   </div>
 
-  <!-- HUD Bilgi ve Rehber Modalı -->
-  <div id="modal-hud-info" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-sm rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+  <!-- ==================== 1. SİYASET & BÜROKRASİ YÖNETİM MODALI ==================== -->
+  <div id="modal-politics-management" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-gradient-to-b from-[#131b2e] via-[#0f1728] to-[#0a101d] border border-purple-500/40 w-full max-w-md rounded-2xl shadow-2xl max-h-[92vh] text-slate-100 flex flex-col overflow-hidden relative">
       <!-- Sabit Başlık -->
-      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800 shrink-0">
-        <div class="flex items-center gap-2">
-          <div id="hud-info-icon-box" class="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
-            <i data-lucide="wallet" class="w-4 h-4"></i>
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800/80 bg-slate-900/40 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/40 flex items-center justify-center text-purple-400 shadow-sm">
+            <i data-lucide="landmark" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 id="hud-info-title" class="font-extrabold text-sm text-white">Kulüp Kasası</h3>
-            <span id="hud-info-subtitle" class="text-[10px] text-slate-400">Nakit Varlık & Mali Güç</span>
+            <h3 class="text-xs font-black text-white tracking-wider uppercase font-mono">SİYASİ LOBİ & BÜROKRASİ</h3>
+            <p class="text-[10px] text-slate-400 font-medium">Ankara temasları ve devlet destekleri</p>
           </div>
         </div>
-        <button onclick="closeHudInfoModal()" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs border border-slate-700 cursor-pointer">
+        <div class="flex items-center gap-1.5">
+          <button onclick="openHowToPlayModal('politics')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold border border-slate-700 flex items-center gap-1 cursor-pointer transition-colors" title="Nasıl Oynanır?">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5 text-purple-400"></i>
+            <span>Rehber</span>
+          </button>
+          <button onclick="closePoliticsManagementModal()" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs border border-slate-700 cursor-pointer transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- İçerik -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
+        <!-- Durum Özeti -->
+        <div class="bg-gradient-to-br from-[#171f33] to-[#0f1624] p-3 rounded-2xl border border-slate-700/60 shadow-md">
+          <div class="flex items-center justify-between text-xs mb-1.5">
+            <span class="text-slate-400 font-semibold flex items-center gap-1">
+              <i data-lucide="scale" class="w-3.5 h-3.5 text-purple-400"></i>
+              <span>Mevcut Siyasi Nüfuz:</span>
+            </span>
+            <span id="politics-modal-power-val" class="text-purple-300 font-black font-mono text-sm">%50</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700/80">
+            <div id="politics-modal-power-bar" class="bg-gradient-to-r from-purple-600 to-indigo-500 h-full rounded-full transition-all duration-500" style="width: 50%"></div>
+          </div>
+          <p class="text-[9.5px] text-slate-400 mt-2 leading-tight">Spor Bakanlığı ve karar verici mercilerdeki nüfuzunuz. %65 üstü Cumhurbaşkanlığı hibesi için gereklidir.</p>
+        </div>
+
+        <!-- Aksiyon Listesi -->
+        <div class="space-y-2">
+          <!-- 1. Ankara Ziyareti -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="building" class="w-3.5 h-3.5 text-purple-400"></i>
+                  <span>Ankara & Bakanlık Temasları</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Bakanlık ve bürokratlarla resmi istişare toplantısı.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">2.0M €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+10 Siyaset</span>
+              </span>
+            </div>
+            <button onclick="submitPoliticsAction('ankara_visit')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-purple-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="briefcase" class="w-3.5 h-3.5 text-purple-400"></i>
+              <span>Ziyarete Git (2.0M €)</span>
+            </button>
+          </div>
+
+          <!-- 2. Sosyal Proje -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="award" class="w-3.5 h-3.5 text-indigo-400"></i>
+                  <span>Devlet Destekli Gençlik Projesi</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Kulüp altyapısına devlet protokolüyle tesis ve akademi desteği.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">8.0M €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+16 Siyaset, +8 Taraftar</span>
+              </span>
+            </div>
+            <button onclick="submitPoliticsAction('gov_project')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-indigo-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="file-check" class="w-3.5 h-3.5 text-indigo-400"></i>
+              <span>Protokol İmzala (8.0M €)</span>
+            </button>
+          </div>
+
+          <!-- 3. Lobi Demeci -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="megaphone" class="w-3.5 h-3.5 text-sky-400"></i>
+                  <span>Kamuoyu Lobi Demeci</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Hükümet ve federasyon politikalarını destekleyen yapıcı açıklama.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-slate-400 font-mono block">Ücretsiz</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+8 Siyaset, -4 Taraftar</span>
+              </span>
+            </div>
+            <button onclick="submitPoliticsAction('pro_statement')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="mic" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Açıklama Yap (2 Hafta Bekleme)</span>
+            </button>
+          </div>
+
+          <!-- 4. Cumhurbaşkanlığı Hibesi -->
+          <div class="bg-gradient-to-br from-purple-950/40 via-[#16122c] to-[#0e1626] p-3 rounded-2xl border border-purple-500/50 shadow-md flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">SEZONDA 1 KEZ</span>
+                  <h4 class="text-xs font-bold text-white">Cumhurbaşkanlığı Hibesi</h4>
+                </div>
+                <p class="text-[10px] text-slate-300 mt-1">Saraydan 20M € nakit hibe veya 15 Dönüm Hazine Arazisi tahsis talebi.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-amber-400 font-mono block">Min %65 Güç</span>
+              </span>
+            </div>
+            <button onclick="requestPresidentialGrant()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md active:scale-98 transition-all">
+              <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Saray Hibesi Talep Et</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. TARAFTAR İLİŞKİLERİ & TRİBÜN MODALI ==================== -->
+  <div id="modal-fan-management" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-gradient-to-b from-[#131b2e] via-[#0f1728] to-[#0a101d] border border-amber-500/40 w-full max-w-md rounded-2xl shadow-2xl max-h-[92vh] text-slate-100 flex flex-col overflow-hidden relative">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800/80 bg-slate-900/40 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-sm">
+            <i data-lucide="flame" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-black text-white tracking-wider uppercase font-mono">TARAFTAR & TRİBÜN YÖNETİMİ</h3>
+            <p class="text-[10px] text-slate-400 font-medium">Sokağın nabzı ve tribün atmosferi</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="openHowToPlayModal('fan')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold border border-slate-700 flex items-center gap-1 cursor-pointer transition-colors" title="Nasıl Oynanır?">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Rehber</span>
+          </button>
+          <button onclick="closeFanManagementModal()" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs border border-slate-700 cursor-pointer transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- İçerik -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
+        <!-- Durum Özeti -->
+        <div class="bg-gradient-to-br from-[#171f33] to-[#0f1624] p-3 rounded-2xl border border-slate-700/60 shadow-md">
+          <div class="flex items-center justify-between text-xs mb-1.5">
+            <span class="text-slate-400 font-semibold flex items-center gap-1">
+              <i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Tribün Güven Endeksi:</span>
+            </span>
+            <span id="fan-modal-trust-val" class="text-amber-300 font-black font-mono text-sm">%80</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700/80">
+            <div id="fan-modal-trust-bar" class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all duration-500" style="width: 80%"></div>
+          </div>
+          <p class="text-[9.5px] text-slate-400 mt-2 leading-tight">İç saha bilet satışları ve forma cirosunu belirler. %35 altına düşerse kongre imza toplamaya başlar.</p>
+        </div>
+
+        <!-- Aksiyon Listesi -->
+        <div class="space-y-2">
+          <!-- 1. Amigo Yemeği -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="coffee" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Tribün Liderleriyle İstişare Yemeği</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Dernekler ve amigolarla birlik beraberlik buluşması.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">400K €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+8 Taraftar, +4 Moral</span>
+              </span>
+            </div>
+            <button onclick="submitFanAction('tribune_meeting')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-amber-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="handshake" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Yemeği Düzenle (400K €)</span>
+            </button>
+          </div>
+
+          <!-- 2. Deplasman Seferberliği -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="bus" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>Deplasman Seferberliği (Otobüs & Bilet)</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Deplasman maçına 40 otobüs kaldırıp bilet masrafını karşılama.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">1.2M €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+12 Taraftar Güveni</span>
+              </span>
+            </div>
+            <button onclick="submitFanAction('away_bus_support')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-amber-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="flag" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Otobüsleri Kaldır (1.2M €)</span>
+            </button>
+          </div>
+
+          <!-- 3. Halk Günü Bilet İndirimi -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="ticket" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Halk Günü: %50 Bilet İndirimi</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">İç saha maç biletlerinde yarı yarıya halk indirimi.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-slate-400 font-mono block">Ücretsiz</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+10 Taraftar, -3 Yönetim</span>
+              </span>
+            </div>
+            <button onclick="submitFanAction('ticket_discount')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-emerald-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="tag" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>İndirimi Başlat (3 Hafta Bekleme)</span>
+            </button>
+          </div>
+
+          <!-- 4. Açık Antrenman -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-yellow-400"></i>
+                  <span>Meşaleli Açık Moral İdmanı</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Stadyumda binlerce taraftarla meşale eşliğinde motivasyon idmanı.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">300K €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+6 Taraftar, +6 Takım Morali</span>
+              </span>
+            </div>
+            <button onclick="submitFanAction('open_training')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-yellow-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-yellow-400"></i>
+              <span>Kapıları Aç (300K €)</span>
+            </button>
+          </div>
+
+          <!-- 5. Maç Önü Festivali Bağlantısı -->
+          <div class="bg-gradient-to-br from-amber-950/30 to-[#0e1626] p-3 rounded-2xl border border-amber-500/40 shadow-sm flex items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                <i data-lucide="party-popper" class="w-3.5 h-3.5"></i>
+                <span>Maç Önü Taraftar Festivali</span>
+              </h4>
+              <p class="text-[10px] text-slate-400">Stat çevresi konser, barbekü ve etkinlikleri yönet.</p>
+            </div>
+            <button onclick="closeFanManagementModal(); openPreMatchEventModal();" class="py-2 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1 cursor-pointer shadow-md active:scale-95 transition-all shrink-0">
+              <span>Aç</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-950"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. KONGRE & DİVAN KURULU MODALI ==================== -->
+  <div id="modal-board-management" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-gradient-to-b from-[#131b2e] via-[#0f1728] to-[#0a101d] border border-sky-500/40 w-full max-w-md rounded-2xl shadow-2xl max-h-[92vh] text-slate-100 flex flex-col overflow-hidden relative">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800/80 bg-slate-900/40 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/40 flex items-center justify-center text-sky-400 shadow-sm">
+            <i data-lucide="users" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-xs font-black text-white tracking-wider uppercase font-mono">KONGRE & DİVAN KURULU</h3>
+            <p class="text-[10px] text-slate-400 font-medium">Yönetim meşruiyeti ve iktidar dengeleri</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button onclick="openHowToPlayModal('board')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold border border-slate-700 flex items-center gap-1 cursor-pointer transition-colors" title="Nasıl Oynanır?">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5 text-sky-400"></i>
+            <span>Rehber</span>
+          </button>
+          <button onclick="closeBoardManagementModal()" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs border border-slate-700 cursor-pointer transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- İçerik -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
+        <!-- Durum Özeti -->
+        <div class="bg-gradient-to-br from-[#171f33] to-[#0f1624] p-3 rounded-2xl border border-slate-700/60 shadow-md">
+          <div class="flex items-center justify-between text-xs mb-1.5">
+            <span class="text-slate-400 font-semibold flex items-center gap-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Kongre Güven Seviyesi:</span>
+            </span>
+            <span id="board-modal-trust-val" class="text-sky-300 font-black font-mono text-sm">%75</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden border border-slate-700/80">
+            <div id="board-modal-trust-bar" class="bg-gradient-to-r from-sky-500 to-blue-600 h-full rounded-full transition-all duration-500" style="width: 75%"></div>
+          </div>
+          <p class="text-[9.5px] text-slate-400 mt-2 leading-tight">Sezon sonundaki başkanlık seçimlerinde sandıktan çıkma oranınızı ve divan kurulu desteğini belirler.</p>
+        </div>
+
+        <!-- Aksiyon Listesi -->
+        <div class="space-y-2">
+          <!-- 1. Duayen Zirvesi -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="user-check" class="w-3.5 h-3.5 text-sky-400"></i>
+                  <span>Olağanüstü Yönetim Zirvesi</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Kulüp duayenleri ve divan kurulu üyeleriyle strateji toplantısı.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">600K €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+8 Kongre, +4 Medya</span>
+              </span>
+            </div>
+            <button onclick="submitBoardAction('board_meeting')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="users" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Toplantıyı Başlat (600K €)</span>
+            </button>
+          </div>
+
+          <!-- 2. Şeffaf Mali Rapor -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Şeffaf Mali İbra Raporu Sunumu</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Bağımsız denetim ve borç-alacak tablolarını kamuoyuna açma.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-slate-400 font-mono block">Ücretsiz</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+7 Kongre, +5 Medya</span>
+              </span>
+            </div>
+            <button onclick="submitBoardAction('financial_report')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-emerald-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Raporu Sun (3 Hafta Bekleme)</span>
+            </button>
+          </div>
+
+          <!-- 3. Personel Prim Fonu -->
+          <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-2xl border border-slate-700/60 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                  <i data-lucide="coins" class="w-3.5 h-3.5 text-amber-400"></i>
+                  <span>İdari ve Tesis Personeli Prim Dağıtımı</span>
+                </h4>
+                <p class="text-[10px] text-slate-400 mt-0.5">Kulüp çalışanları ve yönetim kadrosuna olağanüstü moral primi.</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">2.0M €</span>
+                <span class="text-[9px] text-emerald-400 font-bold block">+10 Kongre, +5 Takım Morali</span>
+              </span>
+            </div>
+            <button onclick="submitBoardAction('staff_bonus')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-amber-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="gift" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Primi Dağıt (2.0M €)</span>
+            </button>
+          </div>
+
+          <!-- 4. Güven Oylaması Resti -->
+          <div class="bg-gradient-to-br from-sky-950/30 to-[#0e1626] p-3 rounded-2xl border border-sky-500/40 shadow-sm flex flex-col justify-between gap-2.5">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.5 rounded text-[8.5px] font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 font-mono">SEZONDA 1 KEZ</span>
+                  <h4 class="text-xs font-bold text-white">Kongre Güven Oylaması Resti</h4>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1">Muhalefete rest çekip sandık çağrısı yap. Güven %50+ ise +15 kazandırır!</p>
+              </div>
+              <span class="text-right shrink-0">
+                <span class="text-[10px] font-bold text-rose-300 font-mono block">1.0M €</span>
+              </span>
+            </div>
+            <button onclick="submitBoardAction('vote_of_confidence')" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 hover:border-sky-500/50 text-slate-100 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="vote" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Güvenoyu İste (1.0M €)</span>
+            </button>
+          </div>
+
+          <!-- 5. İstifa Butonu -->
+          <div class="pt-1">
+            <button onclick="closeBoardManagementModal(); promptResign();" class="w-full py-2.5 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/50 text-rose-300 font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-98 transition-all">
+              <i data-lucide="log-out" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Başkanlık Görevinden İstifa Et</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 4. NASIL OYNANIR & OYUN KILAVUZU (SEKMELİ MODAL) ==================== -->
+  <div id="modal-how-to-play" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-gradient-to-b from-[#131b2e] via-[#0f1728] to-[#0a101d] border border-slate-700 w-full max-w-md rounded-2xl shadow-2xl relative max-h-[92vh] flex flex-col overflow-hidden text-slate-100">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800/80 bg-slate-900/40 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div id="how-to-play-icon-box" class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-sm">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="how-to-play-title" class="font-black text-xs text-white uppercase font-mono tracking-wider">OYUN KILAVUZU</h3>
+            <span id="how-to-play-subtitle" class="text-[10px] text-slate-400 font-medium">Yönetim dinamikleri ve ipuçları</span>
+          </div>
+        </div>
+        <button onclick="closeHowToPlayModal()" class="w-7 h-7 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center font-bold text-xs border border-slate-700 cursor-pointer transition-colors">
           <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Kılavuz Sekmeleri (Tab Bar) -->
+      <div class="flex items-center gap-1 p-2 bg-[#0c1220] border-b border-slate-800/80 overflow-x-auto no-scrollbar shrink-0 text-[10px] font-bold">
+        <button type="button" onclick="switchHowToPlayTab('budget')" id="guide-tab-budget" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-amber-500/50 bg-slate-800 text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="wallet" class="w-3 h-3 text-emerald-400"></i>
+          <span>Kasa</span>
+        </button>
+        <button type="button" onclick="switchHowToPlayTab('fan')" id="guide-tab-fan" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="flame" class="w-3 h-3 text-amber-400"></i>
+          <span>Taraftar</span>
+        </button>
+        <button type="button" onclick="switchHowToPlayTab('board')" id="guide-tab-board" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="users" class="w-3 h-3 text-sky-400"></i>
+          <span>Kongre</span>
+        </button>
+        <button type="button" onclick="switchHowToPlayTab('politics')" id="guide-tab-politics" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="landmark" class="w-3 h-3 text-purple-400"></i>
+          <span>Siyaset</span>
+        </button>
+        <button type="button" onclick="switchHowToPlayTab('transfer')" id="guide-tab-transfer" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="arrow-left-right" class="w-3 h-3 text-emerald-400"></i>
+          <span>Transfer</span>
+        </button>
+        <button type="button" onclick="switchHowToPlayTab('tactics')" id="guide-tab-tactics" class="guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all">
+          <i data-lucide="clipboard-list" class="w-3 h-3 text-cyan-400"></i>
+          <span>Taktik</span>
         </button>
       </div>
 
       <!-- İç Kaydırılabilir Gövde -->
       <div class="p-4 pt-3 space-y-2.5 text-xs overflow-y-auto flex-1 pr-2">
-        <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1">
+        <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-xl border border-slate-700/60 space-y-1 shadow-sm">
           <div class="font-bold text-amber-400 text-[11px] flex items-center gap-1.5">
-            <i data-lucide="book-open" class="w-3.5 h-3.5 text-amber-400"></i> <span>Ne Anlama Gelir?</span>
+            <i data-lucide="info" class="w-3.5 h-3.5 text-amber-400"></i> <span>Ne Anlama Gelir?</span>
           </div>
-          <p id="hud-info-desc" class="text-slate-300 text-[10px] leading-relaxed"></p>
+          <p id="how-to-play-desc" class="text-slate-300 text-[10.5px] leading-relaxed"></p>
         </div>
 
-        <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1">
+        <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-xl border border-slate-700/60 space-y-1 shadow-sm">
           <div class="font-bold text-emerald-400 text-[11px] flex items-center gap-1.5">
             <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i> <span>Nasıl Arttırılır ve Yönetilir?</span>
           </div>
-          <ul id="hud-info-how-increase" class="text-slate-300 text-[10px] space-y-0.5 list-disc list-inside"></ul>
+          <ul id="how-to-play-how-increase" class="text-slate-300 text-[10.5px] space-y-1 list-disc list-inside"></ul>
         </div>
 
-        <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1">
+        <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-xl border border-slate-700/60 space-y-1 shadow-sm">
           <div class="font-bold text-rose-400 text-[11px] flex items-center gap-1.5">
             <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i> <span>Düşerse Ne Olur? (Kritik Tehlikeler)</span>
           </div>
-          <ul id="hud-info-risks" class="text-slate-300 text-[10px] space-y-0.5 list-disc list-inside"></ul>
+          <ul id="how-to-play-risks" class="text-slate-300 text-[10.5px] space-y-1 list-disc list-inside"></ul>
         </div>
 
-        <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1">
-          <div class="font-bold text-blue-400 text-[11px] flex items-center gap-1.5">
-            <i data-lucide="star" class="w-3.5 h-3.5 text-blue-400"></i> <span>Kulübe Sağladığı Büyük Avantajlar</span>
+        <div class="bg-gradient-to-br from-[#141e33] to-[#0e1626] p-3 rounded-xl border border-slate-700/60 space-y-1 shadow-sm">
+          <div class="font-bold text-sky-400 text-[11px] flex items-center gap-1.5">
+            <i data-lucide="star" class="w-3.5 h-3.5 text-sky-400"></i> <span>Kulübe Sağladığı Büyük Avantajlar</span>
           </div>
-          <ul id="hud-info-benefits" class="text-slate-300 text-[10px] space-y-0.5 list-disc list-inside"></ul>
+          <ul id="how-to-play-benefits" class="text-slate-300 text-[10.5px] space-y-1 list-disc list-inside"></ul>
         </div>
       </div>
 
       <!-- Sabit Alt Buton -->
-      <div class="p-3 border-t border-slate-800 shrink-0 bg-[#111726]">
-        <button onclick="closeHudInfoModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer">
+      <div class="p-3 border-t border-slate-800 shrink-0 bg-[#0c1220]">
+        <button onclick="closeHowToPlayModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer shadow-sm">
           Anladım, Kapat
         </button>
       </div>
     </div>
   </div>
+
+  <!-- Geriye Uyumluluk İçin Eski ID Koruması -->
+  <div id="modal-hud-info" class="hidden"></div>
 
   <!-- KULÜP TESİSLERİ VE PASİF GELİR GELİŞTİRMELERİ MODALI (SKILL TREE) -->
   <div id="modal-club-upgrades" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">

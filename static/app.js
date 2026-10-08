@@ -878,6 +878,11 @@ function renderUI() {
   const polCard = document.getElementById("pol-card-score");
   if (polCard) polCard.innerText = `%${gameState.political_power}`;
 
+  // Yönetim Modalları Açık İse Canlı Güncelle
+  if (typeof updatePoliticsManagementUI === "function") updatePoliticsManagementUI();
+  if (typeof updateFanManagementUI === "function") updateFanManagementUI();
+  if (typeof updateBoardManagementUI === "function") updateBoardManagementUI();
+
   // Özel Kalem & Sekreterya Ajandası UI
   const secAgendaEl = document.getElementById("office-secretary-agenda");
   const secDateEl = document.getElementById("office-secretary-date");
@@ -3952,14 +3957,14 @@ async function requestPresidentialGrant() {
   if (!gameState) return;
   const pol = gameState.political_power || 50;
 
-  if (pol < 50) {
-    showToast("Cumhurbaşkanlığı makamına başvuru için en az %50 Siyasi Nüfuz gereklidir!");
+  if (pol < 65) {
+    showToast("Cumhurbaşkanlığı makamına başvuru için en az %65 Siyasi Nüfuz gereklidir!");
     return;
   }
 
-  const confirmMsg = pol >= 90
-    ? "Siyasi gücünüz %90 üzerinde!\n\nCumhurbaşkanlığı makamından '35 DÖNÜM HAZİNE ARAZİSİ' hibe talebinde bulunmak istiyor musunuz? (%80 Kabul Şansı)"
-    : "Siyasi gücünüz %50-%89 arasında!\n\nCumhurbaşkanlığı Acil Kulüp Fonu'ndan '120.000.000 ₺ NAKİT HİBE' talebinde bulunmak istiyor musunuz? (%35 Kabul Şansı - Reddedilirse basına sızar!)";
+  const confirmMsg = pol >= 85
+    ? "Siyasi gücünüz %85 üzerinde!\n\nCumhurbaşkanlığı makamından '15 DÖNÜM HAZİNE ARAZİSİ ve 25M € Fon' hibe talebinde bulunmak istiyor musunuz? (%40 Kabul Şansı)"
+    : "Siyasi gücünüz %65-%84 arasında!\n\nCumhurbaşkanlığı Acil Kulüp Fonu'ndan '20M € NAKİT HİBE' talebinde bulunmak istiyor musunuz? (%25 Kabul Şansı - Reddedilirse basına yansır!)";
 
   if (!confirm(confirmMsg)) return;
 
@@ -3973,6 +3978,7 @@ async function requestPresidentialGrant() {
 
     showToast(data.message);
     gameState = data.state;
+    if (typeof updatePoliticsManagementUI === "function") updatePoliticsManagementUI();
     renderUI();
   } catch (e) {
     console.error(e);
@@ -5468,6 +5474,7 @@ async function loadCoachRecommendations() {
 }
 
 // ==================== 4 METRİK (HUD) TIKLANABİLİR BİLGİ MODALI ====================
+// ==================== NASIL OYNANIR & OYUN KILAVUZU VERİLERİ ====================
 const HUD_INFO_DATA = {
   budget: {
     title: "Kulüp Kasası (Bütçe)",
@@ -5484,7 +5491,7 @@ const HUD_INFO_DATA = {
     ],
     risks: [
       "Kasa eksiye düşerse kulüp mali darboğaza girer ve borç faizleri katlanır.",
-      "Bütçe -30M ₺ altına inerse TFF kulübe TRANSFER TAHTASI KISITI uygular ve yeni oyuncu alamazsınız.",
+      "Bütçe -30M € altına inerse TFF kulübe TRANSFER TAHTASI KISITI uygular ve yeni oyuncu alamazsınız.",
       "Maaşlar ödenemezse takım içi huzur çöker, oyuncu moralleri dip yapar ve isyan çıkar."
     ],
     benefits: [
@@ -5503,7 +5510,7 @@ const HUD_INFO_DATA = {
       "Ligde derbileri ve kritik maçları kazanıp takımı üst sıralara taşıyarak.",
       "Hücum futbolu oynatıp taraftarı heyecanlandıracak yıldız transferleri yaparak.",
       "Altyapı akademisinden yerli genç yetenekleri A takıma kazandırıp parlatarak.",
-      "Devlet projeleri ve sosyal sorumluluk hamleleriyle kulüp prestijini yükselterek."
+      "Tribün liderleriyle istişare yemekleri düzenleyip deplasman otobüs seferberliği ilan ederek."
     ],
     risks: [
       "Güven %50 altına indiğinde tribünler boşalır, bilet ve mağaza gelirleri bıçak gibi kesilir.",
@@ -5520,13 +5527,13 @@ const HUD_INFO_DATA = {
     title: "Kongre & Divan Kurulu Güveni",
     subtitle: "Başkanlık Koltuğunun Meşruiyeti & İktidar",
     icon: "users",
-    colorClass: "text-blue-400 bg-blue-950/80 border-blue-500/40",
+    colorClass: "text-sky-400 bg-sky-950/80 border-sky-500/40",
     desc: "Kulüp genel kurulu, divan üyeleri ve delegelerin başkan olarak size olan sadakatini temsil eder. Sezon sonu başkanlık seçimlerinde sandıktan zaferle çıkmanızı sağlayan en kritik ölçüttür.",
     howIncrease: [
       "Mali disiplini koruyup kulübün borçlarını kontrol altında tutarak.",
       "Takım içi huzuru ve soyunma odası dengesini (Kaptan Raporu) yüksek tutarak.",
-      "Kongreye verilen vaatleri (stadyum yatırımı, altyapı, şampiyonluk) yerine getirerek.",
-      "Siyasi ilişkileri doğru yönetip kulübe devlet teşvikleri ve hazine arazisi kazandırarak."
+      "Şeffaf mali ibra raporları sunup yönetim kurulu zirveleri düzenleyerek.",
+      "Kongreye verilen vaatleri (stadyum yatırımı, altyapı, şampiyonluk) yerine getirerek."
     ],
     risks: [
       "Kongre güveni %40 altına düşerse divan kurulu olağanüstü seçim çağrısı yapar.",
@@ -5548,7 +5555,7 @@ const HUD_INFO_DATA = {
     howIncrease: [
       "Ankara Ziyareti gerçekleştirerek Spor Bakanlığı ve üst düzey bürokratlarla görüşerek (+10 Siyaset).",
       "Devlet Destekli Gençlik ve Tesis Sosyal Projelerine imza atarak (+16 Siyaset).",
-      "Kritik gündemlerde federasyon ve spor kamuoyu lehine yapıcı basın açıklamaları yaparak (+8 Siyaset)."
+      "Kritik gündemlerde federasyon ve kamuoyu lehine yapıcı basın açıklamaları yaparak (+8 Siyaset)."
     ],
     risks: [
       "Siyasi nüfuz düşükse (%65 altı) Cumhurbaşkanlığı makamına erişim kapalıdır, başvuru yapamazsınız.",
@@ -5556,52 +5563,252 @@ const HUD_INFO_DATA = {
       "TFF ve kurullarda lobi gücünüz zayıflarsa hakem hataları ve cezalarda kulüp yalnız kalır."
     ],
     benefits: [
-      "%65 üstü siyasi güçle sezonluk 35M ₺ Cumhurbaşkanlığı Acil Kulüp Hibesi talep edebilirsiniz.",
-      "%85 üstü süper güçle kulübün geleceğini kurtaracak 15 Dönüm Hazine Arazisi ve 30M ₺ altyapı fonu tahsis ettirebilirsiniz.",
+      "%65 üstü siyasi güçle sezonluk 20M € Cumhurbaşkanlığı Acil Kulüp Hibesi talep edebilirsiniz.",
+      "%85 üstü süper güçle kulübün geleceğini kurtaracak 15 Dönüm Hazine Arazisi ve 25M € altyapı fonu tahsis ettirebilirsiniz.",
       "Kulübün yeraltı ve MASAK soruşturmalarında siyasi koruma ve kalkan etkisi oluşturur."
+    ]
+  },
+  transfer: {
+    title: "Transfer & Kadro Yönetimi",
+    subtitle: "Pazarlık, Menajerler & Maaş Dengesi",
+    icon: "arrow-left-right",
+    colorClass: "text-emerald-400 bg-emerald-950/80 border-emerald-500/40",
+    desc: "Kulübün sportif başarısı doğru kadro mühendisliğinden geçer. Oyuncuların potansiyeli, maaş beklentileri ve sözleşme sürelerini dengede tutarak şampiyonluk kadrosu kurmalısınız.",
+    howIncrease: [
+      "Scout ekibini güçlendirerek potansiyeli yüksek genç yetenekleri (Wonderkid) erkenden keşfederek.",
+      "Pazarlıklarda peşinat ve bonus dengesini iyi kurup bonservis maliyetini düşürerek.",
+      "Yaşlanan veya fazla süre alamayan yüksek maaşlı oyuncuları satıp bütçe rahatlatarak.",
+      "Kaptan Raporunu takip edip soyunma odasında maaş adaletsizliği oluşmasını önleyerek."
+    ],
+    risks: [
+      "Transfer tahtası kapanırsa kadronuza yeni takviye yapamazsınız.",
+      "Kadroda gereğinden fazla oyuncu bulundurmak haftalık maaş bütçesini tüketir.",
+      "Sözleşmesi biten oyuncular bedelsiz ayrılarak kulübe mali zarar verebilir."
+    ],
+    benefits: [
+      "Dünya çapında yıldızlar getirerek stadyumu doldurur ve forma satış rekorları kırarsınız.",
+      "Geliştirdiğiniz gençleri Avrupa devlerine rekor bonservislerle satıp kulüp kasasını doldurursunuz."
+    ]
+  },
+  tactics: {
+    title: "Taktik & Maç Hazırlığı",
+    subtitle: "Diziliş, Mentalite & Prim Stratejisi",
+    icon: "clipboard-list",
+    colorClass: "text-cyan-400 bg-cyan-950/80 border-cyan-500/40",
+    desc: "Sahadaki 90 dakikanın kaderi teknik direktörünüzün taktiği ve oyuncuların moral durumuna bağlıdır. Rakibin oyun planına göre doğru diziliş ve maç primi belirlemek kritik puanları kazandırır.",
+    howIncrease: [
+      "Rakibin hücum ve savunma gücüne göre dengeli, ofansif veya kontra atak taktikleri seçerek.",
+      "Kritik derbilerde galibiyet primini artırıp oyuncu motivasyonunu zirveye çıkararak.",
+      "Kadro huzursuzluklarını çözüp takım uyumunu (Harmony) yüksek tutarak.",
+      "Kondisyonu ve formu yüksek 11'i sahaya sürerek."
+    ],
+    risks: [
+      "Üst üste gelen puan kayıpları taraftar ve kongre güvenini hızla tüketir.",
+      "Aşırı düşük moral ve soyunma odası huzursuzluğu takımın sahada dağılmasına yol açar.",
+      "Yanlış taktik tercihi favori olduğunuz maçlarda bile sürpriz mağlubiyetlere neden olabilir."
+    ],
+    benefits: [
+      "Seri galibiyetler kulübü zirveye taşır, TV yayın primleri ve sponsorluk gelirlerini katlar.",
+      "Başarılı taktiklerle Avrupa kupalarında ilerleyip kulüp prestijini zirveye çıkarırsınız."
     ]
   }
 };
 
-function openHudInfoModal(type) {
-  const data = HUD_INFO_DATA[type];
-  if (!data) return;
+let currentHowToPlayTab = "budget";
 
-  const modal = document.getElementById("modal-hud-info");
+function openHowToPlayModal(tabKey = "budget") {
+  const modal = document.getElementById("modal-how-to-play");
   if (!modal) return;
+  switchHowToPlayTab(tabKey);
+  modal.classList.remove("hidden");
+  if (window.lucide) lucide.createIcons();
+}
 
-  document.getElementById("hud-info-title").innerText = data.title;
-  document.getElementById("hud-info-subtitle").innerText = data.subtitle;
-  document.getElementById("hud-info-desc").innerText = data.desc;
+function closeHowToPlayModal() {
+  const modal = document.getElementById("modal-how-to-play");
+  if (modal) modal.classList.add("hidden");
+}
 
-  const iconBox = document.getElementById("hud-info-icon-box");
-  if (iconBox) {
-    iconBox.className = `w-8 h-8 rounded-lg flex items-center justify-center border ${data.colorClass}`;
-    iconBox.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4"></i>`;
+function switchHowToPlayTab(tabKey) {
+  const data = HUD_INFO_DATA[tabKey] || HUD_INFO_DATA["budget"];
+  currentHowToPlayTab = tabKey;
+
+  document.querySelectorAll(".guide-tab-btn").forEach(btn => {
+    btn.className = "guide-tab-btn px-2.5 py-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all";
+  });
+  const activeBtn = document.getElementById(`guide-tab-${tabKey}`);
+  if (activeBtn) {
+    activeBtn.className = "guide-tab-btn px-2.5 py-1.5 rounded-lg border border-amber-500/50 bg-slate-800 text-white flex items-center gap-1 shrink-0 cursor-pointer transition-all";
   }
 
-  const ulIncrease = document.getElementById("hud-info-how-increase");
+  const titleEl = document.getElementById("how-to-play-title");
+  const subEl = document.getElementById("how-to-play-subtitle");
+  const descEl = document.getElementById("how-to-play-desc");
+  const iconBox = document.getElementById("how-to-play-icon-box");
+  const ulIncrease = document.getElementById("how-to-play-how-increase");
+  const ulRisks = document.getElementById("how-to-play-risks");
+  const ulBenefits = document.getElementById("how-to-play-benefits");
+
+  if (titleEl) titleEl.innerText = data.title;
+  if (subEl) subEl.innerText = data.subtitle;
+  if (descEl) descEl.innerText = data.desc;
+  if (iconBox) {
+    iconBox.className = `w-8 h-8 rounded-xl flex items-center justify-center border ${data.colorClass}`;
+    iconBox.innerHTML = `<i data-lucide="${data.icon}" class="w-4 h-4"></i>`;
+  }
   if (ulIncrease) {
     ulIncrease.innerHTML = data.howIncrease.map(item => `<li>${item}</li>`).join("");
   }
-
-  const ulRisks = document.getElementById("hud-info-risks");
   if (ulRisks) {
     ulRisks.innerHTML = data.risks.map(item => `<li>${item}</li>`).join("");
   }
-
-  const ulBenefits = document.getElementById("hud-info-benefits");
   if (ulBenefits) {
     ulBenefits.innerHTML = data.benefits.map(item => `<li>${item}</li>`).join("");
   }
 
   if (window.lucide) lucide.createIcons();
-  modal.classList.remove("hidden");
+}
+
+function openHudInfoModal(type) {
+  openHowToPlayModal(type);
 }
 
 function closeHudInfoModal() {
-  const modal = document.getElementById("modal-hud-info");
+  closeHowToPlayModal();
+}
+
+// ==================== SİYASET, TARAFTAR VE KONGRE YÖNETİM MODALLARI ====================
+
+function openPoliticsManagementModal() {
+  const modal = document.getElementById("modal-politics-management");
+  if (!modal) return;
+  updatePoliticsManagementUI();
+  modal.classList.remove("hidden");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closePoliticsManagementModal() {
+  const modal = document.getElementById("modal-politics-management");
   if (modal) modal.classList.add("hidden");
+}
+
+function updatePoliticsManagementUI() {
+  if (!gameState) return;
+  const pol = Math.round(gameState.political_power || 50);
+  const valEl = document.getElementById("politics-modal-power-val");
+  const barEl = document.getElementById("politics-modal-power-bar");
+  if (valEl) valEl.innerText = `%${pol}`;
+  if (barEl) barEl.style.width = `${Math.min(100, Math.max(5, pol))}%`;
+}
+
+async function submitPoliticsAction(actType) {
+  try {
+    const res = await apiFetch("/api/politics/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action_type: actType })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem yapılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    updatePoliticsManagementUI();
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
+function openFanManagementModal() {
+  const modal = document.getElementById("modal-fan-management");
+  if (!modal) return;
+  updateFanManagementUI();
+  modal.classList.remove("hidden");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeFanManagementModal() {
+  const modal = document.getElementById("modal-fan-management");
+  if (modal) modal.classList.add("hidden");
+}
+
+function updateFanManagementUI() {
+  if (!gameState) return;
+  const fan = Math.round(gameState.fan_trust || 50);
+  const valEl = document.getElementById("fan-modal-trust-val");
+  const barEl = document.getElementById("fan-modal-trust-bar");
+  if (valEl) valEl.innerText = `%${fan}`;
+  if (barEl) barEl.style.width = `${Math.min(100, Math.max(5, fan))}%`;
+}
+
+async function submitFanAction(actType) {
+  try {
+    const res = await apiFetch("/api/fan/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action_type: actType })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem yapılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    updateFanManagementUI();
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
+function openBoardManagementModal() {
+  const modal = document.getElementById("modal-board-management");
+  if (!modal) return;
+  updateBoardManagementUI();
+  modal.classList.remove("hidden");
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeBoardManagementModal() {
+  const modal = document.getElementById("modal-board-management");
+  if (modal) modal.classList.add("hidden");
+}
+
+function updateBoardManagementUI() {
+  if (!gameState) return;
+  const board = Math.round(gameState.board_trust || 60);
+  const valEl = document.getElementById("board-modal-trust-val");
+  const barEl = document.getElementById("board-modal-trust-bar");
+  if (valEl) valEl.innerText = `%${board}`;
+  if (barEl) barEl.style.width = `${Math.min(100, Math.max(5, board))}%`;
+}
+
+async function submitBoardAction(actType) {
+  try {
+    const res = await apiFetch("/api/board/action", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action_type: actType })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "İşlem yapılamadı!");
+      return;
+    }
+    showToast(data.message);
+    gameState = data.state;
+    updateBoardManagementUI();
+    renderUI();
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
 }
 
 // ==================== HİKAYELİ EĞİTİM & BAŞLANGIÇ REHBERİ (TUTORIAL) ====================

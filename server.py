@@ -55,10 +55,10 @@ def get_save_path(session_id: Optional[str] = None) -> str:
 
 def format_money_val(amount: int) -> str:
     if abs(amount) >= 1_000_000:
-        return f"{amount / 1_000_000:.1f}M ₺".replace(".0M", "M")
+        return f"{amount / 1_000_000:.1f}M €".replace(".0M", "M")
     elif abs(amount) >= 1_000:
-        return f"{amount / 1_000:.0f}K ₺"
-    return f"{amount} ₺"
+        return f"{amount / 1_000:.0f}K €"
+    return f"{amount} €"
 
 
 # ==================== DÜNYA YILDIZLARI & TRANSFER HAVUZU ====================
@@ -2896,21 +2896,21 @@ def api_politics_action(req: PoliticsActionRequest):
     pol = state.get("political_power", 50)
     
     if req.action_type == "ankara_visit":
-        cost = 4_000_000
+        cost = 2_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Bakanlık ve Ankara ziyareti için 4M ₺ bütçe gerekli!")
+            raise HTTPException(status_code=400, detail="Bakanlık ve Ankara bürokrasi ziyareti için 2M € bütçe gerekli!")
         state["budget"] -= cost
         state["political_power"] = min(100, pol + 10)
         state["media_trust"] = min(100, state.get("media_trust", 70) + 4)
-        msg = "🏛️ Ankara Ziyareti Başarılı: Spor Bakanlığı ve üst düzey bürokratlarla temas sağlandı (+10 Siyaset)!"
+        msg = "Ankara Ziyareti Başarılı: Spor Bakanlığı ve üst düzey bürokratlarla temas sağlandı (+10 Siyaset, +4 Medya)!"
     elif req.action_type == "gov_project":
-        cost = 15_000_000
+        cost = 8_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Devlet destekli gençlik & tesis projesi için 15M ₺ bütçe gerekli!")
+            raise HTTPException(status_code=400, detail="Devlet destekli gençlik & tesis projesi için 8M € bütçe gerekli!")
         state["budget"] -= cost
         state["political_power"] = min(100, pol + 16)
         state["fan_trust"] = min(100, state["fan_trust"] + 8)
-        msg = "🤝 Devlet Destekli Sosyal Proje: Kulüp gençlik akademisi protokolü imzalandı (+16 Siyaset, +8 Taraftar)!"
+        msg = "Devlet Destekli Sosyal Proje: Kulüp gençlik akademisi protokolü imzalandı (+16 Siyaset, +8 Taraftar)!"
     elif req.action_type == "pro_statement":
         cur_week = state.get("week", 1)
         last_week = state.get("last_pro_statement_week", -99)
@@ -2919,7 +2919,7 @@ def api_politics_action(req: PoliticsActionRequest):
         state["last_pro_statement_week"] = cur_week
         state["political_power"] = min(100, pol + 8)
         state["fan_trust"] = max(10, state["fan_trust"] - 4)
-        msg = "📢 Hükümet & TFF Lehine Basın Açıklaması: Siyasi kanatta memnuniyet yarattı (+8 Siyaset, -4 Muhalif Taraftar)."
+        msg = "Hükümet & TFF Lehine Basın Açıklaması: Siyasi kanatta memnuniyet yarattı (+8 Siyaset, -4 Muhalif Taraftar)."
     else:
         raise HTTPException(status_code=400, detail="Geçersiz aksiyon!")
 
@@ -2955,12 +2955,14 @@ def api_presidential_grant():
         success = (random.random() < 0.40)
         if success:
             acres = 15
-            grant_cash = 30_000_000
-            state["real_estate"]["land_acres"] += acres
+            grant_cash = 25_000_000
+            if "real_estate" not in state or not isinstance(state["real_estate"], dict):
+                state["real_estate"] = {"land_acres": 0}
+            state["real_estate"]["land_acres"] = state["real_estate"].get("land_acres", 0) + acres
             state["budget"] += grant_cash
             state["fan_trust"] = min(100, state["fan_trust"] + 8)
             state["board_trust"] = min(100, state["board_trust"] + 12)
-            msg = f"🏛️ CUMHURBAŞKANLIĞI KARARNAMESİ: Sayın Cumhurbaşkanı kulübümüze {acres} DÖNÜM HAZİNE ARAZİSİ ve {format_money_val(grant_cash)} altyapı fonu tahsis etti!"
+            msg = f"CUMHURBAŞKANLIĞI KARARNAMESİ: Sayın Cumhurbaşkanı kulübümüze {acres} DÖNÜM HAZİNE ARAZİSİ ve {format_money_val(grant_cash)} altyapı fonu tahsis etti!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "success", "type": "land", "message": msg, "state": state}
@@ -2970,7 +2972,7 @@ def api_presidential_grant():
             state["board_trust"] = max(10, state["board_trust"] - 15)
             state["media_trust"] = max(10, state.get("media_trust", 70) - 15)
             state["political_power"] = max(20, pol - 15)
-            msg = "❌ SARAY KAPISINDAN RET! Cumhurbaşkanlığı arazi talebini veto etti. Muhalif basın 'Kulüp eli boş döndü' manşetleri attı (-15 Siyaset, -15 Kongre)!"
+            msg = "SARAY KAPISINDAN RET! Cumhurbaşkanlığı arazi talebini veto etti. Muhalif basın 'Kulüp eli boş döndü' manşetleri attı (-15 Siyaset, -15 Kongre)!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "rejected", "type": "land", "message": msg, "state": state}
@@ -2979,10 +2981,10 @@ def api_presidential_grant():
     else:
         success = (random.random() < 0.25)
         if success:
-            grant_money = 35_000_000
+            grant_money = 20_000_000
             state["budget"] += grant_money
             state["board_trust"] = min(100, state["board_trust"] + 8)
-            msg = f"💰 SARAYDAN MÜJDE: Cumhurbaşkanlığı Acil Kulüp Fonu'ndan kulübümüze {format_money_val(grant_money)} nakit destek onaylandı!"
+            msg = f"SARAYDAN MÜJDE: Cumhurbaşkanlığı Acil Kulüp Fonu'ndan kulübümüze {format_money_val(grant_money)} nakit destek onaylandı!"
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "success", "type": "cash", "message": msg, "state": state}
@@ -2991,10 +2993,144 @@ def api_presidential_grant():
             state["fan_trust"] = max(10, state["fan_trust"] - 10)
             state["board_trust"] = max(10, state["board_trust"] - 10)
             state["political_power"] = max(20, pol - 10)
-            msg = "❌ HİBE TALEBİ REDDEDİLDİ! Cumhurbaşkanlığı makamı bütçe disiplini gerekçesiyle hibe talebini geri çevirdi (-10 Siyaset)."
+            msg = "HİBE TALEBİ REDDEDİLDİ: Cumhurbaşkanlığı makamı bütçe disiplini gerekçesiyle hibe talebini geri çevirdi (-10 Siyaset)."
             state["news"].insert(0, msg)
             save_state(state)
             return {"status": "rejected", "type": "cash", "message": msg, "state": state}
+
+# ==================== TARAFTAR İLİŞKİLERİ VE TRİBÜN YÖNETİMİ ====================
+class FanActionRequest(BaseModel):
+    action_type: str # 'tribune_meeting', 'away_bus_support', 'ticket_discount', 'open_training'
+
+@app.post("/api/fan/action")
+def api_fan_action(req: FanActionRequest):
+    state = get_state()
+    cur_week = state.get("week", 1)
+    
+    if req.action_type == "tribune_meeting":
+        cost = 400_000
+        last_week = state.get("last_fan_tribune_week", -99)
+        if cur_week - last_week < 2:
+            raise HTTPException(status_code=400, detail="Tribün liderleriyle görüşme çok sık yapılamaz! En az 2 hafta ara vermelisiniz.")
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"İstişare yemeği ve organizasyon için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["last_fan_tribune_week"] = cur_week
+        state["fan_trust"] = min(100, state.get("fan_trust", 50) + 8)
+        state["team_morale"] = min(100, state.get("team_morale", 70) + 4)
+        msg = "Tribün Liderleriyle İstişare Yemeği: Amigolar ve derneklerle buluşuldu, tam destek sözü alındı (+8 Taraftar, +4 Moral)."
+
+    elif req.action_type == "away_bus_support":
+        cost = 1_200_000
+        last_week = state.get("last_fan_bus_week", -99)
+        if cur_week - last_week < 2:
+            raise HTTPException(status_code=400, detail="Deplasman seferberliği en az 2 hafta arayla düzenlenebilir.")
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"Deplasman otobüsleri ve bilet fonu için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["last_fan_bus_week"] = cur_week
+        state["fan_trust"] = min(100, state.get("fan_trust", 50) + 12)
+        state["away_fan_boost"] = True
+        msg = "Deplasman Seferberliği: 40 otobüs kaldırıldı ve deplasman biletleri kulüpçe karşılandı (+12 Taraftar Güveni)."
+
+    elif req.action_type == "ticket_discount":
+        last_week = state.get("last_fan_discount_week", -99)
+        if cur_week - last_week < 3:
+            raise HTTPException(status_code=400, detail="Bilet indirimi en az 3 hafta arayla yapılabilir.")
+        state["last_fan_discount_week"] = cur_week
+        state["fan_trust"] = min(100, state.get("fan_trust", 50) + 10)
+        state["board_trust"] = max(10, state.get("board_trust", 60) - 3)
+        msg = "Halk Günü Bilet İndirimi: İç saha biletlerinde %50 indirim ilan edildi (+10 Taraftar, -3 Yönetim Güveni)."
+
+    elif req.action_type == "open_training":
+        cost = 300_000
+        last_week = state.get("last_fan_training_week", -99)
+        if cur_week - last_week < 2:
+            raise HTTPException(status_code=400, detail="Açık antrenman en az 2 hafta arayla düzenlenebilir.")
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"Stadyum organizasyonu için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["last_fan_training_week"] = cur_week
+        state["fan_trust"] = min(100, state.get("fan_trust", 50) + 6)
+        state["team_morale"] = min(100, state.get("team_morale", 70) + 6)
+        msg = "Meşaleli Açık İdman: Binlerce taraftarın katılımıyla stadyumda şov yapıldı (+6 Taraftar, +6 Takım Morali)."
+
+    else:
+        raise HTTPException(status_code=400, detail="Geçersiz taraftar aksiyonu!")
+
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
+
+# ==================== KONGRE & DİVAN KURULU YÖNETİMİ ====================
+class BoardActionRequest(BaseModel):
+    action_type: str # 'board_meeting', 'financial_report', 'staff_bonus', 'vote_of_confidence'
+
+@app.post("/api/board/action")
+def api_board_action(req: BoardActionRequest):
+    state = get_state()
+    cur_week = state.get("week", 1)
+    cur_season = state.get("season", 1)
+
+    if req.action_type == "board_meeting":
+        cost = 600_000
+        last_week = state.get("last_board_meeting_week", -99)
+        if cur_week - last_week < 2:
+            raise HTTPException(status_code=400, detail="Olağanüstü yönetim zirvesi en az 2 hafta arayla yapılabilir.")
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"Zirve ve organizasyon için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["last_board_meeting_week"] = cur_week
+        state["board_trust"] = min(100, state.get("board_trust", 60) + 8)
+        state["media_trust"] = min(100, state.get("media_trust", 70) + 4)
+        msg = "Olağanüstü Yönetim Kurulu Zirvesi: Duayenler ve kurul üyeleriyle tam mutabakata varıldı (+8 Yönetim, +4 Medya)."
+
+    elif req.action_type == "financial_report":
+        last_week = state.get("last_board_audit_week", -99)
+        if cur_week - last_week < 3:
+            raise HTTPException(status_code=400, detail="Şeffaf mali rapor en az 3 hafta arayla sunulabilir.")
+        state["last_board_audit_week"] = cur_week
+        state["board_trust"] = min(100, state.get("board_trust", 60) + 7)
+        state["media_trust"] = min(100, state.get("media_trust", 70) + 5)
+        msg = "Şeffaf Mali İbra Raporu: Bağımsız denetim raporu genel kurula sunuldu ve alkış aldı (+7 Yönetim, +5 Medya)."
+
+    elif req.action_type == "staff_bonus":
+        cost = 2_000_000
+        last_week = state.get("last_board_bonus_week", -99)
+        if cur_week - last_week < 4:
+            raise HTTPException(status_code=400, detail="Kulüp personeli prim dağıtımı en az 4 hafta arayla yapılabilir.")
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"Personel prim fonu için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["last_board_bonus_week"] = cur_week
+        state["board_trust"] = min(100, state.get("board_trust", 60) + 10)
+        state["team_morale"] = min(100, state.get("team_morale", 70) + 5)
+        msg = "İdari ve Tesis Personeli Prim Dağıtımı: Kulüp emekçilerine moral primi dağıtıldı (+10 Yönetim, +5 Takım Morali)."
+
+    elif req.action_type == "vote_of_confidence":
+        if state.get("board_confidence_season") == cur_season:
+            raise HTTPException(status_code=400, detail="Güven oylaması sezonda yalnızca 1 kez talep edilebilir!")
+        cost = 1_000_000
+        if state["budget"] < cost:
+            raise HTTPException(status_code=400, detail=f"Kongre çağrısı ve salon masrafları için {format_money_val(cost)} bütçe gerekli!")
+        state["budget"] -= cost
+        state["board_confidence_season"] = cur_season
+        
+        cur_board = state.get("board_trust", 60)
+        if cur_board >= 50:
+            state["board_trust"] = min(100, cur_board + 15)
+            state["fan_trust"] = min(100, state.get("fan_trust", 50) + 6)
+            msg = "Güven Oylaması Zaferi: Genel kurul yönetime tam itimat ve açık çek verdi (+15 Yönetim, +6 Taraftar)!"
+        else:
+            state["board_trust"] = max(15, cur_board - 12)
+            msg = "Güven Oylamasında Çatlak Sesler: Muhalefet sert eleştiriler yöneltti ve kongre gergin geçti (-12 Yönetim Güveni)!"
+
+    else:
+        raise HTTPException(status_code=400, detail="Geçersiz kongre aksiyonu!")
+
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {"message": msg, "state": state}
 
 # ==================== TAKIM KAPTANI & KADRO HUZURSUZLUKLARI ====================
 @app.get("/api/captain/report")
