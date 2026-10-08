@@ -155,10 +155,10 @@ function toggleMusicPlayback() {
   initAudioSystem();
   if (isBgmPlaying) {
     stopBgm();
-    showToast("Arka plan müziği duraklatıldı 🔇");
+    showToast("Arka plan müziği duraklatıldı");
   } else {
     startBgm();
-    showToast("Arka plan müziği çalıyor 🎵");
+    showToast("Arka plan müziği çalıyor");
   }
 }
 
@@ -170,21 +170,22 @@ function updateMusicUIButtons(playing) {
 
   if (playing) {
     if (hBtn) hBtn.className = "text-[9px] text-amber-400 font-bold flex items-center gap-1 bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/40 animate-pulse";
-    if (hIcon) hIcon.innerText = "🎵";
+    if (hIcon) hIcon.innerHTML = `<i data-lucide="music" class="w-3 h-3 text-amber-400"></i>`;
     if (hLbl) hLbl.innerText = "Müzik Açık";
     if (mBtn) {
-      mBtn.innerHTML = `<span>🔊 Çalıyor</span>`;
+      mBtn.innerHTML = `<span class="flex items-center gap-1.5"><i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-400"></i><span>Çalıyor</span></span>`;
       mBtn.className = "px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-500/30 font-black text-[10px] shadow-sm transition-all cursor-pointer";
     }
   } else {
     if (hBtn) hBtn.className = "text-[9px] text-slate-400 font-bold flex items-center gap-1 bg-slate-900/90 px-1.5 py-0.5 rounded border border-slate-700";
-    if (hIcon) hIcon.innerText = "🔇";
+    if (hIcon) hIcon.innerHTML = `<i data-lucide="volume-x" class="w-3 h-3 text-slate-400"></i>`;
     if (hLbl) hLbl.innerText = "Müzik";
     if (mBtn) {
-      mBtn.innerHTML = `<span>🔇 Kapalı</span>`;
+      mBtn.innerHTML = `<span class="flex items-center gap-1.5"><i data-lucide="volume-x" class="w-3.5 h-3.5 text-slate-400"></i><span>Kapalı</span></span>`;
       mBtn.className = "px-2.5 py-1 rounded-xl bg-slate-800/80 text-slate-400 border border-slate-700 hover:text-slate-200 font-bold text-[10px] shadow-sm transition-all cursor-pointer";
     }
   }
+  if (window.lucide) lucide.createIcons();
 }
 
 function applyBgmVolume(val) {
@@ -264,9 +265,9 @@ function updateTrackCardsUI(selectedTrack) {
   cards.forEach(card => {
     const cardTrack = card.getAttribute("data-track");
     if (cardTrack === track) {
-      card.className = "track-card p-2 rounded-xl border border-amber-400 bg-amber-500/20 text-amber-300 shadow-md ring-1 ring-amber-400/40 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
+      card.className = "track-card p-2 rounded-xl border-2 border-amber-400 bg-slate-800 text-white shadow-md text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
     } else {
-      card.className = "track-card p-2 rounded-xl border border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-white text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
+      card.className = "track-card p-2 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-400 hover:border-slate-600 hover:text-white text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5";
     }
   });
 
@@ -326,7 +327,7 @@ function closeSettingsModal() {
 }
 
 async function resetCareerPrompt() {
-  if (!confirm("⚠️ Mevcut kariyerinizi sıfırlamak ve tüm eski kayıtları silmek istediğinize emin misiniz? Yeni bir kulüp seçerek sıfırdan başlayacaksınız.")) {
+  if (!confirm("Mevcut kariyerinizi sıfırlamak ve tüm eski kayıtları silmek istediğinize emin misiniz? Yeni bir kulüp seçerek sıfırdan başlayacaksınız.")) {
     return;
   }
   closeSettingsModal();
@@ -338,7 +339,7 @@ async function resetCareerPrompt() {
 
     const res = await apiFetch("/api/save/reset-all", { method: "POST" });
     if (res.ok) {
-      showToast("Tüm kayıtlar silindi! Yeni takımınızı seçin 🔄");
+      showToast("Tüm kayıtlar silindi! Yeni takımınızı seçin.");
       await fetchState();
       openTeamSelectModal();
     } else {
@@ -361,7 +362,7 @@ async function swapSquadPlayers(idx1, idx2) {
       const data = await res.json();
       gameState = data.state;
       renderUI();
-      showToast("Kadro güncellendi 🔄");
+      showToast("Kadro güncellendi.");
     } else {
       const err = await res.json();
       showToast(err.detail || "Kadro değişikliği uygulanamadı!");
@@ -472,8 +473,8 @@ function openSubstitutionModal(idx, isStarter) {
       <div class="truncate">
         <div class="text-xs font-bold text-white flex items-center gap-1.5 truncate">
           <span>${player.name}</span>
-          <span class="text-[9px] ${isStarter ? 'text-amber-400 bg-amber-500/10 border border-amber-500/30' : 'text-slate-400 bg-slate-800'} px-1.5 py-0.2 rounded font-semibold">
-            ${isStarter ? '⭐ İlk 11' : '🪑 Yedek'}
+          <span class="text-[9px] ${isStarter ? 'text-amber-300 bg-slate-900 border border-slate-700' : 'text-slate-400 bg-slate-900 border border-slate-800'} px-2 py-0.5 rounded-lg font-bold">
+            ${isStarter ? 'İlk 11' : 'Yedek'}
           </span>
         </div>
         <div class="text-[10px] text-slate-400 mt-0.5">
@@ -482,7 +483,7 @@ function openSubstitutionModal(idx, isStarter) {
       </div>
     </div>
     <div class="text-right">
-      <span class="text-[10px] text-rose-400 font-bold bg-rose-950/60 border border-rose-800/40 px-2 py-1 rounded">
+      <span class="text-[10px] text-rose-400 font-bold bg-slate-900 border border-rose-500/40 px-2 py-1 rounded-lg">
         ${isStarter ? 'Kenara Geçecek' : 'Sahaya Girecek'}
       </span>
     </div>
@@ -522,7 +523,7 @@ function openSubstitutionModal(idx, isStarter) {
   if (candidates.length === 0) {
     listEl.innerHTML = `
       <div class="p-3 text-center bg-slate-900/60 border border-slate-800 rounded-xl text-slate-400 text-xs">
-        ${isGK ? '⚠️ Yedek kulübesinde başka kaleci bulunmuyor. İlk 11 kalecisiz kalamaz!' : 'Uygun mevkide oyuncu bulunamadı.'}
+        ${isGK ? 'Yedek kulübesinde başka kaleci bulunmuyor. İlk 11 kalecisiz kalamaz!' : 'Uygun mevkide oyuncu bulunamadı.'}
       </div>
     `;
   } else {
@@ -537,7 +538,7 @@ function openSubstitutionModal(idx, isStarter) {
           <div class="truncate">
             <div class="font-bold text-white text-[11px] truncate flex items-center gap-1">
               <span>${p.name}</span>
-              ${p.is_foreign !== false ? '<span class="text-[8px] text-sky-400 font-bold">🌐 YBN</span>' : '<span class="text-[8px] text-rose-400 font-bold">🇹🇷 TR</span>'}
+              ${p.is_foreign !== false ? '<span class="text-[8px] bg-slate-900 text-sky-400 border border-slate-700 px-1 rounded font-bold">YBN</span>' : '<span class="text-[8px] bg-slate-900 text-rose-400 border border-slate-700 px-1 rounded font-bold">TR</span>'}
             </div>
             <div class="text-[9px] text-slate-400">
               ${p.age} yaş • Güç: <strong class="text-white font-bold">${p.overall}</strong> • Sözleşme: ${p.contract_years !== undefined ? p.contract_years : 2} Yıl
@@ -592,7 +593,7 @@ async function autoPickSquadByCoach() {
     }
     gameState = data.state;
     renderUI();
-    showToast("👔 Teknik Direktör ideal 11'i belirledi! (Yabancı kuralı gözetildi)");
+    showToast("Teknik Direktör ideal 11'i belirledi! (Yabancı kuralı gözetildi)");
   } catch (e) {
     console.error(e);
     showToast("Hoca kadroyu belirleyemedi!");
@@ -637,7 +638,7 @@ function setAppTheme(themeId = "default", notify = false) {
   document.body.classList.remove("theme-cyberpunk", "theme-gold", "theme-emerald", "theme-arcade");
   localStorage.setItem("baskan_selected_theme", "default");
   if (notify) {
-    showToast("✨ Büyük Başkan Özel Arayüzü Aktif");
+    showToast("Büyük Başkan Özel Arayüzü Aktif");
   }
 }
 
@@ -801,7 +802,7 @@ async function fetchState() {
           });
           if (syncRes.ok) {
             gameState = await syncRes.json();
-            showToast(`💾 Kayıtlı kariyeriniz otomatik yüklendi! (${gameState.club_name} • ${gameState.season}. Sezon ${gameState.week}. Hafta)`);
+            showToast(`Kayıtlı kariyeriniz otomatik yüklendi! (${gameState.club_name} • ${gameState.season}. Sezon ${gameState.week}. Hafta)`);
           }
         }
       } catch (err) {
@@ -995,13 +996,14 @@ function renderUI() {
     const isMatchday = (todayStr === fixDateStr);
     if (countBadge) {
       if (isMatchday) {
-        countBadge.className = "text-[9.5px] font-black px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 animate-pulse";
-        countBadge.innerText = "🔥 BUGÜN MAÇ GÜNÜ!";
+        countBadge.className = "text-[9.5px] font-black px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-md animate-pulse flex items-center gap-1";
+        countBadge.innerHTML = `<i data-lucide="flame" class="w-3 h-3 text-white"></i><span>BUGÜN MAÇ GÜNÜ!</span>`;
       } else {
         const diffDays = Math.max(0, Math.round((new Date(fixDateStr) - new Date(todayStr)) / (1000 * 3600 * 24)));
-        countBadge.className = "text-[9.5px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
+        countBadge.className = "text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-amber-300 border border-slate-700 shadow-sm";
         countBadge.innerText = `${diffDays} Gün Kaldı`;
       }
+      if (window.lucide) lucide.createIcons();
     }
 
     if (btnOfficePlayMatch && btnOfficeAdvanceDay && btnOfficeAdvanceMatch) {
@@ -1080,13 +1082,14 @@ function renderUI() {
   if (officeBtnContainer) {
     if (isCoachVacant) {
       officeBtnContainer.innerHTML = `
-        <button onclick="openSelectCoachModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg animate-pulse">
-          👔 Yeni TD Seç
+        <button onclick="openSelectCoachModal()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-black shadow-lg animate-pulse flex items-center gap-1.5 cursor-pointer">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+          <span>Yeni TD Seç</span>
         </button>
       `;
     } else {
       officeBtnContainer.innerHTML = `
-        <button onclick="openCoachModal()" class="px-2.5 py-1.5 rounded bg-emerald-600/30 text-[11px] font-bold text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/50">
+        <button onclick="openCoachModal()" class="px-2.5 py-1.5 rounded-lg bg-emerald-600/30 text-[11px] font-bold text-emerald-300 border border-emerald-500/50 hover:bg-emerald-600/50 cursor-pointer">
           Görüş
         </button>
       `;
@@ -1097,19 +1100,20 @@ function renderUI() {
   if (squadActionsGrid) {
     if (isCoachVacant) {
       squadActionsGrid.innerHTML = `
-        <button onclick="openSelectCoachModal()" class="col-span-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-lg animate-pulse">
-          👔 Yeni Teknik Direktör İmzala (Aday Listesi)
+        <button onclick="openSelectCoachModal()" class="col-span-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-lg animate-pulse cursor-pointer">
+          <i data-lucide="user-plus" class="w-4 h-4"></i>
+          <span>Yeni Teknik Direktör İmzala (Aday Listesi)</span>
         </button>
       `;
     } else {
       squadActionsGrid.innerHTML = `
-        <button onclick="openCoachModal()" id="btn-squad-coach-talk" class="py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-[10px] flex items-center justify-center gap-1">
+        <button onclick="openCoachModal()" id="btn-squad-coach-talk" class="py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer">
           <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Hoca ile Konuş
         </button>
-        <button onclick="openCoachVisionModal()" id="btn-squad-coach-vision" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[10px] flex items-center justify-center gap-1">
+        <button onclick="openCoachVisionModal()" id="btn-squad-coach-vision" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer">
           <i data-lucide="sparkles" class="w-3 h-3 text-blue-400"></i> Hoca Vizyonu
         </button>
-        <button onclick="openCaptainReportModal()" id="btn-squad-coach-captain" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[10px] flex items-center justify-center gap-1">
+        <button onclick="openCaptainReportModal()" id="btn-squad-coach-captain" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer">
           <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Kaptan & Zam
         </button>
       `;
@@ -1126,15 +1130,15 @@ function renderUI() {
     return 'zap';
   };
   const renderTraitsHtml = (list) => {
-    if (isCoachVacant) return '<span class="inline-flex items-center gap-1 text-[10px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-800/60"><i data-lucide="alert-triangle" class="w-3 h-3 text-amber-400"></i> Teknik Direktör Aranıyor</span>';
-    if (!list || list.length === 0) return '<span class="inline-flex items-center gap-1 text-[10px] text-slate-400 font-semibold bg-slate-900/60 px-2 py-0.5 rounded-lg border border-slate-800"><i data-lucide="compass" class="w-3 h-3 text-slate-400"></i> Taktiksel Disiplin</span>';
+    if (isCoachVacant) return '<span class="inline-flex items-center gap-1 text-[10px] text-amber-300 font-bold bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700"><i data-lucide="alert-triangle" class="w-3 h-3 text-amber-400"></i> Teknik Direktör Aranıyor</span>';
+    if (!list || list.length === 0) return '<span class="inline-flex items-center gap-1 text-[10px] text-slate-300 font-semibold bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-700"><i data-lucide="compass" class="w-3 h-3 text-slate-400"></i> Taktiksel Disiplin</span>';
     return list.map(t => {
       const name = (typeof t === 'object' && t.name) ? t.name : String(t);
       const icon = (typeof t === 'object' && t.icon) ? t.icon : 'zap';
       const desc = (typeof t === 'object' && t.desc) ? t.desc : '';
       return `
-        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-sky-950/70 text-sky-300 border border-sky-600/40 shadow-sm" title="${desc}">
-          <i data-lucide="${mapTraitIcon(icon)}" class="w-3 h-3 text-sky-400"></i>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-200 border border-slate-700 shadow-sm" title="${desc}">
+          <i data-lucide="${mapTraitIcon(icon)}" class="w-3 h-3 text-amber-400"></i>
           <span>${name}</span>
         </span>
       `;
@@ -1163,7 +1167,7 @@ function renderUI() {
       : (gameState.week < 22)
       ? `Ara transfer dönemi kapandı. Sezon sonuna kadar transfer kapalıdır.`
       : `Pencereler kapandı. Sezon sonuna kadar kadrolar donduruldu.`;
-    winTitle.innerText = "🛑 Transfer Penceresi: KAPALI (Lig Maçları)";
+    winTitle.innerText = "Transfer Penceresi: KAPALI (Lig Maçları)";
     winDesc.innerText = nextWindowMsg;
     officeWin.innerText = `KAPALI (Hf: ${gameState.week}/34)`;
     officeWin.className = "text-xs font-bold text-slate-400";
@@ -1470,23 +1474,23 @@ function renderSquadList() {
   }`;
   banner.innerHTML = `
     <div class="flex items-center gap-1.5">
-      <span class="text-xs">🌐</span>
+      <i data-lucide="globe" class="w-3 h-3 text-slate-400"></i>
       <span>İlk 11 Yabancı Kuralı: <strong class="${foreignCount > 8 ? 'text-red-400 font-black' : 'text-emerald-400 font-bold'}">${foreignCount}/8 Yabancı</strong></span>
     </div>
     ${
       foreignCount > 8
         ? '<span class="text-[9px] bg-red-700 text-white font-black px-2 py-0.5 rounded animate-pulse">4M ₺ CEZA TEHLİKESİ!</span>'
-        : '<span class="text-[9px] text-emerald-400 font-semibold bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/40">Kurala Uygun ✓</span>'
+        : '<span class="text-[9px] text-emerald-400 font-semibold bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Kurala Uygun</span>'
     }
   `;
   container.appendChild(banner);
 
-  // 1. Grup: ⭐ İLK 11 (MAÇ KADROSU)
+  // 1. Grup: İLK 11 (MAÇ KADROSU)
   const startersHeader = document.createElement("div");
-  startersHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 rounded-xl mb-2 shadow-sm";
+  startersHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-slate-200 bg-slate-900 border border-slate-700 rounded-xl mb-2 shadow-sm";
   startersHeader.innerHTML = `
-    <span class="flex items-center gap-1.5"><span>⭐</span> <span>MAÇ KADROSU (İLK 11)</span></span>
-    <span class="text-[9px] text-amber-300/80 font-bold bg-amber-500/20 px-2 py-0.5 rounded-full">11 Oyuncu</span>
+    <span class="flex items-center gap-1.5"><i data-lucide="star" class="w-3.5 h-3.5 text-amber-400"></i> <span>MAÇ KADROSU (İLK 11)</span></span>
+    <span class="text-[9px] text-slate-300 font-bold bg-slate-800 border border-slate-700 px-2 py-0.5 rounded-full">11 Oyuncu</span>
   `;
   container.appendChild(startersHeader);
 
@@ -1575,7 +1579,7 @@ function renderSquadList() {
       card.className = "p-2.5 rounded-xl border border-blue-900/60 bg-slate-900/90 flex items-center justify-between gap-2.5 text-xs shadow-md transition-all";
       const safeName = lp.name.replace(/'/g, "\\'");
       const growthBadge = (lp.growth && lp.growth > 0) 
-        ? `<span class="text-[8px] bg-emerald-950 text-emerald-400 border border-emerald-500/60 px-1 py-0.2 rounded font-black">📈 +${lp.growth} OVR</span>` 
+        ? `<span class="text-[8px] bg-slate-800 text-emerald-400 border border-slate-700 px-1.5 py-0.5 rounded font-bold">+${lp.growth} OVR</span>` 
         : '';
       const weeksLeft = lp.weeks_left !== undefined ? lp.weeks_left : (lp.loan_weeks_left || 0);
       
@@ -1585,9 +1589,9 @@ function renderSquadList() {
           <div class="truncate">
             <div class="font-extrabold text-white text-[11px] flex items-center gap-1.5 flex-wrap">
               <span>${lp.name}</span>
-              <span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-600/40 px-1 py-0.2 rounded font-bold">🏢 ${lp.loan_club}</span>
+              <span class="text-[8px] bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold">${lp.loan_club}</span>
               ${growthBadge}
-              <span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-600/40 px-1 py-0.2 rounded font-bold font-mono">⏳ ${weeksLeft} Hafta Sonra Dönecek</span>
+              <span class="text-[8px] bg-slate-800 text-amber-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold font-mono">${weeksLeft} Hafta Sonra Dönecek</span>
             </div>
             <div class="text-[9px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
               <span class="flex items-center gap-1"><i data-lucide="activity" class="w-2.5 h-2.5 text-sky-400"></i> <strong class="text-white">${lp.matches_played || lp.loan_matches_played || 0}</strong> maç (<strong class="text-white">${lp.minutes_played || lp.loan_minutes_played || 0}</strong> dk)</span>
@@ -1918,7 +1922,7 @@ async function startMatchSimulation() {
   if (startBtn) {
     startBtn.disabled = true;
     startBtn.classList.add("opacity-60", "cursor-not-allowed");
-    startBtn.innerHTML = `<span class="animate-spin inline-block mr-1">⚽</span> <span>1. Devre Oynanıyor... (10s)</span>`;
+    startBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 inline-block mr-1 text-emerald-400"></i> <span>1. Devre Oynanıyor... (10s)</span>`;
   }
 
   document.querySelectorAll(".press-opt-btn").forEach(b => b.disabled = true);
@@ -1936,7 +1940,7 @@ async function startMatchSimulation() {
   const feed = document.getElementById("match-live-feed");
   feed.innerHTML = `
     <div class="p-1.5 rounded-lg bg-emerald-950/70 border border-emerald-600/50 text-emerald-200 text-[11px] font-semibold flex items-center justify-between">
-      <span>📢 Hakem düdüğü çaldı, 1. Devre başladı!</span>
+      <span>Hakem düdüğü çaldı, 1. Devre başladı!</span>
       <span class="font-mono text-[9px] text-amber-400 bg-slate-900 px-1 py-0.2 rounded border border-slate-800 animate-pulse">1. YARI (10s)</span>
     </div>
   `;
@@ -1995,7 +1999,7 @@ async function submitHalftimeAction(action) {
 
   const startBtn = document.getElementById("start-match-btn");
   if (startBtn) {
-    startBtn.innerHTML = `<span class="animate-spin inline-block mr-1">⚽</span> <span>2. Devre Oynanıyor... (10s)</span>`;
+    startBtn.innerHTML = `<i data-lucide="play" class="w-3.5 h-3.5 inline-block mr-1 text-emerald-400"></i> <span>2. Devre Oynanıyor... (10s)</span>`;
   }
 
   try {
@@ -2183,7 +2187,7 @@ function finishMatch(match) {
   const feed = document.getElementById("match-live-feed");
   const endRow = document.createElement("div");
   endRow.className = "p-2 rounded-lg text-[11px] font-bold bg-amber-500/10 border border-amber-500/40 text-amber-300 flex items-center justify-between mt-1";
-  endRow.innerHTML = `<span>🏁 MAÇ SONA ERDİ: ${match.home_name} ${match.home_score} - ${match.away_score} ${match.away_name}</span> <span class="font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">${match.result}</span>`;
+  endRow.innerHTML = `<span>MAÇ SONA ERDİ: ${match.home_name} ${match.home_score} - ${match.away_score} ${match.away_name}</span> <span class="font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">${match.result}</span>`;
   feed.appendChild(endRow);
   feed.scrollTop = feed.scrollHeight;
 
@@ -2213,7 +2217,7 @@ function finishMatch(match) {
           <span class="text-[8px] font-black px-1.5 py-0.5 rounded bg-slate-800 text-amber-400 border border-slate-700 flex-shrink-0">${shortenPosition(p.pos)}</span>
           <span class="text-xs font-semibold text-white truncate" title="${p.name}">${p.name}</span>
           ${p.is_sub ? '<span class="text-[8px] text-blue-300 bg-blue-950 px-1 py-0.2 rounded border border-blue-800 flex-shrink-0 font-bold">YDK</span>' : ''}
-          ${p.goals > 0 ? `<span class="text-[9px] font-black text-amber-400 flex-shrink-0">⚽${p.goals > 1 ? p.goals : ''}</span>` : ''}
+          ${p.goals > 0 ? `<span class="text-[9px] font-black text-amber-400 flex-shrink-0">${p.goals > 1 ? p.goals + " Gol" : "1 Gol"}</span>` : ''}
         </div>
         <span class="text-xs font-black font-mono px-1.5 py-0.5 rounded border flex-shrink-0 ${rtgColor}">${p.rating.toFixed(1)}</span>
       `;
@@ -2226,7 +2230,7 @@ function finishMatch(match) {
 
   const matchIncome = (match.ticket_income || 0) + (match.store_income || 0);
   const incomeStr = matchIncome > 0 ? ` • Hasılat: +${formatMoney(matchIncome)}` : '';
-  showToast(`🏁 Maç Bitti! Skor: ${match.home_score} - ${match.away_score} (${match.result})${incomeStr}`);
+  showToast(`Maç Bitti! Skor: ${match.home_score} - ${match.away_score} (${match.result})${incomeStr}`);
 
   document.getElementById("match-pre-panel").classList.add("hidden");
   document.getElementById("post-match-action").classList.remove("hidden");
@@ -2279,61 +2283,72 @@ function renderPostMatchCoachBriefing(match) {
 
   if (briefingMode === "best") {
     if (tagEl) {
-      tagEl.innerText = "⭐ Maçın Yıldızı";
-      tagEl.className = "text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold";
+      tagEl.innerHTML = `<span class="inline-flex items-center gap-1.5 text-[10px] bg-slate-900 text-slate-100 border border-slate-700 px-2 py-0.5 rounded-lg font-bold shadow-sm"><i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i> Maçın Yıldızı</span>`;
+      tagEl.className = "";
     }
     if (textEl) {
       textEl.innerText = `Hoca ${gameState.coach.name}: "Başkanım, ${selectedPlayer.name} bugün sahada resital sundu (${selectedPlayer.rating.toFixed(1)} Puan). Bu formu korumak için oyuncuyu onore edelim mi?"`;
     }
     if (actionsEl) {
       actionsEl.innerHTML = `
-        <button onclick="submitCoachPostMatchTalk('bonus', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-300 font-bold text-[10px] text-center transition-all">
-          💰 1M ₺ Prim Ver
+        <button onclick="submitCoachPostMatchTalk('bonus', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="coins" class="w-4 h-4 text-emerald-400"></i>
+          <span>250K € Prim</span>
         </button>
-        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-300 font-bold text-[10px] text-center transition-all">
-          👏 Tebrik Et
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-sky-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="award" class="w-4 h-4 text-sky-400"></i>
+          <span>Tebrik Et</span>
         </button>
-        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-bold text-[10px] text-center transition-all">
-          📋 "Rehavet Yok"
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i>
+          <span>Rehavet Yok</span>
         </button>
       `;
     }
   } else if (briefingMode === "worst") {
     if (tagEl) {
-      tagEl.innerText = "⚠️ Düşük Performans";
-      tagEl.className = "text-[9px] bg-rose-500/20 text-rose-300 border border-rose-500/40 px-1.5 py-0.5 rounded font-bold";
+      tagEl.innerHTML = `<span class="inline-flex items-center gap-1.5 text-[10px] bg-slate-900 text-slate-100 border border-slate-700 px-2 py-0.5 rounded-lg font-bold shadow-sm"><i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i> Düşük Performans</span>`;
+      tagEl.className = "";
     }
     if (textEl) {
       textEl.innerText = `Hoca ${gameState.coach.name}: "Başkanım, ${selectedPlayer.name} bugün sahada çok isteksizdi ve beklentinin çok altında kaldı (${selectedPlayer.rating.toFixed(1)} Puan). Bir tedbir alalım mı?"`;
     }
     if (actionsEl) {
       actionsEl.innerHTML = `
-        <button onclick="submitCoachPostMatchTalk('warn', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-rose-600/30 hover:bg-rose-600/50 border border-rose-500/50 text-rose-300 font-bold text-[10px] text-center transition-all">
-          ⚠️ Uyar & Yedeğe Al
+        <button onclick="submitCoachPostMatchTalk('warn', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i>
+          <span>Uyar & Yedek</span>
         </button>
-        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-300 font-bold text-[10px] text-center transition-all">
-          🤝 "Destek Ol Hocam"
+        <button onclick="submitCoachPostMatchTalk('praise', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-sky-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="heart-handshake" class="w-4 h-4 text-sky-400"></i>
+          <span>Moral Ver</span>
         </button>
-        <button onclick="submitCoachPostMatchTalk('fine', '${selectedPlayer.name}')" class="p-1.5 rounded-lg bg-amber-600/30 hover:bg-amber-600/50 border border-amber-500/50 text-amber-300 font-bold text-[10px] text-center transition-all">
-          💸 500K ₺ Ceza Kes
+        <button onclick="submitCoachPostMatchTalk('fine', '${selectedPlayer.name}')" class="flex flex-col items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/60 text-slate-100 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="banknote" class="w-4 h-4 text-amber-400"></i>
+          <span>100K € Ceza</span>
         </button>
       `;
     }
   } else {
     if (tagEl) {
-      tagEl.innerText = "📋 Genel Değerlendirme";
-      tagEl.className = "text-[9px] bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold";
+      tagEl.innerHTML = `<span class="inline-flex items-center gap-1.5 text-[10px] bg-slate-900 text-slate-100 border border-slate-700 px-2 py-0.5 rounded-lg font-bold shadow-sm"><i data-lucide="clipboard-list" class="w-3.5 h-3.5 text-slate-400"></i> Genel Değerlendirme</span>`;
+      tagEl.className = "";
     }
     if (textEl) {
       textEl.innerText = `Hoca ${gameState.coach.name}: "Takım bugün dengeli bir oyun ortaya koydu. Gelecek haftanın taktik hazırlığına başladık."`;
     }
     if (actionsEl) {
       actionsEl.innerHTML = `
-        <button onclick="submitCoachPostMatchTalk('praise', '')" class="col-span-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-[10px] text-center transition-all">
-          👍 "Eline sağlık hocam, devam edelim"
+        <button onclick="submitCoachPostMatchTalk('praise', '')" class="col-span-3 flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold text-[11px] text-center transition-all shadow-sm active:scale-95 cursor-pointer">
+          <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+          <span>"Eline sağlık hocam, devam edelim"</span>
         </button>
       `;
     }
+  }
+
+  if (window.lucide) {
+    lucide.createIcons();
   }
 
   box.classList.remove("hidden");
@@ -2367,7 +2382,7 @@ function prepareNextMatch() {
   if (briefingBox) briefingBox.classList.add("hidden");
 
   if (gameState && gameState.season_finished) {
-    showToast("🏆 Sezon tamamlandı! Kongre ve Kupa ekranına geçiliyor.");
+    showToast("Sezon tamamlandı! Kongre ve Kupa ekranına geçiliyor.");
     checkSeasonEndModal();
     return;
   }
@@ -2387,7 +2402,7 @@ function prepareNextMatch() {
 
   renderUI();
   if (gameState) {
-    showToast(`📅 ${gameState.week}. Hafta maçına odaklanıldı!`);
+    showToast(`${gameState.week}. Hafta maçına odaklanıldı!`);
   }
 }
 
@@ -2411,7 +2426,7 @@ async function openCaptainReportModal() {
         const item = document.createElement("div");
         item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-xl space-y-2";
         item.id = "wage-demand-card-" + p.name;
-        const potBadge = (p.age < 26) ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-bold">⚡ POT: ${p.potential}</span>` : '';
+        const potBadge = (p.age < 26) ? `<span class="text-[9px] bg-slate-800 text-sky-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold font-mono">POT: ${p.potential}</span>` : '';
         item.innerHTML = `
           <div class="flex justify-between items-center text-xs">
             <div>
@@ -2426,7 +2441,7 @@ async function openCaptainReportModal() {
             <span class="text-[9px] font-bold text-amber-300 bg-slate-800 px-1.5 py-0.5 rounded">${p.contract_years} Yıl Kaldı</span>
           </div>
           <div class="text-[9px] text-amber-300/90 font-medium italic bg-slate-950/60 px-2 py-1 rounded border border-slate-800">
-            💬 "${p.reason || 'Sözleşmesinde iyileştirme bekliyor.'}"
+            "${p.reason || 'Sözleşmesinde iyileştirme bekliyor.'}"
           </div>
           <div class="grid grid-cols-3 gap-1 pt-1">
             <button onclick="respondWageNegotiation('${p.name}', 'accept')" class="p-1 rounded bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-300 font-bold text-[9px]">
@@ -2481,7 +2496,7 @@ async function respondWageNegotiation(playerName, decision) {
         card.remove();
         const list = document.getElementById("captain-wage-demands-list");
         if (list && list.children.length === 0) {
-          list.innerHTML = '<div class="text-slate-400 text-xs text-center py-3 italic">Tüm zam talepleri sonuçlandırıldı. Aktif talep kalmadı ✓</div>';
+          list.innerHTML = '<div class="text-slate-400 text-xs text-center py-3 italic">Tüm zam talepleri sonuçlandırıldı. Aktif talep kalmadı.</div>';
         }
       }, 300);
     } else {
@@ -2573,7 +2588,7 @@ function openCoachVisionModal() {
         badge.innerText = "Bu Yarı Sezonda Kullanıldı (Kilitli)";
       } else {
         badge.className = "px-2 py-0.5 rounded font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/50";
-        badge.innerText = "Müsait ✓";
+        badge.innerText = "Müsait";
       }
     }
   }
@@ -2656,7 +2671,7 @@ function onScoutTeamChanged() {
           <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-800 text-amber-400">${shortenPosition(p.pos)}</span>
           <span>${p.name}</span>
           <span class="text-[9px] text-slate-400">(${p.age} yaş)</span>
-          ${(p.age < 26) ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-1 py-0.2 rounded font-bold">⚡ POT: ${p.potential || Math.min(94, p.overall + Math.max(3, (27 - p.age) * 2))}</span>` : ''}
+          ${(p.age < 26) ? `<span class="text-[9px] bg-slate-800 text-sky-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold font-mono">POT: ${p.potential || Math.min(94, p.overall + Math.max(3, (27 - p.age) * 2))}</span>` : ''}
         </div>
         <div class="text-[9px] text-slate-400 mt-0.5">
           Değer: <strong class="text-emerald-400">${formatMoney(p.val)}</strong> • Maaş: ${formatMoney(p.wage)} • Sözleşme: ${p.contract_years || 2} Yıl
@@ -2754,8 +2769,8 @@ function switchNegotiationMode(mode) {
   const title = document.getElementById("negotiate-modal-title");
 
   if (mode === "loan") {
-    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all";
-    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg bg-blue-600 text-white shadow-md transition-all";
+    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer flex items-center justify-center gap-1.5";
+    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg bg-blue-600 text-white shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5";
     if (paneBuy) paneBuy.classList.add("hidden");
     if (paneLoan) paneLoan.classList.remove("hidden");
     if (title) title.innerText = "Kiralık Sözleşmesi Pazarlığı";
@@ -2766,8 +2781,8 @@ function switchNegotiationMode(mode) {
     if (signStep) signStep.classList.add("hidden");
     setLoanWagePct(activeNegotiation.loanWagePct || 100);
   } else {
-    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 shadow-md transition-all";
-    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+    if (btnBuy) btnBuy.className = "py-1.5 text-center font-bold rounded-lg bg-amber-500 text-slate-950 shadow-md transition-all cursor-pointer flex items-center justify-center gap-1.5";
+    if (btnLoan) btnLoan.className = "py-1.5 text-center font-bold rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer flex items-center justify-center gap-1.5";
     if (paneBuy) paneBuy.classList.remove("hidden");
     if (paneLoan) paneLoan.classList.add("hidden");
     if (title) title.innerText = "Transfer & Maaş Pazarlığı";
@@ -2827,7 +2842,7 @@ async function submitCustomNegotiation() {
     if (!res.ok) {
       if (fbBox) {
         fbBox.className = "p-2 rounded-lg text-[10.5px] bg-rose-950/70 border border-rose-800 text-rose-300 leading-snug";
-        fbBox.innerText = "❌ " + (data.detail || "Teklif iletilemedi!");
+        fbBox.innerText =  (data.detail || "Teklif iletilemedi!");
         fbBox.classList.remove("hidden");
       }
       showToast(data.detail || "Transfer gerçekleşemedi!");
@@ -2835,7 +2850,7 @@ async function submitCustomNegotiation() {
     }
 
     if (data.status === "accepted") {
-      showToast("✅ " + data.message);
+      showToast(data.message);
       closeNegotiationModal();
       if (typeof closeLeagueScoutModal === "function") closeLeagueScoutModal();
       gameState = data.state;
@@ -2843,22 +2858,24 @@ async function submitCustomNegotiation() {
       renderTransferMarket();
     } else if (data.status === "counter_offer") {
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-amber-950/70 border border-amber-700 text-amber-200 leading-snug";
-        fbBox.innerHTML = `⚠️ <strong>Pazarlık Devam Ediyor:</strong><br>${data.message}`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-amber-500 text-slate-200 leading-snug flex items-start gap-2";
+        fbBox.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i><div><strong class="text-amber-400 font-bold">Pazarlık Devam Ediyor:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
       if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
       if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
-      showToast("⚠️ Kulüp ve oyuncu karşı teklif sundu!");
+      showToast("Kulüp ve oyuncu karşı teklif sundu.");
     } else if (data.status === "insult_rejected") {
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-rose-950/80 border border-rose-700 text-rose-200 leading-snug";
-        fbBox.innerHTML = `🚫 <strong>Masadan Kalktılar:</strong><br>${data.message}`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2";
+        fbBox.innerHTML = `<i data-lucide="x-circle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">Masadan Kalktılar:</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
       if (data.counter_fee && bidInput) bidInput.value = data.counter_fee;
       if (data.counter_wage && wageInput) wageInput.value = data.counter_wage;
-      showToast("🚫 Kulüp teklife öfkelendi!");
+      showToast("Kulüp teklife öfkelendi!");
     }
   } catch (e) {
     console.error(e);
@@ -2904,15 +2921,17 @@ async function tapUpCurrentPlayer() {
         bidInput.value = discounted;
       }
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-emerald-950/80 border border-emerald-700 text-emerald-200 leading-snug";
-        fbBox.innerHTML = `🕵️ <strong>İSYAN ÇIKARILDI!</strong><br>${data.message}`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-emerald-500 text-slate-200 leading-snug flex items-start gap-2";
+        fbBox.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i><div><strong class="text-emerald-400 font-bold">İSYAN ÇIKARILDI!</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
     } else {
       showToast(data.message);
       if (fbBox) {
-        fbBox.className = "p-2.5 rounded-lg text-[10.5px] bg-rose-950/80 border border-rose-700 text-rose-200 leading-snug";
-        fbBox.innerHTML = `⚠️ <strong>SKANDAL PATLADI!</strong><br>${data.message}`;
+        fbBox.className = "p-2.5 rounded-xl text-xs bg-slate-900 border border-slate-700 border-l-4 border-l-rose-500 text-slate-200 leading-snug flex items-start gap-2";
+        fbBox.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400 shrink-0 mt-0.5"></i><div><strong class="text-rose-400 font-bold">SKANDAL PATLADI!</strong><div class="mt-0.5 text-slate-300">${data.message}</div></div>`;
+        if (window.lucide) lucide.createIcons();
         fbBox.classList.remove("hidden");
       }
     }
@@ -2972,7 +2991,7 @@ function openSecretaryEventModal(eventObj) {
       btn.innerHTML = `
         <div class="flex items-start justify-between gap-2">
           <span class="text-xs font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">${opt.text}</span>
-          <span class="text-[9px] font-black text-amber-400 bg-amber-500/15 px-1.5 py-0.5 rounded border border-amber-500/30 shrink-0">Seçenek ${idx + 1}</span>
+          <span class="text-[10px] font-bold text-slate-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded shrink-0">Seçenek ${idx + 1}</span>
         </div>
         ${effHtml}
       `;
@@ -3006,7 +3025,7 @@ async function respondSecretaryEvent(eventId, optionId) {
     }
     closeSecretaryEventModal();
     gameState = data.state;
-    showToast("💼 " + data.message);
+    showToast(data.message);
     renderUI();
   } catch (e) {
     console.error(e);
@@ -3085,7 +3104,7 @@ async function submitClubLoanNegotiation() {
     }
 
     if (data.status === "loan_accepted") {
-      showToast("✅ Kulüp kiralık teklifinizi kabul etti!");
+      showToast("Kulüp kiralık teklifinizi kabul etti!");
       document.getElementById("neg-loan-step-offer").classList.add("hidden");
       document.getElementById("neg-loan-step-sign").classList.remove("hidden");
       document.getElementById("neg-loan-accepted-msg").innerText = data.message;
@@ -3093,7 +3112,7 @@ async function submitClubLoanNegotiation() {
       activeNegotiation.acceptedWageCoveragePct = data.wage_coverage_pct;
       activeNegotiation.acceptedBuyOption = data.buy_option;
     } else {
-      showToast("❌ " + data.message);
+      showToast(data.message);
       if (data.counter_fee) {
         feeInput.value = data.counter_fee;
       }
@@ -3258,7 +3277,7 @@ function renderCalendarView() {
   if (transBadge) {
     if (isTransferOpen) {
       transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-      transBadge.innerText = "🟢 Transfer Penceresi Açık";
+      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1.5"></span>Transfer Penceresi Açık`;
       if (transDaysLeft) {
         const summerEnd = `${currentCalendarYear}-09-15`;
         const winterEnd = `${currentCalendarYear + 1}-02-08`;
@@ -3268,7 +3287,7 @@ function renderCalendarView() {
       }
     } else {
       transBadge.className = "inline-block text-[10px] font-black px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
-      transBadge.innerText = "⚪ Transfer Penceresi Kapalı";
+      transBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-500 inline-block mr-1.5"></span>Transfer Penceresi Kapalı`;
       if (transDaysLeft) transDaysLeft.innerText = "Lig maçlarına odaklanılıyor";
     }
   }
@@ -3328,7 +3347,7 @@ function renderCalendarView() {
     if (isToday) {
       headerHtml += `<span class="text-[7.5px] font-black bg-amber-400 text-slate-950 px-1 rounded">BUGÜN</span>`;
     } else if (isDeadline) {
-      headerHtml += `<span class="text-[8px]" title="Transfer Bitiş">⏱️</span>`;
+      headerHtml += `<i data-lucide="clock" class="w-3 h-3 text-slate-400" title="Transfer Bitiş"></i>`;
     }
     headerHtml += `</div>`;
 
@@ -3349,7 +3368,7 @@ function renderCalendarView() {
       } else {
         bodyHtml = `<div class="mt-0.5 flex items-center justify-between text-[8px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1 py-0.5 rounded truncate">
           <span>${locLetter}:${oppShort}</span>
-          <span>⚽</span>
+          <i data-lucide="trophy" class="w-3 h-3 text-amber-400"></i>
         </div>`;
       }
     }
@@ -3390,7 +3409,7 @@ function renderCalendarSelectedCard() {
     tagEl.className = "text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40";
     tagEl.innerText = "Bugün";
     if (fix) {
-      descEl.innerText = `🔥 MAÇ GÜNÜ! ${fix.opponent} ile ${fix.week}. Hafta karşılaşması.`;
+      descEl.innerText = `MAÇ GÜNÜ! ${fix.opponent} ile ${fix.week}. Hafta karşılaşması.`;
     } else {
       descEl.innerText = "Ofis ve antrenman günü. Transfer teklifleri ve kulüp yönetimi.";
     }
@@ -3410,7 +3429,7 @@ function renderCalendarSelectedCard() {
     tagEl.innerText = `${diffDays} Gün Sonra`;
 
     if (fix) {
-      descEl.innerText = `⚽ ${fix.week}. Hafta: ${fix.opponent} (${fix.is_home ? 'İç Saha' : 'Deplasman'}) Maçı`;
+      descEl.innerText = `${fix.week}. Hafta: ${fix.opponent} (${fix.is_home ? 'İç Saha' : 'Deplasman'}) Maçı`;
     } else {
       descEl.innerText = `Hafta içi yönetim ve antrenman programı.`;
     }
@@ -3768,10 +3787,10 @@ function renderTransferMarket() {
     const item = document.createElement("div");
     item.className = "bg-gradient-to-br from-[#121a2e] to-[#0e1424] border border-slate-800 hover:border-blue-500/50 p-3 rounded-xl flex flex-col gap-2.5 text-xs transition-all shadow-md relative group";
     const cost = (p.price || 0) + (p.salary || p.wage || 0);
-    const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.5 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
+    const clubBadge = p.club ? `<span class="bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold text-[9px] mr-1">${p.club}</span>` : '';
     const posBadge = getFifaPosBadgeHtml(p.pos);
     const natBadge = (p.is_foreign === false)
-      ? '<span class="bg-red-950 text-red-300 border border-red-700/60 px-1.5 py-0.5 rounded font-black text-[9px] mr-1">🇹🇷 TR</span>'
+      ? '<span class="bg-slate-800 text-rose-400 border border-slate-700 px-1.5 py-0.5 rounded font-black text-[9px] mr-1">TR</span>'
       : '<span class="bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold text-[9px] mr-1">Yabancı</span>';
 
     const potVal = p.real_pot || p.overall || p.claimed_pot || 75;
@@ -3934,13 +3953,13 @@ async function requestPresidentialGrant() {
   const pol = gameState.political_power || 50;
 
   if (pol < 50) {
-    showToast("⚠️ Cumhurbaşkanlığı makamına başvuru için en az %50 Siyasi Nüfuz gereklidir!");
+    showToast("Cumhurbaşkanlığı makamına başvuru için en az %50 Siyasi Nüfuz gereklidir!");
     return;
   }
 
   const confirmMsg = pol >= 90
-    ? "🏛️ Siyasi gücünüz %90 üzerinde!\n\nCumhurbaşkanlığı makamından '35 DÖNÜM HAZİNE ARAZİSİ' hibe talebinde bulunmak istiyor musunuz? (%80 Kabul Şansı)"
-    : "💰 Siyasi gücünüz %50-%89 arasında!\n\nCumhurbaşkanlığı Acil Kulüp Fonu'ndan '120.000.000 ₺ NAKİT HİBE' talebinde bulunmak istiyor musunuz? (%35 Kabul Şansı - Reddedilirse basına sızar!)";
+    ? "Siyasi gücünüz %90 üzerinde!\n\nCumhurbaşkanlığı makamından '35 DÖNÜM HAZİNE ARAZİSİ' hibe talebinde bulunmak istiyor musunuz? (%80 Kabul Şansı)"
+    : "Siyasi gücünüz %50-%89 arasında!\n\nCumhurbaşkanlığı Acil Kulüp Fonu'ndan '120.000.000 ₺ NAKİT HİBE' talebinde bulunmak istiyor musunuz? (%35 Kabul Şansı - Reddedilirse basına sızar!)";
 
   if (!confirm(confirmMsg)) return;
 
@@ -3975,15 +3994,15 @@ function checkSeasonEndModal() {
   modal.classList.remove("hidden");
 
   if (gameState.season_result === "champion") {
-    title.innerText = "🏆 SÜPER LİG ŞAMPİYONU!";
+    title.innerText = "SÜPER LİG ŞAMPİYONU!";
     desc.innerText = `${gameState.club_name} 34 haftalık maratonu ZİRVEDE bitirdi ve KUPA MÜZEMİZE GELDİ!`;
     reward.innerText = "Ödül: +100.000.000 ₺ Şampiyonluk Primi Kasaya Eklendi!";
   } else if (gameState.season_result === "europe") {
-    title.innerText = "🌟 AVRUPA KUPALARI BİLETİ!";
+    title.innerText = "AVRUPA KUPALARI BİLETİ!";
     desc.innerText = `${gameState.club_name} ilk 4'te bitirerek Avrupa kupalarına katılmaya hak kazandı!`;
     reward.innerText = "Ödül: +45.000.000 ₺ Başarı Ödülü!";
   } else if (gameState.season_result === "relegated") {
-    title.innerText = "⚠️ KÜME DÜŞME TEHLİKESİ!";
+    title.innerText = "KÜME DÜŞME TEHLİKESİ!";
     desc.innerText = "Takım ligin dibinde bitirdi. Yönetim kurulu acil toplantı talep ediyor!";
     reward.innerText = "Kongre Güveni: %20'ye düştü!";
   } else {
@@ -4030,7 +4049,7 @@ async function startNextSeason() {
       return;
     }
 
-    showToast("🎉 34 Haftalık Yeni Sezon Fikstürü Hazırlandı!");
+    showToast("34 Haftalık Yeni Sezon Fikstürü Hazırlandı!");
     gameState = data;
     renderUI();
     switchTab("office");
@@ -4075,7 +4094,7 @@ async function runElection(promise) {
     if (result.won) {
       box.innerHTML = `
         <div class="text-center space-y-2">
-          <div class="text-sm font-black text-emerald-400">🎉 GÜVEN TAZELEDİNİZ!</div>
+          <div class="text-sm font-black text-emerald-400">GÜVEN TAZELEDİNİZ!</div>
           <div class="text-xs text-slate-200">${result.msg}</div>
           <div class="flex items-center justify-center gap-4 text-xs font-bold py-1.5 bg-slate-800 rounded-lg">
             <span class="text-emerald-400">Siz: %${result.user_votes}</span>
@@ -4089,7 +4108,7 @@ async function runElection(promise) {
     } else {
       box.innerHTML = `
         <div class="text-center space-y-2">
-          <div class="text-sm font-black text-rose-400">❌ SEÇİMİ KAYBETTİNİZ!</div>
+          <div class="text-sm font-black text-rose-400">SEÇİMİ KAYBETTİNİZ!</div>
           <div class="text-xs text-slate-200">${result.msg}</div>
           <button onclick="closeElectionModal(); openTeamSelectModal();" class="w-full py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs mt-2">
             Yeni Kulüp Seç
@@ -4262,7 +4281,7 @@ async function continueExistingCareer() {
   }
 
   document.getElementById("modal-team-select").classList.add("hidden");
-  showToast(`Hoş geldiniz ${username}! ${verifiedExistingAccount.club_name} kariyeriniz yüklendi 🏆`);
+  showToast(`Hoş geldiniz ${username}! ${verifiedExistingAccount.club_name} kariyeriniz yüklendi.`);
   await fetchState();
   switchTab("office");
 }
@@ -4290,7 +4309,7 @@ function renderTeamSelectList() {
         <div>
           <div class="flex items-center gap-1.5">
             <span class="font-extrabold text-sm text-white">${t.name}</span>
-            ${t.is_big ? '<span class="badge-big-club">👑 BÜYÜK</span>' : ''}
+            ${t.is_big ? '<span class="badge-big-club">BÜYÜK</span>' : ''}
           </div>
           <div class="text-[10px] text-slate-300 mt-0.5 flex items-center gap-1.5 flex-wrap">
             ${t.coach_photo ? `<img src="${t.coach_photo}" alt="${t.coach_name}" class="w-4 h-4 rounded-full object-cover border-2 border-amber-400 inline-block flex-shrink-0" />` : ''}
@@ -4334,7 +4353,7 @@ async function selectTeamAndStart(teamId) {
     gameState = data;
     viewingFinishedMatch = false;
     document.getElementById("modal-team-select").classList.add("hidden");
-    showToast(`👑 Büyük Başkan ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
+    showToast(`Büyük Başkan ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
     renderUI();
     switchTab("office");
   } catch (e) {
@@ -4447,7 +4466,7 @@ async function promptFireCoachFromProfile() {
   const c = gameState.coach;
   const severance = Math.round((c.salary || 35000000) * 0.40);
 
-  if (!confirm(`Teknik Direktör ${c.name} ile sözleşmeyi tek taraflı feshetmek istiyor musunuz?\n\n📄 Fesih Tazminatı: ${formatMoney(severance)}\n\nBu tutar kulüp bütçesinden kesilecek ve teknik direktörlük koltuğu boşa çıkacaktır.`)) {
+  if (!confirm(`Teknik Direktör ${c.name} ile sözleşmeyi tek taraflı feshetmek istiyor musunuz?\n\nFesih Tazminatı: ${formatMoney(severance)}\n\nBu tutar kulüp bütçesinden kesilecek ve teknik direktörlük koltuğu boşa çıkacaktır.`)) {
     return;
   }
 
@@ -4905,7 +4924,7 @@ function closeCoachConfrontModal() {
 
 function showBenchAccountabilityTab() {
   switchTab("squad");
-  showToast("👉 Kulübedeki oyuncuların yanındaki '🗣️ Hesap Sor' butonuna tıklayarak hocayla yüzleşebilirsiniz!");
+  showToast("Kulübedeki oyuncuların yanındaki 'Hesap Sor' butonuna tıklayarak hocayla yüzleşebilirsiniz!");
 }
 
 async function fireScout() {
@@ -4996,10 +5015,10 @@ async function loadSponsors() {
         (isSigned ? "border-emerald-500/50 " : canSign ? "border-slate-700/80 hover:border-amber-400/60 " : "border-slate-800/80 opacity-85 ") +
         "rounded-2xl p-3 flex flex-col justify-between shadow-lg relative transition-all text-xs";
 
-      const slotIcon = sp.type === 'chest' ? '👕' :
-                       sp.type === 'stadium' ? '🏟️' :
-                       sp.type === 'back' ? '⚡' :
-                       sp.type === 'arm' ? '🩳' : '🏥';
+      const slotIcon = sp.type === 'chest' ? '<i data-lucide="shirt" class="w-4 h-4 text-amber-400 inline-block"></i>' :
+                       sp.type === 'stadium' ? '<i data-lucide="building" class="w-4 h-4 text-emerald-400 inline-block"></i>' :
+                       sp.type === 'back' ? '<i data-lucide="zap" class="w-4 h-4 text-sky-400 inline-block"></i>' :
+                       sp.type === 'arm' ? '<i data-lucide="shield" class="w-4 h-4 text-purple-400 inline-block"></i>' : '<i data-lucide="activity" class="w-4 h-4 text-rose-400 inline-block"></i>';
       const slotLabel = sp.type_label || (
         sp.type === 'chest' ? 'Göğüs Sponsoru' :
         sp.type === 'stadium' ? 'Stadyum İsim Hakkı' :
@@ -5011,7 +5030,7 @@ async function loadSponsors() {
       if (isSigned) {
         actionBtn = `
           <div class="w-full py-2 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-extrabold text-[10px] text-center flex items-center justify-center gap-1 shadow-inner">
-            <span class="text-xs">✓</span>
+            <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 inline-block"></i>
             <span>Aktif (${sp.remaining_weeks ? sp.remaining_weeks + ' Hf' : 'Sezonluk'})</span>
           </div>`;
       } else if (!canSign) {
@@ -5054,7 +5073,7 @@ async function loadSponsors() {
               <span>Şart:</span>
               <span class="${canSign ? 'text-blue-300' : 'text-rose-300'} font-bold truncate max-w-[130px]">${sp.req_text || 'Tüm Kulüplere Açık'}</span>
             </div>
-            ${!canSign && sp.reason_unmet ? `<div class="text-rose-400 font-medium truncate pt-0.5 border-t border-rose-900/40">⚠️ ${sp.reason_unmet}</div>` : ''}
+            ${!canSign && sp.reason_unmet ? `<div class="text-rose-400 font-medium truncate pt-0.5 border-t border-rose-900/40">${sp.reason_unmet}</div>` : ''}
           </div>
 
           <!-- Aksiyon Butonu -->
@@ -5100,7 +5119,7 @@ async function makeUndergroundDeal(dealType) {
       showToast(data.detail || "İşlem başarısız!");
       return;
     }
-    showToast("🕶️ " + data.message);
+    showToast(data.message);
     gameState = data.state;
     renderUI();
   } catch (e) {
@@ -5120,7 +5139,7 @@ async function startRealEstateProject(projType) {
       showToast(data.detail || "Proje başlatılamadı!");
       return;
     }
-    showToast("🏗️ Proje başlatıldı!");
+    showToast("Proje başlatıldı.");
     gameState = data.state;
     renderUI();
   } catch (e) {
@@ -5183,7 +5202,7 @@ function renderRealEstateUI() {
     if (btnMall) {
       const isMallDone = (re.completed || []).includes("Kulüp Rezidans & AVM");
       btnMall.disabled = isMallDone;
-      btnMall.innerText = isMallDone ? "✓ Tamamlandı" : "Başlat (+150M ₺)";
+      btnMall.innerText = isMallDone ? "Tamamlandı" : "Başlat (+150M ₺)";
       btnMall.className = isMallDone
         ? "px-3 py-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 font-bold text-[10px] border border-emerald-800/60 cursor-default"
         : "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-sm";
@@ -5192,7 +5211,7 @@ function renderRealEstateUI() {
     if (btnAcademy) {
       const isAcadDone = (re.completed || []).includes("Futbol Altyapı Kampüsü");
       btnAcademy.disabled = isAcadDone;
-      btnAcademy.innerText = isAcadDone ? "✓ Tamamlandı" : "Başlat (+5 Güç)";
+      btnAcademy.innerText = isAcadDone ? "Tamamlandı" : "Başlat (+5 Güç)";
       btnAcademy.className = isAcadDone
         ? "px-3 py-1.5 rounded-lg bg-blue-950/60 text-blue-400 font-bold text-[10px] border border-blue-800/60 cursor-default"
         : "px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-sm";
@@ -5201,7 +5220,7 @@ function renderRealEstateUI() {
     if (btnStadium) {
       const isStadDone = (re.completed || []).includes("Mega Arena Genişletme");
       btnStadium.disabled = isStadDone;
-      btnStadium.innerText = isStadDone ? "✓ Tamamlandı" : "İnşa Et (+15K Stat)";
+      btnStadium.innerText = isStadDone ? "Tamamlandı" : "İnşa Et (+15K Stat)";
       btnStadium.className = isStadDone
         ? "px-3 py-1.5 rounded-lg bg-purple-950/60 text-purple-400 font-bold text-[10px] border border-purple-800/60 cursor-default"
         : "px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold transition-all shadow-sm";
@@ -5403,8 +5422,8 @@ async function loadFanSocialFeed() {
         </div>
         <p class="text-[10px] text-slate-200 leading-snug">${post.text}</p>
         <div class="flex items-center gap-3 text-[9px] text-slate-400 pt-0.5">
-          <span class="flex items-center gap-1 text-rose-400/80">❤️ ${post.likes}</span>
-          <span class="flex items-center gap-1 text-sky-400/80">🔁 ${post.retweets || Math.floor(post.likes * 0.15)}</span>
+          <span class="flex items-center gap-1 text-rose-400/80"><i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400 inline-block mr-1"></i>${post.likes}</span>
+          <span class="flex items-center gap-1 text-sky-400/80"><i data-lucide="repeat" class="w-3.5 h-3.5 text-sky-400 inline-block mr-1"></i>${post.retweets || Math.floor(post.likes * 0.15)}</span>
         </div>
       `;
       container.appendChild(card);
@@ -5589,39 +5608,39 @@ function closeHudInfoModal() {
 let currentTutorialStep = 0;
 const TUTORIAL_STEPS = [
   {
-    title: "💥 Adım 1: Ağır Miras (500M ₺ Borç!)",
+    title: "Adım 1: Ağır Miras (500M ₺ Borç!)",
     coachQuote: "Sayın Başkanım kulübe hoş geldiniz ama durumumuz felaket! Bizden önceki yönetim kulübe tam 500.000.000 ₺ borç takıp kayıplara karıştı! Bankalar ve TFF kapıda. Her hafta düzenli kredi faizi ve futbolcu maaşları kasamızdan çekilecek.",
     detail: "Kulübü kayyuma ve mali iflasa sürüklenmekten kurtarmak için bütçe disiplinini sağlamalı, lüzumsuz yüksek maaşlı isimleri satmalı ve gelir getiren anlaşmalara odaklanmalısınız.",
-    tip: "💡 İpucu: Kasa (Bütçe) sekmesinden haftalık net nakit akışını takip edin; eksiye düşmemek birincil önceliğinizdir!",
-    icon: "💰"
+    tip: "İpucu: Kasa (Bütçe) sekmesinden haftalık net nakit akışını takip edin; eksiye düşmemek birincil önceliğinizdir!",
+    icon: "landmark"
   },
   {
-    title: "⚽ Adım 2: Global FIFA Kadro & Taktik Düzeni",
+    title: "Adım 2: Kadro & Taktik Düzeni",
     coachQuote: "Takım kadromuz uluslararası FIFA mevkilerine (GK, CB, LB, RB, DMF, CM, AMF, RW, LW, ST) göre düzenlenmiştir. İlk 11'de her zaman tam 1 Kaleci olmak zorundadır ve Süper Lig kuralı gereği en fazla 8 Yabancı sahada yer alabilir.",
-    detail: "Kadro listesinde oyuncular mevkilerine göre (Kaleci ➔ Defans ➔ Orta Saha ➔ Forvet) düzenli sıralanır. Kafanız karıştığında tek tıkla 'Hoca 11'i Belirlesin' butonuna basabilirsiniz; ben sizin için en ideal kadroyu anında sahaya sürerim!",
-    tip: "💡 İpucu: Kadro sekmesinden oyuncuları tek tıkla yedeğe çekebilir veya yedekten 11'e alabilirsiniz.",
-    icon: "📋"
+    detail: "Kadro listesinde oyuncular mevkilerine göre (Kaleci > Defans > Orta Saha > Forvet) düzenli sıralanır. Kafanız karıştığında tek tıkla 'Hoca 11'i Belirlesin' butonuna basabilirsiniz; ben sizin için en ideal kadroyu anında sahaya sürerim!",
+    tip: "İpucu: Kadro sekmesinden oyuncuları tek tıkla yedeğe çekebilir veya yedekten 11'e alabilirsiniz.",
+    icon: "clipboard-list"
   },
   {
-    title: "💼 Adım 3: Sponsorluklar & Nakit Akışı",
+    title: "Adım 3: Sponsorluklar & Nakit Akışı",
     coachQuote: "500 Milyon ₺ borcu eritmenin en temiz yolu sponsorluklardır. Göğüs, Sırt ve Stadyum İsim sponsorlukları sayesinde her hafta kasaya sıcak para akar ve peşin imza parası alırsınız.",
     detail: "Ancak unutmayın; dev holdingler şart koşar! Ligde üst sıralarda olmak, yüksek taraftar güveni ve stadyum doluluğu büyük sponsorların ana kriterleridir.",
-    tip: "💡 İpucu: Sponsorluk sekmesine giderek şartlarını karşıladığınız firmalarla hemen sözleşme imzalayın!",
-    icon: "🤝"
+    tip: "İpucu: Sponsorluk sekmesine giderek şartlarını karşıladığınız firmalarla hemen sözleşme imzalayın!",
+    icon: "handshake"
   },
   {
-    title: "🏛️ Adım 4: Siyaset, Lobi & Cumhurbaşkanlığı Hibesi",
+    title: "Adım 4: Siyaset, Lobi & Cumhurbaşkanlığı Hibesi",
     coachQuote: "Büyük kulüp yönetmek yalnızca yeşil sahada değil, Ankara koridorlarında da güçlü olmayı gerektirir. Ankara ziyaretleri ve sosyal projelerle Siyasi Nüfuzunuzu %65'in üzerine çıkarabilirsiniz.",
     detail: "Zor günlerde Cumhurbaşkanlığı Makamından yılda 1 defa devasa can suyu hibesi talep etme hakkınız vardır. Bu hibe iflasın eşiğindeki kulübümüz için hayat kurtarıcıdır.",
-    tip: "💡 İpucu: Siyasi lobi hamleleri muhalif taraftarları kızdırabilir; taraftar ve siyaset dengesini iyi gözetin.",
-    icon: "🏛️"
+    tip: "İpucu: Siyasi lobi hamleleri muhalif taraftarları kızdırabilir; taraftar ve siyaset dengesini iyi gözetin.",
+    icon: "building-2"
   },
   {
-    title: "🎲 Adım 5: Yeraltı Dünyası, Bahis & Sandık Zaferi",
+    title: "Adım 5: Yeraltı Dünyası, Bahis & Sandık Zaferi",
     coachQuote: "Mali darboğazda karanlık güçler kapınızı çalabilir. Yeraltı bahis baronları maç manipülasyonu karşılığı milyonlar teklif eder. Kolay paradır ama TFF veya savcılık yakalarsa puan silme ve kayyumla kulüp batar!",
     detail: "Sezon sonunda 34. hafta bittiğinde kulüp üyelerinin karşısına sandığa çıkacaksınız. Kulübü borçtan kurtarıp şampiyon yaparsanız efsane başkan olarak tarihe geçersiniz!",
-    tip: "💡 İpucu: Artık her şeyi biliyorsunuz! Koltuğunuza oturun ve büyük maceraya başlayın!",
-    icon: "🏆"
+    tip: "İpucu: Artık her şeyi biliyorsunuz! Koltuğunuza oturun ve büyük maceraya başlayın!",
+    icon: "trophy"
   }
 ];
 
@@ -5639,7 +5658,7 @@ function closeStoryTutorial() {
 
 function skipStoryTutorial() {
   closeStoryTutorial();
-  showToast("⏩ Eğitim atlandı. İstediğiniz an Ayarlar menüsünden tekrar izleyebilirsiniz!");
+  showToast("Eğitim atlandı. İstediğiniz an Ayarlar menüsünden tekrar izleyebilirsiniz.");
 }
 
 function renderStoryTutorialStep() {
@@ -5660,7 +5679,8 @@ function renderStoryTutorialStep() {
     if (coachNameEl) coachNameEl.innerText = gameState.coach.name || "Teknik Direktör";
   }
 
-  if (titleEl) titleEl.innerHTML = `<span>${step.icon}</span> <span>${step.title}</span>`;
+  if (titleEl) titleEl.innerHTML = `<i data-lucide="${step.icon}" class="w-4 h-4 text-amber-400 inline-block mr-1"></i> <span>${step.title}</span>`;
+  if (window.lucide) lucide.createIcons();
   if (contentEl) {
     contentEl.innerHTML = `
       <p class="italic text-amber-200/90 font-medium">"${step.coachQuote}"</p>
@@ -5668,7 +5688,7 @@ function renderStoryTutorialStep() {
     `;
   }
   if (tipEl) {
-    tipEl.innerHTML = `<span class="text-amber-400 text-xs">⚡</span> <span>${step.tip}</span>`;
+    tipEl.innerHTML = `<i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 inline-block"></i> <span>${step.tip}</span>`;
   }
 
   // Step dots
@@ -5686,10 +5706,10 @@ function renderStoryTutorialStep() {
   }
   if (nextBtn) {
     if (currentTutorialStep === TUTORIAL_STEPS.length - 1) {
-      nextBtn.innerHTML = `<span>Başkanlık Koltuğuna Otur! 🏆</span>`;
+      nextBtn.innerHTML = `<span>Başkanlık Koltuğuna Otur!</span>`;
       nextBtn.className = "px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1";
     } else {
-      nextBtn.innerHTML = `<span>İleri</span> <span>➔</span>`;
+      nextBtn.innerHTML = `<span>İleri</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5 inline-block"></i>`;
       nextBtn.className = "px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1";
     }
   }
@@ -5701,7 +5721,7 @@ function nextStoryTutorialStep() {
     renderStoryTutorialStep();
   } else {
     closeStoryTutorial();
-    showToast("🎉 Büyük Başkan göreve başladı! Bol şanslar!");
+    showToast("Büyük Başkan göreve başladı! Bol şanslar.");
   }
 }
 
@@ -5748,8 +5768,8 @@ function promptDailyRewardClaim() {
   inlineContainer.innerHTML = `
     <div id="daily-reward-card" class="w-full bg-gradient-to-r from-amber-950 via-amber-900 to-amber-800 border-2 border-amber-400 p-2.5 sm:p-3 rounded-2xl shadow-xl flex flex-row items-center justify-between gap-2 transition-all">
       <div class="flex items-center gap-2 min-w-0 flex-1">
-        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-lg sm:text-xl flex-shrink-0">
-          🎁
+        <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="gift" class="w-5 h-5 text-amber-300"></i>
         </div>
         <div class="min-w-0 flex-1">
           <div class="font-black text-[11px] sm:text-xs text-white uppercase tracking-wide truncate">GÜNLÜK ÖDÜL!</div>
@@ -5757,7 +5777,7 @@ function promptDailyRewardClaim() {
         </div>
       </div>
       <button id="btn-claim-daily" onclick="claimDailyReward(this)" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-[11px] sm:text-xs shadow-md transition-all flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
-        <span>Hemen Al</span> <span>➔</span>
+        <span>Hemen Al</span> <i data-lucide="arrow-right" class="w-3.5 h-3.5 inline-block"></i>
       </button>
     </div>
   `;
@@ -5778,7 +5798,7 @@ async function claimDailyReward(btnEl) {
       showToast(data.detail || "Ödül alınamadı!");
       if (btn) {
         btn.disabled = false;
-        btn.innerText = "Hemen Al ➔";
+        btn.innerText = "Hemen Al";
       }
       return;
     }
@@ -5788,12 +5808,12 @@ async function claimDailyReward(btnEl) {
     }
     gameState = data.state;
     renderUI();
-    showToast(data.message || "🎉 5.000.000 ₺ Günlük Giriş Ödülü Kasaya Eklendi!");
+    showToast(data.message || "5.000.000 ₺ Günlük Giriş Ödülü Kasaya Eklendi.");
   } catch (e) {
     console.error(e);
     if (btn) {
       btn.disabled = false;
-      btn.innerText = "Hemen Al ➔";
+      btn.innerText = "Hemen Al";
     }
   }
 }
@@ -5818,12 +5838,12 @@ async function openClubUpgradesModal() {
       const isMax = u.level >= u.max_level;
       const canAfford = u.can_upgrade;
 
-      let icon = "🏢";
-      if (branch === "stadium") icon = "🏟️";
-      else if (branch === "transit") icon = "🚇";
-      else if (branch === "merch") icon = "👕";
-      else if (branch === "academy") icon = "🌱";
-      else if (branch === "broadcast") icon = "📡";
+      let icon = "building-2";
+      if (branch === "stadium") icon = "building";
+      else if (branch === "transit") icon = "navigation";
+      else if (branch === "merch") icon = "shirt";
+      else if (branch === "academy") icon = "sprout";
+      else if (branch === "broadcast") icon = "radio";
 
       // Seviye çubuğu noktaları (5 seviye)
       const levelDots = Array.from({ length: 5 }, (_, i) => `
@@ -5835,7 +5855,7 @@ async function openClubUpgradesModal() {
       item.innerHTML = `
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span class="text-lg">${icon}</span>
+            <i data-lucide="${icon}" class="w-5 h-5 text-amber-400"></i>
             <div>
               <div class="text-xs font-bold text-white">${u.title}</div>
               <div class="text-[10px] text-slate-400">${u.desc}</div>
@@ -5848,7 +5868,7 @@ async function openClubUpgradesModal() {
         </div>
         <div class="flex items-center justify-between pt-1 border-t border-slate-800/60">
           <div class="text-[10px] text-slate-300">
-            ${isMax ? '<span class="text-emerald-400 font-bold">✓ MAKSİMUM SEVİYEYE ULAŞILDI</span>' : `Yükseltme Bedeli: <strong class="text-amber-400 font-bold">${formatMoney(u.next_cost)}</strong>`}
+            ${isMax ? '<span class="text-emerald-400 font-bold">MAKSİMUM SEVİYEYE ULAŞILDI</span>' : `Yükseltme Bedeli: <strong class="text-amber-400 font-bold">${formatMoney(u.next_cost)}</strong>`}
           </div>
           ${!isMax ? `
             <button onclick="upgradeClubBranch('${branch}')" ${!canAfford ? 'disabled' : ''} class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
@@ -5973,9 +5993,9 @@ async function loadSponsorOffers() {
     offers.forEach(o => {
       const card = document.createElement("div");
       card.className = "w-[225px] min-w-[225px] max-w-[225px] shrink-0 snap-start bg-gradient-to-b from-[#151e33] via-[#0f172a] to-[#0a101d] border-2 border-amber-500/50 hover:border-amber-400 rounded-2xl p-3 flex flex-col justify-between shadow-lg relative transition-all text-xs";
-      const slotIcon = o.slot === 'chest' ? '👕' :
-                       o.slot === 'stadium' ? '🏟️' :
-                       o.slot === 'arm' ? '🩳' : '⚡';
+      const slotIcon = o.slot === 'chest' ? '<i data-lucide="shirt" class="w-3.5 h-3.5 text-amber-400 inline-block"></i>' :
+                       o.slot === 'stadium' ? '<i data-lucide="building" class="w-3.5 h-3.5 text-emerald-400 inline-block"></i>' :
+                       o.slot === 'arm' ? '<i data-lucide="shield" class="w-3.5 h-3.5 text-purple-400 inline-block"></i>' : '<i data-lucide="zap" class="w-3.5 h-3.5 text-sky-400 inline-block"></i>';
       const slotName = o.slot === 'chest' ? 'Göğüs Sponsoru' :
                        o.slot === 'stadium' ? 'Stadyum İsim Hakkı' :
                        o.slot === 'arm' ? 'Forma Kol / Şort' : 'Sırt / No Sponsoru';
@@ -5984,7 +6004,7 @@ async function loadSponsorOffers() {
         <div class="space-y-1.5">
           <!-- Üst Rozet & Durum -->
           <div class="flex items-center justify-between gap-1">
-            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1 truncate max-w-[125px]">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-200 border border-slate-700 flex items-center gap-1.5 truncate max-w-[135px]">
               <span>${slotIcon}</span>
               <span class="truncate">${slotName}</span>
             </span>
@@ -6128,7 +6148,7 @@ async function renderTacticalSkillsTree() {
 
         let actionBtn = "";
         if (isUnlocked) {
-          actionBtn = `<span class="px-3 py-1 rounded-lg bg-emerald-950/80 text-emerald-400 border border-emerald-600/40 text-[10px] font-black">✓ AKTİF (AÇILDI)</span>`;
+          actionBtn = `<span class="px-3 py-1 rounded-lg bg-emerald-950/80 text-emerald-400 border border-emerald-600/40 text-[10px] font-black">AKTİF (AÇILDI)</span>`;
         } else if (canUnlock) {
           actionBtn = `<button onclick="unlockTacticalSkill('${sk.id}')" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-[10px] shadow-sm transition-all">
             Yeteneği Aç (${sk.cost} TP)
@@ -6142,7 +6162,7 @@ async function renderTacticalSkillsTree() {
         card.innerHTML = `
           <div class="flex items-start justify-between gap-2">
             <div class="flex items-center gap-2.5">
-              <span class="text-2xl p-1.5 rounded-lg bg-slate-950 border border-slate-800">${sk.icon || '⚡'}</span>
+              <span class="p-2 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-amber-400"><i data-lucide="zap" class="w-5 h-5"></i></span>
               <div>
                 <div class="text-xs font-black text-white flex items-center gap-2">
                   <span>${sk.name}</span>
@@ -6316,7 +6336,7 @@ async function loadPlayerLoans() {
               <div class="text-[10px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
                 <span>Kulüp: <strong class="text-amber-300">${p.loan_club}</strong></span>
                 <span>• Maç: <strong class="text-white">${p.matches_played || p.loan_matches_played || 0}</strong> (${p.minutes_played || p.loan_minutes_played || 0} Dk)</span>
-                <span>• Kalan: <strong class="text-blue-300 font-mono">⏳ ${weeksLeft} Hafta Sonra Dönecek</strong></span>
+                <span>• Kalan: <strong class="text-blue-300 font-mono">${weeksLeft} Hafta Sonra Dönecek</strong></span>
               </div>
             </div>
             <div class="flex-shrink-0">

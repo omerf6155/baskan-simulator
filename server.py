@@ -3339,17 +3339,17 @@ def api_coach_post_match_talk(req: CoachPostMatchTalkRequest):
     coach = state.get("coach", {})
     
     if req.action == "bonus":
-        if state["budget"] < 1_000_000:
-            raise HTTPException(status_code=400, detail="Kasada 1M ₺ prim bütçesi yok!")
-        state["budget"] -= 1_000_000
+        if state["budget"] < 250_000:
+            raise HTTPException(status_code=400, detail="Kasada 250.000 € prim bütçesi yok!")
+        state["budget"] -= 250_000
         if player: player["morale"] = 100
         coach["moral"] = min(100, coach.get("moral", 80) + 4)
         state["fan_trust"] = min(100, state.get("fan_trust", 80) + 2)
-        msg = f"💰 MAÇ PRİMİ: {req.player_name} için 1.000.000 ₺ maç primi ödendi. Oyuncunun morali tavan yaptı!"
+        msg = f"MAÇ PRİMİ: {req.player_name} için 250.000 € maç primi ödendi. Oyuncunun morali yükseldi!"
     elif req.action == "praise":
         coach["moral"] = min(100, coach.get("moral", 80) + 5)
         if player: player["morale"] = min(100, player.get("morale", 80) + 5)
-        msg = f"👏 TEBRİK: Teknik Direktör ve {req.player_name} kutlandı. Soyunma odasında motivasyon arttı."
+        msg = f"TEBRİK: Teknik Direktör ve {req.player_name} kutlandı. Soyunma odasında motivasyon arttı."
     elif req.action == "warn":
         if player:
             player["morale"] = max(40, player.get("morale", 80) - 10)
@@ -3359,11 +3359,11 @@ def api_coach_post_match_talk(req: CoachPostMatchTalkRequest):
                 squad[p_idx], squad[11] = squad[11], squad[p_idx]
         coach["moral"] = min(100, coach.get("moral", 80) + 3)
         state["squad_harmony"] = min(100, state.get("squad_harmony", 80) + 4)
-        msg = f"⚠️ SERT UYARI: {req.player_name} yetersiz performansı sebebiyle uyarıldı ve yedek kulübesine çekildi."
+        msg = f"SERT UYARI: {req.player_name} yetersiz performansı sebebiyle uyarıldı ve yedek kulübesine çekildi."
     elif req.action == "fine":
-        state["budget"] += 500_000
+        state["budget"] += 100_000
         if player: player["morale"] = max(30, player.get("morale", 80) - 15)
-        msg = f"💸 PARA CEZASI: Disiplinsizlik sebebiyle {req.player_name}'a 500.000 ₺ ceza kesildi ve kulüp kasasına aktarıldı."
+        msg = f"PARA CEZASI: Disiplinsizlik sebebiyle {req.player_name}'a 100.000 € ceza kesildi ve kulüp kasasına aktarıldı."
     else:
         msg = "Görüşme tamamlandı."
         
@@ -4051,19 +4051,19 @@ def api_calendar_advance_day():
         }
 
     res = advance_calendar_day_internal(state)
-    msg = f"📅 Tarih: {format_turkish_date_full(state['current_date'])}"
+    msg = f"Tarih: {format_turkish_date_full(state['current_date'])}"
     stopped_reason = "normal"
     
     if res.get("secretary_event"):
         stopped_reason = "secretary_event"
-        msg = f"💼 ÖZEL KALEM BİLDİRİMİ: {res['secretary_event']['title']}"
+        msg = f"ÖZEL KALEM BİLDİRİMİ: {res['secretary_event']['title']}"
     elif res["is_matchday"]:
         stopped_reason = "matchday"
-        msg = f"⚽ MAÇ GÜNÜ! {res['next_fix']['opponent']} ile karşılaşma günü geldi!"
+        msg = f"MAÇ GÜNÜ! {res['next_fix']['opponent']} ile karşılaşma günü geldi!"
         state["news"].insert(0, msg)
     elif res["new_bid"]:
         stopped_reason = "incoming_bid"
-        msg = f"📩 TRANSFER TEKLİFİ! {res['new_bid']['player_name']} için {res['new_bid']['club']} kulübünden teklif var!"
+        msg = f"TRANSFER TEKLİFİ! {res['new_bid']['player_name']} için {res['new_bid']['club']} kulübünden teklif var!"
         state["news"].insert(0, msg)
 
     save_state(state)
@@ -4099,24 +4099,24 @@ def api_calendar_advance_to_date(req: AdvanceToDateReq):
         next_fix = next((f for f in state.get("fixtures", []) if f["week"] == cur_week and not f.get("played")), None)
         if next_fix and state.get("current_date") == next_fix.get("date"):
             stopped_reason = "matchday"
-            stop_msg = f"⚽ MAÇ GÜNÜ GELDİ! ({next_fix['opponent']} karşılaşması)"
+            stop_msg = f"MAÇ GÜNÜ GELDİ! ({next_fix['opponent']} karşılaşması)"
             break
 
         step_res = advance_calendar_day_internal(state)
 
         if step_res.get("secretary_event"):
             stopped_reason = "secretary_event"
-            stop_msg = f"💼 ÖZEL KALEM BİLDİRİMİ: {step_res['secretary_event']['title']}"
+            stop_msg = f"ÖZEL KALEM BİLDİRİMİ: {step_res['secretary_event']['title']}"
             break
 
         if step_res["new_bid"]:
             stopped_reason = "incoming_bid"
-            stop_msg = f"📩 TRANSFER TEKLİFİ! {step_res['new_bid']['player_name']} için resmi teklif geldi!"
+            stop_msg = f"TRANSFER TEKLİFİ! {step_res['new_bid']['player_name']} için resmi teklif geldi!"
             break
 
         if step_res["is_matchday"]:
             stopped_reason = "matchday"
-            stop_msg = f"⚽ MAÇ GÜNÜ GELDİ! ({step_res['next_fix']['opponent']} karşılaşması)"
+            stop_msg = f"MAÇ GÜNÜ GELDİ! ({step_res['next_fix']['opponent']} karşılaşması)"
             break
 
     save_state(state)
