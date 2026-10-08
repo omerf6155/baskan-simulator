@@ -273,6 +273,8 @@ function openSettingsModal() {
   const sfxSlider = document.getElementById("sfx-volume-slider");
   const sfxTxt = document.getElementById("sfx-volume-txt");
   const trackSel = document.getElementById("bgm-track-select");
+  const presNameEl = document.getElementById("settings-current-username");
+  const clubNameEl = document.getElementById("settings-current-clubname");
 
   if (bgmSlider) bgmSlider.value = Math.round(bgmVolume * 100);
   if (bgmTxt) bgmTxt.innerText = `${Math.round(bgmVolume * 100)}%`;
@@ -280,22 +282,13 @@ function openSettingsModal() {
   if (sfxTxt) sfxTxt.innerText = `${Math.round(sfxVolume * 100)}%`;
   if (trackSel) trackSel.value = currentBgmTrack;
 
+  if (presNameEl && gameState) presNameEl.innerText = gameState.president_name || "Başkan";
+  if (clubNameEl && gameState) clubNameEl.innerText = gameState.club_name || "Kulüp";
+
   updateMusicUIButtons(isBgmPlaying);
 
-  // Tema seçimi vurgularını yenile
-  const currentTheme = localStorage.getItem("baskan_selected_theme") || "default";
-  AVAILABLE_THEMES.forEach(t => {
-    const btn = document.getElementById("theme-btn-" + t.id);
-    if (btn) {
-      if (t.id === currentTheme) {
-        btn.classList.add("ring-2", "ring-amber-400", "scale-[1.02]");
-      } else {
-        btn.classList.remove("ring-2", "ring-amber-400", "scale-[1.02]");
-      }
-    }
-  });
-
   modal.classList.remove("hidden");
+  if (window.lucide) window.lucide.createIcons();
 }
 
 function closeSettingsModal() {
@@ -632,6 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadScoutCandidates();
   loadSponsors();
   loadTransferMarket();
+  switchTab("office");
   lucide.createIcons();
 
   const unlockAudio = () => {
@@ -685,7 +679,9 @@ function switchTab(tabId) {
   }
 
   document.querySelectorAll(".nav-item").forEach(btn => btn.classList.remove("active", "text-amber-400"));
-  const navBtn = document.getElementById("nav-btn-" + tabId);
+  let activeNavId = "nav-btn-" + tabId;
+  if (tabId === "match") activeNavId = "nav-btn-office";
+  const navBtn = document.getElementById(activeNavId);
   if (navBtn) {
     navBtn.classList.add("active");
   }
@@ -700,7 +696,7 @@ function switchTab(tabId) {
     loadSponsorOffers();
   }
 
-  if (tabId === "transfers") {
+  if (tabId === "transfers" || tabId === "scout") {
     loadTransferMarket();
   }
 
@@ -772,12 +768,8 @@ async function fetchState() {
     }
 
     renderUI();
-    // Tutorial: Sadece kullanıcı daha önce görmediyse aç
-    const tutorialSeen = localStorage.getItem("baskan_story_tutorial_seen");
-    if (!tutorialSeen && !_tutorialShownThisSession && gameState && gameState.is_started) {
-      _tutorialShownThisSession = true;
-      setTimeout(() => openStoryTutorial(), 800);
-    }
+    // Tutorial kaldirildi
+    // Günlük Giriş Ödülü Bildirimi
 
     // Günlük Giriş Ödülü Bildirimi
     checkDailyRewardClaim();
@@ -1011,17 +1003,23 @@ function renderUI() {
     }
   }
 
-  // Hoca Karakteristik Özellikleri (Traits)
   const traits = (!isCoachVacant && gameState.coach && gameState.coach.traits) ? gameState.coach.traits : [];
   const renderTraitsHtml = (list) => {
-    if (isCoachVacant) return '<span class="text-[9px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60">⚠️ Teknik Direktör Aranıyor</span>';
-    if (!list || list.length === 0) return '<span class="text-[9px] text-slate-500 italic">Genel Taktisyen</span>';
-    return list.map(t => `
-      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30" title="${t.desc}">
-        <span>${t.icon || '⭐'}</span>
-        <span>${t.name}</span>
-      </span>
-    `).join('');
+    if (isCoachVacant) return '<span class="text-[10px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-800/60">⚠️ Teknik Direktör Aranıyor</span>';
+    if (!list || list.length === 0) return '<span class="text-[10px] text-slate-400 font-semibold">Taktiksel Disiplin</span>';
+    return list.map(t => {
+      let name = t.name || '';
+      if (name.includes('Efsane Kaptan')) name = 'Derbi Motivasyonu';
+      if (name.includes('Forvet Büyücüsü')) name = 'Bitiricilik Uzmanı';
+      if (name.includes('Zirve Yarışı')) name = 'Zirve Yarışı';
+      if (name.includes('Total Gegenpress')) name = 'Gegenpress Baskısı';
+      return `
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-sky-950/70 text-sky-300 border border-sky-600/40 shadow-sm" title="${t.desc}">
+          <span>${t.icon || '⚡'}</span>
+          <span>${name}</span>
+        </span>
+      `;
+    }).join('');
   };
   const officeTraitsEl = document.getElementById("office-coach-traits");
   if (officeTraitsEl) officeTraitsEl.innerHTML = renderTraitsHtml(traits);
@@ -3453,29 +3451,29 @@ function renderTeamSelectList() {
 
   teamsList.forEach(t => {
     const card = document.createElement("div");
-    card.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between hover:border-amber-500 hover:bg-slate-800/60 cursor-pointer transition-all";
+    card.className = "p-2.5 rounded-xl flex items-center justify-between cursor-pointer transition-all";
     card.onclick = () => selectTeamAndStart(t.id);
     card.innerHTML = `
       <div class="flex items-center gap-2.5">
-        <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 p-1 flex items-center justify-center flex-shrink-0">
-          ${t.logo ? `<img src="${t.logo}?v=3" alt="${t.name}" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />` : ''}
+        <div class="w-11 h-11 rounded-xl p-1 flex items-center justify-center flex-shrink-0">
+          ${t.logo ? `<img src="${t.logo}?v=3" alt="${t.name}" class="w-full h-full object-contain drop-shadow" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />` : ''}
           <span class="font-black text-xs text-amber-400 ${t.logo ? 'hidden' : ''}">${t.short}</span>
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <span class="font-extrabold text-xs text-white">${t.name}</span>
-            ${t.is_big ? '<span class="text-[8px] font-black px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">BÜYÜK</span>' : ''}
+            <span class="font-extrabold text-sm text-white">${t.name}</span>
+            ${t.is_big ? '<span class="badge-big-club">👑 BÜYÜK</span>' : ''}
           </div>
-          <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
-            ${t.coach_photo ? `<img src="${t.coach_photo}" alt="${t.coach_name}" class="w-4 h-4 rounded-full object-cover border border-amber-500/50 inline-block flex-shrink-0" />` : ''}
-            <span>TD: <span class="text-slate-200 font-semibold">${t.coach_name}</span></span>
+          <div class="text-[10px] text-slate-300 mt-0.5 flex items-center gap-1.5 flex-wrap">
+            ${t.coach_photo ? `<img src="${t.coach_photo}" alt="${t.coach_name}" class="w-4 h-4 rounded-full object-cover border-2 border-amber-400 inline-block flex-shrink-0" />` : ''}
+            <span>TD: <span class="text-white font-bold">${t.coach_name}</span></span>
             <span>• Bütçe: <strong class="text-emerald-400">${formatMoney(t.budget)}</strong></span>
           </div>
         </div>
       </div>
       <div class="text-right flex-shrink-0">
-        <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">${t.power}</span>
-        <div class="text-[8px] text-slate-400 mt-0.5 font-semibold">GÜÇ</div>
+        <span class="power-shield-badge">${t.power}</span>
+        <div class="text-[8px] font-bold text-slate-400 mt-0.5">GÜÇ</div>
       </div>
     `;
     container.appendChild(card);
@@ -3511,9 +3509,6 @@ async function selectTeamAndStart(teamId) {
     showToast(`👑 Büyük Başkan ${username}, ${data.club_name} kulübünün yeni başkanı oldunuz!`);
     renderUI();
     switchTab("office");
-    setTimeout(() => {
-      openStoryTutorial(true);
-    }, 500);
   } catch (e) {
     console.error(e);
     showToast("Kulüp seçimi başlatılamadı!");
@@ -4449,11 +4444,7 @@ const TUTORIAL_STEPS = [
 ];
 
 function openStoryTutorial(force = false) {
-  const modal = document.getElementById("modal-story-tutorial");
-  if (!modal) return;
-  currentTutorialStep = 0;
-  renderStoryTutorialStep();
-  modal.classList.remove("hidden");
+  return;
 }
 
 function closeStoryTutorial() {
