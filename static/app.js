@@ -838,17 +838,17 @@ function renderUI() {
       const bc = gameState.bank_consortium || {};
       const sLevel = bc.sanction_level || 0;
       if (sLevel === 0) {
-        bankStatusEl.className = "font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-1.5 py-0.2 rounded text-[9px]";
-        bankStatusEl.innerText = "Normal (Temiz)";
+        bankStatusEl.className = "font-black text-emerald-400 bg-emerald-950/70 border border-emerald-700/50 px-2 py-0.5 rounded-lg text-xs";
+        bankStatusEl.innerText = "Güvenli (Temiz)";
       } else if (sLevel === 1) {
-        bankStatusEl.className = "font-bold text-amber-400 bg-amber-950/60 border border-amber-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.className = "font-black text-amber-400 bg-amber-950/70 border border-amber-700/50 px-2 py-0.5 rounded-lg text-xs";
         bankStatusEl.innerText = "İHTAR: Transfer Yasağı!";
       } else if (sLevel === 2) {
-        bankStatusEl.className = "font-bold text-orange-400 bg-orange-950/60 border border-orange-800/40 px-1.5 py-0.2 rounded text-[9px]";
+        bankStatusEl.className = "font-black text-orange-400 bg-orange-950/70 border border-orange-700/50 px-2 py-0.5 rounded-lg text-xs";
         bankStatusEl.innerText = "AĞIR: %40 Gelir Blokesi!";
       } else {
-        bankStatusEl.className = "font-bold text-rose-400 bg-rose-950/60 border border-rose-800/40 px-1.5 py-0.2 rounded text-[9px]";
-        bankStatusEl.innerText = "KRİTİK: TFF -3 Puan Cezası!";
+        bankStatusEl.className = "font-black text-rose-400 bg-rose-950/70 border border-rose-700/50 px-2 py-0.5 rounded-lg text-xs";
+        bankStatusEl.innerText = "KRİTİK: TFF -3 Puan!";
       }
     }
   }
