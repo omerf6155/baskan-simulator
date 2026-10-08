@@ -747,21 +747,44 @@ nav.royale-bottom-dock {
     0 6px 16px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Kaydırma Çubuğu (Custom Royale Scrollbar) */
+/* ==========================================================================
+   KAYDIRMA ÇUBUĞU (MODERN & TAŞMAYAN TRANSPARAN SCROLLBAR)
+   ========================================================================== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #080f1e;
+  background: transparent !important;
+  margin: 6px 0 !important; /* Yuvarlak köşelere taşmayı engeller */
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #253d69;
-  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.28) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s ease;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--cr-gold);
+  background: rgba(245, 158, 11, 0.75) !important;
 }
+
+::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* Modallarda ve kartlarda yatay taşmayı ve sıçramaları kesinlikle önle */
+div[id^="modal-"] > div {
+  overflow-x: hidden !important;
+}
+
 
 /* ==========================================================================
    ETKİLEŞİMLİ KULÜP TAKVİMİ & FİKSTÜR ARAYÜZÜ (#modal-calendar)

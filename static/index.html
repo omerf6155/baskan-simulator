@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20261008_calendar_v1">
+  <link rel="stylesheet" href="style.css?v=20261008_scrollbar_v2">
 </head>
 <body class="bg-[#080c14] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex items-center justify-center p-0 md:p-3">
 
@@ -1532,8 +1532,9 @@
 
   <!-- 5. TEKNİK DİREKTÖR GELECEK VİZYONU & ALTYAPI MODALI -->
   <div id="modal-coach-vision" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#111726] border border-blue-500/60 w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto scrollbar-thin">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+    <div class="bg-[#111726] border border-blue-500/60 w-full max-w-sm rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Sabit Başlık -->
+      <div class="flex justify-between items-center border-b border-slate-800 p-4 pb-3 shrink-0">
         <div class="flex items-center gap-2.5">
           <div class="w-10 h-10 rounded-xl bg-slate-900 border-2 border-blue-500/60 overflow-hidden flex-shrink-0 shadow-md">
             <img id="vision-coach-photo" src="/static/coach_senol_gunes.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_senol_gunes.png'" />
@@ -1543,8 +1544,11 @@
             <div class="text-xs font-black text-white" id="vision-coach-name">Şenol Güneş</div>
           </div>
         </div>
-        <button onclick="closeCoachVisionModal()" class="text-slate-400 hover:text-white text-xs font-bold">✕</button>
+        <button onclick="closeCoachVisionModal()" class="w-7 h-7 rounded-lg bg-slate-850 hover:bg-slate-750 text-slate-400 hover:text-white text-xs font-bold flex items-center justify-center border border-slate-700 transition-colors cursor-pointer">✕</button>
       </div>
+
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
 
       <div class="flex items-center justify-between bg-blue-950/40 border border-blue-800/40 p-2 rounded-xl text-[10px]">
         <span class="text-slate-300">Stratejik Hak: <strong class="text-amber-400">Yarı Sezonda 1 Kez</strong></span>
@@ -1636,6 +1640,7 @@
           </div>
           <div class="text-[9px] text-slate-300 mt-1">Soyunma odasındaki tüm kırgınlıkları bitirir, geriye düşülen maçlarda geri dönüş inancını ve taraftar bağını ateşler.</div>
         </button>
+      </div>
       </div>
     </div>
   </div>
@@ -1797,35 +1802,39 @@
 
   <!-- 9. KUPA TÖRENİ & YENİ SEZON & HOCA OYUNCU ÖNERİLERİ MODALI -->
   <div id="modal-season-end" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="relative bg-[#111726] border border-amber-500/60 w-full max-w-sm rounded-2xl p-4 text-center space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto scrollbar-thin">
-      <button onclick="document.getElementById('modal-season-end').classList.add('hidden'); switchTab('office');" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1 rounded-lg">
+    <div class="relative bg-[#111726] border border-amber-500/60 w-full max-w-sm rounded-2xl shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+      <button onclick="document.getElementById('modal-season-end').classList.add('hidden'); switchTab('office');" class="absolute top-3 right-3 z-10 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/60 cursor-pointer">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
-      <div class="w-16 h-16 mx-auto rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
-        <i data-lucide="award" class="w-9 h-9"></i>
-      </div>
-      <div>
-        <h2 class="text-base font-black text-white" id="season-end-title">SEZON TAMAMLANDI!</h2>
-        <p class="text-xs text-slate-300 mt-1" id="season-end-desc">34 haftalık lig maratonu sona erdi.</p>
-      </div>
 
-      <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-amber-400 font-bold" id="season-end-reward">
-        Ödül: +100M ₺ Şampiyonluk Primi!
-      </div>
-
-      <!-- Hoca Sezon Sonu Oyuncu Önerileri -->
-      <div class="text-left space-y-1.5 pt-1">
-        <div class="text-[11px] font-bold text-white flex items-center gap-1">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Hoca Sezon Sonu Transfer Önerileri:
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-5 text-center space-y-3 overflow-y-auto flex-1 pr-2">
+        <div class="w-16 h-16 mx-auto rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+          <i data-lucide="award" class="w-9 h-9"></i>
         </div>
-        <div class="space-y-1" id="season-coach-recommendations">
-          <!-- JS ile önerilen 2-3 oyuncu basılır -->
+        <div>
+          <h2 class="text-base font-black text-white" id="season-end-title">SEZON TAMAMLANDI!</h2>
+          <p class="text-xs text-slate-300 mt-1" id="season-end-desc">34 haftalık lig maratonu sona erdi.</p>
         </div>
-      </div>
 
-      <button onclick="startNextSeason()" class="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs">
-        YENİ SEZONA GEÇİŞ YAP (34 HAFTA)
-      </button>
+        <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-amber-400 font-bold" id="season-end-reward">
+          Ödül: +100M ₺ Şampiyonluk Primi!
+        </div>
+
+        <!-- Hoca Sezon Sonu Oyuncu Önerileri -->
+        <div class="text-left space-y-1.5 pt-1">
+          <div class="text-[11px] font-bold text-white flex items-center gap-1">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Hoca Sezon Sonu Transfer Önerileri:
+          </div>
+          <div class="space-y-1" id="season-coach-recommendations">
+            <!-- JS ile önerilen 2-3 oyuncu basılır -->
+          </div>
+        </div>
+
+        <button onclick="startNextSeason()" class="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs cursor-pointer shadow-md active:scale-95">
+          YENİ SEZONA GEÇİŞ YAP (34 HAFTA)
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1884,10 +1893,10 @@
 
   <!-- 11. OYUN & SES AYARLARI MODALI (KLASİK OYUN AYARLARI MENÜSÜ) -->
   <div id="modal-settings" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-[#0e1526] border-2 border-[#1e293b] w-full max-w-sm rounded-2xl p-4 shadow-2xl space-y-3.5 max-h-[90vh] overflow-y-auto text-slate-100">
+    <div class="bg-[#0e1526] border-2 border-[#1e293b] w-full max-w-sm rounded-2xl shadow-2xl max-h-[90vh] text-slate-100 flex flex-col overflow-hidden">
       
-      <!-- Başlık Çubuğu -->
-      <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+      <!-- Sabit Başlık Çubuğu -->
+      <div class="flex justify-between items-center border-b border-slate-800 p-4 pb-3 shrink-0">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
             <i data-lucide="sliders" class="w-4 h-4"></i>
@@ -1901,6 +1910,9 @@
           ✕
         </button>
       </div>
+
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3.5 overflow-y-auto flex-1 pr-2">
 
       <!-- 1. Müzik & Ses Efektleri -->
       <div class="bg-[#131b2e] p-3 rounded-xl border border-slate-850 space-y-3 shadow-inner">
@@ -1980,16 +1992,16 @@
           <span>Kulüp Başkanlığından İstifa Et</span>
         </button>
       </div>
-
+      </div>
     </div>
   </div>
 
   <!-- 11.5. KULÜP TAKVİMİ & FİKSTÜR MODALI (FM / FIFA TARZI ETKİLEŞİMLİ TAKVİM) -->
   <div id="modal-calendar" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-    <div class="bg-[#0e1526] border-2 border-[#1e293b] w-full max-w-md rounded-2xl p-4 shadow-2xl space-y-3 max-h-[92vh] overflow-y-auto text-slate-100 flex flex-col">
+    <div class="bg-[#0e1526] border-2 border-[#1e293b] w-full max-w-md rounded-2xl shadow-2xl max-h-[92vh] text-slate-100 flex flex-col overflow-hidden">
       
-      <!-- Başlık Çubuğu -->
-      <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+      <!-- Sabit Başlık Çubuğu -->
+      <div class="flex justify-between items-center border-b border-slate-800 p-4 pb-3 shrink-0">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
             <i data-lucide="calendar" class="w-4 h-4"></i>
@@ -2003,6 +2015,9 @@
           ✕
         </button>
       </div>
+
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
 
       <!-- Bilgi Şeridi: Bugün & Transfer Dönemi Durumu -->
       <div class="bg-[#131b2e] p-2.5 rounded-xl border border-slate-850 flex items-center justify-between shadow-inner text-xs">
@@ -2071,8 +2086,10 @@
         </button>
       </div>
 
-      <!-- Hızlı İşlemler Butonları -->
-      <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/80">
+      </div>
+
+      <!-- Sabit Hızlı İşlemler Butonları -->
+      <div class="grid grid-cols-3 gap-2 p-3 border-t border-slate-800/80 shrink-0 bg-[#0a0f1d]">
         <button onclick="advanceCalendarDay()" class="py-2 px-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-[11px] border border-slate-700 transition-all flex items-center justify-center gap-1 text-center cursor-pointer active:scale-95">
           <i data-lucide="step-forward" class="w-3 h-3 text-amber-400"></i> +1 Gün
         </button>
@@ -2157,8 +2174,9 @@
 
   <!-- HUD Bilgi ve Rehber Modalı -->
   <div id="modal-hud-info" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-sm rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-sm rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800 shrink-0">
         <div class="flex items-center gap-2">
           <div id="hud-info-icon-box" class="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
             <i data-lucide="wallet" class="w-4 h-4"></i>
@@ -2171,7 +2189,8 @@
         <button onclick="closeHudInfoModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
       </div>
 
-      <div class="space-y-2.5 text-xs">
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-2.5 text-xs overflow-y-auto flex-1 pr-2">
         <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-amber-400 text-[11px] flex items-center gap-1.5">
             <span>📖</span> <span>Ne Anlama Gelir?</span>
@@ -2201,16 +2220,20 @@
         </div>
       </div>
 
-      <button onclick="closeHudInfoModal()" class="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors">
-        Anladım, Kapat
-      </button>
+      <!-- Sabit Alt Buton -->
+      <div class="p-3 border-t border-slate-800 shrink-0 bg-[#111726]">
+        <button onclick="closeHudInfoModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors cursor-pointer">
+          Anladım, Kapat
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- KULÜP TESİSLERİ VE PASİF GELİR GELİŞTİRMELERİ MODALI (SKILL TREE) -->
   <div id="modal-club-upgrades" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-md rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+    <div class="bg-[#151c2e] border border-slate-700 w-full max-w-md rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800 shrink-0">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
             <i data-lucide="wrench" class="w-4 h-4"></i>
@@ -2223,12 +2246,15 @@
         <button onclick="closeClubUpgradesModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
       </div>
 
-      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-        Kulübün altyapısını ve gelir kollarını geliştirerek her maç daha yüksek bilet, mağaza ve TV hasılatı elde edin; oyuncularınızın kondisyon toparlanmasını hızlandırın.
-      </div>
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3.5 overflow-y-auto flex-1 pr-2">
+        <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          Kulübün altyapısını ve gelir kollarını geliştirerek her maç daha yüksek bilet, mağaza ve TV hasılatı elde edin; oyuncularınızın kondisyon toparlanmasını hızlandırın.
+        </div>
 
-      <div id="club-upgrades-list" class="space-y-2.5">
-        <!-- JS ile 5 skill dalı render edilir -->
+        <div id="club-upgrades-list" class="space-y-2.5">
+          <!-- JS ile 5 skill dalı render edilir -->
+        </div>
       </div>
     </div>
   </div>
@@ -2283,8 +2309,9 @@
 
   <!-- TAKTİK & KÜLTÜR SKILL AĞACI MODALI -->
   <div id="modal-tactical-skills" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#121929] border border-amber-500/40 w-full max-w-lg rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+    <div class="bg-[#121929] border border-amber-500/40 w-full max-w-lg rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800 shrink-0">
         <div class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-inner">
             <i data-lucide="zap" class="w-5 h-5"></i>
@@ -2303,58 +2330,67 @@
         </div>
       </div>
 
-      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-start gap-2.5">
-        <i data-lucide="info" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
-        <span>
-          <strong>Taktik Puanı (TP):</strong> Maç galibiyetlerinden (+2 TP), derbi zaferlerinden (+3 TP) ve beraberliklerden (+1 TP) kazanılır. Bu ağaçtaki yetenekler kulübe pasif para değil; maç anında <strong>%10 ev sahibi baskısı, deplasman direnci ve 80-90. dakikalarda derbi mucizeleri</strong> kazandırır!
-        </span>
-      </div>
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3.5 overflow-y-auto flex-1 pr-2">
+        <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-start gap-2.5">
+          <i data-lucide="info" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
+          <span>
+            <strong>Taktik Puanı (TP):</strong> Maç galibiyetlerinden (+2 TP), derbi zaferlerinden (+3 TP) ve beraberliklerden (+1 TP) kazanılır. Bu ağaçtaki yetenekler kulübe pasif para değil; maç anında <strong>%10 ev sahibi baskısı, deplasman direnci ve 80-90. dakikalarda derbi mucizeleri</strong> kazandırır!
+          </span>
+        </div>
 
-      <!-- Skill Düğümleri Listesi -->
-      <div id="tactical-skills-tree-list" class="space-y-3">
-        <!-- JS ile render edilir -->
+        <!-- Skill Düğümleri Listesi -->
+        <div id="tactical-skills-tree-list" class="space-y-3">
+          <!-- JS ile render edilir -->
+        </div>
       </div>
     </div>
   </div>
 
   <!-- GENÇ OYUNCU KİRALAMA MODALI -->
   <div id="modal-player-loan" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
-    <div class="bg-[#121929] border border-blue-500/40 w-full max-w-lg rounded-2xl p-4 space-y-3.5 shadow-2xl relative max-h-[92vh] overflow-y-auto scrollbar-thin">
-      <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shadow-inner">
-            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+    <div class="bg-[#121929] border border-blue-500/40 w-full max-w-lg rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Sabit Başlık & Sekmeler -->
+      <div class="p-4 pb-3 border-b border-slate-800 shrink-0 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shadow-inner">
+              <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-sm text-white">Genç Oyuncu Kiralama Masası</h3>
+              <span class="text-[10px] text-slate-400">Gelişim, Tecrübe ve OVR Patlaması</span>
+            </div>
           </div>
-          <div>
-            <h3 class="font-extrabold text-sm text-white">Genç Oyuncu Kiralama Masası</h3>
-            <span class="text-[10px] text-slate-400">Gelişim, Tecrübe ve OVR Patlaması</span>
-          </div>
+          <button onclick="closePlayerLoanModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
         </div>
-        <button onclick="closePlayerLoanModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-bold">✕</button>
+
+        <!-- Alt Sekmeler -->
+        <div class="flex gap-2">
+          <button onclick="switchLoanSubTab('eligible')" id="btn-loan-subtab-eligible" class="flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-xs text-center transition-all cursor-pointer">
+            Kiralığa Verilebilecekler (<span id="loan-eligible-count">0</span>)
+          </button>
+          <button onclick="switchLoanSubTab('active')" id="btn-loan-subtab-active" class="flex-1 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs text-center hover:bg-slate-700 transition-all cursor-pointer">
+            Kiralıktaki Gençlerimiz (<span id="loan-active-count">0</span>)
+          </button>
+        </div>
       </div>
 
-      <!-- Alt Sekmeler -->
-      <div class="flex gap-2">
-        <button onclick="switchLoanSubTab('eligible')" id="btn-loan-subtab-eligible" class="flex-1 py-1.5 rounded-lg bg-blue-600 text-white font-bold text-xs text-center transition-all">
-          Kiralığa Verilebilecekler (<span id="loan-eligible-count">0</span>)
-        </button>
-        <button onclick="switchLoanSubTab('active')" id="btn-loan-subtab-active" class="flex-1 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-semibold text-xs text-center hover:bg-slate-700 transition-all">
-          Kiralıktaki Gençlerimiz (<span id="loan-active-count">0</span>)
-        </button>
-      </div>
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
+        <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+          Genç yeteneklerinizi 1. Lig ve alt lig kulüplerine kiralayarak düzenli ilk 11 süresi ve maç tecrübesi kazandırabilirsiniz. Kiralıkta forma giyen gençler her hafta tecrübe kazanır ve takıma güçlenerek (+1 ila +3 OVR) döner! Maaşın %60'ını kiralayan kulüp karşılar.
+        </div>
 
-      <div class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-        Genç yeteneklerinizi 1. Lig ve alt lig kulüplerine kiralayarak düzenli ilk 11 süresi ve maç tecrübesi kazandırabilirsiniz. Kiralıkta forma giyen gençler her hafta tecrübe kazanır ve takıma güçlenerek (+1 ila +3 OVR) döner! Maaşın %60'ını kiralayan kulüp karşılar.
-      </div>
+        <!-- Kiralığa Verilebilir Oyuncular -->
+        <div id="loan-eligible-view" class="space-y-2">
+          <!-- JS ile render edilir -->
+        </div>
 
-      <!-- Kiralığa Verilebilir Oyuncular -->
-      <div id="loan-eligible-view" class="space-y-2 max-h-[380px] overflow-y-auto scrollbar-thin pr-1">
-        <!-- JS ile render edilir -->
-      </div>
-
-      <!-- Kiralıktaki Oyuncular -->
-      <div id="loan-active-view" class="hidden space-y-2 max-h-[380px] overflow-y-auto scrollbar-thin pr-1">
-        <!-- JS ile render edilir -->
+        <!-- Kiralıktaki Oyuncular -->
+        <div id="loan-active-view" class="hidden space-y-2">
+          <!-- JS ile render edilir -->
+        </div>
       </div>
     </div>
   </div>
@@ -2366,6 +2402,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261008_calendar_v1"></script>
+  <script src="app.js?v=20261008_scrollbar_v2"></script>
 </body>
 </html>
