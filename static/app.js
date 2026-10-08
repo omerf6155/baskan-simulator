@@ -1046,18 +1046,24 @@ function renderUI() {
   }
 
   const traits = (!isCoachVacant && gameState.coach && gameState.coach.traits) ? gameState.coach.traits : [];
+  const mapTraitIcon = (icon) => {
+    if (!icon) return 'zap';
+    if (['zap', 'shield', 'flame', 'award', 'activity', 'battery-charging', 'shield-check', 'compass', 'user-check', 'target', 'sparkles', 'users'].includes(icon)) return icon;
+    if (icon.includes('🧤') || icon.includes('🛡️') || icon.includes('Kalkan') || icon.includes('Duvar')) return 'shield';
+    if (icon.includes('🔥') || icon.includes('Alev')) return 'flame';
+    if (icon.includes('👑') || icon.includes('Taç') || icon.includes('Kaptan')) return 'award';
+    return 'zap';
+  };
   const renderTraitsHtml = (list) => {
-    if (isCoachVacant) return '<span class="text-[10px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-800/60">⚠️ Teknik Direktör Aranıyor</span>';
-    if (!list || list.length === 0) return '<span class="text-[10px] text-slate-400 font-semibold">Taktiksel Disiplin</span>';
+    if (isCoachVacant) return '<span class="inline-flex items-center gap-1 text-[10px] text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-800/60"><i data-lucide="alert-triangle" class="w-3 h-3 text-amber-400"></i> Teknik Direktör Aranıyor</span>';
+    if (!list || list.length === 0) return '<span class="inline-flex items-center gap-1 text-[10px] text-slate-400 font-semibold bg-slate-900/60 px-2 py-0.5 rounded-lg border border-slate-800"><i data-lucide="compass" class="w-3 h-3 text-slate-400"></i> Taktiksel Disiplin</span>';
     return list.map(t => {
-      let name = t.name || '';
-      if (name.includes('Efsane Kaptan')) name = 'Derbi Motivasyonu';
-      if (name.includes('Forvet Büyücüsü')) name = 'Bitiricilik Uzmanı';
-      if (name.includes('Zirve Yarışı')) name = 'Zirve Yarışı';
-      if (name.includes('Total Gegenpress')) name = 'Gegenpress Baskısı';
+      const name = (typeof t === 'object' && t.name) ? t.name : String(t);
+      const icon = (typeof t === 'object' && t.icon) ? t.icon : 'zap';
+      const desc = (typeof t === 'object' && t.desc) ? t.desc : '';
       return `
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-sky-950/70 text-sky-300 border border-sky-600/40 shadow-sm" title="${t.desc}">
-          <span>${t.icon || '⚡'}</span>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-sky-950/70 text-sky-300 border border-sky-600/40 shadow-sm" title="${desc}">
+          <i data-lucide="${mapTraitIcon(icon)}" class="w-3 h-3 text-sky-400"></i>
           <span>${name}</span>
         </span>
       `;
@@ -1265,11 +1271,11 @@ function drawHexagonalRadar(canvasId, myStats, oppStats) {
 }
 
 // ==================== KADRO VE PUAN DURUMU RENDER ====================
-function renderPosLineHeader(title, count, icon, colorClass = "text-slate-400 border-slate-800") {
+function renderPosLineHeader(title, count, iconKey, colorClass = "text-slate-400 border-slate-800") {
   const div = document.createElement("div");
   div.className = `flex items-center justify-between px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${colorClass} bg-slate-900/40 border-b border-t border-slate-800/60 my-1 rounded`;
   div.innerHTML = `
-    <span class="flex items-center gap-1.5"><span>${icon}</span> <span>${title}</span></span>
+    <span class="flex items-center gap-1.5"><i data-lucide="${iconKey}" class="w-3.5 h-3.5"></i> <span>${title}</span></span>
     <span class="text-[9px] opacity-75 font-semibold">${count} Oyuncu</span>
   `;
   return div;
@@ -1277,9 +1283,10 @@ function renderPosLineHeader(title, count, icon, colorClass = "text-slate-400 bo
 
 function renderSquadPlayerCard(p, idx, isStarter) {
   const card = document.createElement("div");
-  card.className = `p-2 rounded-lg border flex items-center justify-between text-xs transition-all ${
-    isStarter ? "bg-slate-900/90 border-slate-700/80" : "bg-slate-950/70 border-slate-800/60 opacity-85"
+  card.className = `p-2 rounded-xl border flex items-center justify-between text-xs transition-all cursor-pointer ${
+    isStarter ? "bg-slate-900/90 border-slate-700/80 hover:border-amber-500/50" : "bg-slate-950/70 border-slate-800/60 opacity-90 hover:border-slate-700 hover:opacity-100"
   }`;
+  card.onclick = () => openPlayerProfileModal(idx, isStarter);
 
   const sk = p.skills || {};
   const contractYears = p.contract_years !== undefined ? p.contract_years : 2;
@@ -1288,11 +1295,11 @@ function renderSquadPlayerCard(p, idx, isStarter) {
   const isForeign = p.is_foreign !== false;
 
   const actionBtn = isStarter
-    ? `<button onclick="benchStarterPlayer(${idx})" title="Yedek kulübesine çek" class="px-2 py-1 rounded bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
-         <span>🪑</span> <span class="hidden xs:inline">Yedeğe Al</span>
+    ? `<button onclick="event.stopPropagation(); benchStarterPlayer(${idx})" title="Yedek kulübesine çek" class="px-2 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
+         <i data-lucide="arrow-down-left" class="w-3 h-3 text-rose-400"></i> <span class="hidden xs:inline">Yedeğe Al</span>
        </button>`
-    : `<button onclick="promoteBenchPlayer(${idx})" title="İlk 11 maç kadrosuna al" class="px-2 py-1 rounded bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
-         <span>⭐</span> <span class="hidden xs:inline">11'e Al</span>
+    : `<button onclick="event.stopPropagation(); promoteBenchPlayer(${idx})" title="İlk 11 maç kadrosuna al" class="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
+         <i data-lucide="star" class="w-3 h-3 text-amber-400"></i> <span class="hidden xs:inline">11'e Al</span>
        </button>`;
 
   const potVal = p.potential || Math.min(94, p.overall + Math.max(3, (27 - (p.age || 24)) * 2));
@@ -1312,38 +1319,42 @@ function renderSquadPlayerCard(p, idx, isStarter) {
     <div class="flex items-center gap-2 truncate">
       ${getFifaPosBadgeHtml(p.pos)}
       <div class="truncate">
-        <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5">
-          <span>${p.name}</span>
+        <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5 flex-wrap">
+          <span class="hover:text-amber-300 transition-colors">${p.name}</span>
           ${idx === 0 && !isGoalkeeper(p.pos) ? '<span class="text-[8px] bg-amber-500 text-black px-1 rounded font-black">KAPTAN</span>' : ''}
           ${isForeign 
-            ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">🌐 YBN</span>' 
-            : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">🇹🇷 TR</span>'}
-          ${isYouth ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 py-0.2 rounded font-bold" title="Genç Yetenek Potansiyeli">⚡ POT: ${potVal}</span>` : ''}
-          <span class="text-[8px] px-1 py-0.2 rounded border font-black ${stamColor}" title="Kondisyon / Dayanıklılık">⚡ %${stamVal}</span>
-          ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse">🩹 Sakat (${p.injured_weeks} Hf)</span>` : ''}
-          ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse">🔴 Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
-          ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold">${p.yellow_cards}🟨</span>` : ''}
-          ${p.is_inbound_loan ? `<span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-500/50 px-1 py-0.2 rounded font-bold" title="Kiralık Oyuncu">🔄 Kiralık (${p.parent_club || 'Dış Kulüp'})</span>` : ''}
+            ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">YBN</span>' 
+            : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">TR</span>'}
+          ${isYouth ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 py-0.2 rounded font-bold flex items-center gap-0.5" title="Genç Yetenek Potansiyeli"><i data-lucide="sparkles" class="w-2.5 h-2.5"></i> POT: ${potVal}</span>` : ''}
+          <span class="text-[8px] px-1 py-0.2 rounded border font-black ${stamColor} flex items-center gap-0.5" title="Kondisyon / Dayanıklılık"><i data-lucide="zap" class="w-2.5 h-2.5"></i> %${stamVal}</span>
+          ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse flex items-center gap-0.5"><i data-lucide="activity" class="w-2.5 h-2.5"></i> Sakat (${p.injured_weeks} Hf)</span>` : ''}
+          ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse flex items-center gap-0.5"><i data-lucide="shield-alert" class="w-2.5 h-2.5"></i> Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
+          ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold flex items-center gap-0.5"><span class="w-1.5 h-2.5 bg-yellow-400 rounded-[1px] inline-block"></span> ${p.yellow_cards}</span>` : ''}
+          ${p.is_inbound_loan ? `<span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-500/50 px-1 py-0.2 rounded font-bold flex items-center gap-0.5" title="Kiralık Oyuncu"><i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i> Kiralık</span>` : ''}
         </div>
         <div class="text-[9px] text-slate-400">
           ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${p.is_inbound_loan ? '1 Yıl (Kiralık)' : `${contractYears} Yıl`}</strong> • Maaş: ${formatMoney(p.wage)}
         </div>
         <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
-          <span>⏱️ <strong class="text-white font-mono">${mins}</strong> dk (${matches} maç)</span>
-          <span>⭐ Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
+          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-2.5 h-2.5 text-slate-400"></i> <strong class="text-white font-mono">${mins}</strong> dk (${matches} m)</span>
+          <span class="flex items-center gap-1"><i data-lucide="award" class="w-2.5 h-2.5 text-amber-400"></i> Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
+          ${(p.goals || 0) > 0 ? `<span class="flex items-center gap-1 text-emerald-400 font-mono font-bold"><i data-lucide="target" class="w-2.5 h-2.5"></i> ${p.goals} Gol</span>` : ''}
+          <button onclick="event.stopPropagation(); openPlayerProfileModal(${idx}, ${isStarter})" class="px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/60 text-[8px] font-bold hover:bg-indigo-900 transition-all flex items-center gap-0.5" title="Detaylı Oyuncu Kartı & İstatistikler">
+            <i data-lucide="user-check" class="w-2.5 h-2.5"></i> <span>Profil</span>
+          </button>
           ${p.is_inbound_loan && p.buy_option ? `
-            <button onclick="buyLoanOption('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-600/50 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Satın Alma Opsiyonunu Kullan">
-              <span>💰</span> <span>Opsiyonu Al (${formatMoney(p.buy_option)})</span>
+            <button onclick="event.stopPropagation(); buyLoanOption('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-600/50 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Satın Alma Opsiyonunu Kullan">
+              <i data-lucide="dollar-sign" class="w-2.5 h-2.5"></i> <span>Opsiyon (${formatMoney(p.buy_option)})</span>
             </button>
           ` : ''}
           ${!isStarter && !p.is_inbound_loan ? `
-            <button onclick="terminatePlayerContract('${safeName}')" class="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 text-[8px] font-bold hover:bg-rose-900 transition-all flex items-center gap-0.5" title="Sözleşmeyi tazminat ödeyerek feshet">
-              <span>❌</span> <span>Feshet</span>
+            <button onclick="event.stopPropagation(); terminatePlayerContract('${safeName}')" class="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 text-[8px] font-bold hover:bg-rose-900 transition-all flex items-center gap-0.5" title="Sözleşmeyi tazminat ödeyerek feshet">
+              <i data-lucide="trash-2" class="w-2.5 h-2.5 text-rose-400"></i> <span>Feshet</span>
             </button>
           ` : ''}
           ${!isStarter && p.overall >= 78 && mins < 90 && (gameState.week || 1) >= 2 ? `
-            <button onclick="confrontCoachAboutPlayer('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700/60 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Teknik Direktöre bu oyuncunun neden oynamadığını sor!">
-              <span>🗣️</span> <span>Hesap Sor</span>
+            <button onclick="event.stopPropagation(); confrontCoachAboutPlayer('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700/60 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Teknik Direktöre bu oyuncunun neden oynamadığını sor!">
+              <i data-lucide="message-square" class="w-2.5 h-2.5 text-amber-400"></i> <span>Hesap Sor</span>
             </button>
           ` : ''}
         </div>
@@ -1416,31 +1427,31 @@ function renderSquadList() {
   const sOther = starters.filter(item => !sGk.includes(item) && !sDef.includes(item) && !sMid.includes(item) && !sFwd.includes(item));
 
   if (sGk.length > 0) {
-    container.appendChild(renderPosLineHeader("Kaleci", sGk.length, "🧤", "text-amber-400"));
+    container.appendChild(renderPosLineHeader("Kaleci", sGk.length, "shield-check", "text-amber-400"));
     sGk.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
   }
   if (sDef.length > 0) {
-    container.appendChild(renderPosLineHeader("Defans Hattı", sDef.length, "🛡️", "text-sky-400"));
+    container.appendChild(renderPosLineHeader("Defans Hattı", sDef.length, "shield", "text-sky-400"));
     sDef.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
   }
   if (sMid.length > 0) {
-    container.appendChild(renderPosLineHeader("Orta Saha Hattı", sMid.length, "⚙️", "text-emerald-400"));
+    container.appendChild(renderPosLineHeader("Orta Saha Hattı", sMid.length, "layers", "text-emerald-400"));
     sMid.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
   }
   if (sFwd.length > 0) {
-    container.appendChild(renderPosLineHeader("Forvet & Hücum Hattı", sFwd.length, "🎯", "text-rose-400"));
+    container.appendChild(renderPosLineHeader("Forvet & Hücum Hattı", sFwd.length, "target", "text-rose-400"));
     sFwd.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
   }
   if (sOther.length > 0) {
     sOther.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, true)));
   }
 
-  // 2. Grup: 🪑 YEDEKLER & REZERVLER
+  // 2. Grup: YEDEKLER & REZERVLER
   if (bench.length > 0) {
     const benchHeader = document.createElement("div");
     benchHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-slate-300 bg-slate-800/80 border border-slate-700/80 rounded-xl mt-4 mb-2 shadow-sm";
     benchHeader.innerHTML = `
-      <span class="flex items-center gap-1.5"><span>🪑</span> <span>YEDEKLER & REZERV KADRO</span></span>
+      <span class="flex items-center gap-1.5"><i data-lucide="users" class="w-3.5 h-3.5 text-slate-400"></i> <span>YEDEKLER & REZERV KADRO</span></span>
       <span class="text-[9px] text-slate-400 font-bold bg-slate-800 px-2 py-0.5 rounded-full">${bench.length} Oyuncu</span>
     `;
     container.appendChild(benchHeader);
@@ -1452,19 +1463,19 @@ function renderSquadList() {
     const bOther = bench.filter(item => !bGk.includes(item) && !bDef.includes(item) && !bMid.includes(item) && !bFwd.includes(item));
 
     if (bGk.length > 0) {
-      container.appendChild(renderPosLineHeader("Yedek Kaleci", bGk.length, "🧤", "text-amber-400"));
+      container.appendChild(renderPosLineHeader("Yedek Kaleci", bGk.length, "shield-check", "text-amber-400"));
       bGk.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
     }
     if (bDef.length > 0) {
-      container.appendChild(renderPosLineHeader("Yedek Defans", bDef.length, "🛡️", "text-sky-400"));
+      container.appendChild(renderPosLineHeader("Yedek Defans", bDef.length, "shield", "text-sky-400"));
       bDef.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
     }
     if (bMid.length > 0) {
-      container.appendChild(renderPosLineHeader("Yedek Orta Saha", bMid.length, "⚙️", "text-emerald-400"));
+      container.appendChild(renderPosLineHeader("Yedek Orta Saha", bMid.length, "layers", "text-emerald-400"));
       bMid.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
     }
     if (bFwd.length > 0) {
-      container.appendChild(renderPosLineHeader("Yedek Forvet", bFwd.length, "🎯", "text-rose-400"));
+      container.appendChild(renderPosLineHeader("Yedek Forvet", bFwd.length, "target", "text-rose-400"));
       bFwd.forEach(item => container.appendChild(renderSquadPlayerCard(item.player, item.actualIdx, false)));
     }
     if (bOther.length > 0) {
@@ -1472,14 +1483,14 @@ function renderSquadList() {
     }
   }
 
-  // 3. Grup: 🔄 KİRALIKTAKİ OYUNCULARIMIZ (Dış Kulüplere Kiralananlar)
+  // 3. Grup: KİRALIKTAKİ OYUNCULARIMIZ (Dış Kulüplere Kiralananlar)
   const loanedPlayers = gameState.loaned_players || [];
   if (loanedPlayers.length > 0) {
     const loanHeader = document.createElement("div");
     loanHeader.className = "flex items-center justify-between px-2.5 py-2 text-[11px] font-bold text-blue-300 bg-blue-950/60 border border-blue-500/40 rounded-xl mt-4 mb-2 shadow-sm";
     loanHeader.innerHTML = `
       <span class="flex items-center gap-1.5">
-        <span>🔄</span>
+        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
         <span>KİRALIKTAKİ OYUNCULARIMIZ</span>
       </span>
       <span class="text-[9px] text-blue-300 font-bold bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30">
@@ -1508,20 +1519,24 @@ function renderSquadList() {
               <span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-600/40 px-1 py-0.2 rounded font-bold font-mono">⏳ ${weeksLeft} Hafta Sonra Dönecek</span>
             </div>
             <div class="text-[9px] text-slate-300 mt-1 flex items-center gap-2 flex-wrap">
-              <span>⚽ <strong class="text-white">${lp.matches_played || lp.loan_matches_played || 0}</strong> maç (<strong class="text-white">${lp.minutes_played || lp.loan_minutes_played || 0}</strong> dk)</span>
-              <span>💰 Maaş Tasarrufu: <strong class="text-emerald-400 font-mono">${formatMoney(lp.saved_wage || 0)}</strong></span>
+              <span class="flex items-center gap-1"><i data-lucide="activity" class="w-2.5 h-2.5 text-sky-400"></i> <strong class="text-white">${lp.matches_played || lp.loan_matches_played || 0}</strong> maç (<strong class="text-white">${lp.minutes_played || lp.loan_minutes_played || 0}</strong> dk)</span>
+              <span class="flex items-center gap-1"><i data-lucide="dollar-sign" class="w-2.5 h-2.5 text-emerald-400"></i> Maaş Tasarrufu: <strong class="text-emerald-400 font-mono">${formatMoney(lp.saved_wage || 0)}</strong></span>
             </div>
           </div>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
           <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">${lp.overall} OVR</span>
           <button onclick="recallLoanPlayer('${safeName}')" title="4M ₺ fesih bedeli ödeyerek oyuncuyu hemen as kadroya geri çağır" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-md flex items-center gap-1 transition-all">
-            <span>↩️</span> <span>Geri Çağır (4M ₺)</span>
+            <i data-lucide="corner-down-left" class="w-3 h-3 text-slate-950"></i> <span>Geri Çağır (4M ₺)</span>
           </button>
         </div>
       `;
       container.appendChild(card);
     });
+  }
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
   }
 }
 
@@ -3897,6 +3912,322 @@ async function promptResign() {
   } catch (e) {
     console.error(e);
   }
+}
+
+// ==================== TEKNİK DİREKTÖR & OYUNCU DETAYLI PROFİL MODALLARI ====================
+function openCoachProfileModal() {
+  const modal = document.getElementById("modal-coach-profile");
+  if (!modal) return;
+  if (!gameState || !gameState.coach || gameState.coach_vacant) {
+    showToast("Kulübün şu an sözleşmeli bir teknik direktörü yok!");
+    openSelectCoachModal();
+    return;
+  }
+  const c = gameState.coach;
+  const nameEl = document.getElementById("coach-profile-name");
+  const photoEl = document.getElementById("coach-profile-photo");
+  const ovrBadge = document.getElementById("coach-profile-ovr-badge");
+  const metaEl = document.getElementById("coach-profile-meta");
+  const salaryEl = document.getElementById("coach-profile-salary");
+  const styleBadge = document.getElementById("coach-profile-style-badge");
+  const philEl = document.getElementById("coach-profile-philosophy");
+  const bgEl = document.getElementById("coach-profile-background");
+
+  if (nameEl) nameEl.textContent = c.name || "Teknik Direktör";
+  if (photoEl) {
+    photoEl.src = c.photo || "/static/coach_senol_gunes.png";
+    photoEl.onerror = () => { photoEl.src = "/static/coach_senol_gunes.png"; };
+  }
+  if (ovrBadge) ovrBadge.textContent = `${c.rating || 85} OVR`;
+  if (metaEl) metaEl.textContent = c.meta || "Ekol Stratejist & Şampiyon Teknik Direktör";
+  if (salaryEl) salaryEl.textContent = `${formatMoney(c.salary || 35000000)} / Yıl`;
+  if (styleBadge) styleBadge.textContent = c.style || "4-3-3 Karadeniz Fırtınası & Yüksek Pres";
+  if (philEl) philEl.textContent = c.philosophy || "Agresif ön alan presi, hızlı kanat akınları ve dikine hücum futbolu.";
+  if (bgEl) bgEl.textContent = c.background || "Kariyerinde efsanevi kalecilik dönemi ve tarihi şampiyonluklar barındıran duayen taktisyen.";
+
+  const setBar = (valId, barId, val) => {
+    const vEl = document.getElementById(valId);
+    const bEl = document.getElementById(barId);
+    const num = Math.min(99, Math.max(30, val || 75));
+    if (vEl) vEl.textContent = num;
+    if (bEl) bEl.style.width = `${num}%`;
+  };
+  setBar("bar-coach-attack-val", "bar-coach-attack", c.attack || 85);
+  setBar("bar-coach-defense-val", "bar-coach-defense", c.defense || 83);
+  setBar("bar-coach-youth-val", "bar-coach-youth", c.youth || 84);
+  setBar("bar-coach-press-val", "bar-coach-press", c.press || 86);
+  setBar("bar-coach-ego-val", "bar-coach-ego", c.ego || 70);
+
+  const traitsListEl = document.getElementById("coach-profile-traits-list");
+  if (traitsListEl) {
+    const traits = c.traits || [];
+    if (traits.length === 0) {
+      traitsListEl.innerHTML = '<div class="text-xs text-slate-400 italic">Belirgin özel karakter özelliği tanımlanmadı.</div>';
+    } else {
+      traitsListEl.innerHTML = traits.map(t => {
+        const iconKey = (typeof t === 'object' && t.icon) ? t.icon : 'award';
+        const nameStr = (typeof t === 'object' && t.name) ? t.name : String(t);
+        const descStr = (typeof t === 'object' && t.desc) ? t.desc : 'Takım kimyasına etki eden karakteristik özellik.';
+        const mappedIcon = (typeof mapTraitIcon === 'function') ? mapTraitIcon(iconKey) : 'award';
+        return `
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-sky-950/90 border border-sky-600/40 flex items-center justify-center flex-shrink-0 text-sky-400">
+              <i data-lucide="${mappedIcon}" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-white">${nameStr}</div>
+              <div class="text-[10.5px] text-slate-400 leading-tight mt-0.5">${descStr}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  modal.classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function closeCoachProfileModal() {
+  const modal = document.getElementById("modal-coach-profile");
+  if (modal) modal.classList.add("hidden");
+}
+
+async function promptFireCoachFromProfile() {
+  if (!gameState || !gameState.coach || gameState.coach_vacant) return;
+  const c = gameState.coach;
+  const severance = Math.round((c.salary || 35000000) * 0.40);
+
+  if (!confirm(`Teknik Direktör ${c.name} ile sözleşmeyi tek taraflı feshetmek istiyor musunuz?\n\n📄 Fesih Tazminatı: ${formatMoney(severance)}\n\nBu tutar kulüp bütçesinden kesilecek ve teknik direktörlük koltuğu boşa çıkacaktır.`)) {
+    return;
+  }
+
+  try {
+    const res = await apiFetch("/api/coach/fire", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || "Fesih işlemi gerçekleştirilemedi!");
+      return;
+    }
+    closeCoachProfileModal();
+    showToast(data.message);
+    gameState = data.state;
+    renderUI();
+
+    setTimeout(() => {
+      if (confirm("Yeni bir teknik direktör göreve getirmek için Teknik Direktör Pazarı açılsın mı?")) {
+        openSelectCoachModal(data.candidates);
+      }
+    }, 400);
+  } catch (e) {
+    console.error(e);
+    showToast("Bağlantı hatası!");
+  }
+}
+
+let currentProfilePlayer = null;
+
+function openPlayerProfileModal(playerOrIdx, isStarter) {
+  const modal = document.getElementById("modal-player-profile");
+  if (!modal || !gameState || !gameState.squad) return;
+
+  let player = null;
+  let actualIdx = -1;
+  let starterFlag = false;
+
+  if (typeof playerOrIdx === 'object' && playerOrIdx !== null) {
+    player = playerOrIdx;
+    actualIdx = gameState.squad.findIndex(p => p.name === player.name);
+    starterFlag = actualIdx >= 0 && actualIdx < 11;
+  } else if (typeof playerOrIdx === 'number') {
+    actualIdx = playerOrIdx;
+    player = gameState.squad[actualIdx];
+    starterFlag = actualIdx < 11;
+  }
+
+  if (!player) {
+    showToast("Oyuncu verisi bulunamadı!");
+    return;
+  }
+
+  currentProfilePlayer = { player, actualIdx, isStarter: starterFlag };
+
+  const nameEl = document.getElementById("player-profile-name");
+  const ovrEl = document.getElementById("player-profile-ovr");
+  const posEl = document.getElementById("player-profile-pos");
+  const potBadgeEl = document.getElementById("player-profile-pot-badge");
+  const captBadgeEl = document.getElementById("player-profile-captain-badge");
+  const ageEl = document.getElementById("player-profile-age");
+  const originEl = document.getElementById("player-profile-origin");
+  const roleEl = document.getElementById("player-profile-role-status");
+  const valEl = document.getElementById("player-profile-val");
+  const wageEl = document.getElementById("player-profile-wage");
+  const contractEl = document.getElementById("player-profile-contract");
+
+  if (nameEl) nameEl.textContent = player.name;
+  if (ovrEl) ovrEl.textContent = player.overall;
+  if (posEl) posEl.textContent = shortenPosition(player.pos);
+
+  const potVal = player.potential || Math.min(94, player.overall + Math.max(3, (27 - (player.age || 24)) * 2));
+  if (potBadgeEl) potBadgeEl.textContent = `POT ${potVal}`;
+
+  if (captBadgeEl) {
+    if (actualIdx === 0 && !isGoalkeeper(player.pos)) captBadgeEl.classList.remove("hidden");
+    else captBadgeEl.classList.add("hidden");
+  }
+
+  if (ageEl) ageEl.textContent = `${player.age || 24} Yaş`;
+  if (originEl) originEl.textContent = player.is_foreign ? "Yabancı" : "Yerli (TR)";
+  if (roleEl) {
+    roleEl.textContent = starterFlag ? "İlk 11 As Kadro" : "Yedek / Kulübe";
+    roleEl.className = starterFlag ? "text-emerald-400 font-bold" : "text-amber-400 font-bold";
+  }
+
+  if (valEl) valEl.textContent = formatMoney(player.val || (player.overall * 1500000));
+  if (wageEl) wageEl.textContent = `${formatMoney(player.wage || 4000000)} / Yıl`;
+  if (contractEl) {
+    contractEl.textContent = player.is_inbound_loan ? "1 Yıl (Kiralık)" : `${player.contract_years !== undefined ? player.contract_years : 2} Yıl`;
+  }
+
+  const stamVal = player.stamina !== undefined ? player.stamina : 100;
+  const stamText = document.getElementById("player-profile-stamina-text");
+  const stamBar = document.getElementById("player-profile-stamina-bar");
+  if (stamText) stamText.textContent = `%${stamVal}`;
+  if (stamBar) {
+    stamBar.style.width = `${stamVal}%`;
+    stamBar.className = stamVal < 60 ? "h-full bg-rose-500 rounded-full transition-all" : (stamVal < 80 ? "h-full bg-amber-500 rounded-full transition-all" : "h-full bg-emerald-500 rounded-full transition-all");
+  }
+
+  const moraleVal = player.morale !== undefined ? player.morale : 80;
+  const moraleText = document.getElementById("player-profile-morale-text");
+  const moraleBar = document.getElementById("player-profile-morale-bar");
+  if (moraleText) moraleText.textContent = `%${moraleVal}`;
+  if (moraleBar) {
+    moraleBar.style.width = `${moraleVal}%`;
+    moraleBar.className = moraleVal < 50 ? "h-full bg-rose-500 rounded-full transition-all" : "h-full bg-amber-500 rounded-full transition-all";
+  }
+
+  const badgesEl = document.getElementById("player-profile-status-badges");
+  if (badgesEl) {
+    let bHtml = "";
+    if ((player.injured_weeks || 0) > 0) {
+      bHtml += `<span class="px-2 py-0.5 rounded-lg bg-red-950/80 border border-red-500/60 text-red-300 text-[10px] font-bold flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3 text-red-400"></i> ${player.injured_weeks} Hafta Sakat</span>`;
+    }
+    if ((player.suspended_weeks || 0) > 0) {
+      bHtml += `<span class="px-2 py-0.5 rounded-lg bg-amber-950/80 border border-amber-500/60 text-amber-300 text-[10px] font-bold flex items-center gap-1"><i data-lucide="shield-alert" class="w-3 h-3 text-amber-400"></i> ${player.suspended_weeks} Hafta Cezalı</span>`;
+    }
+    if ((player.yellow_cards || 0) > 0) {
+      bHtml += `<span class="px-2 py-0.5 rounded-lg bg-yellow-950/80 border border-yellow-600/40 text-yellow-300 text-[10px] font-bold flex items-center gap-1"><span class="w-1.5 h-2.5 bg-yellow-400 rounded-[1px] inline-block"></span> ${player.yellow_cards} Sarı Kart</span>`;
+    }
+    if (player.is_inbound_loan) {
+      bHtml += `<span class="px-2 py-0.5 rounded-lg bg-blue-950/80 border border-blue-500/50 text-blue-300 text-[10px] font-bold flex items-center gap-1"><i data-lucide="refresh-cw" class="w-3 h-3 text-blue-400"></i> Kiralık (${player.parent_club || 'Dış Kulüp'})</span>`;
+    }
+    badgesEl.innerHTML = bHtml;
+  }
+
+  const skillsGrid = document.getElementById("player-profile-skills-grid");
+  if (skillsGrid) {
+    const sk = player.skills || {};
+    const isGk = isGoalkeeper(player.pos);
+    const skillDefs = isGk ? [
+      { key: "pac", label: "Uçuş & Atlama (DIV)", color: "bg-amber-500" },
+      { key: "sho", label: "Top Tutma & Hakimiyet (HAN)", color: "bg-emerald-500" },
+      { key: "pas", label: "Ayakla Oyun / Pas (PAS)", color: "bg-sky-500" },
+      { key: "dri", label: "Refleks & Çabukluk (REF)", color: "bg-purple-500" },
+      { key: "def", label: "Pozisyon Alma (POS)", color: "bg-indigo-500" },
+      { key: "phy", label: "Bire Bir & Fizik (PHY)", color: "bg-rose-500" },
+    ] : [
+      { key: "pac", label: "Hız & İvmelenme (PAC)", color: "bg-amber-500" },
+      { key: "sho", label: "Şut & Bitiricilik (SHO)", color: "bg-rose-500" },
+      { key: "pas", label: "Pas & Oyun Görüşü (PAS)", color: "bg-sky-500" },
+      { key: "dri", label: "Dribbling & Teknik (DRI)", color: "bg-purple-500" },
+      { key: "def", label: "Savunma & Müdahale (DEF)", color: "bg-emerald-500" },
+      { key: "phy", label: "Fizik Güç & Direnç (PHY)", color: "bg-indigo-500" },
+    ];
+
+    skillsGrid.innerHTML = skillDefs.map(s => {
+      const val = sk[s.key] !== undefined ? sk[s.key] : Math.round(player.overall * 0.95);
+      return `
+        <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-800">
+          <div class="flex items-center justify-between text-[10px] font-bold mb-1">
+            <span class="text-slate-300 truncate">${s.label}</span>
+            <span class="text-white font-mono font-black">${val}</span>
+          </div>
+          <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
+            <div class="h-full ${s.color} rounded-full" style="width: ${Math.min(99, Math.max(20, val))}%"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  const statMatches = document.getElementById("player-profile-stat-matches");
+  const statGoals = document.getElementById("player-profile-stat-goals");
+  const statAssists = document.getElementById("player-profile-stat-assists");
+  const statRating = document.getElementById("player-profile-stat-rating");
+  const recentRatingsEl = document.getElementById("player-profile-recent-ratings");
+
+  const mins = player.minutes_played || 0;
+  const matches = player.matches_played || 0;
+  if (statMatches) statMatches.textContent = `${matches} (${mins} dk)`;
+  if (statGoals) statGoals.textContent = player.goals || 0;
+  if (statAssists) statAssists.textContent = player.assists || 0;
+  if (statRating) {
+    const avg = player.avg_rating && player.avg_rating > 0 ? player.avg_rating.toFixed(1) : "-";
+    statRating.textContent = avg;
+  }
+
+  if (recentRatingsEl) {
+    const history = player.ratings_history || [];
+    if (history.length === 0) {
+      recentRatingsEl.innerHTML = '<span class="text-[9px] text-slate-500">-</span>';
+    } else {
+      const lastRatings = history.slice(-5);
+      recentRatingsEl.innerHTML = lastRatings.map(r => {
+        const cClass = r >= 7.5 ? "bg-emerald-950 text-emerald-300 border-emerald-600/50" : (r >= 6.8 ? "bg-blue-950 text-blue-300 border-blue-600/50" : "bg-slate-800 text-slate-300 border-slate-700");
+        return `<span class="px-1.5 py-0.2 rounded border text-[9px] font-black ${cClass}">${r}</span>`;
+      }).join('');
+    }
+  }
+
+  const toggleBtnText = document.getElementById("player-profile-toggle-squad-text");
+  if (toggleBtnText) {
+    toggleBtnText.textContent = starterFlag ? "Yedeğe Çek" : "11'e Al";
+  }
+
+  modal.classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
+}
+
+function closePlayerProfileModal() {
+  const modal = document.getElementById("modal-player-profile");
+  if (modal) modal.classList.add("hidden");
+  currentProfilePlayer = null;
+}
+
+function togglePlayerSquadFromProfile() {
+  if (!currentProfilePlayer) return;
+  const { actualIdx, isStarter } = currentProfilePlayer;
+  closePlayerProfileModal();
+  if (isStarter) {
+    benchStarterPlayer(actualIdx);
+  } else {
+    promoteBenchPlayer(actualIdx);
+  }
+}
+
+function terminateCurrentPlayerFromProfile() {
+  if (!currentProfilePlayer) return;
+  const { player } = currentProfilePlayer;
+  closePlayerProfileModal();
+  terminatePlayerContract(player.name);
 }
 
 // ==================== HOCA DİYALOĞU & SCOUT KOVMA ====================

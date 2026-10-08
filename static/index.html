@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20261008_sponsor_dock_v1">
+  <link rel="stylesheet" href="style.css?v=20261008_coach_player_profiles_v1">
 </head>
 <body class="bg-[#080c14] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex items-center justify-center p-0 md:p-3">
 
@@ -161,24 +161,27 @@
 
         <!-- Hoca Bilgisi & İstatistikleri (Teknik Heyet Odası) -->
         <div id="office-coach-card" class="bg-[#121929]/90 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-3.5 flex items-center justify-between transition-all shadow-lg">
-          <div class="flex items-center gap-3.5 min-w-0">
+          <div class="flex items-center gap-3.5 min-w-0 cursor-pointer" onclick="openCoachProfileModal()" title="Teknik Direktör Detay Profilini Aç">
             <div class="coach-avatar-box w-12 h-12 min-w-[48px] min-h-[48px] max-w-[48px] max-h-[48px] rounded-2xl bg-slate-950 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 flex items-center justify-center shadow-lg relative">
               <img id="office-coach-photo" src="/static/coach_senol_gunes.png" alt="Teknik Direktör" class="w-full h-full object-cover rounded-xl" onerror="this.src='/static/coach_senol_gunes.png'" />
               <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[8px] font-black px-1.5 py-0.5 rounded-tl">TD</span>
             </div>
             <div class="min-w-0">
-              <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Teknik Direktör</div>
+              <div class="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1">
+                <span>Teknik Direktör</span>
+                <i data-lucide="external-link" class="w-3 h-3 text-amber-400"></i>
+              </div>
               <div id="office-coach-name" class="font-black text-sm text-white truncate">Şenol Güneş</div>
               <div class="text-[11px] text-slate-300 mt-0.5 truncate" id="office-coach-style">4-3-3 Ofansif Karadeniz Fırtınası & Yüksek Pres</div>
               <div id="office-coach-traits" class="flex flex-wrap gap-1 mt-1.5"></div>
             </div>
           </div>
           <div class="flex-shrink-0 ml-3 flex flex-col gap-1.5" id="office-coach-btn-container">
-            <button onclick="openCoachModal()" class="btn-royale-green px-3.5 py-1.5 text-xs font-bold text-white text-center cursor-pointer">
-              Görüş
+            <button onclick="openCoachProfileModal()" class="btn-royale-blue px-3 py-1 text-[10px] font-bold text-white text-center cursor-pointer flex items-center justify-center gap-1">
+              <i data-lucide="user-check" class="w-3 h-3"></i> Profil
             </button>
-            <button onclick="openCoachVisionModal()" class="btn-royale-blue px-3 py-1 text-[10px] font-bold text-white text-center cursor-pointer">
-              Vizyon
+            <button onclick="openCoachModal()" class="btn-royale-green px-3 py-1 text-[10px] font-bold text-white text-center cursor-pointer">
+              Görüş
             </button>
           </div>
         </div>
@@ -317,13 +320,16 @@
         <!-- Hoca Kartı -->
         <div class="bg-[#151c2e] border border-slate-800 rounded-xl p-3.5">
           <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="openCoachProfileModal()" title="Teknik Direktör Detay Profilini Aç">
               <div class="w-14 h-14 rounded-2xl bg-slate-900 border-2 border-amber-500/60 overflow-hidden flex-shrink-0 shadow-lg relative">
                 <img id="squad-coach-photo" src="/static/coach_senol_gunes.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_senol_gunes.png'" />
                 <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[8px] font-black px-1 rounded-tl">TD</span>
               </div>
               <div>
-                <div class="text-[10px] text-slate-400">Teknik Direktör</div>
+                <div class="text-[10px] text-slate-400 flex items-center gap-1">
+                  <span>Teknik Direktör</span>
+                  <i data-lucide="external-link" class="w-2.5 h-2.5 text-amber-400"></i>
+                </div>
                 <div class="text-sm font-extrabold text-white" id="squad-coach-name">Şenol Güneş</div>
                 <div class="text-[11px] text-amber-400 font-semibold" id="squad-coach-style">4-3-3 Ofansif Karadeniz Fırtınası & Yüksek Pres</div>
                 <div id="squad-coach-traits" class="flex flex-wrap gap-1 mt-1.5"></div>
@@ -354,15 +360,18 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-3 gap-1.5 pt-1" id="squad-coach-actions-grid">
+          <div class="grid grid-cols-4 gap-1.5 pt-1" id="squad-coach-actions-grid">
+            <button onclick="openCoachProfileModal()" id="btn-squad-coach-profile" class="py-1.5 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/50 text-indigo-200 font-bold text-[10px] flex items-center justify-center gap-1">
+              <i data-lucide="user-check" class="w-3 h-3 text-indigo-400"></i> Profil & Kov
+            </button>
             <button onclick="openCoachModal()" id="btn-squad-coach-talk" class="py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-[10px] flex items-center justify-center gap-1">
-              <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Hoca ile Konuş
+              <i data-lucide="message-square" class="w-3 h-3 text-emerald-400"></i> Konuş
             </button>
             <button onclick="openCoachVisionModal()" id="btn-squad-coach-vision" class="py-1.5 rounded-lg bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/50 text-blue-200 font-bold text-[10px] flex items-center justify-center gap-1">
-              <i data-lucide="sparkles" class="w-3 h-3 text-blue-400"></i> Hoca Vizyonu
+              <i data-lucide="sparkles" class="w-3 h-3 text-blue-400"></i> Vizyon
             </button>
             <button onclick="openCaptainReportModal()" id="btn-squad-coach-captain" class="py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-bold text-[10px] flex items-center justify-center gap-1">
-              <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Kaptan & Zam
+              <i data-lucide="shield" class="w-3 h-3 text-amber-400"></i> Kaptan
             </button>
           </div>
         </div>
@@ -1439,12 +1448,170 @@
     </div>
   </div>
 
+  <!-- TEKNİK DİREKTÖR DETAYLI PROFİL & YÖNETİM MASASI MODALI -->
+  <div id="modal-coach-profile" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0e1628] border-2 border-slate-700 w-full max-w-md rounded-2xl shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden text-slate-100">
+      <!-- Sabit Başlık -->
+      <div class="flex items-center justify-between p-4 pb-3 border-b border-slate-800 shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-black text-white tracking-wide">TEKNİK DİREKTÖR PROFİLİ</h3>
+            <p class="text-[10px] text-slate-400 font-medium">Oyun Felsefesi, Beceriler & Yönetim</p>
+          </div>
+        </div>
+        <button onclick="closeCoachProfileModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-bold flex items-center justify-center transition-colors cursor-pointer text-xs border border-slate-700">✕</button>
+      </div>
+
+      <!-- İç Kaydırılabilir Gövde -->
+      <div class="p-4 pt-3 space-y-3.5 overflow-y-auto flex-1 pr-2">
+        <!-- Hoca Başlık Kartı -->
+        <div class="bg-gradient-to-r from-[#141e34] via-[#10182b] to-[#0a101e] p-3.5 rounded-2xl border border-slate-750 flex items-center gap-3.5 shadow-md">
+          <div class="w-16 h-16 rounded-2xl bg-slate-950 border-2 border-amber-500/70 overflow-hidden shrink-0 shadow-lg relative">
+            <img id="coach-profile-photo" src="/static/coach_senol_gunes.png" alt="TD" class="w-full h-full object-cover" onerror="this.src='/static/coach_senol_gunes.png'" />
+            <span class="absolute bottom-0 right-0 bg-amber-500 text-slate-950 text-[8px] font-black px-1.5 py-0.2 rounded-tl">TD</span>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-1">
+              <h2 id="coach-profile-name" class="text-base font-black text-white truncate">Şenol Güneş</h2>
+              <span id="coach-profile-ovr-badge" class="px-2 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-xs font-mono shadow-sm">85 OVR</span>
+            </div>
+            <div id="coach-profile-meta" class="text-[10.5px] text-amber-300 font-bold truncate mt-0.5">Türk Ekolü • Trabzonspor</div>
+            <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
+              <span>Maaş: <strong id="coach-profile-salary" class="text-emerald-400 font-mono">35M ₺</strong></span>
+              <span>•</span>
+              <span id="coach-profile-status" class="text-emerald-300 font-semibold">Görevde (Sözleşmeli)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Büyük Oyun Karakteri & Felsefesi -->
+        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 space-y-1.5">
+          <div class="text-[10.5px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Büyük Oyun Karakteri & Taktik Tarzı</span>
+          </div>
+          <div id="coach-profile-style-badge" class="text-xs font-extrabold text-white">4-3-3 Karadeniz Fırtınası & Ofansif Pres</div>
+          <p id="coach-profile-philosophy" class="text-[10.5px] text-slate-300 leading-relaxed font-medium">
+            Kanat akınları, dikine cesur hücum ve genç yıldızları parlatma ustalığı. Kaleci geçmişinden gelen saha görüşüyle savunma direncini korur.
+          </p>
+          <div id="coach-profile-background" class="text-[10px] text-slate-400 pt-1.5 border-t border-slate-800/80 leading-snug">
+            Trabzonspor'da 1.112 dakikalık tarihi gol yememe rekoru sahibi efsane kaleci ve Dünya 3.sü Milli Takım teknik direktörü.
+          </div>
+        </div>
+
+        <!-- Taktik Nitelikler (Barlar) -->
+        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 space-y-2.5">
+          <div class="text-[10.5px] font-black text-slate-300 uppercase tracking-wider flex items-center justify-between">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Teknik Direktör Becerileri</span>
+            </span>
+            <span class="text-[9.5px] text-slate-400 lowercase">100 üzerinden</span>
+          </div>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <div class="flex justify-between text-[10px] mb-1">
+                <span class="text-slate-300 font-semibold">Hücum Gücü & Forvet Büyüsü</span>
+                <strong id="bar-coach-attack-val" class="text-emerald-400 font-mono font-bold">87</strong>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-coach-attack" class="h-full bg-emerald-500 rounded-full" style="width: 87%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-[10px] mb-1">
+                <span class="text-slate-300 font-semibold">Savunma Direnci & Kompaktlık</span>
+                <strong id="bar-coach-defense-val" class="text-sky-400 font-mono font-bold">83</strong>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-coach-defense" class="h-full bg-sky-500 rounded-full" style="width: 83%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-[10px] mb-1">
+                <span class="text-slate-300 font-semibold">Genç Yetenek & Akademi Gelişimi</span>
+                <strong id="bar-coach-youth-val" class="text-amber-400 font-mono font-bold">84</strong>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-coach-youth" class="h-full bg-amber-500 rounded-full" style="width: 84%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-[10px] mb-1">
+                <span class="text-slate-300 font-semibold">Basın & Medya Hakimiyeti</span>
+                <strong id="bar-coach-press-val" class="text-indigo-400 font-mono font-bold">86</strong>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-coach-press" class="h-full bg-indigo-500 rounded-full" style="width: 86%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-[10px] mb-1">
+                <span class="text-slate-300 font-semibold">Taktiksel Otorite & Soyunma Odası</span>
+                <strong id="bar-coach-ego-val" class="text-rose-400 font-mono font-bold">72</strong>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-coach-ego" class="h-full bg-rose-500 rounded-full" style="width: 72%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Özel Nitelikler & Karakter (Vector İkonlu) -->
+        <div class="bg-slate-900/90 p-3 rounded-2xl border border-slate-800 space-y-2">
+          <div class="text-[10.5px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Özel Yetenekler & Karakter Özellikleri</span>
+          </div>
+          <div id="coach-profile-traits-list" class="space-y-2">
+            <!-- JS ile dinamik doldurulur -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Sabit Alt Yönetim Butonları (Kovma / Alma / Görüşme) -->
+      <div class="p-3 border-t border-slate-800 shrink-0 bg-[#0b101c] space-y-2">
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="closeCoachProfileModal(); openCoachModal();" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-750 transition-all cursor-pointer">
+            <i data-lucide="message-square" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Taktik Görüş</span>
+          </button>
+          <button onclick="closeCoachProfileModal(); openCoachVisionModal();" class="py-2 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-750 transition-all cursor-pointer">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-400"></i>
+            <span>Hoca Vizyonu</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="closeCoachProfileModal(); openSelectCoachModal();" class="py-2 px-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i>
+            <span>Hoca Pazarı / Değiş</span>
+          </button>
+          <button onclick="promptFireCoachFromProfile()" class="py-2 px-2 rounded-xl bg-rose-950/80 hover:bg-rose-900 border border-rose-700/60 text-rose-200 font-black text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="user-x" class="w-3.5 h-3.5 text-rose-400"></i>
+            <span>Hocayı Kov (Fesih)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- YENİ TEKNİK DİREKTÖR SEÇİM MODALI -->
   <div id="modal-select-coach" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3">
     <div class="bg-[#111726] border-2 border-amber-500/80 w-full max-w-md rounded-2xl p-4 shadow-2xl space-y-3 max-h-[92vh] flex flex-col">
       <div class="flex justify-between items-center border-b border-slate-800 pb-2">
         <div class="flex items-center gap-2">
-          <span class="text-lg">👔</span>
+          <div class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+          </div>
           <div>
             <div class="text-xs font-black text-amber-400 uppercase tracking-wide">YENİ TEKNİK DİREKTÖR SEÇİMİ</div>
             <div class="text-[10px] text-slate-400">Kulübün başına getirmek istediğiniz hocayı belirleyin</div>
@@ -1453,13 +1620,171 @@
         <button onclick="closeSelectCoachModal()" class="text-slate-400 hover:text-white text-xs font-bold p-1">✕</button>
       </div>
 
-      <div class="text-[11px] text-slate-300 bg-amber-950/30 border border-amber-800/40 p-2.5 rounded-xl">
-        ⚡ <strong>Başkanım:</strong> Boşalan teknik direktörlük koltuğu için ligin en tecrübeli ve prestijli isimleri hazır bekliyor. İmza parası: <strong>2.000.000 ₺</strong>.
+      <div class="text-[11px] text-slate-300 bg-amber-950/30 border border-amber-800/40 p-2.5 rounded-xl flex items-start gap-2">
+        <i data-lucide="info" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+        <span><strong>Başkanım:</strong> Boşalan teknik direktörlük koltuğu için ligin en tecrübeli ve prestijli isimleri hazır bekliyor. İmza parası: <strong>2.000.000 ₺</strong>.</span>
       </div>
 
       <div id="select-coach-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
         <!-- JS ile dinamik teknik direktör adayları doldurulacak -->
       </div>
+    </div>
+  </div>
+
+  <!-- 13. OYUNCU DETAYLI PROFİL MODALI -->
+  <div id="modal-player-profile" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3">
+    <div class="bg-[#101726] border-2 border-slate-700/80 w-full max-w-md rounded-2xl p-4 shadow-2xl space-y-3.5 max-h-[92vh] flex flex-col text-slate-100 overflow-hidden">
+      
+      <!-- Başlık Çubuğu -->
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2.5 flex-shrink-0">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="text-xs font-black text-white tracking-wide uppercase">FUTBOLCU PROFİLİ & RAPOR</div>
+            <div class="text-[10px] text-slate-400 font-medium">Teknik heyet gözlem ve performans kartı</div>
+          </div>
+        </div>
+        <button onclick="closePlayerProfileModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-bold flex items-center justify-center cursor-pointer transition-colors text-xs border border-slate-700">
+          ✕
+        </button>
+      </div>
+
+      <!-- Kaydırılabilir İçerik -->
+      <div class="overflow-y-auto space-y-3 pr-1 scrollbar-thin flex-1">
+
+        <!-- Futbolcu Ana Başlık Kartı (FUT / FM Tarzı) -->
+        <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-start justify-between gap-3 relative overflow-hidden shadow-md">
+          <div class="flex items-center gap-3 min-w-0">
+            <!-- Pozisyon ve OVR Rozeti -->
+            <div class="w-14 h-16 rounded-xl bg-slate-950 border-2 border-amber-500/60 flex flex-col items-center justify-center flex-shrink-0 shadow-lg relative">
+              <span id="player-profile-ovr" class="text-lg font-black text-amber-400 font-mono leading-none">82</span>
+              <span id="player-profile-pos" class="text-[10px] font-black uppercase tracking-wider text-slate-300 mt-0.5">ST</span>
+              <div id="player-profile-pot-badge" class="absolute -bottom-1 text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 rounded font-bold whitespace-nowrap">
+                POT 87
+              </div>
+            </div>
+
+            <!-- İsim ve Temel Bilgiler -->
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <h3 id="player-profile-name" class="text-sm font-black text-white truncate">Futbolcu İsmi</h3>
+                <span id="player-profile-captain-badge" class="hidden text-[8px] bg-amber-500 text-slate-950 px-1 rounded font-black">KAPTAN</span>
+              </div>
+              <div class="text-[10.5px] text-slate-400 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                <span id="player-profile-age">24 Yaş</span>
+                <span>•</span>
+                <span id="player-profile-origin" class="font-semibold text-slate-300">Yerli (TR)</span>
+                <span>•</span>
+                <span id="player-profile-role-status" class="text-emerald-400 font-bold">İlk 11 As Kadro</span>
+              </div>
+              <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-2 flex-wrap">
+                <span>Piyasa: <strong id="player-profile-val" class="text-white font-mono">12.5M ₺</strong></span>
+                <span>Maaş: <strong id="player-profile-wage" class="text-emerald-400 font-mono">3.2M ₺</strong></span>
+                <span>Sözleşme: <strong id="player-profile-contract" class="text-amber-300 font-mono">2 Yıl</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kondisyon, Moral & Disiplin -->
+        <div class="grid grid-cols-2 gap-2">
+          <!-- Kondisyon -->
+          <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 mb-1">
+              <span class="flex items-center gap-1">
+                <i data-lucide="zap" class="w-3 h-3 text-emerald-400"></i> Kondisyon
+              </span>
+              <span id="player-profile-stamina-text" class="text-emerald-400 font-mono">%100</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+              <div id="player-profile-stamina-bar" class="h-full bg-emerald-500 rounded-full transition-all" style="width: 100%"></div>
+            </div>
+          </div>
+
+          <!-- Moral -->
+          <div class="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 mb-1">
+              <span class="flex items-center gap-1">
+                <i data-lucide="heart" class="w-3 h-3 text-rose-400"></i> Moral
+              </span>
+              <span id="player-profile-morale-text" class="text-emerald-400 font-mono">%85</span>
+            </div>
+            <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+              <div id="player-profile-morale-bar" class="h-full bg-amber-500 rounded-full transition-all" style="width: 85%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disiplin / Sakatlık Rozetleri -->
+        <div id="player-profile-status-badges" class="flex flex-wrap gap-1.5 empty:hidden"></div>
+
+        <!-- 6 Temel Özellik (FM / FIFA Skilleri) -->
+        <div class="p-3 rounded-xl bg-[#131b2e] border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase text-amber-400 tracking-wider flex items-center gap-1">
+              <i data-lucide="activity" class="w-3 h-3 text-amber-400"></i> TEKNİK ÖZELLİKLER & BECERİLER
+            </span>
+            <span class="text-[9px] text-slate-500 font-mono">FIFA Standartları</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-x-3 gap-y-2 pt-1" id="player-profile-skills-grid">
+            <!-- 6 Skill Bar JS ile render edilecek -->
+          </div>
+        </div>
+
+        <!-- Sezon Performansı & Sofascore Reytingi -->
+        <div class="p-3 rounded-xl bg-[#131b2e] border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase text-sky-400 tracking-wider flex items-center gap-1">
+              <i data-lucide="award" class="w-3 h-3 text-sky-400"></i> SEZON PERFORMANSI & İSTATİSTİKLER
+            </span>
+            <span class="text-[9px] text-slate-500 font-mono">Lig & Kupa</span>
+          </div>
+
+          <div class="grid grid-cols-4 gap-1.5 text-center">
+            <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-800">
+              <div class="text-[9px] text-slate-400">Maç / Süre</div>
+              <div class="text-xs font-black text-white font-mono mt-0.5" id="player-profile-stat-matches">0 (0 dk)</div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-800">
+              <div class="text-[9px] text-slate-400">Gol</div>
+              <div class="text-xs font-black text-emerald-400 font-mono mt-0.5" id="player-profile-stat-goals">0</div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-800">
+              <div class="text-[9px] text-slate-400">Asist</div>
+              <div class="text-xs font-black text-sky-400 font-mono mt-0.5" id="player-profile-stat-assists">0</div>
+            </div>
+            <div class="p-2 rounded-lg bg-slate-900/90 border border-slate-800">
+              <div class="text-[9px] text-slate-400">Ort. Reyting</div>
+              <div class="text-xs font-black text-amber-400 font-mono mt-0.5" id="player-profile-stat-rating">6.8</div>
+            </div>
+          </div>
+
+          <!-- Son Maç Form Akışı -->
+          <div class="pt-1 flex items-center justify-between text-[10px]">
+            <span class="text-slate-400 font-medium">Son Maç Notları:</span>
+            <div class="flex items-center gap-1 font-mono" id="player-profile-recent-ratings"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Aksiyon Tuşları (Alt Bar) -->
+      <div class="pt-2 border-t border-slate-800 space-y-2 flex-shrink-0">
+        <div class="grid grid-cols-2 gap-2" id="player-profile-actions-grid">
+          <button id="btn-player-profile-toggle-squad" onclick="togglePlayerSquadFromProfile()" class="py-2 px-2 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/50 text-emerald-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="arrow-left-right" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span id="player-profile-toggle-squad-text">11'e Al</span>
+          </button>
+          <button id="btn-player-profile-terminate" onclick="terminateCurrentPlayerFromProfile()" class="py-2 px-2 rounded-xl bg-rose-950/80 hover:bg-rose-900 border border-rose-700/60 text-rose-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5 text-rose-400"></i>
+            <span>Sözleşmeyi Feshet</span>
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -2414,6 +2739,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261008_sponsor_dock_v1"></script>
+  <script src="app.js?v=20261008_coach_player_profiles_v1"></script>
 </body>
 </html>

@@ -165,6 +165,8 @@ AVAILABLE_COACHES_MARKET = [
         "id": "c_terim",
         "name": "Fatih Terim",
         "style": "4-3-3 Total Hücum & 'Biz Bitti Demeden Bitmez' Kaos Baskısı",
+        "philosophy": "Korkusuz hücum, yüksek özgüven ve 'taktik mazeret üretmez' anlayışıyla rakibi ceza sahasına hapseden dominant futbol.",
+        "background": "UEFA Kupası şampiyonu, sayısız Süper Lig kupası ve Türk futbolunun en büyük lider figürlerinden biri.",
         "rating": 89,
         "attack": 92,
         "defense": 79,
@@ -174,14 +176,16 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 45_000_000,
         "photo": "/static/coach_terim.png",
         "traits": [
-            {"name": "İmparator Aurası", "icon": "👑", "desc": "Büyük maçlarda takım gücünü +6 artırır."},
-            {"name": "Geri Dönüş Uzmanı", "icon": "🔥", "desc": "Yenikken 2. yarıda gol bulma şansını %35 artırır."}
+            {"name": "İmparator Aurası", "icon": "award", "desc": "Büyük maçlarda takım gücünü +6 artırır."},
+            {"name": "Geri Dönüş Uzmanı", "icon": "flame", "desc": "Yenikken 2. yarıda gol bulma şansını %35 artırır."}
         ]
     },
     {
         "id": "c_sergen",
         "name": "Sergen Yalçın",
         "style": "4-2-3-1 Pragmatik Hücum & Bireysel Yetenek Özgürlüğü",
+        "philosophy": "Yetenekli ayaklara sınırsız özgürlük, geçiş oyununda akılcı paslar ve taktik sıkıcılıktan uzak saf futbol zekası.",
+        "background": "Süper Lig şampiyonu efsane sol ayak. Sahada taktik tahtasından çok oyuncu dehasına ve maç anındaki sezgiye güvenir.",
         "rating": 86,
         "attack": 88,
         "defense": 80,
@@ -191,31 +195,35 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 36_000_000,
         "photo": "/static/coach_sergen.png",
         "traits": [
-            {"name": "Dahi Dokunuş", "icon": "🪄", "desc": "Hücum oyuncularının bireysel bitiricilik yeteneğini yükseltir."},
-            {"name": "Büyük Maç Gurusu", "icon": "⚡", "desc": "Derbi ve zor maçlarda taktik disiplini üst seviyeye çeker."}
+            {"name": "Dahi Dokunuş", "icon": "sparkles", "desc": "Hücum oyuncularının bireysel bitiricilik yeteneğini yükseltir."},
+            {"name": "Büyük Maç Gurusu", "icon": "zap", "desc": "Derbi ve zor maçlarda taktik disiplini üst seviyeye çeker."}
         ]
     },
     {
         "id": "c_senol",
         "name": "Şenol Güneş",
-        "style": "4-3-3 Klasik Türk Hücum Ekolü & Golcü Patlatıcı",
+        "style": "4-3-3 Karadeniz Fırtınası & Ofansif Pres",
+        "philosophy": "Kanat akınları, dikine cesur hücum ve genç yıldızları parlatma ustalığı. Kaleci geçmişinden gelen saha görüşüyle savunma direncini korur.",
+        "background": "Trabzonspor'da 1.112 dakikalık tarihi gol yememe rekoru sahibi efsane kaleci ve Dünya 3.sü Milli Takım teknik direktörü.",
         "rating": 85,
         "attack": 87,
-        "defense": 78,
-        "youth": 80,
+        "defense": 83,
+        "youth": 84,
         "press_rel": 86,
         "ego": 72,
         "salary": 32_000_000,
         "photo": "/static/coach_senol_gunes.png",
         "traits": [
-            {"name": "Forvet Büyücüsü", "icon": "🎯", "desc": "Santraforların maç başına gol atma ihtimalini %25 artırır."},
-            {"name": "Tecrübe Abidesi", "icon": "🏛️", "desc": "Puan kayıplarında soyunma odası krizlerini sakinleştirir."}
+            {"name": "Efsane Kaleci Mirası", "icon": "shield", "desc": "Trabzonspor kalesindeki efsane gol yememe rekoru mirasıyla takıma savunma direnci (+5) aşılar."},
+            {"name": "Ofansif Cesaret & Oyuncu Geliştirici", "icon": "zap", "desc": "Hızlı kanat hücumları ve genç yetenekleri parlatma felsefesiyle takımın gol potansiyelini yükseltir."}
         ]
     },
     {
         "id": "c_kartal",
         "name": "İsmail Kartal",
         "style": "4-2-3-1 Yüksek Tempolu Pozisyonel Pres & Hücum Disiplini",
+        "philosophy": "Fiziksel üstünlük, bitmek bilmeyen koşu mesafesi ve hücumda pozisyon sadakatiyle 90 dakika rakibi yıpratan tempo.",
+        "background": "Süper Lig rekor puan toplamış, taktik disiplini ve oyuncularla abi-kardeş bağını aynı anda kuran çalışkan teknik adam.",
         "rating": 84,
         "attack": 85,
         "defense": 82,
@@ -225,14 +233,16 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 26_000_000,
         "photo": "/static/coach_ismail_kartal.png",
         "traits": [
-            {"name": "Hacı İsmail Hırsı", "icon": "🦅", "desc": "Takımın koşu mesafesini ve ikili mücadele kazanımını artırır."},
-            {"name": "Kondisyoner", "icon": "🔋", "desc": "Oyuncuların yorgunluk düşüş hızını %20 azaltır."}
+            {"name": "Yüksek Mücadele Gücü", "icon": "activity", "desc": "Takımın koşu mesafesini ve ikili mücadele kazanımını artırır."},
+            {"name": "Kondisyon Disiplini", "icon": "battery-charging", "desc": "Oyuncuların yorgunluk düşüş hızını %20 azaltır."}
         ]
     },
     {
         "id": "c_volkan",
         "name": "Volkan Demirel",
         "style": "4-4-2 Savaşçı Ruh & Hatay Dayanışması",
+        "philosophy": "Korkusuz gladyatör karakteri, forması için ter döken savaşçı kadro ve geriye düşse bile vazgeçmeyen direnç.",
+        "background": "Fenerbahçe ve A Milli Takım'ın unutulmaz kalecisi. Kriz dönemlerinde takımı tek yürek yapan ateşleyici lider.",
         "rating": 81,
         "attack": 80,
         "defense": 84,
@@ -242,14 +252,16 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 20_000_000,
         "photo": "/static/coach_volkan.png",
         "traits": [
-            {"name": "Gladyatör Karakteri", "icon": "🛡️", "desc": "Yenilgi durumunda takımın pes etmesini engeller."},
-            {"name": "Liderlik Karizması", "icon": "📢", "desc": "Taraftar güvenini maç başına +1 ekstra besler."}
+            {"name": "Gladyatör Karakteri", "icon": "shield", "desc": "Yenilgi durumunda takımın pes etmesini engeller."},
+            {"name": "Liderlik Karizması", "icon": "volume-2", "desc": "Taraftar güvenini maç başına +1 ekstra besler."}
         ]
     },
     {
         "id": "c_reis",
         "name": "Thomas Reis",
         "style": "4-2-3-1 Dinamik Alman Presi & Fiziksel Baskı",
+        "philosophy": "Bundesliga kökenli karşı pres, dar alan savunması ve topsuz oyunda rakibe nefes aldırmayan fiziksel organizasyon.",
+        "background": "Almanya ve Türkiye'de taktik disipliniyle fark yaratan, savunma duvarını kusursuz ören Alman futbol ekolü temsilcisi.",
         "rating": 83,
         "attack": 82,
         "defense": 84,
@@ -259,14 +271,16 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 24_000_000,
         "photo": "/static/coach_thomas_reis.png",
         "traits": [
-            {"name": "Alman Savunma Duvarı", "icon": "🧱", "desc": "Yenen gol beklentisini (xGA) %20 düşürür."},
-            {"name": "Fiziksel Kondisyon", "icon": "⚡", "desc": "80. dakikadan sonra takımın kondisyonunu korur."}
+            {"name": "Alman Savunma Duvarı", "icon": "shield-check", "desc": "Yenen gol beklentisini (xGA) %20 düşürür."},
+            {"name": "Fiziksel Kondisyon", "icon": "zap", "desc": "80. dakikadan sonra takımın kondisyonunu korur."}
         ]
     },
     {
         "id": "c_tekke",
         "name": "Fatih Tekke",
         "style": "4-3-3 Pas Oyunu & Pozisyon Zenginliği",
+        "philosophy": "Topa sahip olan oyuna hükmeder anlayışı. Yerden akıcı paslar, forvet hareketliliği ve genç yeteneklere tam güven.",
+        "background": "UEFA Kupası kazanmış ve Trabzonspor efsanesi olmuş gol kralı. Modern Türk teknik adamlığının taktik zekası yüksek temsilcisi.",
         "rating": 80,
         "attack": 82,
         "defense": 78,
@@ -276,8 +290,8 @@ AVAILABLE_COACHES_MARKET = [
         "salary": 20_000_000,
         "photo": "/static/coach_tekke.png",
         "traits": [
-            {"name": "Topa Hakimiyet & Pas", "icon": "⚽", "desc": "Topla oynama oranını %10 artırır."},
-            {"name": "Genç Yetenek Kaşifi", "icon": "🌱", "desc": "Altyapı oyuncularının gelişimini hızlandırır."}
+            {"name": "Topa Hakimiyet & Pas", "icon": "compass", "desc": "Topla oynama oranını %10 artırır."},
+            {"name": "Genç Yetenek Kaşifi", "icon": "user-check", "desc": "Altyapı oyuncularının gelişimini hızlandırır."}
         ]
     }
 ]
@@ -722,6 +736,12 @@ def enrich_player(p: Dict[str, Any]) -> Dict[str, Any]:
         p["ratings_history"] = []
     if "avg_rating" not in p:
         p["avg_rating"] = 0.0
+    if "goals" not in p:
+        p["goals"] = 0
+    if "assists" not in p:
+        p["assists"] = 0
+    if "red_cards" not in p:
+        p["red_cards"] = 0
 
     return p
 
@@ -1542,9 +1562,18 @@ def get_state(session_id: Optional[str] = None):
                             if team_info and team_info.get("coach"):
                                 state["coach"] = dict(team_info["coach"])
                                 coach = state["coach"]
-                        if coach:
                             if not coach.get("photo"):
                                 coach["photo"] = (team_info.get("coach", {}).get("photo") if team_info else None) or "/static/coach_senol_gunes.png"
+                            if coach.get("name") == "Şenol Güneş":
+                                if not coach.get("philosophy") or any(t.get("icon") in ["⚡", "🎯"] for t in coach.get("traits", [])):
+                                    coach["style"] = "4-3-3 Karadeniz Fırtınası & Ofansif Pres"
+                                    coach["philosophy"] = "Kanat akınları, dikine cesur hücum ve genç yıldızları parlatma ustalığı. Kaleci geçmişinden gelen saha görüşüyle savunma direncini korur."
+                                    coach["background"] = "Trabzonspor'da 1.112 dakikalık tarihi gol yememe rekoru sahibi efsane kaleci ve Dünya 3.sü Milli Takım teknik direktörü."
+                                    coach["defense"] = max(83, coach.get("defense", 80))
+                                    coach["traits"] = [
+                                        {"name": "Efsane Kaleci Mirası", "icon": "shield", "desc": "Trabzonspor kalesinde 1.112 dakikalık tarihi gol yememe rekoru. Takım savunmasına ve direncine +5 ekler."},
+                                        {"name": "Ofansif Cesaret & Oyuncu Geliştirici", "icon": "zap", "desc": "Kanat organizasyonları ve genç yetenekleri parlatıp hücum temposunu zirveye taşır."}
+                                    ]
                     if "loaned_players" not in state:
                         state["loaned_players"] = []
                     if "tactical_skills" not in state:
@@ -2453,11 +2482,14 @@ def api_match_half2(req: HalftimeActionRequest):
             p.setdefault("ratings_history", []).append(final_rtg)
             p["avg_rating"] = round(sum(p["ratings_history"]) / len(p["ratings_history"]), 1)
 
+            p_goals = scorers.count(p["name"])
+            p["goals"] = p.get("goals", 0) + p_goals
+
             player_ratings.append({
                 "name": p["name"],
                 "pos": p["pos"],
                 "rating": final_rtg,
-                "goals": scorers.count(p["name"]),
+                "goals": p_goals,
                 "minutes": played_mins,
                 "is_sub": p["name"] not in [x["name"] for x in state["squad"][:11]]
             })
@@ -5157,6 +5189,32 @@ def api_coach_dialog(req: CoachDialogAction):
     state["coach_dialog_pending"] = False
     save_state(state)
     return {"message": msg, "state": state}
+
+@app.post("/api/coach/fire")
+def api_coach_fire():
+    state = get_state()
+    coach = state.get("coach")
+    if not coach or state.get("coach_vacant", False):
+        raise HTTPException(status_code=400, detail="Kulüpte görevde bir teknik direktör bulunmuyor!")
+
+    tazminat = int(coach.get("salary", 25_000_000) * 0.4)
+    if state["budget"] < tazminat:
+        raise HTTPException(status_code=400, detail=f"Hocayı kovmak için kasada en az {format_money_val(tazminat)} fesih tazminatı bulunmalıdır!")
+
+    state["budget"] -= tazminat
+    old_coach_name = coach["name"]
+    state["coach_vacant"] = True
+    state["coach"] = None
+    state["fan_trust"] = max(10, state["fan_trust"] - 4)
+    msg = f"⚡ RESMİ AYRILIK: {old_coach_name} ile sözleşme tek taraflı feshedildi! ({format_money_val(tazminat)} fesih tazminatı ödendi). Yeni hoca arayışı başladı."
+    state["news"].insert(0, msg)
+    save_state(state)
+    return {
+        "message": msg,
+        "state": state,
+        "coach_vacant": True,
+        "coaches": [c for c in AVAILABLE_COACHES_MARKET if c["name"] != old_coach_name]
+    }
 
 @app.get("/api/coach/market")
 def api_get_coach_market():
