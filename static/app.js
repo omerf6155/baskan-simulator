@@ -2507,6 +2507,9 @@ function openCoachVisionModal() {
     }
   }
   document.getElementById("modal-coach-vision").classList.remove("hidden");
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 function closeCoachVisionModal() {
@@ -3222,27 +3225,29 @@ function renderIncomingBids() {
         <div class="flex justify-between items-start text-xs">
           <div>
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="bg-blue-900/80 text-blue-300 border border-blue-500/60 px-1.5 py-0.2 rounded font-black text-[9px]">🔄 KİRALIK TEKLİFİ</span>
-              <span class="font-extrabold text-white">${bid.player_name}</span>
-              <span class="text-[9px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
+              <span class="bg-blue-950 text-blue-300 border border-blue-600/50 px-2 py-0.5 rounded-lg font-black text-[10px] flex items-center gap-1">
+                <i data-lucide="refresh-cw" class="w-3 h-3 text-blue-400"></i> KİRALIK TEKLİFİ
+              </span>
+              <span class="font-black text-white text-sm">${bid.player_name}</span>
+              <span class="text-[10px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
             </div>
-            <div class="text-[10px] text-slate-300 mt-1">
+            <div class="text-[11px] text-slate-300 mt-1">
               Talip Kulüp: <strong class="text-white">${bid.club}</strong> • Kiralama Bedeli: <strong class="text-emerald-400 font-mono">+${formatMoney(bid.loan_fee || bid.offer_val)}</strong>
             </div>
-            <div class="text-[9px] text-slate-400 mt-0.5">
+            <div class="text-[10px] text-slate-400 mt-0.5">
               Maaş Karşılama: <strong class="text-blue-300 font-bold">%${bid.wage_coverage_pct || 100}</strong>${optText}
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-3 gap-1.5 pt-1">
-          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
-            Kabul Et (Kirala)
+        <div class="grid grid-cols-3 gap-2 pt-1.5">
+          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="btn-royale-green py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i> Kabul Et
           </button>
-          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="py-1 rounded bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px]">
-            Pazarlık (+%30)
+          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="btn-royale-gold py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="handshake" class="w-3.5 h-3.5"></i> Pazarlık (+%30)
           </button>
-          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
-            Reddet
+          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="btn-royale-red py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i> Reddet
           </button>
         </div>
       `;
@@ -3251,30 +3256,35 @@ function renderIncomingBids() {
         <div class="flex justify-between items-start text-xs">
           <div>
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="bg-amber-900/80 text-amber-300 border border-amber-500/60 px-1.5 py-0.2 rounded font-black text-[9px]">💰 BONSERVİS SATIŞ</span>
-              <span class="font-extrabold text-white">${bid.player_name}</span>
-              <span class="text-[9px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
+              <span class="bg-amber-950 text-amber-300 border border-amber-600/50 px-2 py-0.5 rounded-lg font-black text-[10px] flex items-center gap-1">
+                <i data-lucide="coins" class="w-3 h-3 text-amber-400"></i> BONSERVİS SATIŞ
+              </span>
+              <span class="font-black text-white text-sm">${bid.player_name}</span>
+              <span class="text-[10px] text-amber-400 font-bold">(${shortenPosition(bid.pos)})</span>
             </div>
-            <div class="text-[10px] text-slate-300 mt-1">
+            <div class="text-[11px] text-slate-300 mt-1">
               Talip Kulüp: <strong class="text-white">${bid.club}</strong> • Bonservis Teklifi: <strong class="text-emerald-400 font-mono">+${formatMoney(bid.offer_val)}</strong>
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-3 gap-1.5 pt-1">
-          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px]">
-            Kabul Et (Sat)
+        <div class="grid grid-cols-3 gap-2 pt-1.5">
+          <button onclick="respondIncomingBid('${bid.id}', 'accept')" class="btn-royale-green py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="check" class="w-3.5 h-3.5"></i> Kabul Et
           </button>
-          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="py-1 rounded bg-blue-600 hover:bg-blue-500 text-white font-bold text-[10px]">
-            Pazarlık (+%25)
+          <button onclick="respondIncomingBid('${bid.id}', 'counter')" class="btn-royale-gold py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="handshake" class="w-3.5 h-3.5"></i> Pazarlık (+%25)
           </button>
-          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px]">
-            Reddet
+          <button onclick="respondIncomingBid('${bid.id}', 'reject')" class="btn-royale-red py-2 px-1 text-white font-black text-xs text-center flex items-center justify-center gap-1 cursor-pointer">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i> Reddet
           </button>
         </div>
       `;
     }
     content.appendChild(item);
   });
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 async function respondIncomingBid(bidId, action) {
@@ -3314,17 +3324,52 @@ async function loadTransferMarket() {
   }
 }
 
+let currentTransferPositionFilter = "ALL";
+let currentTransferSearchQuery = "";
+
 function switchTransferMarketCategory(cat) {
   currentTransferMarketCategory = cat;
   ["all", "turkish", "europe", "stars", "free"].forEach(c => {
     const btn = document.getElementById("btn-tcat-" + c);
     if (btn) {
-      btn.className = (c === cat)
-        ? "py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-[10px] text-center"
-        : "py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700";
+      if (c === cat) {
+        btn.className = "py-2 px-1 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-[10px] text-center shadow-sm border border-amber-300 transition-all cursor-pointer flex items-center justify-center gap-1";
+      } else {
+        btn.className = "py-2 px-1 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-[10px] text-center border border-slate-750 transition-all cursor-pointer flex items-center justify-center gap-1";
+      }
     }
   });
   renderTransferMarket();
+}
+
+function setTransferPositionFilter(pos) {
+  currentTransferPositionFilter = pos;
+  ["ALL", "GK", "DEF", "MID", "FWD"].forEach(p => {
+    const btn = document.getElementById("btn-tpos-" + p);
+    if (btn) {
+      if (p === pos) {
+        btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-black bg-amber-500 text-slate-950 shrink-0 cursor-pointer shadow-sm";
+      } else {
+        btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 cursor-pointer border border-slate-700/60";
+      }
+    }
+  });
+  renderTransferMarket();
+}
+
+function handleTransferSearch(val) {
+  currentTransferSearchQuery = (val || "").trim();
+  const clearBtn = document.getElementById("btn-transfer-clear-search");
+  if (clearBtn) {
+    clearBtn.classList.toggle("hidden", !currentTransferSearchQuery);
+  }
+  renderTransferMarket();
+}
+
+function clearTransferSearch() {
+  const input = document.getElementById("transfer-search-input");
+  if (input) input.value = "";
+  handleTransferSearch("");
 }
 
 function renderTransferMarket() {
@@ -3359,32 +3404,131 @@ function renderTransferMarket() {
   );
   list = list.filter(p => !myOwnedNames.has((p.name || "").trim().toLowerCase()));
 
+  // 1. Mevki Filtresi
+  if (currentTransferPositionFilter && currentTransferPositionFilter !== "ALL") {
+    list = list.filter(p => getPosCategory(p.pos) === currentTransferPositionFilter);
+  }
+
+  // 2. Metin Arama Filtresi (İsim, Kulüp, Mevki, Açıklama)
+  if (currentTransferSearchQuery) {
+    const q = currentTransferSearchQuery.toLowerCase();
+    list = list.filter(p => {
+      const name = (p.name || "").toLowerCase();
+      const club = (p.club || p.current_club || "").toLowerCase();
+      const pos = (p.pos || "").toLowerCase();
+      const desc = (p.desc || "").toLowerCase();
+      return name.includes(q) || club.includes(q) || pos.includes(q) || desc.includes(q);
+    });
+  }
+
+  // Başlık Güncelleme
+  const titleEl = document.getElementById("transfer-market-title");
+  if (titleEl) {
+    const catLabels = {
+      all: "Scout Transfer Pazarı",
+      turkish: "Süper Lig Yerli Yıldızlar",
+      europe: "Avrupa Kulüpleri Pazarı",
+      stars: "Dünya Süper Yıldızları",
+      free: "Serbest Oyuncu Havuzu"
+    };
+    const catName = catLabels[currentTransferMarketCategory] || "Transfer Pazarı";
+    const posFilterName = currentTransferPositionFilter === "ALL" ? "" : ` • [${currentTransferPositionFilter}]`;
+    titleEl.innerText = `${catName} (${list.length} Oyuncu)${posFilterName}`;
+  }
+
+  // Boş Sonuç Durumu
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="p-6 text-center bg-slate-900/60 rounded-xl border border-slate-800 space-y-2">
+        <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-400">
+          <i data-lucide="search-x" class="w-5 h-5"></i>
+        </div>
+        <p class="text-xs font-bold text-slate-200">Aradığınız kriterde oyuncu bulunamadı</p>
+        <p class="text-[10px] text-slate-400">Mevki filtresini veya arama kutusunu sıfırlayarak tekrar deneyin.</p>
+        <button onclick="setTransferPositionFilter('ALL'); clearTransferSearch();" class="mt-1 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-[10px] font-bold cursor-pointer">
+          Filtreleri Sıfırla
+        </button>
+      </div>
+    `;
+    if (window.lucide) {
+      try { lucide.createIcons(); } catch (e) {}
+    }
+    return;
+  }
+
   list.forEach(p => {
     const item = document.createElement("div");
-    item.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex flex-col gap-1.5 text-xs";
+    item.className = "bg-gradient-to-br from-[#121a2e] to-[#0e1424] border border-slate-800 hover:border-blue-500/50 p-3 rounded-xl flex flex-col gap-2.5 text-xs transition-all shadow-md relative group";
     const cost = (p.price || 0) + (p.salary || p.wage || 0);
-    const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.2 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
+    const clubBadge = p.club ? `<span class="bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-1.5 py-0.5 rounded font-black text-[9px] mr-1">${p.club}</span>` : '';
     const posBadge = getFifaPosBadgeHtml(p.pos);
-    const natBadge = (p.is_foreign === false) ? '<span class="bg-red-950 text-red-300 border border-red-700/60 px-1 py-0.2 rounded font-black text-[9px] mr-1">🇹🇷 TR</span>' : '';
+    const natBadge = (p.is_foreign === false)
+      ? '<span class="bg-red-950 text-red-300 border border-red-700/60 px-1.5 py-0.5 rounded font-black text-[9px] mr-1">🇹🇷 TR</span>'
+      : '<span class="bg-slate-800 text-slate-300 border border-slate-700 px-1.5 py-0.5 rounded font-bold text-[9px] mr-1">Yabancı</span>';
+
+    const potVal = p.real_pot || p.overall || p.claimed_pot || 75;
+
+    let btnActionHtml = '';
+    if (p.type === 'europe') {
+      btnActionHtml = `
+        <button onclick="buyEuropeanPlayer('${p.club}', '${p.name}', this)" class="btn-royale-blue w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-sky-300"></i>
+          <span>Avrupa Transferini Bitir <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
+        </button>
+      `;
+    } else if (p.type === 'turkish') {
+      btnActionHtml = `
+        <button onclick="buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)" class="btn-royale-red w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5 text-white"></i>
+          <span>Yerli Yıldızı Bitir <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
+        </button>
+      `;
+    } else {
+      btnActionHtml = `
+        <button onclick="buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)" class="btn-royale-blue w-full py-2.5 px-3 rounded-xl text-white font-black text-xs text-center flex items-center justify-center gap-1.5 cursor-pointer shadow-md">
+          <i data-lucide="user-plus" class="w-3.5 h-3.5 text-sky-300"></i>
+          <span>Transfer Et <strong class="font-mono text-amber-300">(${formatMoney(cost)})</strong></span>
+        </button>
+      `;
+    }
 
     item.innerHTML = `
-      <div class="flex justify-between items-start">
-        <div>
-          <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
-            ${natBadge}${clubBadge}${posBadge}<span class="text-white font-bold">${p.name}</span>
-            <span class="text-[10px] text-slate-400 font-medium">(${p.age} yaş)</span>
+      <div class="flex justify-between items-start gap-2">
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            ${natBadge}${clubBadge}${posBadge}
+            <span class="text-white font-black text-sm tracking-wide truncate">${p.name}</span>
+            <span class="text-[10px] text-slate-400 font-semibold">(${p.age} yaş)</span>
           </div>
-          <div class="text-[9px] text-slate-400 mt-0.5">Bonservis: <strong>${formatMoney(p.price || 0)}</strong> • Maaş: ${formatMoney(p.salary || p.wage || 0)}</div>
+          ${p.desc ? `<p class="text-[10px] text-slate-300/90 italic mt-1 bg-slate-900/60 p-1.5 rounded border-l-2 border-amber-500/60">"${p.desc}"</p>` : ''}
         </div>
-        <span class="text-[9px] font-bold text-blue-400 bg-blue-950 px-1.5 py-0.5 rounded border border-blue-800">Güç/Pot: ${p.real_pot || p.overall || p.claimed_pot}</span>
+        <div class="flex flex-col items-end shrink-0">
+          <div class="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-black text-xs font-mono shadow-sm flex items-center gap-1">
+            <i data-lucide="zap" class="w-3 h-3 text-amber-400"></i> ${potVal}
+          </div>
+          <span class="text-[8.5px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Güç / Pot</span>
+        </div>
       </div>
-      ${p.desc ? `<p class="text-[9px] text-slate-300 italic">"${p.desc}"</p>` : ''}
-      <button onclick="${p.type === 'europe' ? `buyEuropeanPlayer('${p.club}', '${p.name}', this)` : `buyMarketPlayer('${p.name}', ${p.price || 0}, ${p.salary || p.wage || 10_000_000}, this)`}" class="w-full py-1.5 rounded ${p.type === 'europe' ? 'bg-indigo-600 hover:bg-indigo-500' : p.type === 'turkish' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'} text-white font-bold text-[10px]">
-        ${p.type === 'europe' ? `Avrupa Transferini Bitir (${formatMoney(cost)})` : p.type === 'turkish' ? `🇹🇷 Yerli Yıldızı Bitir (${formatMoney(cost)})` : `Transfer Et (${formatMoney(cost)})`}
-      </button>
+
+      <div class="grid grid-cols-2 gap-2 bg-[#0a101e] p-2 rounded-lg border border-slate-800 text-[10.5px]">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Bonservis:</span>
+          <strong class="text-white font-mono font-bold">${formatMoney(p.price || 0)}</strong>
+        </div>
+        <div class="flex items-center justify-between border-l border-slate-800 pl-2">
+          <span class="text-slate-400">Yıllık Maaş:</span>
+          <strong class="text-emerald-400 font-mono font-bold">${formatMoney(p.salary || p.wage || 0)}</strong>
+        </div>
+      </div>
+
+      ${btnActionHtml}
     `;
     container.appendChild(item);
   });
+
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 async function buyEuropeanPlayer(clubName, playerName, btnEl) {
@@ -4333,12 +4477,15 @@ async function openSelectCoachModal(cachedList) {
           </div>
         </div>
       </div>
-      <button onclick="hireCoach('${c.id}', this)" class="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 text-slate-950 font-black text-xs shadow-lg transition-all flex-shrink-0 whitespace-nowrap">
+      <button onclick="hireCoach('${c.id}', this)" class="btn-royale-gold px-3.5 py-2 text-slate-950 font-black text-xs shadow-lg transition-all flex-shrink-0 whitespace-nowrap cursor-pointer">
         Göreve Getir
       </button>
     `;
     listEl.appendChild(card);
   });
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch (e) {}
+  }
 }
 
 function closeSelectCoachModal() {
@@ -5567,23 +5714,26 @@ async function loadSponsorOffers() {
           </div>
 
           <!-- Aksiyon Butonları -->
-          <div class="flex items-center gap-1">
-            <button onclick="respondSponsorOffer('${o.id}', 'reject')" class="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/80 hover:text-rose-300 text-slate-400 font-bold text-[9.5px] border border-slate-700 transition-all cursor-pointer">
-              Reddet
+          <div class="flex items-center gap-1.5 pt-1">
+            <button onclick="respondSponsorOffer('${o.id}', 'reject')" class="btn-royale-red py-2 px-2 text-white font-black text-[10px] text-center flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="x" class="w-3 h-3"></i> Reddet
             </button>
             ${!o.is_bargained ? `
-              <button onclick="respondSponsorOffer('${o.id}', 'bargain')" class="flex-1 py-1.5 rounded-lg bg-blue-950/80 hover:bg-blue-900/90 text-blue-300 font-bold text-[9.5px] border border-blue-600/60 transition-all text-center cursor-pointer">
-                Pazarlık (+%15)
+              <button onclick="respondSponsorOffer('${o.id}', 'bargain')" class="btn-royale-gold flex-1 py-2 px-2 text-white font-black text-[10px] text-center flex items-center justify-center gap-1 cursor-pointer">
+                <i data-lucide="handshake" class="w-3.5 h-3.5"></i> Pazarlık (+%15)
               </button>
             ` : ''}
-            <button onclick="respondSponsorOffer('${o.id}', 'accept')" class="flex-1 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-[9.5px] shadow-sm transition-all active:scale-95 text-center cursor-pointer">
-              İmzala
+            <button onclick="respondSponsorOffer('${o.id}', 'accept')" class="btn-royale-green flex-1 py-2 px-2 text-white font-black text-[10px] text-center flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i> İmzala
             </button>
           </div>
         </div>
       `;
       container.appendChild(card);
     });
+    if (window.lucide) {
+      try { lucide.createIcons(); } catch (e) {}
+    }
   } catch (e) {
     console.error("loadSponsorOffers error:", e);
   }

@@ -973,22 +973,69 @@
         </button>
 
         <!-- Transfer Kategorileri / Filtreler -->
-        <div class="grid grid-cols-5 gap-1">
-          <button onclick="switchTransferMarketCategory('all')" id="btn-tcat-all" class="py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-[10px] text-center">
-            Scout
+        <div class="grid grid-cols-5 gap-1.5">
+          <button onclick="switchTransferMarketCategory('all')" id="btn-tcat-all" class="py-2 px-1 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-[10px] text-center shadow-sm border border-amber-300 transition-all cursor-pointer flex items-center justify-center gap-1">
+            <i data-lucide="compass" class="w-3 h-3"></i>
+            <span>Scout</span>
           </button>
-          <button onclick="switchTransferMarketCategory('turkish')" id="btn-tcat-turkish" class="py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700">
-            🇹🇷 Yerli
+          <button onclick="switchTransferMarketCategory('turkish')" id="btn-tcat-turkish" class="py-2 px-1 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-[10px] text-center border border-slate-750 transition-all cursor-pointer flex items-center justify-center gap-1">
+            <i data-lucide="flag" class="w-3 h-3 text-red-400"></i>
+            <span>Yerli</span>
           </button>
-          <button onclick="switchTransferMarketCategory('europe')" id="btn-tcat-europe" class="py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700">
-            🇪🇺 Avrupa
+          <button onclick="switchTransferMarketCategory('europe')" id="btn-tcat-europe" class="py-2 px-1 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-[10px] text-center border border-slate-750 transition-all cursor-pointer flex items-center justify-center gap-1">
+            <i data-lucide="globe" class="w-3 h-3 text-blue-400"></i>
+            <span>Avrupa</span>
           </button>
-          <button onclick="switchTransferMarketCategory('stars')" id="btn-tcat-stars" class="py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700">
-            ⭐ Yıldızlar
+          <button onclick="switchTransferMarketCategory('stars')" id="btn-tcat-stars" class="py-2 px-1 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-[10px] text-center border border-slate-750 transition-all cursor-pointer flex items-center justify-center gap-1">
+            <i data-lucide="sparkles" class="w-3 h-3 text-amber-400"></i>
+            <span>Yıldız</span>
           </button>
-          <button onclick="switchTransferMarketCategory('free')" id="btn-tcat-free" class="py-1 rounded-lg bg-slate-800 text-slate-300 font-semibold text-[10px] text-center hover:bg-slate-700">
-            🆓 Serbest
+          <button onclick="switchTransferMarketCategory('free')" id="btn-tcat-free" class="py-2 px-1 rounded-xl bg-slate-850 hover:bg-slate-750 text-slate-300 hover:text-white font-semibold text-[10px] text-center border border-slate-750 transition-all cursor-pointer flex items-center justify-center gap-1">
+            <i data-lucide="user-plus" class="w-3 h-3 text-emerald-400"></i>
+            <span>Serbest</span>
           </button>
+        </div>
+
+        <!-- Transfer Filtreleme & Arama Alanı -->
+        <div class="bg-[#121929] border border-slate-800 rounded-xl p-2.5 space-y-2 shadow-sm">
+          <!-- Arama Girişi -->
+          <div class="relative flex items-center">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 pointer-events-none"></i>
+            <input
+              type="text"
+              id="transfer-search-input"
+              oninput="handleTransferSearch(this.value)"
+              placeholder="Oyuncu veya kulüp ismiyle filtrele..."
+              class="w-full bg-[#0a0f1e] border border-slate-700/80 focus:border-amber-400 rounded-lg pl-8 pr-8 py-1.5 text-xs text-white placeholder-slate-500 outline-none transition-all"
+            />
+            <button
+              id="btn-transfer-clear-search"
+              onclick="clearTransferSearch()"
+              class="hidden absolute right-2 text-slate-400 hover:text-white text-xs font-bold w-5 h-5 flex items-center justify-center cursor-pointer"
+            >✕</button>
+          </div>
+
+          <!-- Mevki Filtresi (Tümü, KL, DEF, ORT, FOR) -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none">
+            <span class="text-[9.5px] font-black text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1">
+              <i data-lucide="filter" class="w-3 h-3 text-amber-400"></i> MEVKİ:
+            </span>
+            <button onclick="setTransferPositionFilter('ALL')" id="btn-tpos-ALL" class="px-2.5 py-1 rounded-lg text-[10px] font-black bg-amber-500 text-slate-950 shrink-0 cursor-pointer shadow-sm">
+              TÜMÜ
+            </button>
+            <button onclick="setTransferPositionFilter('GK')" id="btn-tpos-GK" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 cursor-pointer border border-slate-700/60">
+              KL
+            </button>
+            <button onclick="setTransferPositionFilter('DEF')" id="btn-tpos-DEF" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 cursor-pointer border border-slate-700/60">
+              DEF
+            </button>
+            <button onclick="setTransferPositionFilter('MID')" id="btn-tpos-MID" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 cursor-pointer border border-slate-700/60">
+              ORT
+            </button>
+            <button onclick="setTransferPositionFilter('FWD')" id="btn-tpos-FWD" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 shrink-0 cursor-pointer border border-slate-700/60">
+              FOR
+            </button>
+          </div>
         </div>
 
         <!-- Scout Şefi -->
@@ -1544,6 +1591,14 @@
           </div>
         </div>
       </div>
+
+      <!-- Sabit Alt Bar (Footer) -->
+      <div class="pt-2 border-t border-slate-800 shrink-0">
+        <button onclick="closeCoachModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all cursor-pointer flex items-center justify-center gap-1.5">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          <span>Odayı Terk Et / Kapat</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1724,8 +1779,16 @@
         <span><strong>Başkanım:</strong> Boşalan teknik direktörlük koltuğu için ligin en tecrübeli ve prestijli isimleri hazır bekliyor. İmza parası: <strong>2.000.000 ₺</strong>.</span>
       </div>
 
-      <div id="select-coach-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
+      <div id="select-coach-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 pb-6 scrollbar-thin">
         <!-- JS ile dinamik teknik direktör adayları doldurulacak -->
+      </div>
+
+      <!-- Sabit Alt Bar (Footer) -->
+      <div class="pt-2 border-t border-slate-800 shrink-0">
+        <button onclick="closeSelectCoachModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all cursor-pointer flex items-center justify-center gap-1.5">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          <span>Vazgeç / Kapat</span>
+        </button>
       </div>
     </div>
   </div>
@@ -1976,107 +2039,133 @@
             <img id="vision-coach-photo" src="/static/coach_senol_gunes.png" alt="Teknik Direktör" class="w-full h-full object-cover" onerror="this.src='/static/coach_senol_gunes.png'" />
           </div>
           <div>
-            <div class="text-[9px] text-blue-400 font-bold uppercase">Stratejik Vizyon</div>
+            <div class="text-[9px] text-blue-400 font-bold uppercase tracking-wider">Stratejik Vizyon</div>
             <div class="text-xs font-black text-white" id="vision-coach-name">Şenol Güneş</div>
           </div>
         </div>
-        <button onclick="closeCoachVisionModal()" class="w-7 h-7 rounded-lg bg-slate-850 hover:bg-slate-750 text-slate-400 hover:text-white text-xs font-bold flex items-center justify-center border border-slate-700 transition-colors cursor-pointer">✕</button>
+        <button onclick="closeCoachVisionModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white text-xs font-bold flex items-center justify-center border border-slate-700 transition-colors cursor-pointer">✕</button>
       </div>
 
       <!-- İç Kaydırılabilir Gövde -->
-      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2">
+      <div class="p-4 pt-3 space-y-3 overflow-y-auto flex-1 pr-2 pb-8 scrollbar-thin">
 
-      <div class="flex items-center justify-between bg-blue-950/40 border border-blue-800/40 p-2 rounded-xl text-[10px]">
+      <div class="flex items-center justify-between bg-blue-950/40 border border-blue-800/40 p-2.5 rounded-xl text-[10px]">
         <span class="text-slate-300">Stratejik Hak: <strong class="text-amber-400">Yarı Sezonda 1 Kez</strong></span>
         <span id="coach-vision-status-badge" class="px-2 py-0.5 rounded font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/50">Müsait ✓</span>
       </div>
 
-      <p class="text-[11px] text-slate-300">
-        Teknik direktörünüz kulübün geleceğini şekillendirecek 5 farklı stratejik reform hazırladı:
+      <p class="text-[11px] text-slate-300 font-medium">
+        Teknik direktörünüz kulübün geleceğini şekillendirecek stratejik reformlar hazırladı:
       </p>
 
       <div class="space-y-2">
         <!-- 1. Wonderkid -->
-        <button onclick="submitCoachVision('youth')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-blue-500 text-left transition-all">
+        <button onclick="submitCoachVision('youth')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-blue-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-blue-400 flex items-center gap-1.5">⭐ Akademi Devrimi (18 Yaş Wonderkid)</span>
-            <span class="text-[9px] bg-blue-950 text-blue-300 border border-blue-800 px-1 rounded font-bold">POT: 90</span>
+            <span class="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-400"></i> Akademi Devrimi (18 Yaş Wonderkid)
+            </span>
+            <span class="text-[9px] bg-blue-950 text-blue-300 border border-blue-800 px-1.5 py-0.2 rounded font-bold">POT: 90</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">18 yaşındaki yerli süper yetenek doğrudan A Takıma çıkar ve 5 yıllık sözleşme imzalar!</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">18 yaşındaki yerli süper yetenek doğrudan A Takıma çıkar ve 5 yıllık sözleşme imzalar!</div>
         </button>
 
         <!-- 2. Gegenpress -->
-        <button onclick="submitCoachVision('gegenpress')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500 text-left transition-all">
+        <button onclick="submitCoachVision('gegenpress')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">⚡ Gegenpress & Yüksek Tempo Kampı</span>
-            <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1 rounded font-bold">+3 Hız • +3 Şut</span>
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400"></i> Gegenpress & Yüksek Tempo Kampı
+            </span>
+            <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1.5 py-0.2 rounded font-bold">+3 Hız • +3 Şut</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Takımın tamamına yüksek pres, hız ve bitiricilik aşılar; hücum temposunu kalıcı artırır.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Takımın tamamına yüksek pres, hız ve bitiricilik aşılar; hücum temposunu kalıcı artırır.</div>
         </button>
 
         <!-- 3. Catenaccio -->
-        <button onclick="submitCoachVision('defensive')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-emerald-500 text-left transition-all">
+        <button onclick="submitCoachVision('defensive')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-emerald-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">🛡️ İtalyan Savunma Duvarı & Disiplin</span>
-            <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-1 rounded font-bold">+4 Defans • +3 Fizik</span>
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-emerald-400"></i> İtalyan Savunma Duvarı & Disiplin
+            </span>
+            <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-1.5 py-0.2 rounded font-bold">+4 Defans • +3 Fizik</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Takımı çelik gibi savunma bloğuna sokar; kontra ve duran top savunmasını maksimuma çıkarır.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Takımı çelik gibi savunma bloğuna sokar; kontra ve duran top savunmasını maksimuma çıkarır.</div>
         </button>
 
         <!-- 4. Duran Top -->
-        <button onclick="submitCoachVision('setpiece')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-purple-500 text-left transition-all">
+        <button onclick="submitCoachVision('setpiece')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-purple-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-purple-400 flex items-center gap-1.5">🎯 Duran Top & Frikik Organizasyonu</span>
-            <span class="text-[9px] bg-purple-950 text-purple-300 border border-purple-800 px-1 rounded font-bold">+4 Pas • +2 Şut</span>
+            <span class="text-xs font-bold text-purple-400 flex items-center gap-1.5">
+              <i data-lucide="crosshair" class="w-3.5 h-3.5 text-purple-400"></i> Duran Top & Frikik Organizasyonu
+            </span>
+            <span class="text-[9px] bg-purple-950 text-purple-300 border border-purple-800 px-1.5 py-0.2 rounded font-bold">+4 Pas • +2 Şut</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Korner, serbest vuruş ve taç taktiklerini mükemmelleştirir; kilit maçları çözer.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Korner, serbest vuruş ve taç taktiklerini mükemmelleştirir; kilit maçları çözer.</div>
         </button>
 
         <!-- 5. Maaş Tasarrufu -->
-        <button onclick="submitCoachVision('wage_discipline')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-rose-500 text-left transition-all">
+        <button onclick="submitCoachVision('wage_discipline')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-rose-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-rose-400 flex items-center gap-1.5">💼 Maaş Disiplini & Bütçe Reformu</span>
-            <span class="text-[9px] bg-rose-950 text-rose-300 border border-rose-800 px-1 rounded font-bold">%10 Tasarruf</span>
+            <span class="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+              <i data-lucide="briefcase" class="w-3.5 h-3.5 text-rose-400"></i> Maaş Disiplini & Bütçe Reformu
+            </span>
+            <span class="text-[9px] bg-rose-950 text-rose-300 border border-rose-800 px-1.5 py-0.2 rounded font-bold">%10 Tasarruf</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Hoca otoritesiyle kadro fedakarlık yapar; yıllık kulüp maaş yükünden %10 tasarruf sağlanır.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Hoca otoritesiyle kadro fedakarlık yapar; yıllık kulüp maaş yükünden %10 tasarruf sağlanır.</div>
         </button>
 
         <!-- 6. Tiki-Taka -->
-        <button onclick="submitCoachVision('tiki_taka')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-cyan-500 text-left transition-all">
+        <button onclick="submitCoachVision('tiki_taka')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-cyan-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">🌀 İspanyol Tiki-Taka & Pas Doktrini</span>
-            <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-1 rounded font-bold">+5 Pas • +3 Dripling</span>
+            <span class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i> İspanyol Tiki-Taka & Pas Doktrini
+            </span>
+            <span class="text-[9px] bg-cyan-950 text-cyan-300 border border-cyan-800 px-1.5 py-0.2 rounded font-bold">+5 Pas • +3 Dripling</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Takıma topa sahip olma üstünlüğü aşılar; maçlarda topla oynama oranını ve pas akıcılığını zirveye çıkarır.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Takıma topa sahip olma üstünlüğü aşılar; maçlarda topla oynama oranını ve pas akıcılığını zirveye çıkarır.</div>
         </button>
 
         <!-- 7. Kontra-Atak -->
-        <button onclick="submitCoachVision('counter_attack')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500 text-left transition-all">
+        <button onclick="submitCoachVision('counter_attack')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">⚡ Şimşek Geçiş & Kontra-Atak</span>
-            <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1 rounded font-bold">+5 Hız • Deplasman Silahı</span>
+            <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <i data-lucide="chevrons-up" class="w-3.5 h-3.5 text-amber-400"></i> Şimşek Geçiş & Kontra-Atak
+            </span>
+            <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 px-1.5 py-0.2 rounded font-bold">+5 Hız • Deplasman Silahı</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Özellikle zorlu derbi ve deplasman maçlarında savunma arkasına sarkan ölümcül hücum silahı kazandırır.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Özellikle zorlu derbi ve deplasman maçlarında savunma arkasına sarkan ölümcül hücum silahı kazandırır.</div>
         </button>
 
         <!-- 8. Global Scout -->
-        <button onclick="submitCoachVision('scout_revolution')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-indigo-500 text-left transition-all">
+        <button onclick="submitCoachVision('scout_revolution')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-indigo-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">🌍 Global Scout Operasyonu (19 Yaş Yabancı Wonderkid)</span>
-            <span class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-1 rounded font-bold">POT: 91</span>
+            <span class="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+              <i data-lucide="globe" class="w-3.5 h-3.5 text-indigo-400"></i> Global Scout Operasyonu (19 Yaş Wonderkid)
+            </span>
+            <span class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-800 px-1.5 py-0.2 rounded font-bold">POT: 91</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Hocanın Avrupa bağlantılarıyla Fransa/Brezilya'dan 19 yaşındaki süper potansiyel genç yıldız A Takıma bedelsiz katılır!</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Hocanın Avrupa bağlantılarıyla Fransa/Brezilya'dan 19 yaşındaki süper potansiyel genç yıldız A Takıma bedelsiz katılır!</div>
         </button>
 
         <!-- 9. Şampiyonluk Karakteri -->
-        <button onclick="submitCoachVision('mental_resilience')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-yellow-500 text-left transition-all">
+        <button onclick="submitCoachVision('mental_resilience')" class="w-full p-2.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-yellow-500 text-left transition-all cursor-pointer">
           <div class="flex justify-between items-center">
-            <span class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">🧠 Şampiyonluk Karakteri & Kriz Yönetimi</span>
-            <span class="text-[9px] bg-yellow-950 text-yellow-300 border border-yellow-800 px-1 rounded font-bold">%100 Moral & Ahenk</span>
+            <span class="text-xs font-bold text-yellow-400 flex items-center gap-1.5">
+              <i data-lucide="award" class="w-3.5 h-3.5 text-yellow-400"></i> Şampiyonluk Karakteri & Kriz Yönetimi
+            </span>
+            <span class="text-[9px] bg-yellow-950 text-yellow-300 border border-yellow-800 px-1.5 py-0.2 rounded font-bold">%100 Moral & Ahenk</span>
           </div>
-          <div class="text-[9px] text-slate-300 mt-1">Soyunma odasındaki tüm kırgınlıkları bitirir, geriye düşülen maçlarda geri dönüş inancını ve taraftar bağını ateşler.</div>
+          <div class="text-[9.5px] text-slate-300 mt-1">Soyunma odasındaki tüm kırgınlıkları bitirir, geriye düşülen maçlarda geri dönüş inancını ve taraftar bağını ateşler.</div>
         </button>
       </div>
+      </div>
+
+      <!-- Sabit Alt Bar (Footer) -->
+      <div class="p-3 border-t border-slate-800 bg-[#0c121e] shrink-0">
+        <button onclick="closeCoachVisionModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs border border-slate-700 transition-all cursor-pointer flex items-center justify-center gap-1.5">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          <span>Vazgeç / Kapat</span>
+        </button>
       </div>
     </div>
   </div>
