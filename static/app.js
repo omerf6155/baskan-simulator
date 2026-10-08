@@ -4201,47 +4201,82 @@ async function loadSponsors() {
     if (!container) return;
     container.innerHTML = "";
 
+    if (!sponsors || sponsors.length === 0) {
+      container.innerHTML = '<div class="w-full text-[11px] text-slate-500 italic p-3 bg-slate-900/50 rounded-xl text-center">Aktif veya müsait sponsorluk bulunmuyor.</div>';
+      return;
+    }
+
     sponsors.forEach(sp => {
       const card = document.createElement("div");
-      card.className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg flex items-center justify-between text-xs";
       const isSigned = sp.is_signed === true;
       const canSign = sp.can_sign !== false;
 
-      let actionBtn = "";
-      if (isSigned) {
-        actionBtn = `<span class="px-2.5 py-1.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-600/40 text-[10px] font-bold">✓ Aktif (${sp.remaining_weeks ? sp.remaining_weeks + ' Hf' : 'Sezonluk'})</span>`;
-      } else if (!canSign) {
-        actionBtn = `<button disabled title="${sp.reason_unmet || 'Kriter karşılanamadı'}" class="px-2.5 py-1.5 rounded bg-slate-800/80 text-slate-500 border border-slate-700/60 font-bold text-[10px] cursor-not-allowed opacity-60">
-             Kriter Karşılanmadı
-           </button>`;
-      } else {
-        actionBtn = `<button onclick="signSponsor('${sp.id}')" class="px-2.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] transition-all shadow-sm">
-             İmzala (+${formatMoney(sp.income_season)})
-           </button>`;
-      }
+      card.className = "w-[215px] min-w-[215px] max-w-[215px] shrink-0 snap-start bg-gradient-to-b from-[#141d30] via-[#0f1728] to-[#0a101d] border-2 " + 
+        (isSigned ? "border-emerald-500/50 " : canSign ? "border-slate-700/80 hover:border-amber-400/60 " : "border-slate-800/80 opacity-85 ") +
+        "rounded-2xl p-3 flex flex-col justify-between shadow-lg relative transition-all text-xs";
 
+      const slotIcon = sp.type === 'chest' ? '👕' :
+                       sp.type === 'stadium' ? '🏟️' :
+                       sp.type === 'back' ? '⚡' :
+                       sp.type === 'arm' ? '🩳' : '🏥';
       const slotLabel = sp.type_label || (
         sp.type === 'chest' ? 'Göğüs Sponsoru' :
         sp.type === 'stadium' ? 'Stadyum İsim Hakkı' :
-        sp.type === 'back' ? 'Forma Sırt & Numara' :
-        sp.type === 'arm' ? 'Forma Kol & Şort' : 'Resmi Sağlık Sponsoru'
+        sp.type === 'back' ? 'Forma Sırt & No' :
+        sp.type === 'arm' ? 'Forma Kol & Şort' : 'Sağlık Sponsoru'
       );
 
+      let actionBtn = "";
+      if (isSigned) {
+        actionBtn = `
+          <div class="w-full py-2 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-extrabold text-[10px] text-center flex items-center justify-center gap-1 shadow-inner">
+            <span class="text-xs">✓</span>
+            <span>Aktif (${sp.remaining_weeks ? sp.remaining_weeks + ' Hf' : 'Sezonluk'})</span>
+          </div>`;
+      } else if (!canSign) {
+        actionBtn = `
+          <button disabled title="${sp.reason_unmet || 'Kriter karşılanamadı'}" class="w-full py-2 rounded-xl bg-slate-850 border border-slate-750 text-slate-500 font-bold text-[10px] cursor-not-allowed opacity-70 text-center">
+            Kriter Karşılanmadı
+          </button>`;
+      } else {
+        actionBtn = `
+          <button onclick="signSponsor('${sp.id}')" class="w-full py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-[10.5px] transition-all shadow-md active:scale-95 text-center flex items-center justify-center gap-1 cursor-pointer">
+            <span>İmzala</span>
+            <span class="text-[9.5px] text-emerald-100 font-mono">(+${formatMoney(sp.income_season)})</span>
+          </button>`;
+      }
+
       card.innerHTML = `
-        <div class="mr-2">
-          <div class="font-bold text-white text-xs flex items-center gap-1.5 flex-wrap">
-            <span>${sp.name}</span>
-            <span class="text-[9px] text-amber-400 font-semibold px-1.5 py-0.2 rounded bg-slate-800 border border-slate-700/80">(${slotLabel})</span>
-          </div>
-          <div class="text-[9px] text-slate-400 mt-0.5">${sp.desc}</div>
-          <div class="mt-1 text-[9px] flex items-center gap-1.5 flex-wrap">
-            <span class="px-1.5 py-0.2 rounded font-bold ${canSign ? 'bg-blue-950/80 text-blue-300 border border-blue-800/60' : 'bg-red-950/80 text-red-300 border border-red-800/60'}">
-              Gerekçe / Şart: ${sp.req_text || 'Tüm Kulüplere Açık'}
+        <div class="space-y-1.5">
+          <!-- Üst Rozet & Hakediş -->
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${isSigned ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-slate-800 text-amber-300 border border-slate-700'} flex items-center gap-1 truncate max-w-[125px]">
+              <span>${slotIcon}</span>
+              <span class="truncate">${slotLabel}</span>
             </span>
-            ${!canSign && sp.reason_unmet ? `<span class="text-rose-400 font-medium">(${sp.reason_unmet})</span>` : ''}
+            <span class="text-[9.5px] font-black ${isSigned ? 'text-emerald-400 font-mono' : 'text-amber-400 font-mono'} shrink-0">
+              +${formatMoney(sp.income_season)}
+            </span>
           </div>
+
+          <!-- Marka İsmi -->
+          <h4 class="font-black text-white text-xs leading-snug line-clamp-1 mt-1">${sp.name}</h4>
+
+          <!-- Açıklama -->
+          <p class="text-[9.5px] text-slate-400 line-clamp-2 leading-tight">${sp.desc}</p>
         </div>
-        <div class="flex-shrink-0">
+
+        <div class="pt-2">
+          <!-- Şart & Kriter Kutusu -->
+          <div class="p-1.5 rounded-xl ${canSign ? 'bg-slate-900/90 border border-slate-800' : 'bg-rose-950/40 border border-rose-900/50'} text-[9px] leading-tight space-y-0.5 mb-2">
+            <div class="text-slate-400 font-medium flex items-center justify-between">
+              <span>Şart:</span>
+              <span class="${canSign ? 'text-blue-300' : 'text-rose-300'} font-bold truncate max-w-[130px]">${sp.req_text || 'Tüm Kulüplere Açık'}</span>
+            </div>
+            ${!canSign && sp.reason_unmet ? `<div class="text-rose-400 font-medium truncate pt-0.5 border-t border-rose-900/40">⚠️ ${sp.reason_unmet}</div>` : ''}
+          </div>
+
+          <!-- Aksiyon Butonu -->
           ${actionBtn}
         </div>
       `;
@@ -5150,46 +5185,70 @@ async function loadSponsorOffers() {
     const offers = await res.json();
     container.innerHTML = "";
     if (!offers || offers.length === 0) {
-      container.innerHTML = '<div class="text-[10px] text-slate-500 italic p-2 bg-slate-900/50 rounded-lg text-center">Şu an masada bekleyen yeni sponsorluk teklifi yok. Her hafta yeni teklifler ulaşabilir.</div>';
+      container.innerHTML = '<div class="w-full text-[11px] text-slate-500 italic p-3 bg-slate-900/50 rounded-xl text-center">Şu an masada bekleyen yeni sponsorluk teklifi yok. Her hafta yeni teklifler ulaşabilir.</div>';
       return;
     }
 
     offers.forEach(o => {
       const card = document.createElement("div");
-      card.className = "bg-gradient-to-r from-slate-900 via-slate-900 to-slate-850 border border-slate-800 hover:border-amber-500/40 p-3 rounded-xl space-y-2 transition-all shadow-sm";
+      card.className = "w-[225px] min-w-[225px] max-w-[225px] shrink-0 snap-start bg-gradient-to-b from-[#151e33] via-[#0f172a] to-[#0a101d] border-2 border-amber-500/50 hover:border-amber-400 rounded-2xl p-3 flex flex-col justify-between shadow-lg relative transition-all text-xs";
+      const slotIcon = o.slot === 'chest' ? '👕' :
+                       o.slot === 'stadium' ? '🏟️' :
+                       o.slot === 'arm' ? '🩳' : '⚡';
       const slotName = o.slot === 'chest' ? 'Göğüs Sponsoru' :
                        o.slot === 'stadium' ? 'Stadyum İsim Hakkı' :
-                       o.slot === 'arm' ? 'Forma Kol / Şort' : 'Sırt / Forma Arkası';
+                       o.slot === 'arm' ? 'Forma Kol / Şort' : 'Sırt / No Sponsoru';
+
       card.innerHTML = `
-        <div class="flex items-start justify-between gap-2">
-          <div>
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="font-extrabold text-white text-xs">${o.brand}</span>
-              <span class="text-[9px] bg-amber-500/20 text-amber-300 font-bold px-1.5 py-0.2 rounded border border-amber-500/30">${slotName}</span>
-              ${o.is_bargained ? '<span class="text-[8px] bg-blue-900/40 text-blue-300 font-black px-1 rounded border border-blue-700/40">PAZARLIK YAPILDI</span>' : ''}
+        <div class="space-y-1.5">
+          <!-- Üst Rozet & Durum -->
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-1 truncate max-w-[125px]">
+              <span>${slotIcon}</span>
+              <span class="truncate">${slotName}</span>
+            </span>
+            ${o.is_bargained ? 
+              '<span class="text-[8px] bg-blue-900/60 text-blue-200 font-black px-1.5 py-0.2 rounded border border-blue-500/50 shrink-0">PAZARLIKLI</span>' : 
+              '<span class="text-[8px] bg-emerald-950/80 text-emerald-300 font-bold px-1.5 py-0.2 rounded border border-emerald-600/40 shrink-0">YENİ TEKLİF</span>'}
+          </div>
+
+          <!-- Marka İsmi -->
+          <h4 class="font-black text-white text-xs leading-snug line-clamp-1 mt-1">${o.brand}</h4>
+
+          <!-- Açıklama -->
+          <p class="text-[9.5px] text-slate-400 line-clamp-1 leading-tight">${o.desc || 'Prestijli kurumsal sponsorluk'}</p>
+        </div>
+
+        <div class="pt-2">
+          <!-- Finansal Şartlar Kutusu -->
+          <div class="p-2 rounded-xl bg-slate-900/95 border border-slate-800 space-y-1 mb-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] text-slate-400 font-medium">Yıllık Hakediş:</span>
+              <span class="text-xs font-black text-emerald-400 font-mono">${formatMoney(o.amount)}</span>
             </div>
-            <div class="text-[10px] text-slate-400 mt-0.5">${o.desc || 'Prestijli kurumsal ortaklık'}</div>
+            <div class="flex items-center justify-between text-[9px]">
+              <span class="text-slate-400">Peşin Nakit:</span>
+              <span class="text-amber-300 font-bold font-mono">+${formatMoney(o.upfront_cash)}</span>
+            </div>
+            <div class="text-[8.5px] text-amber-200/90 pt-1 border-t border-slate-800/80 truncate" title="${o.bonus_clause || ''}">
+              <strong>Prim:</strong> ${o.bonus_clause || 'Şampiyonlukta ek prim'}
+            </div>
           </div>
-          <div class="text-right">
-            <div class="text-xs font-black text-emerald-400 font-mono">${formatMoney(o.amount)}</div>
-            <div class="text-[9px] text-slate-400 font-medium">+${formatMoney(o.upfront_cash)} Peşin</div>
-          </div>
-        </div>
-        <div class="text-[9px] text-amber-300/90 bg-amber-950/30 p-1.5 rounded border border-amber-800/30">
-          <strong>Özel Madde:</strong> ${o.bonus_clause || 'Lig şampiyonluğunda ek prim'}
-        </div>
-        <div class="flex items-center gap-1.5 pt-1 border-t border-slate-800/60 justify-end">
-          <button onclick="respondSponsorOffer('${o.id}', 'reject')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-rose-950/60 hover:text-rose-300 text-slate-400 font-bold text-[10px] border border-slate-700/60 transition-all">
-            Reddet
-          </button>
-          ${!o.is_bargained ? `
-            <button onclick="respondSponsorOffer('${o.id}', 'bargain')" class="px-2.5 py-1 rounded bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 font-bold text-[10px] border border-blue-500/50 transition-all">
-              Pazarlık Et (+%15)
+
+          <!-- Aksiyon Butonları -->
+          <div class="flex items-center gap-1">
+            <button onclick="respondSponsorOffer('${o.id}', 'reject')" class="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/80 hover:text-rose-300 text-slate-400 font-bold text-[9.5px] border border-slate-700 transition-all cursor-pointer">
+              Reddet
             </button>
-          ` : ''}
-          <button onclick="respondSponsorOffer('${o.id}', 'accept')" class="px-3 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] shadow-sm transition-all">
-            Kabul Et & İmzala
-          </button>
+            ${!o.is_bargained ? `
+              <button onclick="respondSponsorOffer('${o.id}', 'bargain')" class="flex-1 py-1.5 rounded-lg bg-blue-950/80 hover:bg-blue-900/90 text-blue-300 font-bold text-[9.5px] border border-blue-600/60 transition-all text-center cursor-pointer">
+                Pazarlık (+%15)
+              </button>
+            ` : ''}
+            <button onclick="respondSponsorOffer('${o.id}', 'accept')" class="flex-1 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-[9.5px] shadow-sm transition-all active:scale-95 text-center cursor-pointer">
+              İmzala
+            </button>
+          </div>
         </div>
       `;
       container.appendChild(card);

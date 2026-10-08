@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20261008_scrollbar_v2">
+  <link rel="stylesheet" href="style.css?v=20261008_sponsor_dock_v1">
 </head>
 <body class="bg-[#080c14] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex items-center justify-center p-0 md:p-3">
 
@@ -803,17 +803,29 @@
           </div>
 
           <!-- Gelen Teklifler Havuzu -->
-          <div class="space-y-2" id="incoming-sponsors-container">
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kulübe Ulaşan Yeni Teklifler</div>
-            <div class="space-y-2" id="incoming-sponsors-list">
+          <div class="space-y-1.5" id="incoming-sponsors-container">
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">
+              <span>Kulübe Ulaşan Yeni Teklifler</span>
+              <span class="text-[9px] text-amber-400/80 font-semibold lowercase flex items-center gap-0.5">
+                <span>sağa kaydır</span> <span>▶</span>
+              </span>
+            </div>
+            <!-- Yatay Kayar Karusel (1.5 - 2 Kutu Görünümü) -->
+            <div class="flex gap-2.5 overflow-x-auto pb-2.5 pt-1 px-1 scrollbar-thin snap-x snap-mandatory" id="incoming-sponsors-list">
               <!-- JS ile teklifler render edilir -->
             </div>
           </div>
 
           <!-- Mevcut İmzalanmış Sponsorlar -->
-          <div class="pt-2 border-t border-slate-800 space-y-2">
-            <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Aktif Sezonluk Sponsorlar</div>
-            <div class="space-y-1.5" id="available-sponsors-list">
+          <div class="pt-2.5 border-t border-slate-800 space-y-1.5">
+            <div class="flex items-center justify-between text-[10px] font-bold text-emerald-400 uppercase tracking-wider px-1">
+              <span>Aktif Sezonluk Sponsorlar</span>
+              <span class="text-[9px] text-emerald-400/80 font-semibold lowercase flex items-center gap-0.5">
+                <span>sağa kaydır</span> <span>▶</span>
+              </span>
+            </div>
+            <!-- Yatay Kayar Karusel (1.5 - 2 Kutu Görünümü) -->
+            <div class="flex gap-2.5 overflow-x-auto pb-2.5 pt-1 px-1 scrollbar-thin snap-x snap-mandatory" id="available-sponsors-list">
               <!-- JS ile doldurulur -->
             </div>
           </div>
@@ -2402,6 +2414,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261008_scrollbar_v2"></script>
+  <script src="app.js?v=20261008_sponsor_dock_v1"></script>
 </body>
 </html>

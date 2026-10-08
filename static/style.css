@@ -674,45 +674,68 @@ nav.royale-bottom-dock {
   color: #f1f5f9 !important;
 }
 
-/* BALIK GÖZÜ (FISH-EYE) & SARI PARLAMA: Hangi menü seçiliyse altın kapsül olarak büyür ve parlar */
+/* AKTİF MENÜ BUTONU (SADECE ALTIN PARLAMA - KUTUSUZ & DİKDÖRTGENSİZ) */
 .nav-item.active {
   opacity: 1 !important;
   color: #fef08a !important;
   font-weight: 800 !important;
-  transform: translateY(-4px) scale(1.1) !important;
-  background: linear-gradient(180deg, rgba(234, 179, 8, 0.22) 0%, rgba(180, 83, 9, 0.1) 100%) !important;
-  border: 1.5px solid #facc15 !important;
-  border-radius: 12px !important;
-  box-shadow: 
-    0 0 14px rgba(250, 204, 21, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-2px) scale(1.08) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
   z-index: 10 !important;
 }
 
 .nav-item.active::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 20%;
-  right: 20%;
-  height: 3px;
-  background: #fde047;
-  border-radius: 9999px;
-  box-shadow: 0 0 8px #facc15;
+  display: none !important;
 }
 
 .nav-item.active i, .nav-item.active svg {
   color: #facc15 !important;
-  transform: scale(1.18) !important;
-  filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.95)) drop-shadow(0 0 16px rgba(234, 179, 8, 0.6)) !important;
+  transform: scale(1.2) !important;
+  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.95)) drop-shadow(0 0 14px rgba(234, 179, 8, 0.7)) !important;
 }
 
 .nav-item.active span {
   font-family: var(--font-game) !important;
   font-size: 0.72rem !important;
   color: #fef08a !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(250, 204, 21, 0.5) !important;
+  text-shadow: 0 0 8px rgba(250, 204, 21, 0.8), 0 1px 2px rgba(0, 0, 0, 0.9) !important;
   letter-spacing: 0.02em !important;
+}
+
+/* ==========================================================================
+   YATAY SPONSORLUK KARUSELİ & KARTLARI
+   ========================================================================== */
+#incoming-sponsors-list,
+#available-sponsors-list {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+}
+
+#incoming-sponsors-list::-webkit-scrollbar,
+#available-sponsors-list::-webkit-scrollbar {
+  height: 4px;
+}
+
+#incoming-sponsors-list::-webkit-scrollbar-track,
+#available-sponsors-list::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border-radius: 9999px;
+  margin: 0 4px !important;
+}
+
+#incoming-sponsors-list::-webkit-scrollbar-thumb,
+#available-sponsors-list::-webkit-scrollbar-thumb {
+  background: rgba(234, 179, 8, 0.4) !important;
+  border-radius: 9999px;
+}
+
+#incoming-sponsors-list::-webkit-scrollbar-thumb:hover,
+#available-sponsors-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(250, 204, 21, 0.8) !important;
 }
 
 /* ==========================================================================
