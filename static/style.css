@@ -901,3 +901,309 @@ div[id^="modal-"] > div {
   }
 }
 
+
+
+/* ==========================================================================
+   SADE & DÜZ TEMA (FLAT) — "Yapay zeka paneli" görünümünden arındırma
+   - Yarı saydam / renk tonlu rozet (chip) arka planları HER YERDE kaldırıldı
+   - Parlama (glow), cam efekti (blur), gradyan kartlar, yanıp sönme kaldırıldı
+   - Düz yüzeyler, ince çizgiler, tek vurgu rengi (amber)
+   ========================================================================== */
+:root {
+  --flat-bg: #0d121c;
+  --flat-surface: #131a28;
+  --flat-surface-2: #182033;
+  --flat-line: #222c42;
+}
+
+/* Cam efekti, parlama, yanıp sönme yok */
+*, *::before, *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  text-shadow: none !important;
+}
+.animate-pulse { animation: none !important; }
+.drop-shadow, [class*="drop-shadow"] { filter: none !important; }
+[class*="shadow"]:not(#app-frame) { box-shadow: none !important; }
+
+/* ---- ROZETLER: yarı saydam arka planlı yazılar -> düz yazı ---- */
+:is(#main-content, header, .royale-news-ticker, div[id^="modal-"]) span:not(:empty):not(.absolute):not(.fixed):not([class*="bg-gradient"]):not([class~="bg-amber-500"]):not([class~="bg-red-700"]):not([class~="bg-rose-600"]):not([class~="bg-emerald-500"]):not([class~="bg-emerald-600"]):not([class~="bg-blue-600"]):not([class~="bg-purple-600"]):not([class~="bg-sky-600"]):not(.nav-item *):not(.calendar-action-btn *),
+:is(#main-content, header, div[id^="modal-"]) div.rounded-full[class*="bg-"]:not(:empty):not([class*="w-"][class*="h-"]):not([class*="h-"]):not(:has(> *)) {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border-radius: 0 !important;
+}
+/* Solid vurgu rozetleri (ÖZEL KALEM, TD, ceza uyarısı) düz ve köşeli kalsın */
+:is(#main-content, header) span[class~="bg-amber-500"],
+:is(#main-content, header) span[class~="bg-red-700"] {
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+/* ---- KARTLAR: gradyan kart yok, düz yüzey ---- */
+:is(#main-content, div[id^="modal-"]) [class*="bg-gradient"][class*="border"]:not(button):not([class*="text-slate-950"]):not([class*="text-white"]):not([class*="rounded-full"]) {
+  background-image: none !important;
+  background-color: var(--flat-surface) !important;
+}
+.match-hero-card {
+  background: var(--flat-surface-2) !important;
+  border: 1px solid var(--flat-line) !important;
+  border-top: 2px solid #f59e0b !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+.match-hero-card::after { display: none !important; }
+#office-coach-card {
+  background: var(--flat-surface) !important;
+  border: 1px solid var(--flat-line) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+#office-coach-card:hover { transform: none !important; border-color: #3a4766 !important; }
+.coach-avatar-box { box-shadow: none !important; border-width: 2px !important; }
+.match-hero-card span.font-black.text-slate-500 {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #64748b !important;
+  padding: 0 .4rem !important;
+}
+
+/* ---- ÜST PANEL (HUD) ---- */
+header {
+  background: var(--flat-bg) !important;
+  border-bottom: 1px solid var(--flat-line) !important;
+  box-shadow: none !important;
+}
+#header-club-logo-box {
+  background: var(--flat-surface) !important;
+  border: 1px solid var(--flat-line) !important;
+  box-shadow: none !important;
+}
+.header-hud-grid > div {
+  background: var(--flat-surface) !important;
+  border: 1px solid var(--flat-line) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+.header-hud-grid > div:hover, .header-hud-grid > div:active {
+  transform: none !important;
+  border-color: #33405f !important;
+}
+.royale-news-ticker {
+  background: var(--flat-bg) !important;
+  border-bottom: 1px solid var(--flat-line) !important;
+  box-shadow: none !important;
+}
+
+/* ---- ALT MENÜ: parlama yok, sade vurgu ---- */
+nav.royale-bottom-dock {
+  background: var(--flat-bg) !important;
+  border-top: 1px solid var(--flat-line) !important;
+  box-shadow: none !important;
+}
+.nav-item { transition: color .15s ease !important; opacity: .7; }
+.nav-item.active {
+  transform: none !important;
+  opacity: 1 !important;
+  color: #fbbf24 !important;
+}
+.nav-item.active::after {
+  position: absolute !important;
+  top: -5px !important;
+  left: 20% !important;
+  width: 60% !important;
+  height: 2px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: #fbbf24 !important;
+}
+.nav-item.active i, .nav-item.active svg {
+  transform: none !important;
+  filter: none !important;
+  color: #fbbf24 !important;
+}
+.nav-item.active span { color: #fbbf24 !important; }
+
+/* ---- BUTONLAR: 3D / parlama yok, düz dolgu ---- */
+.btn-royale-gold, #btn-control-account {
+  background: #f59e0b !important; border: 0 !important; box-shadow: none !important;
+}
+.btn-royale-green { background: #10b981 !important; border: 0 !important; box-shadow: none !important; }
+.btn-royale-blue  { background: #2563eb !important; border: 0 !important; box-shadow: none !important; }
+.btn-royale-red   { background: #dc2626 !important; border: 0 !important; box-shadow: none !important; }
+.btn-royale-slate, .btn-royale-dark { box-shadow: none !important; transform: none !important; }
+.btn-royale-gold:hover, .btn-royale-green:hover, .btn-royale-blue:hover, .btn-royale-red:hover {
+  box-shadow: none !important; filter: brightness(1.08) !important;
+}
+
+/* ---- Modallar ---- */
+div[id^="modal-"] { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+
+/* ---- Yarı saydam renk tonlu butonlar -> düz koyu yüzey + ince çizgi ---- */
+:is(#main-content, header, div[id^="modal-"]) :is(
+  button[class*=" bg-emerald-500/"],
+  button[class^="bg-emerald-500/"],
+  button[class*=" bg-emerald-600/"],
+  button[class^="bg-emerald-600/"],
+  button[class*=" bg-emerald-700/"],
+  button[class^="bg-emerald-700/"],
+  button[class*=" bg-emerald-800/"],
+  button[class^="bg-emerald-800/"],
+  button[class*=" bg-emerald-900/"],
+  button[class^="bg-emerald-900/"],
+  button[class*=" bg-emerald-950/"],
+  button[class^="bg-emerald-950/"],
+  button[class*=" bg-blue-500/"],
+  button[class^="bg-blue-500/"],
+  button[class*=" bg-blue-600/"],
+  button[class^="bg-blue-600/"],
+  button[class*=" bg-blue-700/"],
+  button[class^="bg-blue-700/"],
+  button[class*=" bg-blue-800/"],
+  button[class^="bg-blue-800/"],
+  button[class*=" bg-blue-900/"],
+  button[class^="bg-blue-900/"],
+  button[class*=" bg-blue-950/"],
+  button[class^="bg-blue-950/"],
+  button[class*=" bg-amber-500/"],
+  button[class^="bg-amber-500/"],
+  button[class*=" bg-amber-600/"],
+  button[class^="bg-amber-600/"],
+  button[class*=" bg-amber-700/"],
+  button[class^="bg-amber-700/"],
+  button[class*=" bg-amber-800/"],
+  button[class^="bg-amber-800/"],
+  button[class*=" bg-amber-900/"],
+  button[class^="bg-amber-900/"],
+  button[class*=" bg-amber-950/"],
+  button[class^="bg-amber-950/"],
+  button[class*=" bg-sky-500/"],
+  button[class^="bg-sky-500/"],
+  button[class*=" bg-sky-600/"],
+  button[class^="bg-sky-600/"],
+  button[class*=" bg-sky-700/"],
+  button[class^="bg-sky-700/"],
+  button[class*=" bg-sky-800/"],
+  button[class^="bg-sky-800/"],
+  button[class*=" bg-sky-900/"],
+  button[class^="bg-sky-900/"],
+  button[class*=" bg-sky-950/"],
+  button[class^="bg-sky-950/"],
+  button[class*=" bg-rose-500/"],
+  button[class^="bg-rose-500/"],
+  button[class*=" bg-rose-600/"],
+  button[class^="bg-rose-600/"],
+  button[class*=" bg-rose-700/"],
+  button[class^="bg-rose-700/"],
+  button[class*=" bg-rose-800/"],
+  button[class^="bg-rose-800/"],
+  button[class*=" bg-rose-900/"],
+  button[class^="bg-rose-900/"],
+  button[class*=" bg-rose-950/"],
+  button[class^="bg-rose-950/"],
+  button[class*=" bg-purple-500/"],
+  button[class^="bg-purple-500/"],
+  button[class*=" bg-purple-600/"],
+  button[class^="bg-purple-600/"],
+  button[class*=" bg-purple-700/"],
+  button[class^="bg-purple-700/"],
+  button[class*=" bg-purple-800/"],
+  button[class^="bg-purple-800/"],
+  button[class*=" bg-purple-900/"],
+  button[class^="bg-purple-900/"],
+  button[class*=" bg-purple-950/"],
+  button[class^="bg-purple-950/"],
+  button[class*=" bg-slate-500/"],
+  button[class^="bg-slate-500/"],
+  button[class*=" bg-slate-600/"],
+  button[class^="bg-slate-600/"],
+  button[class*=" bg-slate-700/"],
+  button[class^="bg-slate-700/"],
+  button[class*=" bg-slate-800/"],
+  button[class^="bg-slate-800/"],
+  button[class*=" bg-slate-900/"],
+  button[class^="bg-slate-900/"],
+  button[class*=" bg-slate-950/"],
+  button[class^="bg-slate-950/"],
+  button[class*=" bg-red-500/"],
+  button[class^="bg-red-500/"],
+  button[class*=" bg-red-600/"],
+  button[class^="bg-red-600/"],
+  button[class*=" bg-red-700/"],
+  button[class^="bg-red-700/"],
+  button[class*=" bg-red-800/"],
+  button[class^="bg-red-800/"],
+  button[class*=" bg-red-900/"],
+  button[class^="bg-red-900/"],
+  button[class*=" bg-red-950/"],
+  button[class^="bg-red-950/"],
+  button[class*=" bg-cyan-500/"],
+  button[class^="bg-cyan-500/"],
+  button[class*=" bg-cyan-600/"],
+  button[class^="bg-cyan-600/"],
+  button[class*=" bg-cyan-700/"],
+  button[class^="bg-cyan-700/"],
+  button[class*=" bg-cyan-800/"],
+  button[class^="bg-cyan-800/"],
+  button[class*=" bg-cyan-900/"],
+  button[class^="bg-cyan-900/"],
+  button[class*=" bg-cyan-950/"],
+  button[class^="bg-cyan-950/"],
+  button[class*=" bg-indigo-500/"],
+  button[class^="bg-indigo-500/"],
+  button[class*=" bg-indigo-600/"],
+  button[class^="bg-indigo-600/"],
+  button[class*=" bg-indigo-700/"],
+  button[class^="bg-indigo-700/"],
+  button[class*=" bg-indigo-800/"],
+  button[class^="bg-indigo-800/"],
+  button[class*=" bg-indigo-900/"],
+  button[class^="bg-indigo-900/"],
+  button[class*=" bg-indigo-950/"],
+  button[class^="bg-indigo-950/"],
+  button[class*=" bg-orange-500/"],
+  button[class^="bg-orange-500/"],
+  button[class*=" bg-orange-600/"],
+  button[class^="bg-orange-600/"],
+  button[class*=" bg-orange-700/"],
+  button[class^="bg-orange-700/"],
+  button[class*=" bg-orange-800/"],
+  button[class^="bg-orange-800/"],
+  button[class*=" bg-orange-900/"],
+  button[class^="bg-orange-900/"],
+  button[class*=" bg-orange-950/"],
+  button[class^="bg-orange-950/"]
+) {
+  background-color: var(--flat-surface-2) !important;
+  background-image: none !important;
+}
+#squad-coach-actions-grid button { padding-left: 4px !important; padding-right: 4px !important; white-space: nowrap !important; }
+
+#squad-coach-actions-grid { width: 100% !important; }
+#squad-coach-actions-grid button { flex: 1 1 0; min-width: 0; }
+#squad-coach-actions-grid svg, #squad-coach-actions-grid i { display: none !important; }
+/* Günlük ödül bandı: sade, ince çizgili */
+[class*="from-amber-950"][class*="border-2"] {
+  background-image: none !important;
+  background-color: var(--flat-surface) !important;
+  border-width: 1px !important;
+  border-color: #b45309 !important;
+}
+#btn-office-advance-day { white-space: nowrap !important; }
+
+/* ---- Gradyanlı butonlar -> düz dolgu ---- */
+[class*="bg-gradient"][class*="from-amber-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #f59e0b !important; }
+[class*="bg-gradient"][class*="from-purple-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #7c3aed !important; }
+[class*="bg-gradient"][class*="from-indigo-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #4f46e5 !important; }
+[class*="bg-gradient"][class*="from-blue-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #1d4ed8 !important; }
+[class*="bg-gradient"][class*="from-emerald-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #059669 !important; }
+[class*="bg-gradient"][class*="from-rose-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #be123c !important; }
+[class*="bg-gradient"][class*="from-sky-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #0284c7 !important; }
+
+button svg, button i[data-lucide] { flex-shrink: 0; }

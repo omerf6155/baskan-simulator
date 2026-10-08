@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20261008_mobile_polish_v5">
+  <link rel="stylesheet" href="style.css?v=20261008_flat_v4">
 </head>
 <body class="bg-[#080c14] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex items-center justify-center p-0 md:p-3">
 
@@ -139,28 +139,28 @@
 
         <!-- Sıradaki Maç Paneli (Matchday Hero Card) -->
         <div class="match-hero-card rounded-2xl p-4 shadow-xl border border-white/10 relative overflow-hidden">
-          <div class="flex items-center justify-between text-xs text-slate-300 font-semibold mb-3">
+          <div class="flex items-center justify-between gap-2 mb-1">
             <span class="flex items-center gap-1.5 min-w-0">
-              <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping flex-shrink-0"></span>
               <i data-lucide="calendar" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-              <span class="uppercase tracking-wider font-extrabold text-[11px] text-amber-400/90 truncate">Sıradaki Maç:</span>
-              <span id="office-match-date-badge" class="text-[10px] text-slate-200 font-black bg-slate-800/90 px-2 py-0.5 rounded-md border border-slate-700/80">15 Ağu 2026</span>
+              <span class="uppercase tracking-wider font-extrabold text-[11px] text-amber-400 whitespace-nowrap">Sıradaki Maç</span>
             </span>
-            <div class="flex items-center gap-1.5 flex-shrink-0">
-              <span id="office-match-countdown-badge" class="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-slate-900 text-amber-300 border border-slate-700 shadow-sm">5 Gün Kaldı</span>
-              <span id="office-derby-badge" class="hidden text-[9px] font-black px-2 py-0.5 rounded-full bg-rose-600 text-white shadow-lg shadow-rose-900/50 animate-pulse flex items-center gap-1"><i data-lucide="flame" class="w-3 h-3 text-white"></i><span>BÜYÜK DERBİ</span></span>
-              <span id="office-match-loc" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-900/90 text-slate-200 border border-slate-700/80">EV SAHİBİ</span>
-            </div>
+            <span id="office-match-loc" class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 whitespace-nowrap">EV SAHİBİ</span>
+          </div>
+          <div class="flex items-center flex-wrap gap-x-2 gap-y-0.5 text-[11px] text-slate-300 font-semibold mb-3">
+            <span id="office-match-date-badge" class="font-bold text-slate-200">15 Ağu 2026</span>
+            <span class="text-slate-600">•</span>
+            <span id="office-match-countdown-badge" class="font-bold text-amber-300">5 Gün Kaldı</span>
+            <span id="office-derby-badge" class="hidden text-[10px] font-black text-rose-400 flex items-center gap-1"><i data-lucide="flame" class="w-3 h-3 text-rose-400"></i><span>BÜYÜK DERBİ</span></span>
           </div>
 
           <div class="flex items-center justify-between my-3 px-2">
             <!-- Biz -->
-            <div class="text-center w-5/12 flex flex-col items-center">
+            <div class="text-center w-5/12 min-w-0 flex flex-col items-center">
               <div class="w-12 h-12 mb-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/10 flex items-center justify-center shadow-inner">
                 <img id="office-my-logo" src="" alt="" class="w-full h-full object-contain filter drop-shadow" onerror="this.style.display='none'" />
               </div>
-              <div class="font-extrabold text-sm text-white truncate max-w-full" id="office-my-name">Trabzonspor</div>
-              <div class="text-[11px] font-mono text-emerald-400 font-bold mt-0.5 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Güç: <span id="office-my-pwr">81</span></div>
+              <div class="font-extrabold text-sm text-white leading-tight max-w-full break-words" id="office-my-name">Trabzonspor</div>
+              <div class="text-[11px] font-mono text-emerald-400 font-bold mt-0.5">Güç: <span id="office-my-pwr">81</span></div>
             </div>
 
             <div class="text-center w-2/12 flex flex-col items-center justify-center">
@@ -168,12 +168,12 @@
             </div>
 
             <!-- Rakip -->
-            <div class="text-center w-5/12 flex flex-col items-center">
+            <div class="text-center w-5/12 min-w-0 flex flex-col items-center">
               <div class="w-12 h-12 mb-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/10 flex items-center justify-center shadow-inner">
                 <img id="office-opp-logo" src="" alt="" class="w-full h-full object-contain filter drop-shadow" onerror="this.style.display='none'" />
               </div>
-              <div class="font-extrabold text-sm text-white truncate max-w-full" id="office-opp-name">Fenerbahçe</div>
-              <div class="text-[11px] font-mono text-rose-400 font-bold mt-0.5 bg-rose-500/10 px-2 py-0.5 rounded-full border border-rose-500/20">Güç: <span id="office-opp-pwr">86</span></div>
+              <div class="font-extrabold text-sm text-white leading-tight max-w-full break-words" id="office-opp-name">Fenerbahçe</div>
+              <div class="text-[11px] font-mono text-rose-400 font-bold mt-0.5">Güç: <span id="office-opp-pwr">86</span></div>
             </div>
           </div>
 
@@ -371,7 +371,7 @@
             </div>
             <div class="text-right">
               <div class="text-[10px] text-slate-400">Maaş</div>
-              <div class="text-xs font-bold text-emerald-400" id="squad-coach-salary">32M ₺ / Sezon</div>
+              <div class="text-xs font-bold text-emerald-400" id="squad-coach-salary">32M € / Sezon</div>
             </div>
           </div>
 
@@ -735,7 +735,7 @@
             </div>
             <div class="text-right">
               <span class="text-xs font-black text-emerald-400 bg-emerald-950/70 border border-emerald-600/50 px-2.5 py-1 rounded-xl font-mono shadow-sm" id="fin-net-change">
-                +-- ₺
+                +-- €
               </span>
             </div>
           </div>
@@ -873,7 +873,7 @@
               <span class="text-[11px] text-slate-400 font-bold flex items-center gap-1.5">
                 <i data-lucide="flame" class="w-3.5 h-3.5 text-rose-400"></i> Haftalık Faiz
               </span>
-              <strong class="text-xs font-black text-rose-400 font-mono" id="bank-weekly-interest">~1.5M ₺ / Hf</strong>
+              <strong class="text-xs font-black text-rose-400 font-mono" id="bank-weekly-interest">~1.5M € / Hf</strong>
             </div>
 
             <!-- Mali Disiplin Rozeti -->
@@ -892,7 +892,7 @@
                 <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-amber-400"></i> Kritik Limit
               </span>
               <span class="text-xs font-black text-amber-300 font-mono">
-                -15M ₺ (Kasa)
+                -15M € (Kasa)
               </span>
             </div>
           </div>
@@ -909,13 +909,13 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button onclick="payClubDebt(10000000)" class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-750 active:scale-95 text-white font-black text-xs border border-slate-700 hover:border-amber-400 shadow-md transition-all cursor-pointer">
-                10M ₺ Öde
+                10M € Öde
               </button>
               <button onclick="payClubDebt(25000000)" class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-750 active:scale-95 text-white font-black text-xs border border-slate-700 hover:border-amber-400 shadow-md transition-all cursor-pointer">
-                25M ₺ Öde
+                25M € Öde
               </button>
               <button onclick="payClubDebt(50000000)" class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-750 active:scale-95 text-white font-black text-xs border border-slate-700 hover:border-amber-400 shadow-md transition-all cursor-pointer">
-                50M ₺ Öde
+                50M € Öde
               </button>
               <button onclick="payClubDebt(999999999)" class="py-2.5 px-2 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-500 hover:from-amber-400 hover:to-emerald-400 active:scale-95 text-slate-950 font-black text-xs shadow-lg transition-all cursor-pointer flex items-center justify-center gap-1">
                 <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Tümünü Kapat
@@ -935,13 +935,13 @@
             </div>
             <div class="grid grid-cols-3 gap-2">
               <button onclick="takeClubLoan(25000000)" class="py-2 px-1.5 rounded-xl bg-sky-950/70 hover:bg-sky-900/90 active:scale-95 text-sky-200 font-black text-xs border border-sky-700/60 hover:border-sky-400 shadow-md transition-all cursor-pointer">
-                +25M ₺ Kredi
+                +25M € Kredi
               </button>
               <button onclick="takeClubLoan(50000000)" class="py-2 px-1.5 rounded-xl bg-sky-950/70 hover:bg-sky-900/90 active:scale-95 text-sky-200 font-black text-xs border border-sky-700/60 hover:border-sky-400 shadow-md transition-all cursor-pointer">
-                +50M ₺ Kredi
+                +50M € Kredi
               </button>
               <button onclick="takeClubLoan(100000000)" class="py-2 px-1.5 rounded-xl bg-sky-950/70 hover:bg-sky-900/90 active:scale-95 text-sky-200 font-black text-xs border border-sky-700/60 hover:border-sky-400 shadow-md transition-all cursor-pointer">
-                +100M ₺ Kredi
+                +100M € Kredi
               </button>
             </div>
           </div>
@@ -1182,17 +1182,17 @@
           </div>
 
           <p class="text-[11px] text-slate-300 leading-relaxed bg-slate-900/90 p-3 rounded-lg border border-slate-800/80">
-            Bürokrasi ve federasyon koridorlarında kulübün ağırlığını koruyun. Siyasi nüfuz %65 üzerine çıktığında <strong class="text-blue-300">35M ₺ Acil Nakit Hibe</strong>, %85 üzerine çıktığında <strong class="text-emerald-400">15 Dönüm Hazine Arazisi + 30M ₺ Fon</strong> protokolü açılır. Ret almanız halinde kamuoyu önünde siyasi itibarınız zedelenir.
+            Bürokrasi ve federasyon koridorlarında kulübün ağırlığını koruyun. Siyasi nüfuz %65 üzerine çıktığında <strong class="text-blue-300">35M € Acil Nakit Hibe</strong>, %85 üzerine çıktığında <strong class="text-emerald-400">15 Dönüm Hazine Arazisi + 30M € Fon</strong> protokolü açılır. Ret almanız halinde kamuoyu önünde siyasi itibarınız zedelenir.
           </p>
 
           <div class="grid grid-cols-3 gap-2">
             <button onclick="doPoliticsAction('ankara_visit')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
               <div class="text-[11px] font-bold text-slate-200">Bakanlık Ziyareti</div>
-              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+10 Nüfuz • 4M ₺</div>
+              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+10 Nüfuz • 4M €</div>
             </button>
             <button onclick="doPoliticsAction('gov_project')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
               <div class="text-[11px] font-bold text-slate-200">Ortak Protokol</div>
-              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+16 Nüfuz • 15M ₺</div>
+              <div class="text-[9px] text-blue-400 font-mono mt-0.5">+16 Nüfuz • 15M €</div>
             </button>
             <button onclick="doPoliticsAction('pro_statement')" class="p-2.5 rounded-lg bg-slate-800/60 border border-slate-700/80 hover:bg-slate-800 hover:border-slate-500 text-left transition-all">
               <div class="text-[11px] font-bold text-slate-200">Basın Açıklaması</div>
@@ -1274,13 +1274,13 @@
           <div class="grid grid-cols-2 gap-2 pt-1">
             <button onclick="makeUndergroundDeal('referee')" class="p-2.5 rounded-lg bg-[#221515] border border-rose-900/60 hover:bg-[#2c1a1a] text-left">
               <div class="text-[11px] font-bold text-white">Hakemi Bağla</div>
-              <div class="text-[9px] text-amber-400 mt-0.5">Bedel: 18M ₺ Nakit</div>
+              <div class="text-[9px] text-amber-400 mt-0.5">Bedel: 18M € Nakit</div>
               <div class="text-[8px] text-emerald-400">Başarı %88 • Risk %18</div>
             </button>
 
             <button onclick="makeUndergroundDeal('opponent_gk')" class="p-2.5 rounded-lg bg-[#221515] border border-rose-900/60 hover:bg-[#2c1a1a] text-left">
               <div class="text-[11px] font-bold text-white">Kaleciyi Satın Al</div>
-              <div class="text-[9px] text-amber-400 mt-0.5">Bedel: 26M ₺ Nakit</div>
+              <div class="text-[9px] text-amber-400 mt-0.5">Bedel: 26M € Nakit</div>
               <div class="text-[8px] text-emerald-400">Başarı %94 • Risk %28</div>
             </button>
           </div>
@@ -1329,11 +1329,11 @@
                   <span>Kulüp Rezidans & AVM</span>
                   <span class="text-[9px] text-amber-400 bg-amber-950/60 px-1 rounded">Dev Gelir</span>
                 </div>
-                <div class="text-[10px] text-slate-400">Maliyet: 60M ₺ • Süre: 4 Hafta</div>
-                <div class="text-[9px] text-emerald-400 font-medium">Bittiğinde: +150.000.000 ₺ peşin sıcak para!</div>
+                <div class="text-[10px] text-slate-400">Maliyet: 60M € • Süre: 4 Hafta</div>
+                <div class="text-[9px] text-emerald-400 font-medium">Bittiğinde: +150.000.000 € peşin sıcak para!</div>
               </div>
               <button onclick="startRealEstateProject('mall')" id="btn-re-mall" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-sm">
-                Başlat (+150M ₺)
+                Başlat (+150M €)
               </button>
             </div>
 
@@ -1343,7 +1343,7 @@
                   <span>Futbol Altyapı Kampüsü</span>
                   <span class="text-[9px] text-blue-400 bg-blue-950/60 px-1 rounded">Gençlik Patlaması</span>
                 </div>
-                <div class="text-[10px] text-slate-400">Maliyet: 40M ₺ • Süre: 3 Hafta</div>
+                <div class="text-[10px] text-slate-400">Maliyet: 40M € • Süre: 3 Hafta</div>
                 <div class="text-[9px] text-blue-400 font-medium">Bittiğinde: Tüm altyapı & genç oyunculara kalıcı +5 OVR!</div>
               </div>
               <button onclick="startRealEstateProject('academy')" id="btn-re-academy" class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-sm">
@@ -1357,10 +1357,10 @@
                   <span>Mega Arena Genişletme</span>
                   <span class="text-[9px] text-purple-400 bg-purple-950/60 px-1 rounded">Kapasite</span>
                 </div>
-                <div class="text-[10px] text-slate-400">Maliyet: 85M ₺ • Süre: 5 Hafta</div>
+                <div class="text-[10px] text-slate-400">Maliyet: 85M € • Süre: 5 Hafta</div>
                 <div class="text-[9px] text-purple-300 font-medium">Bittiğinde: +15.000 Stadyum Kapasitesi & Tribün Hasılatı!</div>
               </div>
-              <button onclick="startRealEstateProject('stadium')" id="btn-re-stadium" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-[10px] font-bold transition-all shadow-sm">
+              <button onclick="startRealEstateProject('stadium')" id="btn-re-stadium" class="px-3 py-1.5 rounded-lg bg-purple-600 hover:purple-500 text-white text-[10px] font-bold transition-all shadow-sm">
                 İnşa Et (+15K Stat)
               </button>
             </div>
@@ -1699,7 +1699,7 @@
             </div>
             <div id="coach-profile-meta" class="text-[10.5px] text-amber-300 font-bold truncate mt-0.5">Türk Ekolü • Trabzonspor</div>
             <div class="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
-              <span>Maaş: <strong id="coach-profile-salary" class="text-emerald-400 font-mono">35M ₺</strong></span>
+              <span>Maaş: <strong id="coach-profile-salary" class="text-emerald-400 font-mono">35M €</strong></span>
               <span>•</span>
               <span id="coach-profile-status" class="text-emerald-300 font-semibold">Görevde (Sözleşmeli)</span>
             </div>
@@ -1909,8 +1909,8 @@
                 <span id="player-profile-role-status" class="text-emerald-400 font-bold">İlk 11 As Kadro</span>
               </div>
               <div class="text-[10px] text-slate-400 mt-1 flex items-center gap-2 flex-wrap">
-                <span>Piyasa: <strong id="player-profile-val" class="text-white font-mono">12.5M ₺</strong></span>
-                <span>Maaş: <strong id="player-profile-wage" class="text-emerald-400 font-mono">3.2M ₺</strong></span>
+                <span>Piyasa: <strong id="player-profile-val" class="text-white font-mono">12.5M €</strong></span>
+                <span>Maaş: <strong id="player-profile-wage" class="text-emerald-400 font-mono">3.2M €</strong></span>
                 <span>Sözleşme: <strong id="player-profile-contract" class="text-amber-300 font-mono">2 Yıl</strong></span>
               </div>
             </div>
@@ -2527,7 +2527,7 @@
         </div>
 
         <div class="p-3 bg-slate-900 rounded-xl border border-slate-800 text-xs text-amber-400 font-bold" id="season-end-reward">
-          Ödül: +100M ₺ Şampiyonluk Primi!
+          Ödül: +100M € Şampiyonluk Primi!
         </div>
 
         <!-- Hoca Sezon Sonu Oyuncu Önerileri -->
