@@ -1073,7 +1073,7 @@ function renderUI() {
 
   const coachName = isCoachVacant ? "Koltuk Boş (TD Aranıyor)" : gameState.coach.name;
   const coachStyle = isCoachVacant ? "Kulübün başında bir teknik direktör bulunmuyor" : gameState.coach.style;
-  const coachSalary = isCoachVacant ? "0 ₺ / Sezon" : `${formatMoney(gameState.coach.salary)} / Sezon`;
+  const coachSalary = isCoachVacant ? "0 € / Sezon" : `${formatMoney(gameState.coach.salary)} / Sezon`;
 
   const briefingNameEl = document.getElementById("briefing-coach-name");
   if (briefingNameEl) briefingNameEl.innerText = coachName;
@@ -1518,7 +1518,7 @@ function renderSquadList() {
     </div>
     ${
       foreignCount > 8
-        ? '<span class="text-[9px] bg-red-700 text-white font-black px-2 py-0.5 rounded animate-pulse">4M ₺ CEZA TEHLİKESİ!</span>'
+        ? '<span class="text-[9px] bg-red-700 text-white font-black px-2 py-0.5 rounded animate-pulse">4M € CEZA TEHLİKESİ!</span>'
         : '<span class="text-[9px] text-emerald-400 font-semibold bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Kurala Uygun</span>'
     }
   `;
@@ -1640,8 +1640,8 @@ function renderSquadList() {
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
           <span class="text-xs font-black text-amber-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">${lp.overall} OVR</span>
-          <button onclick="recallLoanPlayer('${safeName}')" title="4M ₺ fesih bedeli ödeyerek oyuncuyu hemen as kadroya geri çağır" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-md flex items-center gap-1 transition-all">
-            <i data-lucide="corner-down-left" class="w-3 h-3 text-slate-950"></i> <span>Geri Çağır (4M ₺)</span>
+          <button onclick="recallLoanPlayer('${safeName}')" title="4M € fesih bedeli ödeyerek oyuncuyu hemen as kadroya geri çağır" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-md flex items-center gap-1 transition-all">
+            <i data-lucide="corner-down-left" class="w-3 h-3 text-slate-950"></i> <span>Geri Çağır (4M €)</span>
           </button>
         </div>
       `;
@@ -1730,7 +1730,7 @@ function renderFinances() {
 
   const curFix = (gameState.fixtures || []).find(f => f.week === gameState.week);
   const isAway = curFix && !curFix.is_home;
-  if (travelEl) travelEl.innerText = isAway ? "1.4M ₺" : "0 ₺";
+  if (travelEl) travelEl.innerText = isAway ? "1.4M €" : "0 €";
 
   const net = (fin.last_net_income !== undefined) 
     ? fin.last_net_income 
@@ -4197,11 +4197,11 @@ function checkSeasonEndModal() {
   if (gameState.season_result === "champion") {
     title.innerText = "SÜPER LİG ŞAMPİYONU!";
     desc.innerText = `${gameState.club_name} 34 haftalık maratonu ZİRVEDE bitirdi ve KUPA MÜZEMİZE GELDİ!`;
-    reward.innerText = "Ödül: +100.000.000 ₺ Şampiyonluk Primi Kasaya Eklendi!";
+    reward.innerText = "Ödül: +100.000.000 € Şampiyonluk Primi Kasaya Eklendi!";
   } else if (gameState.season_result === "europe") {
     title.innerText = "AVRUPA KUPALARI BİLETİ!";
     desc.innerText = `${gameState.club_name} ilk 4'te bitirerek Avrupa kupalarına katılmaya hak kazandı!`;
-    reward.innerText = "Ödül: +45.000.000 ₺ Başarı Ödülü!";
+    reward.innerText = "Ödül: +45.000.000 € Başarı Ödülü!";
   } else if (gameState.season_result === "relegated") {
     title.innerText = "KÜME DÜŞME TEHLİKESİ!";
     desc.innerText = "Takım ligin dibinde bitirdi. Yönetim kurulu acil toplantı talep ediyor!";
@@ -4209,7 +4209,7 @@ function checkSeasonEndModal() {
   } else {
     title.innerText = "SEZON TAMAMLANDI";
     desc.innerText = "34 haftalık lig maratonu sona erdi. Orta sıralarda tamamladınız.";
-    reward.innerText = "Ödül: +15.000.000 ₺ Lig Katılım Payı";
+    reward.innerText = "Ödül: +15.000.000 € Lig Katılım Payı";
   }
 
   // Hoca Sezon Sonu Transfer Önerilerini Render Et
@@ -5129,7 +5129,7 @@ function showBenchAccountabilityTab() {
 }
 
 async function fireScout() {
-  if (confirm("Scout ekibini 2M ₺ tazminat ödeyerek kovmak istiyor musunuz?")) {
+  if (confirm("Scout ekibini 2M € tazminat ödeyerek kovmak istiyor musunuz?")) {
     try {
       const res = await apiFetch("/api/scout/fire", { method: "POST" });
       const data = await res.json();
@@ -5411,7 +5411,7 @@ function renderRealEstateUI() {
     if (btnMall) {
       const isMallDone = (re.completed || []).includes("Kulüp Rezidans & AVM");
       btnMall.disabled = isMallDone;
-      btnMall.innerText = isMallDone ? "Tamamlandı" : "Başlat (+150M ₺)";
+      btnMall.innerText = isMallDone ? "Tamamlandı" : "Başlat (+150M €)";
       btnMall.className = isMallDone
         ? "px-3 py-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 font-bold text-[10px] border border-emerald-800/60 cursor-default"
         : "px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-sm";
@@ -6018,8 +6018,8 @@ async function submitBoardAction(actType) {
 let currentTutorialStep = 0;
 const TUTORIAL_STEPS = [
   {
-    title: "Adım 1: Ağır Miras (500M ₺ Borç!)",
-    coachQuote: "Sayın Başkanım kulübe hoş geldiniz ama durumumuz felaket! Bizden önceki yönetim kulübe tam 500.000.000 ₺ borç takıp kayıplara karıştı! Bankalar ve TFF kapıda. Her hafta düzenli kredi faizi ve futbolcu maaşları kasamızdan çekilecek.",
+    title: "Adım 1: Ağır Miras (500M € Borç!)",
+    coachQuote: "Sayın Başkanım kulübe hoş geldiniz ama durumumuz felaket! Bizden önceki yönetim kulübe tam 500.000.000 € borç takıp kayıplara karıştı! Bankalar ve TFF kapıda. Her hafta düzenli kredi faizi ve futbolcu maaşları kasamızdan çekilecek.",
     detail: "Kulübü kayyuma ve mali iflasa sürüklenmekten kurtarmak için bütçe disiplinini sağlamalı, lüzumsuz yüksek maaşlı isimleri satmalı ve gelir getiren anlaşmalara odaklanmalısınız.",
     tip: "İpucu: Kasa (Bütçe) sekmesinden haftalık net nakit akışını takip edin; eksiye düşmemek birincil önceliğinizdir!",
     icon: "landmark"
@@ -6033,7 +6033,7 @@ const TUTORIAL_STEPS = [
   },
   {
     title: "Adım 3: Sponsorluklar & Nakit Akışı",
-    coachQuote: "500 Milyon ₺ borcu eritmenin en temiz yolu sponsorluklardır. Göğüs, Sırt ve Stadyum İsim sponsorlukları sayesinde her hafta kasaya sıcak para akar ve peşin imza parası alırsınız.",
+    coachQuote: "500 Milyon € borcu eritmenin en temiz yolu sponsorluklardır. Göğüs, Sırt ve Stadyum İsim sponsorlukları sayesinde her hafta kasaya sıcak para akar ve peşin imza parası alırsınız.",
     detail: "Ancak unutmayın; dev holdingler şart koşar! Ligde üst sıralarda olmak, yüksek taraftar güveni ve stadyum doluluğu büyük sponsorların ana kriterleridir.",
     tip: "İpucu: Sponsorluk sekmesine giderek şartlarını karşıladığınız firmalarla hemen sözleşme imzalayın!",
     icon: "handshake"
@@ -6183,7 +6183,7 @@ function promptDailyRewardClaim() {
         </div>
         <div class="min-w-0 flex-1">
           <div class="font-black text-[11px] sm:text-xs text-white uppercase tracking-wide truncate">GÜNLÜK ÖDÜL!</div>
-          <div class="text-[9px] sm:text-[10px] text-amber-200 font-semibold truncate">+5.000.000 ₺ Kasa Desteği</div>
+          <div class="text-[9px] sm:text-[10px] text-amber-200 font-semibold truncate">+5.000.000 € Kasa Desteği</div>
         </div>
       </div>
       <button id="btn-claim-daily" onclick="claimDailyReward(this)" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-[11px] sm:text-xs shadow-md transition-all flex items-center gap-1 flex-shrink-0 whitespace-nowrap">
@@ -6218,7 +6218,7 @@ async function claimDailyReward(btnEl) {
     }
     gameState = data.state;
     renderUI();
-    showToast(data.message || "5.000.000 ₺ Günlük Giriş Ödülü Kasaya Eklendi.");
+    showToast(data.message || "5.000.000 € Günlük Giriş Ödülü Kasaya Eklendi.");
   } catch (e) {
     console.error(e);
     if (btn) {
@@ -6751,7 +6751,7 @@ async function loadPlayerLoans() {
             </div>
             <div class="flex-shrink-0">
               <button onclick="recallLoanPlayer('${safeName}')" class="px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-[10px] shadow-sm transition-all">
-                Geri Çağır (4M ₺)
+                Geri Çağır (4M €)
               </button>
             </div>
           `;
@@ -6789,7 +6789,7 @@ async function loanOutPlayer(playerName, elKey) {
 }
 
 async function recallLoanPlayer(playerName) {
-  if (!confirm(`${playerName} isimli oyuncuyu 4.000.000 ₺ fesih bedeli ödeyerek kiralıktan geri çağırmak istiyor musunuz?`)) return;
+  if (!confirm(`${playerName} isimli oyuncuyu 4.000.000 € fesih bedeli ödeyerek kiralıktan geri çağırmak istiyor musunuz?`)) return;
   try {
     const res = await apiFetch("/api/players/recall-loan", {
       method: "POST",
