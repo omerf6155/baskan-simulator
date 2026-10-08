@@ -873,7 +873,7 @@ function renderUI() {
   document.getElementById("header-week").innerText = Math.min(gameState.week, gameState.max_weeks || 34);
   const headerDateEl = document.getElementById("header-current-date");
   if (headerDateEl) {
-    headerDateEl.innerText = formatTurkishDateShort(gameState.current_date || "2026-08-10");
+    headerDateEl.innerText = formatTurkishDateHeader(gameState.current_date || "2026-08-10");
   }
   const exRateEl = document.getElementById("header-exchange-rate");
   if (exRateEl) {
@@ -918,9 +918,7 @@ function renderUI() {
   const bankStatusEl = document.getElementById("bank-sanction-status");
   if (bankDebtEl) {
     const curDebt = gameState.debt || 0;
-    const rate = Number(gameState.exchange_rate || 38.50);
-    const tlDebt = Math.round(curDebt * rate);
-    bankDebtEl.innerText = formatMoney(curDebt) + ` (~${(tlDebt / 1_000_000).toFixed(0)}M ₺)`;
+    bankDebtEl.innerText = curDebt > 0 ? (formatMoney(curDebt) + " Borç") : "Borç Yok";
     if (bankIntEl) bankIntEl.innerText = formatMoney(Math.floor(curDebt * 0.003)) + " / Hafta";
     if (bankStatusEl) {
       const bc = gameState.bank_consortium || {};
@@ -3317,6 +3315,16 @@ function formatTurkishDateShort(dateStr) {
   const year = parts[0];
   const shortMonths = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
   return `${day} ${shortMonths[mIndex] || ""} ${year}`;
+}
+
+function formatTurkishDateHeader(dateStr) {
+  if (!dateStr) return "";
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return dateStr;
+  const day = parseInt(parts[2], 10);
+  const mIndex = parseInt(parts[1], 10) - 1;
+  const shortMonths = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"];
+  return `${day} ${shortMonths[mIndex] || ""}`;
 }
 
 function formatTurkishDateLong(dateStr) {

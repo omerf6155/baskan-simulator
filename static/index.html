@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Büyük Başkan - Süper Lig Simülatörü</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <link rel="stylesheet" href="style.css?v=20261008_dock_siyaset_v3">
+  <link rel="stylesheet" href="style.css?v=20261008_mobile_polish_v5">
 </head>
 <body class="bg-[#080c14] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] antialiased min-h-screen flex items-center justify-center p-0 md:p-3">
 
@@ -22,13 +22,13 @@
     <!-- ÜST KULÜP PANELİ & HUD -->
     <header class="bg-[#0b0f19] border-b border-slate-800/90 px-3 pt-2.5 pb-2.5 flex-shrink-0 z-20 w-full block">
       <div class="header-top-row flex items-center justify-between gap-2 mb-2 w-full">
-        <div class="flex items-center gap-2.5 min-w-0">
+        <div class="flex items-center gap-2 min-w-0 flex-1">
           <div class="w-9 h-9 rounded-xl bg-[#131b2e] border border-slate-700/70 flex items-center justify-center overflow-hidden p-0.5 shadow-sm flex-shrink-0" id="header-club-logo-box">
             <img id="header-club-logo" src="" alt="Arma" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('header-club-badge').style.display='block';" />
             <span id="header-club-badge" class="font-extrabold text-[11px] text-amber-400 hidden">TS</span>
           </div>
-          <div class="min-w-0">
-            <h1 class="font-extrabold text-sm text-white tracking-wide truncate max-w-[140px]" id="header-club-name">Trabzonspor</h1>
+          <div class="min-w-0 flex-1">
+            <h1 class="font-extrabold text-sm text-white tracking-wide truncate" id="header-club-name">Trabzonspor</h1>
             <div class="text-[10.5px] text-slate-400 truncate mt-0.5 font-medium">
               Başkan: <span class="text-slate-200 font-bold" id="header-pres-name">Yusuf</span>
             </div>
@@ -36,12 +36,12 @@
         </div>
 
         <div class="flex items-center gap-1.5 flex-shrink-0">
-          <button onclick="openCalendarModal()" id="header-calendar-btn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#131b2e] hover:bg-[#1a253c] border border-slate-700/80 hover:border-amber-400/80 transition-all shadow-sm active:scale-95 cursor-pointer" title="Kulüp Takvimi & Fikstür">
+          <button onclick="openCalendarModal()" id="header-calendar-btn" class="inline-flex items-center gap-1.5 px-2 py-1.5 rounded-xl bg-[#131b2e] hover:bg-[#1a253c] border border-slate-700/80 hover:border-amber-400/80 transition-all shadow-sm active:scale-95 cursor-pointer" title="Kulüp Takvimi & Fikstür">
             <i data-lucide="calendar" class="w-3.5 h-3.5 text-amber-400"></i>
-            <span id="header-current-date" class="text-slate-100 font-extrabold text-[11px]">10 Ağu 2026</span>
-            <span id="header-season-week-pill" class="text-[10px] bg-slate-900 text-slate-100 px-2 py-0.5 rounded-lg font-mono font-bold border border-slate-700 shadow-sm">S<span id="header-season">1</span>•H<span id="header-week">1</span></span>
+            <span id="header-current-date" class="text-slate-100 font-extrabold text-[11px]">10 Ağu</span>
+            <span id="header-season-week-pill" class="text-[10px] bg-slate-900 text-slate-100 px-1.5 py-0.5 rounded-lg font-mono font-bold border border-slate-700 shadow-sm">S<span id="header-season">1</span>•H<span id="header-week">1</span></span>
           </button>
-          <div class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-[#131b2e] border border-slate-700 text-[10.5px] font-mono font-black text-amber-300 shadow-sm" title="Döviz Kuru: 1 Euro kaç TL?">
+          <div class="hidden min-[380px]:flex items-center gap-1 px-1.5 py-1.5 rounded-xl bg-[#131b2e] border border-slate-700 text-[10px] font-mono font-black text-amber-300 shadow-sm" title="Döviz Kuru: 1 Euro kaç TL?">
             <span class="text-white text-[9px] font-bold">€</span>
             <span id="header-exchange-rate">38.50 ₺</span>
           </div>
@@ -447,7 +447,7 @@
           </button>
         </div>
 
-        <div id="standings-table-view" class="bg-[#151c2e] border border-slate-800 rounded-xl overflow-hidden">
+        <div id="standings-table-view" class="bg-[#151c2e] border border-slate-800 rounded-xl overflow-x-auto scrollbar-thin">
           <table class="w-full text-left text-[11px]">
             <thead class="bg-[#0b0f19] text-slate-400 text-[10px] border-b border-slate-800">
               <tr>
@@ -859,9 +859,9 @@
             </div>
             
             <!-- Büyük Borç Rozeti -->
-            <div class="text-right">
-              <span class="text-xs font-black px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-500/60 text-amber-300 font-mono shadow-md" id="bank-debt-display">
-                500M ₺ Borç
+            <div class="text-right shrink-0">
+              <span class="text-xs font-black px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-500/60 text-amber-300 font-mono shadow-md whitespace-nowrap inline-block" id="bank-debt-display">
+                500M € Borç
               </span>
             </div>
           </div>
@@ -3648,6 +3648,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261008_sponsor_sleek_v4"></script>
+  <script src="app.js?v=20261008_mobile_polish_v5"></script>
 </body>
 </html>

@@ -90,7 +90,7 @@ button, a, input, select, [onclick], .nav-item, .cursor-pointer {
 }
 
 /* ==========================================================================
-   CLASH ROYALE ARENA ÇERÇEVESİ (#app-frame)
+   CLASH ROYALE ARENA ÇERÇEVESİ (#app-frame) & MOBİL OPTİMİZASYONU
    ========================================================================== */
 #app-frame {
   background: linear-gradient(180deg, #101c33 0%, #0a1222 100%) !important;
@@ -830,5 +830,74 @@ div[id^="modal-"] > div {
 
 #modal-calendar .calendar-action-btn:active {
   transform: scale(0.97) !important;
+}
+
+/* ==========================================================================
+   MOBİL & SAFE-AREA OPTİMİZASYONU (iOS / Android / Safari)
+   ========================================================================== */
+@media (max-width: 767px) {
+  html, body {
+    height: 100% !important;
+    overflow: hidden !important;
+    -webkit-text-size-adjust: 100% !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  #app-frame {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* iOS Çentik / Dinamik Ada Güvenli Alanı */
+  header {
+    padding-top: max(10px, env(safe-area-inset-top, 0px)) !important;
+    padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* iOS Alt Çubuk / Ev Çubuğu Güvenli Alanı & Alt Dock Yüksekliği */
+  nav.royale-bottom-dock {
+    padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)) !important;
+    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    gap: 1px !important;
+  }
+
+  /* Alt Dock Menü Metinleri: Taşmayı ve Satır Sarmayı Önle */
+  .nav-item {
+    padding: 3px 1px !important;
+    gap: 1px !important;
+  }
+  .nav-item span {
+    font-size: 0.60rem !important;
+    letter-spacing: -0.01em !important;
+  }
+  .nav-item i, .nav-item svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  /* Akıcı 60fps Momentum Dokunmatik Kaydırma */
+  #main-content {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: contain !important;
+    padding-left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    padding-right: max(10px, env(safe-area-inset-right, 0px)) !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Mobil Modallar: Ekranı taşmama, safe-area koruması ve yumuşak kaydırma */
+  .fixed.inset-0.z-50 {
+    padding: max(8px, env(safe-area-inset-top, 0px)) max(8px, env(safe-area-inset-right, 0px)) max(8px, env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)) !important;
+  }
+  .fixed.inset-0.z-50 > div {
+    max-height: calc(100dvh - max(16px, env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px) + 8px)) !important;
+    width: 100% !important;
+    border-radius: 20px !important;
+  }
 }
 

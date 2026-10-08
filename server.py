@@ -1562,8 +1562,8 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "coach_dialog_pending": False,
         "last_match": None,
         "news": [
-            f"🏆 {team['name']} Genel Kurulu tamamlandı! Sayın Başkan görevine başladı.",
-            "📅 34 Haftalık Süper Lig maratonu start aldı. Hedef Şampiyonluk!"
+            f"{team['name']} Genel Kurulu tamamlandı! Sayın Başkan görevine başladı.",
+            "34 Haftalık Süper Lig maratonu start aldı. Hedef Şampiyonluk!"
         ]
     }
 
@@ -2900,11 +2900,11 @@ def api_match_half2(req: HalftimeActionRequest):
             state["budget"] += 150_000_000
             state["fan_trust"] = 100
             state["board_trust"] = 100
-            state["news"].insert(0, f"🏆 ŞAMPİYON {state['club_name']}! KUPA MÜZEMİZDE! 150M ₺ ÖDÜL KAZANILDI!")
+            state["news"].insert(0, f"ŞAMPİYON {state['club_name']}! KUPA MÜZEMİZDE! 150M ₺ ÖDÜL KAZANILDI!")
         elif final_rank <= 4:
             state["season_result"] = "europe"
             state["budget"] += 60_000_000
-            state["news"].insert(0, f"🌟 {state['club_name']} Avrupa Kupalarına katılmaya hak kazandı!")
+            state["news"].insert(0, f"{state['club_name']} Avrupa Kupalarına katılmaya hak kazandı!")
         else:
             state["season_result"] = "mid"
 
@@ -5326,10 +5326,10 @@ def api_fans_social_feed():
         "club_rank": rank,
         "feed": posts,
         "demands": [
-            "🏆 Lig şampiyonluğu veya ilk 3 garantisi",
-            "⚽ Hücum futbolu ve bol gollü galibiyetler",
-            "🌍 Avrupa kulüplerinden elit yabancı transferleri",
-            "🎟️ Makul bilet ve forma fiyatları"
+            "Lig şampiyonluğu veya ilk 3 garantisi",
+            "Hücum futbolu ve bol gollü galibiyetler",
+            "Avrupa kulüplerinden elit yabancı transferleri",
+            "Makul bilet ve forma fiyatları"
         ]
     }
 
