@@ -927,7 +927,7 @@ div[id^="modal-"] > div {
 [class*="shadow"]:not(#app-frame) { box-shadow: none !important; }
 
 /* ---- ROZETLER: yarı saydam arka planlı yazılar -> düz yazı ---- */
-:is(#main-content, header, .royale-news-ticker, div[id^="modal-"]) span:not(:empty):not(.absolute):not(.fixed):not([class*="bg-gradient"]):not([class~="bg-amber-500"]):not([class~="bg-red-700"]):not([class~="bg-rose-600"]):not([class~="bg-emerald-500"]):not([class~="bg-emerald-600"]):not([class~="bg-blue-600"]):not([class~="bg-purple-600"]):not([class~="bg-sky-600"]):not(.nav-item *):not(.calendar-action-btn *),
+:is(#main-content, header, .royale-news-ticker, div[id^="modal-"]) span:not(:empty):not(.absolute):not(.fixed):not([class*="bg-gradient"]):not([class~="bg-amber-500"]):not([class~="bg-red-700"]):not([class~="bg-rose-600"]):not([class~="bg-emerald-500"]):not([class~="bg-emerald-600"]):not([class~="bg-blue-600"]):not([class~="bg-purple-600"]):not([class~="bg-sky-600"]):not(.nav-item *):not(.calendar-action-btn *):not([class~="w-5"]):not([class~="w-4"]):not([class~="w-6"]):not([class~="w-7"]):not([class~="w-8"]):not([class~="w-9"]):not([class~="w-10"]):not(.cal-result):not(.keep-chip):not([class*="btn-royale"]),
 :is(#main-content, header, div[id^="modal-"]) div.rounded-full[class*="bg-"]:not(:empty):not([class*="w-"][class*="h-"]):not([class*="h-"]):not(:has(> *)) {
   background: transparent !important;
   background-image: none !important;
@@ -1029,18 +1029,6 @@ nav.royale-bottom-dock {
   color: #fbbf24 !important;
 }
 .nav-item.active span { color: #fbbf24 !important; }
-
-/* ---- BUTONLAR: 3D / parlama yok, düz dolgu ---- */
-.btn-royale-gold, #btn-control-account {
-  background: #f59e0b !important; border: 0 !important; box-shadow: none !important;
-}
-.btn-royale-green { background: #10b981 !important; border: 0 !important; box-shadow: none !important; }
-.btn-royale-blue  { background: #2563eb !important; border: 0 !important; box-shadow: none !important; }
-.btn-royale-red   { background: #dc2626 !important; border: 0 !important; box-shadow: none !important; }
-.btn-royale-slate, .btn-royale-dark { box-shadow: none !important; transform: none !important; }
-.btn-royale-gold:hover, .btn-royale-green:hover, .btn-royale-blue:hover, .btn-royale-red:hover {
-  box-shadow: none !important; filter: brightness(1.08) !important;
-}
 
 /* ---- Modallar ---- */
 div[id^="modal-"] { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
@@ -1197,13 +1185,81 @@ div[id^="modal-"] { -webkit-backdrop-filter: none !important; backdrop-filter: n
 }
 #btn-office-advance-day { white-space: nowrap !important; }
 
-/* ---- Gradyanlı butonlar -> düz dolgu ---- */
-[class*="bg-gradient"][class*="from-amber-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #f59e0b !important; }
-[class*="bg-gradient"][class*="from-purple-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #7c3aed !important; }
-[class*="bg-gradient"][class*="from-indigo-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #4f46e5 !important; }
-[class*="bg-gradient"][class*="from-blue-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #1d4ed8 !important; }
-[class*="bg-gradient"][class*="from-emerald-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #059669 !important; }
-[class*="bg-gradient"][class*="from-rose-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #be123c !important; }
-[class*="bg-gradient"][class*="from-sky-"]:not([class*="h-full"]):not([class*="border-"][class*="bg-gradient-to-br"]) { background-image: none !important; background-color: #0284c7 !important; }
-
 button svg, button i[data-lucide] { flex-shrink: 0; }
+
+
+/* ==========================================================================
+   OYUNCU SATIRI — FM Mobile / FIFA kadro listesi tarzı
+   Sol: mevki rengi şeridi | Orta: isim + bilgi | Sağ: değiştir butonu + OVR kutusu
+   ========================================================================== */
+.player-row {
+  --pos-color: #94a3b8;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 9px 10px 9px 0;
+  margin-bottom: 6px;
+  background: #121a2a;
+  border: 1px solid #1d273b;
+  border-left: 4px solid var(--pos-color);
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+}
+.player-row.is-bench { background: #0e1522; border-color: #18212f; border-left-color: var(--pos-color); }
+.player-row:active { background: #172238; }
+.pr-pos {
+  width: 38px; flex-shrink: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 2px;
+  font-weight: 800; font-size: 11px; letter-spacing: .04em;
+  color: var(--pos-color);
+}
+.pr-main { flex: 1; min-width: 0; }
+.pr-name {
+  font-weight: 800; font-size: 14px; color: #f1f5f9; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pr-cap {
+  display: inline-block; margin-left: 6px; width: 15px; height: 15px; line-height: 15px;
+  text-align: center; font-size: 9px; font-weight: 900; border-radius: 50%;
+  background: #fbbf24; color: #1a1205; vertical-align: 1px;
+}
+.pr-meta { margin-top: 3px; font-size: 11.5px; color: #9aa7bd; font-weight: 500; }
+.pr-meta-dim { margin-top: 1px; font-size: 10.5px; color: #66758d; }
+.pr-tags { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 5px; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; }
+.pr-tags:empty { display: none; }
+.pr-tags span { padding: 0 !important; background: none !important; border: 0 !important; }
+.pr-t-foreign { color: #7dd3fc; }
+.pr-t-local   { color: #fda4af; }
+.pr-t-pot     { color: #5eead4; }
+.pr-t-loan    { color: #93c5fd; }
+.pr-t-good    { color: #86efac; }
+.pr-t-warn    { color: #fcd34d; }
+.pr-t-bad     { color: #f87171; }
+.pr-links { display: flex; gap: 16px; margin-top: 7px; }
+.pr-link {
+  padding: 2px 0 !important; background: none !important; border: 0 !important;
+  font-size: 11px; font-weight: 800; letter-spacing: .02em;
+  border-bottom: 1px dashed currentColor !important;
+}
+.pr-link-red  { color: #f87171; }
+.pr-link-gold { color: #fbbf24; }
+.pr-side { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.pr-swap {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 3px solid rgba(0,0,0,.45) !important;
+}
+.pr-swap-in  { background: #16a34a; color: #fff; }
+.pr-swap-out { background: #b91c1c; color: #fff; }
+.pr-swap:active { transform: translateY(2px); border-bottom-width: 1px !important; }
+.pr-ovr-wrap { width: 40px; }
+.pr-ovr {
+  height: 38px; border-radius: 8px 8px 0 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 19px; color: #fff; font-variant-numeric: tabular-nums;
+}
+.pr-stam { height: 4px; background: #263247; border-radius: 0 0 4px 4px; overflow: hidden; }
+.pr-stam > div { height: 100%; }
+.player-row.is-bench .pr-ovr { opacity: .85; }

@@ -1397,91 +1397,61 @@ function renderPosLineHeader(title, count, iconKey, colorClass = "text-slate-400
 
 function renderSquadPlayerCard(p, idx, isStarter) {
   const card = document.createElement("div");
-  card.className = `p-2 rounded-xl border flex items-center justify-between text-xs transition-all cursor-pointer ${
-    isStarter ? "bg-slate-900/90 border-slate-700/80 hover:border-amber-500/50" : "bg-slate-950/70 border-slate-800/60 opacity-90 hover:border-slate-700 hover:opacity-100"
-  }`;
+  const posShort = shortenPosition(p.pos);
+  const posGroup = getPosCategory(p.pos);
+  const posColor = { GK: "#f59e0b", DEF: "#38bdf8", MID: "#34d399", FWD: "#fb7185" }[posGroup] || "#94a3b8";
+  card.className = "player-row " + (isStarter ? "is-starter" : "is-bench");
+  card.style.setProperty("--pos-color", posColor);
   card.onclick = () => openPlayerProfileModal(idx, isStarter);
 
-  const sk = p.skills || {};
   const contractYears = p.contract_years !== undefined ? p.contract_years : 2;
   const isInjured = (p.injured_weeks || 0) > 0;
   const isSuspended = (p.suspended_weeks || 0) > 0;
   const isForeign = p.is_foreign !== false;
-
-  const actionBtn = isStarter
-    ? `<button onclick="event.stopPropagation(); benchStarterPlayer(${idx})" title="Yedek kulübesine çek" class="px-2 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
-         <i data-lucide="arrow-down-left" class="w-3 h-3 text-rose-400"></i> <span class="hidden xs:inline">Yedeğe Al</span>
-       </button>`
-    : `<button onclick="event.stopPropagation(); promoteBenchPlayer(${idx})" title="İlk 11 maç kadrosuna al" class="px-2 py-1 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 text-[9px] font-bold flex items-center gap-1 transition-all">
-         <i data-lucide="star" class="w-3 h-3 text-amber-400"></i> <span class="hidden xs:inline">11'e Al</span>
-       </button>`;
-
   const potVal = p.potential || Math.min(94, p.overall + Math.max(3, (27 - (p.age || 24)) * 2));
   const isYouth = (p.age || 24) < 26;
-
   const stamVal = p.stamina !== undefined ? p.stamina : 100;
-  let stamColor = "text-emerald-400 bg-emerald-950/70 border-emerald-700/50";
-  if (stamVal < 60) stamColor = "text-rose-400 bg-rose-950/70 border-rose-700/50 animate-pulse";
-  else if (stamVal < 80) stamColor = "text-amber-400 bg-amber-950/70 border-amber-700/50";
-
+  const stamColor = stamVal < 60 ? "#ef4444" : (stamVal < 80 ? "#f59e0b" : "#22c55e");
   const mins = p.minutes_played || 0;
   const matches = p.matches_played || 0;
   const avgRtg = (p.avg_rating && p.avg_rating > 0) ? p.avg_rating.toFixed(1) : "-";
   const safeName = p.name.replace(/'/g, "\\'");
+  const ovr = p.overall;
+  const ovrColor = ovr >= 85 ? "#15803d" : ovr >= 78 ? "#4d7c0f" : ovr >= 70 ? "#a16207" : "#9a3412";
+
+  const actionBtn = isStarter
+    ? `<button onclick="event.stopPropagation(); benchStarterPlayer(${idx})" title="Yedek kulübesine çek" class="pr-swap pr-swap-out"><i data-lucide="arrow-down" class="w-4 h-4"></i></button>`
+    : `<button onclick="event.stopPropagation(); promoteBenchPlayer(${idx})" title="İlk 11 maç kadrosuna al" class="pr-swap pr-swap-in"><i data-lucide="arrow-up" class="w-4 h-4"></i></button>`;
+
+  const tags = [];
+  tags.push(`<span class="${isForeign ? 'pr-t-foreign' : 'pr-t-local'}" title="${isForeign ? 'Yabancı' : 'Yerli'} Oyuncu">${isForeign ? 'YBN' : 'TR'}</span>`);
+  if (isYouth) tags.push(`<span class="pr-t-pot" title="Potansiyel">POT ${potVal}</span>`);
+  if (p.is_inbound_loan) tags.push(`<span class="pr-t-loan">Kiralık</span>`);
+  if (isInjured) tags.push(`<span class="pr-t-bad">Sakat · ${p.injured_weeks} hf</span>`);
+  if (isSuspended) tags.push(`<span class="pr-t-warn">Cezalı · ${p.suspended_weeks} hf</span>`);
+  if ((p.yellow_cards || 0) > 0) tags.push(`<span class="pr-t-warn">Sarı ${p.yellow_cards}</span>`);
+  if ((p.goals || 0) > 0) tags.push(`<span class="pr-t-good">${p.goals} gol</span>`);
+
+  const links = [];
+  if (p.is_inbound_loan && p.buy_option) links.push(`<button onclick="event.stopPropagation(); buyLoanOption('${safeName}')" class="pr-link pr-link-gold">Opsiyon ${formatMoney(p.buy_option)}</button>`);
+  if (!isStarter && !p.is_inbound_loan) links.push(`<button onclick="event.stopPropagation(); terminatePlayerContract('${safeName}')" class="pr-link pr-link-red">Feshet</button>`);
+  if (!isStarter && p.overall >= 78 && mins < 90 && (gameState.week || 1) >= 2) links.push(`<button onclick="event.stopPropagation(); confrontCoachAboutPlayer('${safeName}')" class="pr-link pr-link-gold">Hesap Sor</button>`);
 
   card.innerHTML = `
-    <div class="flex items-center gap-2 truncate">
-      ${getFifaPosBadgeHtml(p.pos)}
-      <div class="truncate">
-        <div class="font-bold text-white text-[11px] truncate flex items-center gap-1.5 flex-wrap">
-          <span class="hover:text-amber-300 transition-colors">${p.name}</span>
-          ${idx === 0 && !isGoalkeeper(p.pos) ? '<span class="text-[8px] bg-amber-500 text-black px-1 rounded font-black">KAPTAN</span>' : ''}
-          ${isForeign 
-            ? '<span class="text-[8px] bg-sky-950 text-sky-300 border border-sky-600/40 px-1 py-0.2 rounded font-bold" title="Yabancı Oyuncu">YBN</span>' 
-            : '<span class="text-[8px] bg-rose-950 text-rose-300 border border-rose-600/40 px-1 py-0.2 rounded font-bold" title="Yerli Oyuncu">TR</span>'}
-          ${isYouth ? `<span class="text-[8px] bg-cyan-950 text-cyan-300 border border-cyan-500/50 px-1 py-0.2 rounded font-bold flex items-center gap-0.5" title="Genç Yetenek Potansiyeli"><i data-lucide="sparkles" class="w-2.5 h-2.5"></i> POT: ${potVal}</span>` : ''}
-          <span class="text-[8px] px-1 py-0.2 rounded border font-black ${stamColor} flex items-center gap-0.5" title="Kondisyon / Dayanıklılık"><i data-lucide="zap" class="w-2.5 h-2.5"></i> %${stamVal}</span>
-          ${isInjured ? `<span class="text-[8px] bg-red-950 text-red-300 border border-red-500/60 px-1 py-0.2 rounded font-black animate-pulse flex items-center gap-0.5"><i data-lucide="activity" class="w-2.5 h-2.5"></i> Sakat (${p.injured_weeks} Hf)</span>` : ''}
-          ${isSuspended ? `<span class="text-[8px] bg-amber-950 text-amber-300 border border-amber-500/60 px-1 py-0.2 rounded font-black animate-pulse flex items-center gap-0.5"><i data-lucide="shield-alert" class="w-2.5 h-2.5"></i> Cezalı (${p.suspended_weeks} Hf)</span>` : ''}
-          ${(p.yellow_cards || 0) > 0 ? `<span class="text-[8px] bg-yellow-950 text-yellow-300 border border-yellow-600/40 px-1 py-0.2 rounded font-bold flex items-center gap-0.5"><span class="w-1.5 h-2.5 bg-yellow-400 rounded-[1px] inline-block"></span> ${p.yellow_cards}</span>` : ''}
-          ${p.is_inbound_loan ? `<span class="text-[8px] bg-blue-950 text-blue-300 border border-blue-500/50 px-1 py-0.2 rounded font-bold flex items-center gap-0.5" title="Kiralık Oyuncu"><i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i> Kiralık</span>` : ''}
-        </div>
-        <div class="text-[9px] text-slate-400">
-          ${p.age} yaş • Sözleşme: <strong class="text-amber-300">${p.is_inbound_loan ? '1 Yıl (Kiralık)' : `${contractYears} Yıl`}</strong> • Maaş: ${formatMoney(p.wage)}
-        </div>
-        <div class="text-[9px] text-slate-400 mt-0.5 flex items-center gap-2 flex-wrap">
-          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-2.5 h-2.5 text-slate-400"></i> <strong class="text-white font-mono">${mins}</strong> dk (${matches} m)</span>
-          <span class="flex items-center gap-1"><i data-lucide="award" class="w-2.5 h-2.5 text-amber-400"></i> Ort: <strong class="${(p.avg_rating || 0) >= 7.0 ? 'text-emerald-400' : 'text-amber-400'} font-mono">${avgRtg}</strong></span>
-          ${(p.goals || 0) > 0 ? `<span class="flex items-center gap-1 text-emerald-400 font-mono font-bold"><i data-lucide="target" class="w-2.5 h-2.5"></i> ${p.goals} Gol</span>` : ''}
-          <button onclick="event.stopPropagation(); openPlayerProfileModal(${idx}, ${isStarter})" class="px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-700/60 text-[8px] font-bold hover:bg-indigo-900 transition-all flex items-center gap-0.5" title="Detaylı Oyuncu Kartı & İstatistikler">
-            <i data-lucide="user-check" class="w-2.5 h-2.5"></i> <span>Profil</span>
-          </button>
-          ${p.is_inbound_loan && p.buy_option ? `
-            <button onclick="event.stopPropagation(); buyLoanOption('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-600/50 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Satın Alma Opsiyonunu Kullan">
-              <i data-lucide="dollar-sign" class="w-2.5 h-2.5"></i> <span>Opsiyon (${formatMoney(p.buy_option)})</span>
-            </button>
-          ` : ''}
-          ${!isStarter && !p.is_inbound_loan ? `
-            <button onclick="event.stopPropagation(); terminatePlayerContract('${safeName}')" class="px-1.5 py-0.2 rounded bg-rose-950 text-rose-300 border border-rose-800/60 text-[8px] font-bold hover:bg-rose-900 transition-all flex items-center gap-0.5" title="Sözleşmeyi tazminat ödeyerek feshet">
-              <i data-lucide="trash-2" class="w-2.5 h-2.5 text-rose-400"></i> <span>Feshet</span>
-            </button>
-          ` : ''}
-          ${!isStarter && p.overall >= 78 && mins < 90 && (gameState.week || 1) >= 2 ? `
-            <button onclick="event.stopPropagation(); confrontCoachAboutPlayer('${safeName}')" class="px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-700/60 text-[8px] font-black hover:bg-amber-900 transition-all flex items-center gap-0.5" title="Teknik Direktöre bu oyuncunun neden oynamadığını sor!">
-              <i data-lucide="message-square" class="w-2.5 h-2.5 text-amber-400"></i> <span>Hesap Sor</span>
-            </button>
-          ` : ''}
-        </div>
-      </div>
+    <div class="pr-pos">${posShort}</div>
+    <div class="pr-main">
+      <div class="pr-name">${p.name}${idx === 0 && !isGoalkeeper(p.pos) ? '<span class="pr-cap">C</span>' : ''}</div>
+      <div class="pr-meta">${p.age} yaş · ${p.is_inbound_loan ? '1 yıl (kiralık)' : contractYears + ' yıl'} · ${formatMoney(p.wage)}</div>
+      <div class="pr-meta pr-meta-dim">${mins} dk (${matches} maç) · Ort ${avgRtg}</div>
+      <div class="pr-tags">${tags.join('')}</div>
+      ${links.length ? `<div class="pr-links">${links.join('')}</div>` : ''}
     </div>
-    <div class="text-right flex items-center gap-2 flex-shrink-0">
+    <div class="pr-side">
       ${actionBtn}
-      <div class="text-[9px] text-slate-400 hidden sm:block">
-        Hız:${sk.pac || 75} Şut:${sk.sho || 75}
+      <div class="pr-ovr-wrap" title="Kondisyon %${stamVal}">
+        <div class="pr-ovr" style="background:${ovrColor}">${ovr}</div>
+        <div class="pr-stam"><div style="width:${Math.max(4, Math.min(100, stamVal))}%;background:${stamColor}"></div></div>
       </div>
-      <span class="text-xs font-black ${isStarter ? 'text-amber-400 bg-slate-800 border-slate-700' : 'text-slate-400 bg-slate-900 border-slate-800'} px-2 py-0.5 rounded border">
-        ${p.overall}
-      </span>
     </div>
   `;
   return card;
@@ -3490,18 +3460,15 @@ function renderCalendarView() {
     let cellClasses = "p-1.5 rounded-xl flex flex-col justify-between transition-all cursor-pointer min-h-[50px] relative text-[10px] ";
     
     if (isToday) {
-      cellClasses += "bg-gradient-to-b from-amber-500/20 to-amber-950/25 border border-amber-400/80 shadow-[0_0_12px_rgba(251,191,36,0.18)] ";
+      cellClasses += "bg-[#1f2c48] border-2 border-amber-400 ";
     } else if (isSelected) {
-      cellClasses += "bg-sky-500/20 border border-sky-400/80 shadow-[0_0_12px_rgba(56,189,248,0.18)] ";
+      cellClasses += "bg-[#1b2a45] border-2 border-sky-400 ";
     } else if (fix) {
       cellClasses += "bg-[#18233c] hover:bg-[#202e4f] border border-slate-700/80 ";
     } else {
       cellClasses += "bg-[#101726]/80 hover:bg-[#151f33] border border-slate-800/80 ";
     }
 
-    if (isInTransferWindow && !fix && !isToday && !isSelected) {
-      cellClasses += "border-t-2 border-t-emerald-500/50 ";
-    }
 
     cell.className = cellClasses;
     cell.onclick = () => selectCalendarDate(dStr);
@@ -3535,16 +3502,16 @@ function renderCalendarView() {
       const locLetter = fix.is_home ? "E" : "D";
 
       if (fix.played) {
-        const isWin = fix.result === "win";
-        const isDraw = fix.result === "draw";
-        const badgeColor = isWin ? "bg-emerald-600 text-white" : (isDraw ? "bg-slate-600 text-slate-100" : "bg-rose-600 text-white");
-        bodyHtml = `<div class="mt-1 flex items-center justify-between text-[7.5px] font-black ${badgeColor} px-1.5 py-0.5 rounded truncate shadow-xs">
+        const isWin = fix.my_score > fix.opp_score;
+        const isDraw = fix.my_score === fix.opp_score;
+        const badgeColor = isWin ? "bg-[#16a34a] text-white" : (isDraw ? "bg-[#0284c7] text-white" : "bg-[#dc2626] text-white");
+        bodyHtml = `<div class="cal-result mt-1 flex items-center justify-between text-[8.5px] font-black ${badgeColor} px-1.5 py-0.5 rounded truncate">
           <span>${fix.my_score}-${fix.opp_score}</span>
           <span class="opacity-80">${oppShort}</span>
         </div>`;
       } else {
         const isDerby = fix.opponent_is_big || fix.is_big;
-        const derbyBadgeClass = isDerby ? "bg-amber-500/25 text-amber-300 border-amber-400/60" : "bg-slate-800 text-slate-200 border-slate-700";
+        const derbyBadgeClass = isDerby ? "bg-[#3a2a0c] text-amber-300 border-amber-500" : "bg-[#1a2438] text-slate-300 border-slate-600";
         bodyHtml = `<div class="mt-1 flex items-center justify-between text-[7.5px] font-bold ${derbyBadgeClass} border px-1.5 py-0.5 rounded truncate shadow-xs">
           <span>${locLetter}:${oppShort}</span>
           <i data-lucide="${isDerby ? 'flame' : 'trophy'}" class="w-2.5 h-2.5 ${isDerby ? 'text-amber-400' : 'text-slate-400'} shrink-0"></i>

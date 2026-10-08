@@ -309,7 +309,7 @@ AVAILABLE_SPONSORS = [
         "req_fan": 70,
         "req_rank": 5,
         "desc": "Uluslararası prestij ve Avrupa arenası hedefleyen köklü kulüplerle çalışırlar.",
-        "downside": "İlk 6 sıradan düşülürse sponsorluk ödemeleri dondurulur ve kulübe 6M ₺ ihtar cezası yansıtılır."
+        "downside": "İlk 6 sıradan düşülürse sponsorluk ödemeleri dondurulur ve kulübe 6M € ihtar cezası yansıtılır."
     },
     {
         "id": "sp2",
@@ -344,7 +344,7 @@ AVAILABLE_SPONSORS = [
         "req_stadium": 40000,
         "req_fan": 80,
         "desc": "Global enerji devi; stadyumu devasa bir şölen merkezine dönüştürmek için elit bütçe sunar.",
-        "downside": "Taraftar güveni %65 altına düşerse marka tazminatı olarak 8M ₺ ceza tahsil edilir."
+        "downside": "Taraftar güveni %65 altına düşerse marka tazminatı olarak 8M € ceza tahsil edilir."
     },
     {
         "id": "sp5",
@@ -471,13 +471,13 @@ TACTICAL_SKILLS_DATA = {
 
 # ==================== DİNAMİK SPONSOR TEKLİFLERİ HAVUZU ====================
 COMPANIES_POOL = [
-    {"company": "Türk Hava Yolları", "category": "chest", "category_label": "Göğüs Ana Sponsorluğu", "base": 55_000_000, "cond": "İlk 3 sırada bitirilirse +15M ₺ prim"},
-    {"company": "SOCAR Enerji", "category": "chest", "category_label": "Göğüs Ana Sponsorluğu", "base": 48_000_000, "cond": "Avrupa Kupalarına katılınırsa +12M ₺ prim"},
-    {"company": "Rams Global", "category": "stadium", "category_label": "Stadyum İsim Sponsorluğu", "base": 68_000_000, "cond": "Stadyum doluluğu %75 üzeri olursa +10M ₺ prim"},
-    {"company": "Beko Beyaz Eşya", "category": "back", "category_label": "Forma Sırt Sponsorluğu", "base": 34_000_000, "cond": "Her derbi galibiyetinde +1.5M ₺ prim"},
-    {"company": "Trendyol", "category": "back", "category_label": "Forma Sırt Sponsorluğu", "base": 36_000_000, "cond": "İlk 4 sırada bitirilirse +8M ₺ prim"},
+    {"company": "Türk Hava Yolları", "category": "chest", "category_label": "Göğüs Ana Sponsorluğu", "base": 55_000_000, "cond": "İlk 3 sırada bitirilirse +15M € prim"},
+    {"company": "SOCAR Enerji", "category": "chest", "category_label": "Göğüs Ana Sponsorluğu", "base": 48_000_000, "cond": "Avrupa Kupalarına katılınırsa +12M € prim"},
+    {"company": "Rams Global", "category": "stadium", "category_label": "Stadyum İsim Sponsorluğu", "base": 68_000_000, "cond": "Stadyum doluluğu %75 üzeri olursa +10M € prim"},
+    {"company": "Beko Beyaz Eşya", "category": "back", "category_label": "Forma Sırt Sponsorluğu", "base": 34_000_000, "cond": "Her derbi galibiyetinde +1.5M € prim"},
+    {"company": "Trendyol", "category": "back", "category_label": "Forma Sırt Sponsorluğu", "base": 36_000_000, "cond": "İlk 4 sırada bitirilirse +8M € prim"},
     {"company": "Getir & BiTaksi", "category": "arm", "category_label": "Forma Kol & Şort Sponsorluğu", "base": 24_000_000, "cond": "Mali disiplin korunursa sözleşme uzatılır"},
-    {"company": "Puma Spor", "category": "arm", "category_label": "Forma Kol & Şort Sponsorluğu", "base": 22_000_000, "cond": "Forma satışları 100K adedi geçerse +5M ₺ prim"},
+    {"company": "Puma Spor", "category": "arm", "category_label": "Forma Kol & Şort Sponsorluğu", "base": 22_000_000, "cond": "Forma satışları 100K adedi geçerse +5M € prim"},
     {"company": "Medicana Sağlık", "category": "health", "category_label": "Resmi Sağlık Sponsorluğu", "base": 18_000_000, "cond": "Sakatlık tedavileri ve sağlık kontrolleri ücretsiz"}
 ]
 
@@ -1493,11 +1493,11 @@ def default_career_state(chosen_team_id: str = "trabzonspor", president_name: st
         "election_result": None,
         "team_power": team["power"],
         "budget": team["budget"],
-        "debt": 500_000_000, # Eski başkan 500M ₺ borç takıp kaçtı!
+        "debt": 500_000_000, # Eski başkan 500M € borç takıp kaçtı!
         "story": {
             "previous_debt": 500_000_000,
             "debt_paid": 0,
-            "story_title": "500M ₺ Ağır Miras"
+            "story_title": "500M € Ağır Miras"
         },
         "fan_trust": team["fan_base"],
         "board_trust": 78,
@@ -2069,7 +2069,7 @@ def api_match_half1(req: Half1Request):
         events.append({
             "minute": 1,
             "type": "coach_action",
-            "text": f"⚠️ TFF KURAL İHLALİ: İlk 11'de {foreign_count} yabancı yer aldı (Limit: 8)! TFF 4.000.000 ₺ ceza kesti."
+            "text": f"⚠️ TFF KURAL İHLALİ: İlk 11'de {foreign_count} yabancı yer aldı (Limit: 8)! TFF 4.000.000 € ceza kesti."
         })
 
     outfield_starters = [p for p in healthy_squad[:11] if not is_gk(p)]
@@ -2247,7 +2247,7 @@ def api_match_half2(req: HalftimeActionRequest):
         bonus_cost = 15_000_000
         if state["budget"] >= bonus_cost:
             state["budget"] -= bonus_cost
-            halftime_msg = "💰 DEVRE ARASI KESE AÇILDI: Başkan soyunma odasında adam başı 1.000.000 ₺ galibiyet primi vadetti!"
+            halftime_msg = "💰 DEVRE ARASI KESE AÇILDI: Başkan soyunma odasında adam başı 1.000.000 € galibiyet primi vadetti!"
             my_pwr += 12
         else:
             halftime_msg = "⚠️ Kasada para olmadığı için prim vaadi verilemedi, kuru gaz verildi."
@@ -2714,7 +2714,7 @@ def api_match_half2(req: HalftimeActionRequest):
             state["board_trust"] = max(10, state["board_trust"] - 25)
             ug["under_investigation"] = True
             ug["caught_count"] = ug.get("caught_count", 0) + 1
-            state["news"].insert(0, f"🚨 MASAK & POLİS BASKINI: Yasadışı bahis ve şike ağı deşifre oldu! TFF kulübün 3 PUANINI SİLDİ, 25M ₺ para cezası kesildi!")
+            state["news"].insert(0, f"🚨 MASAK & POLİS BASKINI: Yasadışı bahis ve şike ağı deşifre oldu! TFF kulübün 3 PUANINI SİLDİ, 25M € para cezası kesildi!")
 
         ug["last_bet"] = {
             "won": is_won,
@@ -2831,7 +2831,7 @@ def api_match_half2(req: HalftimeActionRequest):
             if p_type == "mall":
                 state["budget"] += 150_000_000
                 state["fan_trust"] = min(100, state.get("fan_trust", 50) + 10)
-                state["news"].insert(0, f"🏢 MÜJDE: {p_name} projesi tamamlandı! Kulüp kasasına 150M ₺ sıcak nakit girdi!")
+                state["news"].insert(0, f"🏢 MÜJDE: {p_name} projesi tamamlandı! Kulüp kasasına 150M € sıcak nakit girdi!")
             elif p_type == "academy":
                 state["youth_facility"] = state.get("youth_facility", 1) + 2
                 upg = state.setdefault("club_upgrades", {})
@@ -2900,7 +2900,7 @@ def api_match_half2(req: HalftimeActionRequest):
             state["budget"] += 150_000_000
             state["fan_trust"] = 100
             state["board_trust"] = 100
-            state["news"].insert(0, f"ŞAMPİYON {state['club_name']}! KUPA MÜZEMİZDE! 150M ₺ ÖDÜL KAZANILDI!")
+            state["news"].insert(0, f"ŞAMPİYON {state['club_name']}! KUPA MÜZEMİZDE! 150M € ÖDÜL KAZANILDI!")
         elif final_rank <= 4:
             state["season_result"] = "europe"
             state["budget"] += 60_000_000
@@ -3360,7 +3360,7 @@ class TakeLoanRequest(BaseModel):
 def api_take_loan(req: TakeLoanRequest):
     state = get_state()
     if req.amount not in [25_000_000, 50_000_000, 100_000_000]:
-        raise HTTPException(status_code=400, detail="Geçersiz kredi tutarı! Seçenekler: 25M, 50M veya 100M ₺")
+        raise HTTPException(status_code=400, detail="Geçersiz kredi tutarı! Seçenekler: 25M, 50M veya 100M €")
     
     cur_debt = state.get("debt", 0)
     if cur_debt > 650_000_000:
@@ -3629,7 +3629,7 @@ def api_negotiate_club(req: ClubBidRequest):
         counter_offer = int(player_val * 1.1)
         return {
             "status": "club_rejected",
-            "message": f"{target_team['name']} Başkanı: '{req.bid_fee:,} ₺ çok düşük bir teklif! {player['name']} için en az {counter_offer:,} ₺ isteriz.'",
+            "message": f"{target_team['name']} Başkanı: '{format_money_val(req.bid_fee)} çok düşük bir teklif! {player['name']} için en az {format_money_val(counter_offer)} isteriz.'",
             "counter_fee": counter_offer
         }
 
@@ -3653,7 +3653,7 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
 
     total_upfront = req.bid_fee + req.sign_bonus
     if state["budget"] < total_upfront:
-        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Gereken anlık nakit: {total_upfront:,} ₺")
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Gereken anlık nakit: {format_money_val(total_upfront)}")
 
     # Oyuncuyu bul (Diğer takımlardan, serbestlerden veya dünya yıldızlarından)
     found_player = None
@@ -3708,7 +3708,7 @@ def api_sign_negotiated_player(req: PlayerContractRequest):
     # Oyuncu kabul kriteri: Teklif edilen maaş
     min_wage = int(found_player.get("salary", found_player.get("wage", 10_000_000)))
     if req.offered_wage < int(min_wage * 0.9):
-        raise HTTPException(status_code=400, detail=f"Oyuncu teklifi reddetti: 'Bu maaş seviyesi kariyer planlarıma uymuyor (En az {min_wage:,} ₺ bekliyor)!'")
+        raise HTTPException(status_code=400, detail=f"Oyuncu teklifi reddetti: 'Bu maaş seviyesi kariyer planlarıma uymuyor (En az {format_money_val(min_wage)} bekliyor)!'")
 
     state["budget"] -= total_upfront
     player_data = {
@@ -3833,7 +3833,7 @@ def api_sign_loan_player(req: SignLoanPlayerRequest):
         raise HTTPException(status_code=400, detail=f"'{req.player_name}' zaten kadronuzda yer alıyor!")
 
     if state["budget"] < req.loan_fee:
-        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Kiralama bedeli: {req.loan_fee:,} ₺")
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Kiralama bedeli: {format_money_val(req.loan_fee)}")
 
     target_player = None
     target_club_name = req.club_name or "Dış Kulüp"
@@ -3905,7 +3905,7 @@ def api_buy_loan_option(req: BuyLoanOptionRequest):
     if not buy_opt or buy_opt <= 0:
         raise HTTPException(status_code=400, detail="Bu oyuncunun satın alma opsiyonu bulunmuyor!")
     if state["budget"] < buy_opt:
-        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Opsiyon bedeli: {buy_opt:,} ₺")
+        raise HTTPException(status_code=400, detail=f"Bütçeniz yetersiz! Opsiyon bedeli: {format_money_val(buy_opt)}")
 
     state["budget"] -= buy_opt
     player["is_inbound_loan"] = False
@@ -5022,7 +5022,7 @@ def api_scout_fire():
         raise HTTPException(status_code=400, detail="Mevcut bir scout şefi zaten bulunmuyor!")
     tazminat = 2_000_000
     if state["budget"] < tazminat:
-        raise HTTPException(status_code=400, detail="Scout ekibini kovmak için 2.000.000 ₺ fesih tazminatı kasada bulunmalıdır!")
+        raise HTTPException(status_code=400, detail="Scout ekibini kovmak için 2.000.000 € fesih tazminatı kasada bulunmalıdır!")
     state["budget"] -= tazminat
     old_name = scout.get("name", "Scout Şefi")
     vacant = {
@@ -5036,7 +5036,7 @@ def api_scout_fire():
     }
     state["scout"] = vacant
     state["club_scout"] = vacant
-    msg = f"🚪 Scout Şefi {old_name} ile yollar ayrıldı (2M ₺ fesih tazminatı ödendi). Yeni bir scout şefi istihdam edebilirsiniz."
+    msg = f"🚪 Scout Şefi {old_name} ile yollar ayrıldı (2M € fesih tazminatı ödendi). Yeni bir scout şefi istihdam edebilirsiniz."
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
@@ -5074,13 +5074,13 @@ def api_underground_deal(req: UndergroundDealRequest):
     if req.deal_type == "referee":
         cost = 18_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Yetersiz bütçe (18M ₺)!")
+            raise HTTPException(status_code=400, detail="Yetersiz bütçe (18M €)!")
         state["budget"] -= cost
         ug["active_deal"] = {"type": "referee", "name": "Hakem Heyetini Bağlama", "success_rate": 88, "risk": 18}
     elif req.deal_type == "opponent_gk":
         cost = 26_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Yetersiz bütçe (26M ₺)!")
+            raise HTTPException(status_code=400, detail="Yetersiz bütçe (26M €)!")
         state["budget"] -= cost
         ug["active_deal"] = {"type": "opponent_gk", "name": "Rakip Kaleciye Çanta Para", "success_rate": 94, "risk": 28}
 
@@ -5205,7 +5205,7 @@ def api_underground_bet(req: UndergroundBetRequest):
         raise HTTPException(status_code=400, detail="Zaten sıradaki maç için aktif bir yasadışı kuponunuz var!")
 
     if req.amount < 5_000_000:
-        raise HTTPException(status_code=400, detail="Minimum yasadışı bahis tutarı 5M ₺'dir!")
+        raise HTTPException(status_code=400, detail="Minimum yasadışı bahis tutarı 5M €'dir!")
     if state["budget"] < req.amount:
         raise HTTPException(status_code=400, detail="Yetersiz bütçe! Kasada bu kadar nakit para yok.")
 
@@ -5600,7 +5600,7 @@ def api_recall_loan(req: RecallLoanRequest):
     state["team_power"] = round(sum(p["overall"] for p in state["squad"][:11]) / 11)
     state["my_radar"] = calculate_team_radar(state["squad"])
 
-    msg = f"🔙 GERİ ÇAĞIRMA: {lp['name']}, 4M ₺ fesih bedeli ödenerek {lp.get('loan_club', 'Kiralık Kulübü')} kulübünden geri çağrıldı ve as kadroya katıldı (+{lp.get('growth', 0)} OVR gelişim)!"
+    msg = f"🔙 GERİ ÇAĞIRMA: {lp['name']}, 4M € fesih bedeli ödenerek {lp.get('loan_club', 'Kiralık Kulübü')} kulübünden geri çağrıldı ve as kadroya katıldı (+{lp.get('growth', 0)} OVR gelişim)!"
     state["news"].insert(0, msg)
     save_state(state)
     return {"message": msg, "state": state}
@@ -5842,19 +5842,19 @@ def api_realestate_start(req: RealEstateProjRequest):
     if req.project_type == "mall":
         cost = 60_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Yetersiz bütçe (60M ₺)!")
+            raise HTTPException(status_code=400, detail="Yetersiz bütçe (60M €)!")
         state["budget"] -= cost
-        re["active_project"] = {"name": "Kulüp Rezidans & AVM", "type": "mall", "weeks_left": 4, "benefit": "+150M ₺ Sıcak Para"}
+        re["active_project"] = {"name": "Kulüp Rezidans & AVM", "type": "mall", "weeks_left": 4, "benefit": "+150M € Sıcak Para"}
     elif req.project_type == "academy":
         cost = 40_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Yetersiz bütçe (40M ₺)!")
+            raise HTTPException(status_code=400, detail="Yetersiz bütçe (40M €)!")
         state["budget"] -= cost
         re["active_project"] = {"name": "Futbol Altyapı Kampüsü", "type": "academy", "weeks_left": 3, "benefit": "+5 Takım Gücü"}
     elif req.project_type == "stadium":
         cost = 85_000_000
         if state["budget"] < cost:
-            raise HTTPException(status_code=400, detail="Yetersiz bütçe (85M ₺)!")
+            raise HTTPException(status_code=400, detail="Yetersiz bütçe (85M €)!")
         state["budget"] -= cost
         re["active_project"] = {"name": "Mega Arena Genişletme", "type": "stadium", "weeks_left": 5, "benefit": "+20.000 Kapasite"}
 
@@ -6133,7 +6133,7 @@ def api_coach_confront_playing_time(req: CoachConfrontPlayingTimeRequest):
         "state": state
     }
 
-# ==================== GÜNLÜK GİRİŞ ÖDÜLÜ (5.000.000 ₺) ====================
+# ==================== GÜNLÜK GİRİŞ ÖDÜLÜ (5.000.000 €) ====================
 @app.post("/api/daily-reward/claim")
 def api_claim_daily_reward():
     state = get_state()
@@ -6162,7 +6162,7 @@ FACILITY_UPGRADE_CONFIG = {
         "title": "Stadyum & VIP Loca Kapasitesi",
         "costs": [0, 25_000_000, 45_000_000, 75_000_000, 120_000_000],
         "cap_boost": [0, 3000, 5000, 8000, 12000],
-        "desc": "Bilet başına +50 ₺ ek gelir ve tribün genişletmesi."
+        "desc": "Bilet başına +50 € ek gelir ve tribün genişletmesi."
     },
     "transit": {
         "title": "Şehir Raylı Sistem & Maç Günü Ulaşımı",
