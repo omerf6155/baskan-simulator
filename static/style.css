@@ -1263,3 +1263,11 @@ button svg, button i[data-lucide] { flex-shrink: 0; }
 .pr-stam { height: 4px; background: #263247; border-radius: 0 0 4px 4px; overflow: hidden; }
 .pr-stam > div { height: 100%; }
 .player-row.is-bench .pr-ovr { opacity: .85; }
+
+.player-row { padding: 7px 9px 7px 0; margin-bottom: 5px; }
+.pr-name { font-size: 13.5px; }
+.pr-meta { font-size: 11px; margin-top: 2px; }
+.pr-tags { margin-top: 3px; font-size: 10px; }
+.pr-swap { width: 32px; height: 32px; }
+.pr-ovr { height: 34px; font-size: 18px; }
+.pr-ovr-wrap { width: 38px; }

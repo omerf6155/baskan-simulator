@@ -1442,7 +1442,7 @@ function renderSquadPlayerCard(p, idx, isStarter) {
     <div class="pr-main">
       <div class="pr-name">${p.name}${idx === 0 && !isGoalkeeper(p.pos) ? '<span class="pr-cap">C</span>' : ''}</div>
       <div class="pr-meta">${p.age} yaş · ${p.is_inbound_loan ? '1 yıl (kiralık)' : contractYears + ' yıl'} · ${formatMoney(p.wage)}</div>
-      <div class="pr-meta pr-meta-dim">${mins} dk (${matches} maç) · Ort ${avgRtg}</div>
+      ${mins > 0 ? `<div class="pr-meta pr-meta-dim">${mins} dk (${matches} maç) · Ort ${avgRtg}</div>` : ''}
       <div class="pr-tags">${tags.join('')}</div>
       ${links.length ? `<div class="pr-links">${links.join('')}</div>` : ''}
     </div>
@@ -3504,17 +3504,17 @@ function renderCalendarView() {
       if (fix.played) {
         const isWin = fix.my_score > fix.opp_score;
         const isDraw = fix.my_score === fix.opp_score;
-        const badgeColor = isWin ? "bg-[#16a34a] text-white" : (isDraw ? "bg-[#0284c7] text-white" : "bg-[#dc2626] text-white");
-        bodyHtml = `<div class="cal-result mt-1 flex items-center justify-between text-[8.5px] font-black ${badgeColor} px-1.5 py-0.5 rounded truncate">
-          <span>${fix.my_score}-${fix.opp_score}</span>
-          <span class="opacity-80">${oppShort}</span>
+        const badgeColor = isWin ? "bg-[#16a34a] text-white" : (isDraw ? "bg-[#64748b] text-white" : "bg-[#dc2626] text-white");
+        bodyHtml = `<div class="cal-result mt-1 flex flex-col items-center leading-tight ${badgeColor} py-0.5 rounded overflow-hidden">
+          <span class="text-[11px] font-black">${fix.my_score}-${fix.opp_score}</span>
+          <span class="text-[7px] font-bold opacity-90 uppercase">${oppShort}</span>
         </div>`;
       } else {
         const isDerby = fix.opponent_is_big || fix.is_big;
         const derbyBadgeClass = isDerby ? "bg-[#3a2a0c] text-amber-300 border-amber-500" : "bg-[#1a2438] text-slate-300 border-slate-600";
-        bodyHtml = `<div class="mt-1 flex items-center justify-between text-[7.5px] font-bold ${derbyBadgeClass} border px-1.5 py-0.5 rounded truncate shadow-xs">
+        bodyHtml = `<div class="mt-1 flex items-center justify-between text-[8px] font-bold ${derbyBadgeClass} border px-1.5 py-0.5 rounded truncate shadow-xs">
           <span>${locLetter}:${oppShort}</span>
-          <i data-lucide="${isDerby ? 'flame' : 'trophy'}" class="w-2.5 h-2.5 ${isDerby ? 'text-amber-400' : 'text-slate-400'} shrink-0"></i>
+          ${isDerby ? '<i data-lucide="flame" class="w-2.5 h-2.5 text-amber-400 shrink-0"></i>' : ''}
         </div>`;
       }
     }
