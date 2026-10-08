@@ -3051,24 +3051,27 @@ function openSecretaryEventModal(eventObj) {
       }
       if (effects.fan_trust) {
         const isPos = effects.fan_trust > 0;
-        effBadges.push(`<span class="${isPos ? 'text-emerald-400' : 'text-rose-400'}">Taraftar ${isPos ? '+' : ''}${effects.fan_trust}%</span>`);
+        effBadges.push(`<span class="${isPos ? 'text-emerald-400' : 'text-rose-400'} font-medium">Taraftar ${isPos ? '+' : ''}${effects.fan_trust}%</span>`);
       }
       if (effects.political_power) {
         const isPos = effects.political_power > 0;
-        effBadges.push(`<span class="${isPos ? 'text-blue-400' : 'text-rose-400'}">Nüfuz ${isPos ? '+' : ''}${effects.political_power}%</span>`);
+        effBadges.push(`<span class="${isPos ? 'text-sky-400' : 'text-rose-400'} font-medium">Nüfuz ${isPos ? '+' : ''}${effects.political_power}%</span>`);
       }
       if (effects.media_trust) {
         const isPos = effects.media_trust > 0;
-        effBadges.push(`<span class="${isPos ? 'text-purple-400' : 'text-rose-400'}">Basın ${isPos ? '+' : ''}${effects.media_trust}%</span>`);
+        effBadges.push(`<span class="${isPos ? 'text-purple-400' : 'text-rose-400'} font-medium">Basın ${isPos ? '+' : ''}${effects.media_trust}%</span>`);
       }
 
-      const effHtml = effBadges.length > 0 ? `<div class="flex items-center gap-2 mt-1 text-[9.5px] font-bold">${effBadges.join(" • ")}</div>` : '';
+      const effHtml = effBadges.length > 0 ? `<div class="flex flex-wrap items-center gap-2 pt-0.5 text-[10px] font-semibold">${effBadges.join('<span class="text-slate-600 font-normal">•</span>')}</div>` : '';
+      const descHtml = opt.desc ? `<p class="text-[11px] text-slate-400 leading-snug font-normal mt-0.5">${opt.desc}</p>` : '';
 
+      btn.className = "w-full p-3 rounded-xl bg-[#0f172a] border border-slate-800 hover:border-amber-500/60 hover:bg-[#162035] text-left transition-all group cursor-pointer shadow-sm active:scale-[0.99] space-y-1";
       btn.innerHTML = `
-        <div class="flex items-start justify-between gap-2">
+        <div class="flex items-center justify-between gap-2">
           <span class="text-xs font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">${opt.text}</span>
-          <span class="text-[10px] font-bold text-slate-300 bg-slate-800 border border-slate-700 px-2 py-0.5 rounded shrink-0">Seçenek ${idx + 1}</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-transform shrink-0"></i>
         </div>
+        ${descHtml}
         ${effHtml}
       `;
       optContainer.appendChild(btn);
