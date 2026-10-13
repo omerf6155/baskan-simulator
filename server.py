@@ -2909,7 +2909,8 @@ def api_match_half2(req: HalftimeActionRequest):
             state["season_result"] = "mid"
 
     # Transfer Pencereleri Takvim Yönetimi
-    tw_details = get_transfer_window_details(state.get("current_date", "2026-08-16"), season)
+    cur_season = state.get("season", 1)
+    tw_details = get_transfer_window_details(state.get("current_date", "2026-08-16"), cur_season)
     prev_tw_open = state.get("transfer_window_open", False)
     state["transfer_window_open"] = tw_details["is_open"]
     state["transfer_window"] = tw_details
