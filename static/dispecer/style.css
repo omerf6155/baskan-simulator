@@ -673,3 +673,22 @@ body {
   color: var(--danger-text);
   border-color: var(--danger-border);
 }
+
+.retry-q-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+.retry-q-btn:hover {
+  background: var(--bg-accent);
+  border-color: var(--text-main);
+}

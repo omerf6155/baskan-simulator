@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let userProgress = JSON.parse(localStorage.getItem("dispecer_progress") || "{}");
   // Structure: { [questionId]: { answered: true, selectedText: "...", isCorrect: true } }
 
-  // Question Shuffled Layouts in LocalStorage (so options stay stable until reset/shuffle)
+  // Question Shuffled Layouts in LocalStorage
   let optionLayouts = JSON.parse(localStorage.getItem("dispecer_option_layouts") || "{}");
   // Structure: { [questionId]: [ { prefix: "A", text: "...", isCorrect: bool }, ... ] }
 
@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cardCategory = document.getElementById("cardCategory");
   const cardDifficulty = document.getElementById("cardDifficulty");
   const cardSlideRef = document.getElementById("cardSlideRef");
+  const btnRetrySingle = document.getElementById("btnRetrySingle");
   const questionText = document.getElementById("questionText");
   const optionsGrid = document.getElementById("optionsGrid");
 
@@ -75,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnPrev = document.getElementById("btnPrev");
   const btnNext = document.getElementById("btnNext");
   const btnRandom = document.getElementById("btnRandom");
-  const btnNextEmpty = document.getElementById("btnNextEmpty");
+  const btnRetryMode = document.getElementById("btnRetryMode");
 
   // Grid Map Modal
   const btnGridModal = document.getElementById("btnGridModal");
@@ -103,27 +104,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return arr;
   }
 
-  // Strip prefix like "A) ", "B) " to get pure text
   function cleanOptionText(opt) {
     return opt.replace(/^[A-E]\)\s*/, "").trim();
   }
 
-  // Prepare or Retrieve Shuffled Options for Question
   function getPreparedOptions(q, forceShuffle = false) {
     if (!forceShuffle && optionLayouts[q.id]) {
       return optionLayouts[q.id];
     }
 
-    // Build items with pure text and correct flag
     const items = q.options.map((opt, idx) => ({
       rawText: cleanOptionText(opt),
       isCorrect: idx === q.answer
     }));
 
-    // Shuffle options
     const shuffledItems = shuffleArray(items);
-
-    // Re-assign A), B), C), D), E) prefixes
     const prefixes = ["A", "B", "C", "D", "E"];
     const layout = shuffledItems.map((item, idx) => ({
       prefix: prefixes[idx],
@@ -137,10 +132,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return layout;
   }
 
-  // Shuffle all questions options & re-shuffle wrong questions order
+  // Shuffle entire test
   function shuffleEntireTest(onlyWrongs = false) {
     if (onlyWrongs) {
-      // Re-shuffle options for wrong questions
       rawQuestions.forEach(q => {
         const prog = userProgress[q.id];
         if (prog && prog.answered && !prog.isCorrect) {
@@ -148,7 +142,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     } else {
-      // Re-shuffle all 100 questions options
       rawQuestions.forEach(q => {
         getPreparedOptions(q, true);
       });
@@ -158,7 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Init
   function init() {
     allQuestions = [...rawQuestions];
-    // Ensure all questions have layouts
     allQuestions.forEach(q => getPreparedOptions(q, false));
 
     updateBadgesAndStats();
@@ -186,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return true;
     });
 
-    // If user filtered "WRONG", automatically shuffle their question order and their options
     if (currentStatusFilter === "WRONG") {
       shuffleEntireTest(true);
       list = shuffleArray(list);
@@ -196,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentStatusFilter === "WRONG") {
         alert("Süper! Yanlış yaptığın soru bulunmuyor.");
       } else if (currentStatusFilter === "EMPTY") {
-        alert("Tüm soruları tamamladın! Testi yeniden karıştırmak için 'İlerlemeyi Sıfırla' diyebilirsin.");
+        alert("Tüm soruları tamamladın!");
       }
       currentStatusFilter = "ALL";
       updateStatusBtnsActive();
@@ -242,9 +233,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const prog = userProgress[q.id];
     const isAnswered = prog && prog.answered;
 
+    // Retry Button Visibility
+    if (btnRetrySingle) {
+      btnRetrySingle.style.display = isAnswered ? "inline-flex" : "none";
+    }
+
     // Options
     optionsGrid.innerHTML = "";
-    opts.forEach((optItem, optIdx) => {
+    opts.forEach((optItem) => {
       const btn = document.createElement("button");
       btn.className = "option-btn";
       btn.innerHTML = `<span>${optItem.display}</span>`;
@@ -276,6 +272,15 @@ document.addEventListener("DOMContentLoaded", () => {
     btnPrev.disabled = currentIndex === 0;
     btnNext.textContent = currentIndex === totalCount - 1 ? "Bitti 🏁" : "Sonraki →";
 
+    // Update Retry Mode button label depending on current filter
+    if (btnRetryMode) {
+      if (currentStatusFilter === "WRONG") {
+        btnRetryMode.textContent = "🔄 Bu Yanlışları Yeniden Çöz";
+      } else {
+        btnRetryMode.textContent = "⚡ İlk Boşa Git";
+      }
+    }
+
     // Highlight active in grid
     highlightActiveInGrid(q.id);
   }
@@ -299,6 +304,51 @@ document.addEventListener("DOMContentLoaded", () => {
     if (navigator.vibrate) {
       navigator.vibrate(isCorrect ? 30 : [50, 50, 50]);
     }
+  }
+
+  // Clear single question state so user can re-answer it immediately
+  function resetCurrentQuestionForRetry() {
+    const q = filteredQuestions[currentIndex];
+    if (!q) return;
+
+    delete userProgress[q.id];
+    localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
+
+    // Re-shuffle this question's options so user tries again cleanly
+    getPreparedOptions(q, true);
+
+    updateBadgesAndStats();
+    buildGridMap();
+    renderQuestion();
+  }
+
+  // Clear all wrong questions progress so user can re-solve them
+  function resetAllWrongQuestionsForRetry() {
+    let wrongCount = 0;
+    allQuestions.forEach(q => {
+      const prog = userProgress[q.id];
+      if (prog && prog.answered && !prog.isCorrect) {
+        delete userProgress[q.id];
+        getPreparedOptions(q, true); // re-shuffle options
+        wrongCount++;
+      }
+    });
+
+    if (wrongCount === 0) {
+      alert("Yeniden çözülecek yanlış soru bulunmuyor!");
+      return;
+    }
+
+    localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
+    currentStatusFilter = "ALL";
+    updateStatusBtnsActive();
+    
+    // Switch to empty to immediately solve those cleared questions
+    currentStatusFilter = "EMPTY";
+    updateStatusBtnsActive();
+    applyCombinedFilters();
+
+    alert(`${wrongCount} adet yanlış sorun temizlendi ve şıkları karıştırıldı. Şimdi hepsini tekrar çözebilirsin!`);
   }
 
   function showExplanation(isCorrect, text) {
@@ -393,21 +443,20 @@ document.addEventListener("DOMContentLoaded", () => {
     badgeCorrectCount.textContent = correctCount;
   }
 
-  // Reset and Shuffle All (Testi tamamlayıp veya sıfırlayınca)
+  // Reset and Shuffle All
   function handleResetAndReshuffleAll() {
     userProgress = {};
     optionLayouts = {};
     localStorage.removeItem("dispecer_progress");
     localStorage.removeItem("dispecer_option_layouts");
 
-    // Re-shuffle all options dynamically
     shuffleEntireTest(false);
 
     updateBadgesAndStats();
     buildGridMap();
     applyCombinedFilters();
     scoreModal.style.display = "none";
-    alert("Test sıfırlandı ve tüm 100 sorunun şıkları rastgele yeniden karıştırıldı! Kas hafızası sıfırlandı.");
+    alert("Test sıfırlandı ve tüm 100 sorunun şıkları rastgele yeniden karıştırıldı!");
   }
 
   // Setup Listeners
@@ -447,7 +496,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    btnNextEmpty.addEventListener("click", jumpToNextEmpty);
+    // Retry Buttons
+    if (btnRetrySingle) {
+      btnRetrySingle.addEventListener("click", () => {
+        resetCurrentQuestionForRetry();
+      });
+    }
+
+    if (btnRetryMode) {
+      btnRetryMode.addEventListener("click", () => {
+        if (currentStatusFilter === "WRONG") {
+          resetAllWrongQuestionsForRetry();
+        } else {
+          jumpToNextEmpty();
+        }
+      });
+    }
 
     btnRandom.addEventListener("click", () => {
       currentIndex = Math.floor(Math.random() * filteredQuestions.length);
