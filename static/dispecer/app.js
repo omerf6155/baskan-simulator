@@ -149,7 +149,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Init
-  function init() {
+  async function init() {
+    if (!rawQuestions || rawQuestions.length < 150) {
+      try {
+        const res = await fetch(`questions.json?nocache=${Date.now()}`);
+        if (res.ok) {
+          const freshData = await res.json();
+          if (Array.isArray(freshData) && freshData.length >= 150) {
+            rawQuestions = freshData;
+          }
+        }
+      } catch (err) {
+        console.warn("Could not fetch fresh questions:", err);
+      }
+    }
+
     allQuestions = [...rawQuestions];
     allQuestions.forEach(q => getPreparedOptions(q, false));
 

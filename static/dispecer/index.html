@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=150.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,11 +44,11 @@
     <div class="status-mode-bar">
       <button class="status-btn active" data-status-filter="ALL" id="btnFilterAll">
         <span>Tümü</span>
-        <span class="count-pill" id="badgeAllCount">100</span>
+        <span class="count-pill" id="badgeAllCount">150</span>
       </button>
       <button class="status-btn unattempted-btn" data-status-filter="EMPTY" id="btnFilterEmpty">
         <span>Boşlar</span>
-        <span class="count-pill" id="badgeEmptyCount">100</span>
+        <span class="count-pill" id="badgeEmptyCount">150</span>
       </button>
       <button class="status-btn wrong-btn" data-status-filter="WRONG" id="btnFilterWrong">
         <span>Yanlışlarım</span>
@@ -78,7 +78,7 @@
       </div>
       <div class="progress-label-wrap">
         <div class="q-nav-trigger" id="qNavTrigger" title="Soru Numarasına Tıkla ve Seç">
-          <span id="currentQuestionNumber">Soru 1 / 100</span>
+          <span id="currentQuestionNumber">Soru 1 / 150</span>
           <span class="dropdown-arrow">▼</span>
         </div>
         <span id="progressPercent">0%</span>
@@ -168,7 +168,7 @@
     </div>
   </div>
 
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <script src="questions.js?v=150.2"></script>
+  <script src="app.js?v=150.2"></script>
 </body>
 </html>
