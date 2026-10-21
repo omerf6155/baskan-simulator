@@ -10,6 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
   let userProgress = JSON.parse(localStorage.getItem("dispecer_progress") || "{}");
   // Structure: { [questionId]: { answered: true, selected: 1, isCorrect: true } }
 
+  // Theme State
+  let currentTheme = localStorage.getItem("dispecer_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+  const themeIcon = document.getElementById("themeIcon");
+  updateThemeIcon();
+
+  function updateThemeIcon() {
+    if (themeIcon) {
+      themeIcon.textContent = currentTheme === "dark" ? "☀️" : "🌙";
+    }
+  }
+
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", () => {
+      currentTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", currentTheme);
+      localStorage.setItem("dispecer_theme", currentTheme);
+      updateThemeIcon();
+    });
+  }
+
   // DOM Elements
   const headerCorrect = document.getElementById("headerCorrectCount");
   const headerTotal = document.getElementById("headerTotalSeen");
@@ -97,14 +119,14 @@ document.addEventListener("DOMContentLoaded", () => {
     currentQNum.textContent = `Soru ${currentIndex + 1} / ${filteredQuestions.length}`;
     progressPercent.textContent = `%${progress}`;
 
-    // Question
+    // Question Text (Pre-formatted line breaks)
     questionText.textContent = q.question;
 
     // Check if previously answered
     const prog = userProgress[q.id];
     const isAnswered = prog && prog.answered;
 
-    // Options
+    // Options (Clean white high contrast buttons)
     optionsGrid.innerHTML = "";
     q.options.forEach((optText, optIdx) => {
       const btn = document.createElement("button");
@@ -155,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateWrongPillCount();
     renderQuestion();
 
-    // Haptic feedback if supported on mobile
     if (navigator.vibrate) {
       navigator.vibrate(isCorrect ? 30 : [50, 50, 50]);
     }
