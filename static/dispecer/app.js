@@ -213,7 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const hardPool = getHardQuestionsPool();
 
-    // Check if active exam exists and valid
     if (forceNew || !activeExam || !activeExam.questionIds || activeExam.questionIds.length !== 20) {
       startNewExamBatch(false);
     } else {
@@ -234,15 +233,12 @@ document.addEventListener("DOMContentLoaded", () => {
       unserved = [...hardPool];
     }
 
-    // Pick 20 questions
     const shuffledPool = shuffleArray(unserved);
     const picked20 = shuffledPool.slice(0, 20);
     const pickedIds = picked20.map(q => q.id);
 
-    // Shuffle options for these 20
     picked20.forEach(q => getPreparedOptions(q, true));
 
-    // Update served IDs
     examServedIds.push(...pickedIds);
     localStorage.setItem("dispecer_exam_served_ids", JSON.stringify(examServedIds));
 
@@ -253,8 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
       questionIds: pickedIds,
       answers: {},
       isFinished: false,
-      instantFeedback: chkInstantFeedback ? chkInstantFeedback.checked : false
+      instantFeedback: true // Default ON for clear immediate feedback
     };
+    if (chkInstantFeedback) chkInstantFeedback.checked = true;
     localStorage.setItem("dispecer_active_exam", JSON.stringify(activeExam));
 
     filteredQuestions = picked20;
@@ -269,6 +266,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const hardPoolMap = new Map(rawQuestions.map(q => [q.id, q]));
     filteredQuestions = activeExam.questionIds.map(id => hardPoolMap.get(id)).filter(Boolean);
 
+    // Default to true if undefined
+    if (activeExam.instantFeedback === undefined) {
+      activeExam.instantFeedback = true;
+    }
     if (chkInstantFeedback) {
       chkInstantFeedback.checked = !!activeExam.instantFeedback;
     }
@@ -292,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
       examPoolBadge.textContent = `Havuz: ${servedCount}/${totalHard}`;
     }
 
-    // Top stats in exam mode
     if (headerCorrect && headerTotal) {
       const ansCount = Object.keys(activeExam ? activeExam.answers : {}).length;
       let corrCount = 0;
@@ -329,7 +329,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (ans.isCorrect) correctCount++;
         else wrongCount++;
 
-        // Also record to userProgress so user's wrong list & overall stats stay up to date
         userProgress[q.id] = {
           answered: true,
           selectedRawText: ans.selectedRawText,
@@ -344,7 +343,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const scorePct = Math.round((correctCount / totalQuestions) * 100);
     const isPassed = scorePct >= 70;
 
-    // Populate Exam Result Modal
     if (examScoreBig) examScoreBig.textContent = `${correctCount} / ${totalQuestions}`;
     if (examScorePercent) examScorePercent.textContent = `%${scorePct} BAŞARI`;
 
@@ -406,11 +404,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function applyCombinedFilters() {
     let list = allQuestions.filter(q => {
-      // 1. Category check
       const matchCat = (currentCategory === "ALL" || q.category === currentCategory);
       if (!matchCat) return false;
 
-      // 2. Status check
       const prog = userProgress[q.id];
       const isAnswered = prog && prog.answered;
 
@@ -502,7 +498,6 @@ document.addEventListener("DOMContentLoaded", () => {
       renderPracticeQuestion(q, opts, totalCount);
     }
 
-    // Highlight active in grid
     highlightActiveInGrid(q.id);
   }
 
@@ -519,20 +514,23 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.className = "option-btn";
       btn.innerHTML = `<span>${optItem.display}</span>`;
 
-      if (showRevealed) {
-        btn.disabled = true;
+      if (showRevealed && isExamAnswered) {
         if (optItem.isCorrect) {
           btn.classList.add("correct");
-        } else if (isExamAnswered && optItem.rawText === examAns.selectedRawText) {
+        } else if (optItem.rawText === examAns.selectedRawText) {
           btn.classList.add("wrong");
         } else {
           btn.classList.add("faded");
         }
-      } else {
-        if (isExamAnswered && optItem.rawText === examAns.selectedRawText) {
-          btn.classList.add("exam-selected");
-        }
+      } else if (isExamAnswered && optItem.rawText === examAns.selectedRawText) {
+        btn.classList.add("exam-selected");
+      }
+
+      // Always allow clicking unless exam is submitted
+      if (!activeExam || !activeExam.isFinished) {
         btn.addEventListener("click", () => handleExamSelectAnswer(optItem));
+      } else {
+        btn.disabled = true;
       }
 
       optionsGrid.appendChild(btn);
@@ -540,12 +538,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (showRevealed && isExamAnswered) {
       showExplanation(examAns.isCorrect, q.explanation);
+    } else if (isExamAnswered) {
+      explanationBox.style.display = "block";
+      explanationBox.className = "explanation-box";
+      statusIcon.textContent = "📌";
+      statusTitle.textContent = "Cevabın Kaydedildi";
+      explanationText.textContent = "Şıkkı değiştirebilir veya 'Sonraki →' butonu ile ilerleyebilirsin.";
     } else {
       explanationBox.style.display = "none";
     }
 
     btnPrev.disabled = currentIndex === 0;
-    btnNext.textContent = currentIndex === totalCount - 1 ? "Son Soru" : "Sonraki →";
+    btnNext.textContent = currentIndex === totalCount - 1 ? "Sınavı Bitir 🏁" : "Sonraki →";
   }
 
   function handleExamSelectAnswer(selectedOpt) {
@@ -566,7 +570,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buildGridMap();
 
     if (navigator.vibrate) {
-      navigator.vibrate(isCorrect ? 30 : [50, 50, 50]);
+      navigator.vibrate(isCorrect ? 35 : [50, 40, 50]);
     }
   }
 
@@ -585,7 +589,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerHTML = `<span>${optItem.display}</span>`;
 
       if (isAnswered) {
-        btn.disabled = true;
         if (optItem.isCorrect) {
           btn.classList.add("correct");
         } else if (optItem.rawText === prog.selectedRawText) {
@@ -593,9 +596,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           btn.classList.add("faded");
         }
-      } else {
-        btn.addEventListener("click", () => handlePracticeSelectAnswer(optItem));
       }
+
+      // Always allow tapping to answer or re-test choices
+      btn.addEventListener("click", () => handlePracticeSelectAnswer(optItem));
 
       optionsGrid.appendChild(btn);
     });
@@ -634,7 +638,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
 
     if (navigator.vibrate) {
-      navigator.vibrate(isCorrect ? 30 : [50, 50, 50]);
+      navigator.vibrate(isCorrect ? 35 : [50, 40, 50]);
     }
   }
 

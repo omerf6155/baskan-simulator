@@ -792,7 +792,7 @@ body {
 }
 
 /* Exam Selected Option state (before submitting) */
-.option-item.exam-selected {
+.option-btn.exam-selected {
   border-color: #3b82f6 !important;
   background: #eff6ff !important;
   color: #1e3a8a !important;
@@ -800,7 +800,7 @@ body {
   font-weight: 700;
 }
 
-[data-theme='dark'] .option-item.exam-selected {
+[data-theme='dark'] .option-btn.exam-selected {
   border-color: #60a5fa !important;
   background: #172554 !important;
   color: #eff6ff !important;
