@@ -1598,5 +1598,805 @@ const QUESTIONS_DATA = [
     "answer": 1,
     "explanation": "Slayt 96: AIP GEN 1.2 Madde 1.25: 'Slot alındıktan sonra yapılacak uçuş iptallerinin DHMİ Genel Müdürlüğü Slot Koordinasyon Merkezine bildirilmesi zorunludur.'",
     "slideRef": "Slayt 96"
+  },
+  {
+    "id": 101,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nBirleşik Arap Emirlikleri tescilli Emirates uçağı, Dubai meydanından kalkıp Milano (İtalya) meydanına iniyor. Buradaki yolcuları indirdikten sonra yeni yolcular alarak New York (ABD) meydanına uçuyor ve bu hatta bilet satıyor.\n\nEmirates'in Milano ile New York arasındaki bu yolcu taşıma faaliyeti hangi serbesti kapsamındadır?",
+    "options": [
+      "A) 3. Trafik Hakkı",
+      "B) 4. Trafik Hakkı",
+      "C) 5. Trafik Hakkı",
+      "D) 7. Trafik Hakkı",
+      "E) 8. Trafik Hakkı"
+    ],
+    "answer": 2,
+    "explanation": "Sefer kendi tescil ülkesinden (Dubai/BAE) başlamış ve iki yabancı ülke (İtalya ve ABD) arasında dış hat taşımacılığı yapılmıştır -> 5. Trafik Hakkı.",
+    "slideRef": "Slayt 62-63"
+  },
+  {
+    "id": 102,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nTürk Hava Yolları uçağı, İstanbul'dan kalkarak İtalya'nın Roma meydanına iniyor. Ardından Roma'dan kalkıp İtalya'nın Venedik meydanına devam ediyor ve Roma'dan aldığı İtalyan yolculara iç hat bileti satarak Venedik'te seferini noktalıyor.\n\nTHY'nin Roma ile Venedik arasındaki bu taşıma faaliyeti hangi serbestidir?",
+    "options": [
+      "A) 5. Trafik Hakkı",
+      "B) 7. Trafik Hakkı",
+      "C) 8. Trafik Hakkı",
+      "D) 9. Trafik Hakkı",
+      "E) 6. Trafik Hakkı"
+    ],
+    "answer": 2,
+    "explanation": "Uçuş Türkiye'den başlamış ve yabancı bir ülkenin iki iç hat noktası (Roma - Venedik) arasında yolcu taşımıştır -> Kendi ülkesiyle bağlantılı kabotaj = 8. Trafik Hakkı.",
+    "slideRef": "Slayt 67-68"
+  },
+  {
+    "id": 103,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nİspanya tescilli Iberia havayolu şirketi, İspanya ile hiçbir temas kurmaksızın uçağını Almanya'ya konuşlandırmıştır. Uçak Berlin meydanından kalkıp Münih meydanına uçmakta ve tamamen Alman iç hat yolcularına bilet satmaktadır.\n\nIberia'nın Almanya içindeki bu operasyonu havacılık hukukunda hangi serbesti ile ifade edilir?",
+    "options": [
+      "A) 5. Trafik Hakkı",
+      "B) 7. Trafik Hakkı",
+      "C) 8. Trafik Hakkı",
+      "D) 9. Trafik Hakkı",
+      "E) 4. Trafik Hakkı"
+    ],
+    "answer": 3,
+    "explanation": "Yabancı bir ülkenin iki şehri arasında ana vatanla hiçbir operasyonel bağlantı olmaksızın iç hat uçuşu yapılması Saf/Tam Kabotajdır -> 9. Trafik Hakkı.",
+    "slideRef": "Slayt 69-70"
+  },
+  {
+    "id": 104,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nİngiltere tescilli British Airways uçağı, Londra ile hiçbir operasyonel bağlantı kurmaksızın doğrudan Paris (Fransa) ile Madrid (İspanya) arasında tarifeli seferler düzenlemekte ve bu hatta bağımsız bilet satışı yapmaktadır.\n\nBu durum Chicago Sözleşmesi'ne göre hangi serbesti kapsamına girer?",
+    "options": [
+      "A) 4. Trafik Hakkı",
+      "B) 5. Trafik Hakkı",
+      "C) 6. Trafik Hakkı",
+      "D) 7. Trafik Hakkı",
+      "E) 8. Trafik Hakkı"
+    ],
+    "answer": 3,
+    "explanation": "Kendi ülkesiyle hiçbir bağlantı olmaksızın iki yabancı ülke arasında dış hat uçulması -> 7. Trafik Hakkı.",
+    "slideRef": "Slayt 66"
+  },
+  {
+    "id": 105,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nAlman tescilli Lufthansa uçağı; Tokyo (Japonya) meydanından kalkarak Bangkok (Tayland) meydanına iniyor. Buradan aldığı yeni ticari yolcularla birlikte nihai varış noktası olan Frankfurt (Almanya) meydanına inip seferini sonlandırıyor.\n\nLufthansa'nın Tokyo ile Bangkok arasında gerçekleştirdiği ticari taşıma hangi trafik hakkıdır?",
+    "options": [
+      "A) 4. Trafik Hakkı",
+      "B) 5. Trafik Hakkı",
+      "C) 6. Trafik Hakkı",
+      "D) 7. Trafik Hakkı",
+      "E) 8. Trafik Hakkı"
+    ],
+    "answer": 1,
+    "explanation": "Uçuş ana vatanda (Frankfurt/Almanya) son bulduğu için iki yabancı ülke arasındaki bu trafik 5. Trafik Hakkıdır (kendi ülkesinde başlama veya bitme şartı).",
+    "slideRef": "Slayt 62"
+  },
+  {
+    "id": 106,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nTürk Hava Yolları; New York'tan aldığı bir yolcuyu İstanbul aktarmalı olarak gümrüğe sokmaksızın transit bir bağlantıyla Tiflis'e (Gürcistan) taşıyor.\n\nBu aktarmalı ticari operasyon havacılıkta hangi trafik hakkı modeli olarak adlandırılır?",
+    "options": [
+      "A) 3. Trafik Hakkı",
+      "B) 5. Trafik Hakkı",
+      "C) 6. Trafik Hakkı",
+      "D) 7. Trafik Hakkı",
+      "E) 8. Trafik Hakkı"
+    ],
+    "answer": 2,
+    "explanation": "Bir havayolunun kendi ülkesini aktarma merkezi (Hub) yaparak iki yabancı ülke arasındaki trafiği taşıması (4. + 3. hak birleşimi) -> 6. Trafik Hakkı.",
+    "slideRef": "Slayt 64-65"
+  },
+  {
+    "id": 107,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nFransız havayolu Air France uçağı, Paris'ten kalkıp hiçbir yere inmeden doğrudan Türkiye hava sahasını katederek Azerbaycan'a uçuyor.\n\nAir France'ın Türkiye hava sahasından yere inmeksizin gerçekleştirdiği bu geçiş hangi serbesti hakkıdır?",
+    "options": [
+      "A) 1. Trafik Hakkı",
+      "B) 2. Trafik Hakkı",
+      "C) 3. Trafik Hakkı",
+      "D) 4. Trafik Hakkı",
+      "E) 5. Trafik Hakkı"
+    ],
+    "answer": 0,
+    "explanation": "Yabancı bir ülkenin hava sahasından yere inmeksizin transit geçiş yapma hakkı -> 1. Trafik Hakkı (Aşırı uçuş / Overflight).",
+    "slideRef": "Slayt 58"
+  },
+  {
+    "id": 108,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nİsveç tescilli SAS havayolu uçağı, Stockholm'den kalkarak Dubai'ye giderken şiddetli karşı rüzgar nedeniyle yakıt kritiğine giriyor ve ticari yolcu indirip bindirmeksizin sadece yakıt ikmali için Ankara Esenboğa Havalimanı'na teker koyuyor.\n\nBu operasyon Chicago Sözleşmesi ve IASTA kapsamında hangi haktır?",
+    "options": [
+      "A) 1. Trafik Hakkı",
+      "B) 2. Trafik Hakkı",
+      "C) 3. Trafik Hakkı",
+      "D) 4. Trafik Hakkı",
+      "E) 5. Trafik Hakkı"
+    ],
+    "answer": 1,
+    "explanation": "Ticari amaç dışında sadece yakıt ikmali veya arıza gibi teknik sebeplerle iniş yapabilme hakkı -> 2. Trafik Hakkı (Teknik İniş).",
+    "slideRef": "Slayt 59"
+  },
+  {
+    "id": 109,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Aşağıdaki uçuş rotalarından hangisi Türk tescilli bir havayolu şirketi için '7. TRAFİK HAKKI' örneğidir?",
+    "options": [
+      "A) İstanbul -> Londra -> Manchester",
+      "B) İstanbul -> Paris -> New York",
+      "C) Amsterdam -> Roma",
+      "D) Frankfurt -> İstanbul -> Bakü",
+      "E) Ankara -> Antalya"
+    ],
+    "answer": 2,
+    "explanation": "Türk şirketi için Türkiye ile hiçbir temas olmaksızın iki yabancı ülke arasında (Amsterdam/Hollanda -> Roma/İtalya) uçuş yapılması 7. Trafik Hakkıdır.",
+    "slideRef": "Slayt 66"
+  },
+  {
+    "id": 110,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Aşağıdaki uçuş rotalarından hangisi Türk tescilli bir taşıyıcı için '8. TRAFİK HAKKI' (Ardışık Kabotaj) niteliği taşır?",
+    "options": [
+      "A) Paris -> Marsilya",
+      "B) İstanbul -> Madrid -> Barselona",
+      "C) İstanbul -> Londra",
+      "D) Londra -> İstanbul",
+      "E) Frankfurt -> Zürih"
+    ],
+    "answer": 1,
+    "explanation": "Türkiye'den başlayıp yabancı bir ülkenin iki iç hat noktası (Madrid -> Barselona) arasında devam eden taşıma 8. Trafik Hakkıdır.",
+    "slideRef": "Slayt 67-68"
+  },
+  {
+    "id": 111,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir taşıyıcının 5. trafik hakkını kullanabilmesi için ikili veya çok taraflı anlaşmalarda en az kaç devletin karşılıklı rızası ve onayı bulunmalıdır?",
+    "options": [
+      "A) Sadece uçağın tescil edildiği 1 devlet",
+      "B) Seferin başladığı ve ilk indiği 2 devlet",
+      "C) Seferin başladığı ana vatan, ilk inilen yabancı devlet ve trafiğin taşındığı üçüncü yabancı devlet olmak üzere 3 devlet",
+      "D) Yalnızca ICAO Konseyi",
+      "E) Sadece varış meydanındaki yer işletme kuruluşu"
+    ],
+    "answer": 2,
+    "explanation": "5. Trafik hakkında 3 farklı devlet (Tescil devleti, Ülke A ve Ülke B) söz konusu olduğu için üç devletin de hava ulaştırma anlaşmasıyla bu hakkı onaylamış olması gerekir.",
+    "slideRef": "Slayt 62"
+  },
+  {
+    "id": 112,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Chicago Konvansiyonu Madde 7 gereğince; taraf devletlerin diğer bir devlete kabotaj ayrıcalığı tanıması halinde diğer üye devletlerle ilgili kural nedir?",
+    "options": [
+      "A) Bir devlete verilen kabotaj hakkı diğer tüm devletlere otomatik olarak bedava verilir.",
+      "B) Hiçbir taraf devlet bir başka devlete münhasıran (tekel halinde) kabotaj ayrıcalığı tanımamayı taahhüt eder.",
+      "C) Kabotaj hakkı sadece komşu ülkelere verilebilir.",
+      "D) Kabotaj ayrıcalığı sadece askeri amaçlı kargo uçaklarına devredilebilir.",
+      "E) Kabotaj izni veren devlet ICAO üyeliğinden derhal çıkarılır."
+    ],
+    "answer": 1,
+    "explanation": "Chicago Sözleşmesi Madde 7 uyarınca, hiçbir taraf devlet bir başka devlete tekel oluşturacak şekilde münhasır kabotaj hakkı veremez.",
+    "slideRef": "Slayt 26"
+  },
+  {
+    "id": 113,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Senaryo:\nAlman tescilli Condor havayolu; Münih'ten kalkarak Antalya'ya geliyor ve Alman turistleri indiriyor. Aynı uçak dönüşte Antalya'dan aldığı yolcuları tekrar Münih'e götürüyor.\n\nCondor'un Münih'ten Antalya'ya gelişi ve Antalya'dan Münih'e dönüşü sırasıyla hangi trafik haklarıdır?",
+    "options": [
+      "A) 1. ve 2. Trafik Hakları",
+      "B) 3. ve 4. Trafik Hakları",
+      "C) 5. ve 6. Trafik Hakları",
+      "D) 7. ve 8. Trafik Hakları",
+      "E) 8. ve 9. Trafik Hakları"
+    ],
+    "answer": 1,
+    "explanation": "Kendi ülkesinden yabancı ülkeye yolcu götürmek 3. Hak; yabancı ülkeden kendi ülkesine yolcu getirmek ise 4. Trafik Hakkıdır.",
+    "slideRef": "Slayt 60-61"
+  },
+  {
+    "id": 114,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Avrupa Birliği tek havacılık pazarı (Single Aviation Market) içerisinde bir Fransız havayolunun İtalya içinde Roma-Milano uçabilmesi hukuken hangi kavramın serbestleşmesiyle mümkün olmuştur?",
+    "options": [
+      "A) Transit Geçiş Hakkı",
+      "B) Teknik İniş Hakkı",
+      "C) Kabotaj Hakkı",
+      "D) Slot Muafiyeti",
+      "E) Meydan Oluru"
+    ],
+    "answer": 2,
+    "explanation": "AB içi serbestleşme (Open Skies) üye ülke havayollarına diğer üye ülkelerin iç hatlarında serbestçe kabotaj yapma hakkı sağlamıştır.",
+    "slideRef": "Slayt 70"
+  },
+  {
+    "id": 115,
+    "category": "Trafik Hakları",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir taşıyıcının 6. trafik hakkını fiilen icra edebilmesi için operasyonel olarak hangi şartın gerçekleşmesi ZORUNLUDUR?",
+    "options": [
+      "A) Seferin hiçbir yere inmeden doğrudan uçulması",
+      "B) Yolcunun kendi tescil ülkesindeki merkez havalimanında (Hub) aktarma yapması veya uçağın kendi ülkesine iniş kalkış yapması",
+      "C) Uçakta sadece kargo taşınması",
+      "D) Uçuşun Seviye-1 koordinesiz bir meydanda noktalanması",
+      "E) Kaptanın tescil devleti vatandaşlığından çıkması"
+    ],
+    "answer": 1,
+    "explanation": "6. Hak, 4. ve 3. hakların birleşimi olup uçağın veya yolcunun taşıyıcının kendi ülkesine iniş-kalkış yapması şartıyla gerçekleşir.",
+    "slideRef": "Slayt 64-65"
+  },
+  {
+    "id": 116,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.8 uyarınca planlanan kalkıştan en az 5 iş günü önceden yapılması gereken genel kural permi başvurularında, SHGM hangi durumlarda bu süreyi en az 2 iş gününe düşürebilir?",
+    "options": [
+      "A) Havayolunun bilet fiyatlarında indirim yapması durumunda",
+      "B) Mücbir sebepler ve belgelendirilen acil durumlarda",
+      "C) Uçuşun gece şartlarında icra edilecek olması halinde",
+      "D) Uçakta yabancı devlet başkanı bulunması durumunda",
+      "E) Seferin sadece kargo charter olarak planlanması halinde"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 81: AIP GEN 1.2 Madde 1.8 gereğince genel kural 5 iş günüdür; acil durumlarda ise en az 2 iş günü önceden başvuru kabul edilir.",
+    "slideRef": "Slayt 81"
+  },
+  {
+    "id": 117,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "SHGM tarafından verilen bir uçuş izninin (permi) geçerlilik penceresi -24 saat ve +72 saattir. Planlanan kalkış saati 15 Ekim 12:00 UTC olan bir uçak bu izinle en erken ve en geç hangi saatlerde kalkış yapabilir?",
+    "options": [
+      "A) En erken 15 Ekim 00:00 UTC / En geç 16 Ekim 00:00 UTC",
+      "B) En erken 14 Ekim 12:00 UTC / En geç 18 Ekim 12:00 UTC",
+      "C) En erken 15 Ekim 06:00 UTC / En geç 17 Ekim 18:00 UTC",
+      "D) En erken 13 Ekim 12:00 UTC / En geç 16 Ekim 12:00 UTC",
+      "E) Yalnızca 15 Ekim günü boyunca (24 saat)"
+    ],
+    "answer": 1,
+    "explanation": "Kalkış esas alınarak 24 saat öncesi (14 Ekim 12:00) ve 72 saat sonrası (18 Ekim 12:00) geçerlidir.",
+    "slideRef": "Slayt 81"
+  },
+  {
+    "id": 118,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2'ye göre; yabancı bir sivil kargo şirketinin sadece kargo taşımak amacıyla Türkiye'deki bir meydana yapacağı münferit tarifesiz uçuş için SHGM'den alacağı permi kodu hangisidir?",
+    "options": [
+      "A) CAG",
+      "B) CAT",
+      "C) CAC",
+      "D) CASL",
+      "E) CASD"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 127: Charter veya Kargo taşımak amaçlı talep permi tür kodu CAC'dir.",
+    "slideRef": "Slayt 127"
+  },
+  {
+    "id": 119,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Yabancı bir havayolunun Türk hava sahasını sadece üst geçiş koridoru olarak kullanacağı tarifesiz bir overflight uçuşu için onaylanan permi kayıt numarasına hangi tür kodu iliştirilir?",
+    "options": [
+      "A) CAG",
+      "B) CAT",
+      "C) CAC",
+      "D) CASL",
+      "E) CASD"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 127: Transit veya Overflight amaçlı talep permi tür kodu CAT'dir.",
+    "slideRef": "Slayt 127"
+  },
+  {
+    "id": 120,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Yabancı bir havayolu şirketi tarifeli sefer anlaşması çerçevesinde İstanbul Havalimanı'na düzenli dış hat seferleri başlatmak istediğinde permi başvurusunda hangi kod kullanılır?",
+    "options": [
+      "A) CAG",
+      "B) CAC",
+      "C) CASL",
+      "D) CASD",
+      "E) CAST"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 127: Tarifeli sefer düzenlemek amaçlı talep (Dış Hat) tür kodu CASL'dir.",
+    "slideRef": "Slayt 127"
+  },
+  {
+    "id": 121,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Yerli bir havayolu işletmesinin Türkiye içinde tarifeli yeni bir iç hat hattı açmak için SHGM'ye ilettiği permi başvuru kodu hangisidir?",
+    "options": [
+      "A) CASL",
+      "B) CASD",
+      "C) CAT",
+      "D) CAG",
+      "E) CAC"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 127: Tarifeli sefer düzenlemek amaçlı talep (İç Hat) tür kodu CASD'dir.",
+    "slideRef": "Slayt 127"
+  },
+  {
+    "id": 122,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.16 kapsamındaki tehlikeli maddelere ilişkin Askeri ve/veya devlet adına yapılan uçuşlar ile sınır ötesi İHA uçuşlarında diplomatik izin başvurusu nereye yapılır?",
+    "options": [
+      "A) SHGM Genel Müdürlüğü",
+      "B) DHMİ Genel Müdürlüğü",
+      "C) Dışişleri Bakanlığı",
+      "D) Ticaret Bakanlığı",
+      "E) Emniyet Genel Müdürlüğü"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 88, 91: 1.16 kapsamındaki askeri/devlet ve İHA uçuş başvuruları diplomatik kanaldan Dışişleri Bakanlığına yapılır.",
+    "slideRef": "Slayt 88, 91"
+  },
+  {
+    "id": 123,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 uyarınca, sivil hava araçlarının kargo ambarında ticari patlayıcı madde taşınması durumunda SHGM izin sürecini hangi kurumla zorunlu olarak koordine eder?",
+    "options": [
+      "A) Karayolları Genel Müdürlüğü",
+      "B) Tehlikeli Mal ve Kombine Taşımacılık Düzenleme Genel Müdürlüğü (TMKT)",
+      "C) Kültür ve Turizm Bakanlığı",
+      "D) Meteoroloji Genel Müdürlüğü",
+      "E) Bilgi Teknolojileri ve İletişim Kurumu"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 91: Tehlikeli madde başvuruları TMKT Genel Müdürlüğü ile koordine edilerek SHGM tarafından sonuçlandırılır.",
+    "slideRef": "Slayt 91"
+  },
+  {
+    "id": 124,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 3.1.1 gereğince tarifeli transit uçuşlar için tarife döneminden en geç kaç gün önce başvuru yapılmalıdır?",
+    "options": [
+      "A) En geç 5 gün önce",
+      "B) En geç 10 gün önce",
+      "C) En geç 30 gün önce",
+      "D) En geç 60 gün önce",
+      "E) En geç 90 gün önce"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 113: Tarifeli transit uçuş izinleri tarife döneminden en geç 30 gün önce SHGM otomasyon sisteminden yapılır.",
+    "slideRef": "Slayt 113"
+  },
+  {
+    "id": 125,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP ENR 1.10 Madde 2.1.5'e göre silahsızlandırılmış statüdeki Doğu Ege Adaları ve GKRY meydanları ile ilgili yasak aşağıdakilerden hangisidir?",
+    "options": [
+      "A) Tüm sivil yolcu uçaklarına iniş kalkış tamamen yasaktır.",
+      "B) Diplomatik uçuş iznine tabi askeri araçlar tarafından iniş/kalkış veya yedek (alternate) meydan olarak belirtilemez.",
+      "C) Gece şartlarında aydınlatma yapılması yasaktır.",
+      "D) Yalnızca çift motorlu uçakların üzerinden geçişine izin verilir.",
+      "E) Bu meydanlara uçuş planı sadece kargo uçakları için sunulabilir."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 104: Diplomatik uçuş iznine tabi askeri hava araçları bu meydanları iniş, kalkış veya yedek (alternate) meydan olarak gösteremez.",
+    "slideRef": "Slayt 104"
+  },
+  {
+    "id": 126,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 4.4.1 uyarınca turistik charter uçuşlarında kural olarak tek yön bilet satılamaz. Ancak mütekabiliyet ilkesine göre azami yüzde kaça kadar tek yön koltuk satışı yapılabilir?",
+    "options": [
+      "A) %5",
+      "B) %10",
+      "C) %20",
+      "D) %30",
+      "E) %50"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 116: Kısıtlama olmayan ülkelerden yapılan charter uçuşlarında mütekabiliyete göre azami %10 koltuk satışı yapılabilir.",
+    "slideRef": "Slayt 116"
+  },
+  {
+    "id": 127,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 4.4.1 (c) bendine göre yerli havayollarımız yurt dışı turistik charter uçuşlarını uçuş planıyla (FPL) icra edebilmek için planlarını en az kaç saat önce göndermelidir?",
+    "options": [
+      "A) En az 1 saat önce",
+      "B) En az 2 saat önce",
+      "C) En az 3 saat önce",
+      "D) En az 12 saat önce",
+      "E) En az 24 saat önce"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 117: Yerli havayolları uçuştan en az 3 saat önce uçuş amacını içeren uçuş planlarını göndermek kaydıyla uçuş planıyla gerçekleştirebilir.",
+    "slideRef": "Slayt 117"
+  },
+  {
+    "id": 128,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.7'ye göre yabancı tescilli özel bir uçağın Türkiye içindeki iki meydan arasında yapacağı seferlerde kabotaj kuralı ihlali sayılan durum nedir?",
+    "options": [
+      "A) Uçağın gece konaklaması yapması",
+      "B) Uçağın herhangi bir bölümünün üçüncü şahıslara satılması veya kiralanması",
+      "C) Uçağa yerli yakıt ikmali yapılması",
+      "D) Uçuş ekibinin yabancı pilotlardan oluşması",
+      "E) İniş sonrasında gümrük kontrolünden geçilmesi"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 80: Yabancı tescilli özel uçakların ülkemiz içi uçuşlarında uçağın herhangi bir bölümü 3. şahıslara satılamaz ve kiralanamaz.",
+    "slideRef": "Slayt 80"
+  },
+  {
+    "id": 129,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Yabancı bir havayoluna ait uçağın Türk hava sahasını veya havalimanlarını kullanabilmesi için tescil devletinden mutlaka almış olması gereken temel havacılık yetki belgesi nedir?",
+    "options": [
+      "A) Turizm İşletme Belgesi",
+      "B) AOC (Hava Taşıyıcı İşletme Ruhsatı)",
+      "C) IATA Üyelik Sertifikası",
+      "D) Gümrük Acentelik Sözleşmesi",
+      "E) Yer Hizmetleri Lisansı"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 107: Kendi ülkesinden geçerli AOC belgesi almamış havayollarına hava sahası ve havalimanı kullanım izni verilmez.",
+    "slideRef": "Slayt 107"
+  },
+  {
+    "id": 130,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2'ye göre apron park yeri yetersizliği nedeniyle 'Meydan Oluru' uygulanan havalimanları için temel operasyon kuralı nedir?",
+    "options": [
+      "A) SHGM'den permi alınması meydan olurunun da alındığı anlamına gelir.",
+      "B) Permi alınmış olsa dahi ilgili havalimanı otoritesinden ayrıca Meydan Oluru alınması zorunludur.",
+      "C) Meydan oluru alan şirketlerin uçuş planı (FPL) sunmasına gerek kalmaz.",
+      "D) Sadece Seviye-1 meydanlarda meydan oluru aranır.",
+      "E) Meydan oluru sadece askeri tanker uçakları için geçerlidir."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 96: Permi alınmış olması Meydan Oluru alındığı anlamına gelmez; apron yetersizliğinde meydan işletmecisinden ayrıca meydan oluru alınmalıdır.",
+    "slideRef": "Slayt 96"
+  },
+  {
+    "id": 131,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Kargo charter uçuşlarında kargo refakatçisi bulunması halinde dispeçer veya havayolu işletmesi SHGM'ye hangi ek belgeyi sunmakla yükümlüdür?",
+    "options": [
+      "A) Refakatçinin üniversite diplomasını",
+      "B) Mali Sorumluluk Sigortası poliçesini",
+      "C) Havalimanı otopark fişini",
+      "D) Gümrüksüz satış faturasını",
+      "E) Uçak motorunun imalat faturasını"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 119: Kargo içeriği nedeniyle refakatçi bulunması durumunda Mali Sorumluluk Sigortası SHGM'ye gönderilir.",
+    "slideRef": "Slayt 119"
+  },
+  {
+    "id": 132,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Türkiye hava sahasında uçacak yabancı sivil hava araçları için izin başvuru sürelerinde 'iş günü' kavramı neyi ifade eder?",
+    "options": [
+      "A) Haftanın cumartesi ve pazar günleri de dahil tüm 7 günü",
+      "B) Ulusal bayram, genel tatil ve hafta sonları hariç resmi mesai günlerini",
+      "C) Sadece havalimanı kulesinin açık olduğu saatleri",
+      "D) Pilotların aktif uçuş yaptığı nöbet günlerini",
+      "E) Sadece dolunay olan günleri"
+    ],
+    "answer": 1,
+    "explanation": "Havacılık mevzuatında 'iş günü', resmi tatiller ve hafta sonları dışındaki resmi çalışma günlerini kapsar.",
+    "slideRef": "AIP GEN 1.2"
+  },
+  {
+    "id": 133,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 5.1.6 uyarınca; Türk hava sahasını kullanmak için sunulan başvuru evraklarında Türkçe veya İngilizce dışında bir dil kullanılması halinde hukuki sonuç nedir?",
+    "options": [
+      "A) Evraklar otomatik olarak onaylanmış sayılır.",
+      "B) Başvuru geçerli sayılmaz ve usulüne uygun dil kullanılmadığı için reddedilir.",
+      "C) İzin sadece gece uçuşları için geçerli olur.",
+      "D) Havayoluna çift motorlu uçak tahsis edilir.",
+      "E) Başvuru doğrudan NATO karargahına sevk edilir."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 80: Uçuş izni başvurularının Türkçe veya İngilizce olması zorunludur; aksi dildeki talepler kabul edilmez.",
+    "slideRef": "Slayt 80"
+  },
+  {
+    "id": 134,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir havayolunun SHGM'den onaylanmış permi kodu CAST olan bir uçuşun niteliği aşağıdakilerden hangisidir?",
+    "options": [
+      "A) Türk meydanına teknik iniş",
+      "B) Türk Hava Sahasını transit olarak yolcu ve yük taşımacılığında kullanmak amaçlı tarifeli uçuş",
+      "C) Münferit turistik charter inişi",
+      "D) Askeri İHA sınır ötesi operasyonu",
+      "E) Yurtiçi tarifeli sefer"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 127: CAST kodu, Türk Hava Sahasını transit olarak yük ve yolcu taşımacılığında kullanmak amaçlı tarifeli operasyonlara verilir.",
+    "slideRef": "Slayt 127"
+  },
+  {
+    "id": 135,
+    "category": "Permi & Mevzuat",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.16 kapsamına giren ve en az 10 iş günü önceden Dışişleri Bakanlığına başvurulması gereken hava araçları arasında hangisi YER ALIR?",
+    "options": [
+      "A) Tarifeli sivil yolcu uçağı",
+      "B) Sınır ötesi uçuş yapan İnsansız Hava Araçları (İHA) ve Tanker uçakları",
+      "C) Şirket CEO'sunun özel sivil helikopteri",
+      "D) Turistik charter tatil uçağı",
+      "E) Sportif amaçlı sıcak hava balonu"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 88: Madde 1.16 kapsamında tanker uçakları, sınır ötesi İHA'lar ve askeri birlik nakli yapan araçlar yer alır.",
+    "slideRef": "Slayt 88"
+  },
+  {
+    "id": 136,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "IATA standartlarına göre Seviye-3 koordineli bir havalimanında slot talebinde bulunan bir havayoluna koordinatörün onay vermesi halinde kullanılan durum kodu hangisidir?",
+    "options": [
+      "A) U",
+      "B) K",
+      "C) O",
+      "D) W",
+      "E) D"
+    ],
+    "answer": 1,
+    "explanation": "Slot koordinasyonunda durum kodlarından 'K' (Confirmed) slotun onaylandığını ifade eder.",
+    "slideRef": "IATA WSG Kuralları"
+  },
+  {
+    "id": 137,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir havayolu işletmesi Seviye-3 bir havalimanı için talep ettiği slot saatine karşılık koordinatörden 'U' durum kodu alırsa bu ne anlama gelir?",
+    "options": [
+      "A) Slot koşulsuz onaylanmıştır.",
+      "B) İstenen saat kapasite yetersizliği nedeniyle reddedilmiştir (Unable).",
+      "C) Uçuşun derhal iptal edilmesi emredilmiştir.",
+      "D) Uçak tipinin değiştirilmesi zorunlu tutulmuştur.",
+      "E) Bilet fiyatlarının yükseltilmesi istenmiştir."
+    ],
+    "answer": 1,
+    "explanation": "Slot mesajlarında 'U' (Unable / Refused) talep edilen slotun verilemediğini ve reddedildiğini gösterir.",
+    "slideRef": "IATA WSG Kuralları"
+  },
+  {
+    "id": 138,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.23'e göre Antalya Havalimanı'nın (LTAI) slot seviyelendirmesinde yaz ve kış dönemleri arasındaki fark nedir?",
+    "options": [
+      "A) Yazın Seviye-1, kışın Seviye-3'tür.",
+      "B) Yazın Seviye-3 (Koordineli), kışın Seviye-2 (Tarifesi Düzenlenen) statüsündedir.",
+      "C) Hem yaz hem kış Seviye-3'tür.",
+      "D) Hem yaz hem kış Seviye-1 koordinesizdir.",
+      "E) Kışın tamamen ticari uçuşlara kapatılır."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 94: Antalya Havalimanı yaz tarife döneminde Seviye-3, kış tarife döneminde ise Seviye-2 olarak koordine edilir.",
+    "slideRef": "Slayt 94"
+  },
+  {
+    "id": 139,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.23 uyarınca aşağıdaki havalimanlarımızdan hangisi hem yaz hem kış tarife dönemlerinde Seviye-2 (Tarifesi Düzenlenen) statüsündedir?",
+    "options": [
+      "A) İstanbul Havalimanı (LTFM)",
+      "B) Sabiha Gökçen Havalimanı (LTFJ)",
+      "C) Ankara Esenboğa Havalimanı (LTAC)",
+      "D) Londra Gatwick Havalimanı",
+      "E) Frankfurt Havalimanı"
+    ],
+    "answer": 2,
+    "explanation": "Slayt 95: Ankara Esenboğa (LTAC), İzmir, Dalaman ve Bodrum hem yaz hem kış Seviye-2 statüsündedir.",
+    "slideRef": "Slayt 95"
+  },
+  {
+    "id": 140,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "IATA Dünya Slot Kılavuzu'na göre havayollarının Seviye-2 havalimanlarında kullandığı SMA mesajının SCR mesajından temel farkı nedir?",
+    "options": [
+      "A) SMA mesajında sadece kargo taşınabilir.",
+      "B) SMA bir onay/tahsis talebi değil, tarife bildirim ve danışma amaçlı bir tavsiye mesajıdır.",
+      "C) SMA sadece askeri uçaklar tarafından kullanılır.",
+      "D) SMA mesajına cevap verilmesi 30 gün sürer.",
+      "E) SMA mesajı çeken havayolu permi almaktan muaf olur."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 94: SMA (Schedule Movement Advice) Seviye-2 meydanlarda tarife kolaylaştırıcısına sunulan danışma mesajıdır; bağlayıcı onay mekanizması SCR'dir.",
+    "slideRef": "Slayt 94"
+  },
+  {
+    "id": 141,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Seviye-3 bir havalimanında slot tahsis edilmiş bir uçuşun slot tolerans penceresi genel IATA kuralı olarak kaç dakikadır?",
+    "options": [
+      "A) -5 dakika / +5 dakika",
+      "B) -15 dakika / +15 dakika",
+      "C) -30 dakika / +30 dakika",
+      "D) -60 dakika / +60 dakika",
+      "E) Sadece tam saatinde kalkış yapılabilir"
+    ],
+    "answer": 1,
+    "explanation": "Havalimanı slot operasyonlarında kabul edilen standart tolerans penceresi slot saatinin 15 dakika öncesi ve 15 dakika sonrasıdır (-15 / +15 dk).",
+    "slideRef": "IATA WSG"
+  },
+  {
+    "id": 142,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir havayolu şirketi tahsis edilen tarihi slot hakkını (Grandfather rights) bir sonraki sezonda kaybetmemek için slot serisini en az yüzde kaç oranında fiilen kullanmalıdır?",
+    "options": [
+      "A) En az %50",
+      "B) En az %60",
+      "C) En az %70",
+      "D) En az %80",
+      "E) En az %95"
+    ],
+    "answer": 3,
+    "explanation": "80/20 Kuralı: Havayolunun sonraki sezonda öncelikli hakkını koruyabilmesi için tahsis edilen slotun en az %80'ini kullanması gerekir.",
+    "slideRef": "IATA WSG"
+  },
+  {
+    "id": 143,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "AIP GEN 1.2 Madde 1.25'e göre slot uygulanan bir havalimanına sefer planlayan havayolunun slot iptali durumunda bildirim yapması gereken resmi merkez hangisidir?",
+    "options": [
+      "A) SHGM Lisans Şubesi",
+      "B) DHMİ Slot Koordinasyon Merkezi Başmüdürlüğü",
+      "C) Türk Hava Yolları Gelir Yönetimi",
+      "D) Gümrük ve Dış Ticaret Bölge Müdürlüğü",
+      "E) Valilik İl Afet Merkezi"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 96: Slot uygulanan meydanlarda iptallerin DHMİ Slot Koordinasyon Merkezine bildirilmesi zorunludur.",
+    "slideRef": "Slayt 96"
+  },
+  {
+    "id": 144,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Seviye-1 (Koordinesiz) bir havalimanında kapasite ve operasyon durumu nasıldır?",
+    "options": [
+      "A) Talep kapasiteyi aşmıştır, uçuşlar durdurulmuştur.",
+      "B) Havalimanı kapasitesi tüm talepleri karşılayacak düzeydedir ve slot tahsisi gerekmez.",
+      "C) Sadece cumhurbaşkanlığı uçakları iniş yapabilir.",
+      "D) Uçuşlar için en az 1 ay önceden slot sırasına girilir.",
+      "E) Sadece kış tarife döneminde açık tutulur."
+    ],
+    "answer": 1,
+    "explanation": "Seviye-1 meydanlar koordinesiz olup kapasite yeterlidir, slot tahsisi zorunluluğu bulunmaz.",
+    "slideRef": "Slayt 94"
+  },
+  {
+    "id": 145,
+    "category": "Slot & Seviyeler",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Bir dispeçer Seviye-3 bir havalimanı için slot planlaması yaparken bir slotu SİLMEK veya İPTAL ETMEK istediğinde SCR mesajında hangi eylem kodunu kullanır?",
+    "options": [
+      "A) N",
+      "B) C",
+      "C) D",
+      "D) K",
+      "E) O"
+    ],
+    "answer": 2,
+    "explanation": "Slot eylem kodlarında 'D' (Delete) mevcut bir slotun iptali veya silinmesi için kullanılır.",
+    "slideRef": "SSIM Chapter 6"
+  },
+  {
+    "id": 146,
+    "category": "Hukuk & Konvansiyonlar",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Uluslararası bir tarifeli uçuş sırasında uçaktaki bir yolcu kalp krizi geçirmiş ve uçak acil iniş yapmıştır. Yolcunun ölümü halinde taşıyıcının kusursuz sorumluluğunu ve tazminat üst sınırlarını belirleyen modern uluslararası konvansiyon hangisidir?",
+    "options": [
+      "A) 1919 Paris Konvansiyonu",
+      "B) 1963 Tokyo Sözleşmesi",
+      "C) 1970 Lahey Sözleşmesi",
+      "D) 1999 Montreal Sözleşmesi",
+      "E) 1944 Chicago Sözleşmesi"
+    ],
+    "answer": 3,
+    "explanation": "Slayt 34: 1999 Montreal Konvansiyonu uluslararası hava taşımacılığında yolcu ölüm ve yaralanmalarında taşıyıcının modern sorumluluk rejimini düzenler.",
+    "slideRef": "Slayt 34"
+  },
+  {
+    "id": 147,
+    "category": "Hukuk & Konvansiyonlar",
+    "difficulty": "Zor (Senaryo)",
+    "question": "1963 Tokyo Sözleşmesi'ne göre kaptan pilotun uçaktaki bir yolcuyu bağlama veya kısıtlama altına alma yetkisi uçuşun hangi aşamasında geçerlidir?",
+    "options": [
+      "A) Sadece uçağın motorları kapalıyken terminalde",
+      "B) Dış kapıların kapatıldığı andan iniş sonrası kapıların açıldığı ana kadar olan uçuş süresince",
+      "C) Sadece uçak seyir irtifasındayken (düz uçuşta)",
+      "D) Sadece havalimanı polisinin yazılı izniyle",
+      "E) Kaptan pilotun hiçbir aşamada tedbir alma yetkisi yoktur"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 31-32: Tokyo Sözleşmesi Madde 5 uyarınca yetkiler kapıların kapanmasından iniş sonrası kapıların açılmasına kadar geçerlidir.",
+    "slideRef": "Slayt 31-32"
+  },
+  {
+    "id": 148,
+    "category": "Hukuk & Konvansiyonlar",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Uluslararası sivil havacılıkta hava korsanlığı ve sabotaj suçları işleyen şüpheliler hakkında 'İade et ya da yargıla' (Aut dedere aut judicare) kuralını getiren temel sözleşmeler çifti hangisidir?",
+    "options": [
+      "A) Varşova ve Paris",
+      "B) Lahey (1970) ve Montreal (1971)",
+      "C) Roma ve Cenevre",
+      "D) Chicago ve IASTA",
+      "E) Bermuda ve Madrid"
+    ],
+    "answer": 1,
+    "explanation": "Slayt 33: 1970 Lahey (uçak kaçırma) ve 1971 Montreal (sabotaj) sözleşmeleri suçluların mutlaka yargılanmasını veya iadesini zorunlu kılmıştır.",
+    "slideRef": "Slayt 33"
+  },
+  {
+    "id": 149,
+    "category": "Hukuk & Konvansiyonlar",
+    "difficulty": "Zor (Senaryo)",
+    "question": "Varşova Konvansiyonu sisteminde hava yoluyla taşınan kargonun hasar görmesi halinde göndericinin havayolu işletmesine yazılı protesto/ihbar süresi kuralı nedir?",
+    "options": [
+      "A) Teslim tarihinden itibaren en geç 14 gün içinde",
+      "B) En az 6 ay içinde",
+      "C) Sadece uçağın teker koyduğu anda apronda",
+      "D) 5 iş günü içinde SHGM'ye",
+      "E) İhbar süresi bulunmaz, 10 yıl sonra da dava açılabilir"
+    ],
+    "answer": 0,
+    "explanation": "Varşova ve Montreal sisteminde kargo hasarlarında teslimden itibaren 14 gün içinde taşıyıcıya yazılı ihbarda bulunulmalıdır.",
+    "slideRef": "Slayt 20, 34"
+  },
+  {
+    "id": 150,
+    "category": "Hukuk & Konvansiyonlar",
+    "difficulty": "Zor (Senaryo)",
+    "question": "1944 Chicago Konvansiyonu'na göre bir sivil hava aracının milliyeti ve tescili ile ilgili temel ilke nedir?",
+    "options": [
+      "A) Uçaklar aynı anda birden fazla devlete tescil edilebilirler.",
+      "B) Bir hava aracı birden fazla devlete geçerli olarak tescil edilemez; tescil edildiği devletin milliyetini taşır.",
+      "C) Uçakların milliyeti kaptan pilotun vatandaşlığına göre her uçuşta değişir.",
+      "D) Uçaklar sadece ICAO'ya tescil edilirler, devlet tescili aranmaz.",
+      "E) Uçağın tescili yolcuların çoğunluğunun vatandaşı olduğu ülkeye aittir."
+    ],
+    "answer": 1,
+    "explanation": "Slayt 26: Chicago Sözleşmesi Madde 17 ve 18: Hava araçları tescil edildikleri devletin milliyetine sahiptir ve birden fazla devlete geçerli tescil edilemezler.",
+    "slideRef": "Slayt 26"
   }
 ];
