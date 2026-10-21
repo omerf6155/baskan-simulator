@@ -35,7 +35,7 @@
     "id": 3,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "Havacılık kısaltmaları (Doc 8400) kapsamında 'AD' ve 'ASAP' kısaltmalarının doğru karşılıkları hangisidir?",
+    "question": "Havacılık kısaltmaları kapsamında 'AD' ve 'ASAP' kısaltmalarının doğru karşılıkları hangisidir?",
     "options": [
       "A) AD: Air Data / ASAP: Altitude Speed Air Pressure",
       "B) AD: Aerodrome (Meydan) / ASAP: As Soon As Possible (En kısa sürede)",
@@ -51,13 +51,13 @@
     "id": 4,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Orta",
-    "question": "Havacılık haberleşmesinde bir uçuşun fiili kalkış/iniş bilgilerini ve varsa gecikme nedenini diğer istasyonlara bildiren hareket mesajı hangisidir?",
+    "question": "Havacılık haberleşmesinde bir uçuşun fiili kalkış/iniş bilgilerini ve varsa gecikme nedenini ilgili istasyonlara bildiren operasyonel hareket mesajı hangisidir?",
     "options": [
-      "A) LDM (Load Distribution Message)",
-      "B) MVT (Movement Message)",
-      "C) FPL (Filed Flight Plan)",
-      "D) NOTAM (Notice to Airmen)",
-      "E) SCR (Slot Clearance Request)"
+      "A) LDM",
+      "B) MVT",
+      "C) FPL",
+      "D) NOTAM",
+      "E) SCR"
     ],
     "answer": 1,
     "explanation": "Slayt 13: MVT (Movement Message), uçağın kalkış (DEP), iniş (ARR/EA) ve gecikme (DLA) durumlarını bildiren standart operasyonel mesajdır.",
@@ -67,13 +67,13 @@
     "id": 5,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Orta",
-    "question": "Dispeçer ve yer işletme operasyonlarında kullanılan 'LDM' kısaltmasının açılımı ve temel amacı nedir?",
+    "question": "Uçuş harekât ve yer işletme operasyonlarında kullanılan LDM mesajının temel işlevi aşağıdakilerden hangisidir?",
     "options": [
-      "A) Landing Distance Margin - İniş mesafe marjı",
-      "B) Line Dispatch Management - Hat dispeç yönetimi",
-      "C) Load Distribution Message - Uçaktaki yolcu, bagaj, kargo ve yakıt yükünün dağılım mesajı",
-      "D) Late Departure Mitigation - Kalkış rötarlarını önleme mesajı",
-      "E) Low Drag Minimum - Alçak sürtünme limiti"
+      "A) Uçağın iniş mesafe hesaplamalarını ve pist frenleme durumunu bildirmek",
+      "B) Uçuş ekibinin mesai saatlerini ve dinlenme sürelerini takip etmek",
+      "C) Yolcu sayısı, bagaj, kargo ve yakıt yükünün kompartımanlara dağılımını bildirmek",
+      "D) Hava sahasındaki gecikmeleri ve kalkış slotu ertelemelerini raporlamak",
+      "E) Kalkış sonrası rota sapmalarını ve irtifa değişikliklerini koordine etmek"
     ],
     "answer": 2,
     "explanation": "Slayt 13: LDM (Load Distribution Message), uçaktaki yolcu sayısı (PAX), bagaj, kargo ve yakıtın kompartımanlara ağırlık dağılımını gösterir.",
@@ -83,13 +83,13 @@
     "id": 6,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "MVT (Movement Message) içerisinde yer alan 'ETA' ve 'ETD' kısaltmalarının doğru anlamları hangi seçenekte verilmiştir?",
+    "question": "MVT mesajı içerisinde kullanılan ETA ve ETD kısaltmalarının doğru karşılıkları hangisidir?",
     "options": [
-      "A) ETA: Erken Kalkış / ETD: Erken Varış",
-      "B) ETA: Estimated Time of Arrival (Tahmini Varış Zamanı) / ETD: Estimated Time of Departure (Tahmini Kalkış Zamanı)",
+      "A) ETA: Erken Kalkış Zamanı / ETD: Erken Varış Zamanı",
+      "B) ETA: Tahmini Varış Zamanı / ETD: Tahmini Kalkış Zamanı",
       "C) ETA: Gerçek İniş Zamanı / ETD: Gerçek Kalkış Zamanı",
-      "D) ETA: Elektronik Uçuş İzni / ETD: Elektronik Tarife Bildirimi",
-      "E) ETA: Yakıt Tüketim Zamanı / ETD: Motor Başlatma Zamanı"
+      "D) ETA: Elektronik Uçuş Planı / ETD: Elektronik Tarife Bildirimi",
+      "E) ETA: Yakıt İkmal Zamanı / ETD: Motor Çalıştırma Zamanı"
     ],
     "answer": 1,
     "explanation": "Slayt 13: ETA = Estimated Time of Arrival (Tahmini Varış), ETD = Estimated Time of Departure (Tahmini Kalkış).",
@@ -115,13 +115,13 @@
     "id": 8,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "Bir havayolu işletmesine ticari hava taşımacılığı yapabilmesi için Sivil Havacılık Otoritesi (CAA/SHGM) tarafından verilen resmi işletme belgesi/ruhsatı kısaltması nedir?",
+    "question": "Bir havayolu işletmesine ticari hava taşımacılığı yapabilmesi için Sivil Havacılık Otoritesi tarafından verilen resmi işletme ruhsatı kısaltması nedir?",
     "options": [
-      "A) ATC (Air Traffic Control)",
-      "B) AOC (Air Operator Certificate)",
-      "C) AIM (Aeronautical Information Management)",
-      "D) FPL (Flight Plan License)",
-      "E) IATA (International Air Transport Association)"
+      "A) ATC",
+      "B) AOC",
+      "C) AIM",
+      "D) FPL",
+      "E) IATA"
     ],
     "answer": 1,
     "explanation": "Slayt 11: AOC (Air Operator Certificate) = Hava Taşıyıcı İşletme Ruhsatı / Belgesi.",
@@ -163,12 +163,12 @@
     "id": 11,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Orta",
-    "question": "Havacılık kısaltmaları tablosunda yer alan 'CIV' ve 'MIL' kısaltmaları neyi ifade eder?",
+    "question": "Havacılık kısaltmaları tablosunda yer alan CIV ve MIL kısaltmaları neyi ifade eder?",
     "options": [
-      "A) CIV: Sivil (Civil) / MIL: Askeri (Military)",
-      "B) CIV: Hava Sahası / MIL: Havalimanı",
-      "C) CIV: İç Hat / MIL: Dış Hat",
-      "D) CIV: Kargo / MIL: Yolcu",
+      "A) CIV: Sivil / MIL: Askeri",
+      "B) CIV: Hava Sahası / MIL: Hava Meydanı",
+      "C) CIV: İç Hat Seferi / MIL: Dış Hat Seferi",
+      "D) CIV: Kargo Taşımacılığı / MIL: Yolcu Taşımacılığı",
       "E) CIV: Zorunlu İniş / MIL: Teknik İniş"
     ],
     "answer": 0,
@@ -179,13 +179,13 @@
     "id": 12,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir dispeçer, uçağın kalkışının gecikeceğini ve yeni tahmini kalkış zamanını EUROCONTROL ve ilgili istasyonlara bildirmek için hangi mesaj formatını kullanmalıdır?",
+    "question": "Bir dispeçer, uçağın kalkışının gecikeceğini ve yeni tahmini kalkış zamanını EUROCONTROL ve ilgili istasyonlara bildirmek için hangi işlemi yapmalıdır?",
     "options": [
-      "A) LDM mesajı içerisinde PAX sayısını güncelleyerek",
-      "B) DLA (Delay) mesajı çekerek yeni kalkış zamanını belirterek",
-      "C) Sadece NOTAM yayınlayarak",
-      "D) Uçuş planını (FPL) silip yeni şirket açarak",
-      "E) Meydan işletmecisine telefon ederek"
+      "A) LDM mesajı çekerek yolcu sayısını güncellemelidir.",
+      "B) DLA mesajı çekerek yeni kalkış zamanını bildirmelidir.",
+      "C) Havalimanı kulesine sadece NOTAM formu iletmelidir.",
+      "D) Sunulmuş uçuş planını iptal edip seferi ertelemelidir.",
+      "E) Meydan yer hizmetleri kuruluşuna sözlü bildirim yapmalıdır."
     ],
     "answer": 1,
     "explanation": "Slayt 13: DLA (Delay Message - Gecikme Mesajı), uçuş planında belirtilen kalkış saatinden sapmalarda çekilen standart ATC/operasyon mesajıdır.",
@@ -195,13 +195,13 @@
     "id": 13,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "AIM (Aeronautical Information Management) hizmetinin temel amacı nedir?",
+    "question": "Uluslararası sivil havacılıkta AIM hizmetinin temel kuruluş amacı aşağıdakilerden hangisidir?",
     "options": [
-      "A) Uçak bileti fiyatlarını belirlemek",
-      "B) Uçuş emniyeti, düzeni ve verimliliği için gerekli havacılık bilgi ve verilerini sağlamak",
-      "C) Pilotların maaş bordrolarını düzenlemek",
-      "D) Gümrük kaçakçılığını takip etmek",
-      "E) Sadece askeri radar verilerini kaydetmek"
+      "A) Havayolu bilet fiyatlarını ve piyasa tavan ücretlerini belirlemek",
+      "B) Hava seyrüseferinin emniyet ve etkinliği için gerekli havacılık bilgi ve verilerini sağlamak",
+      "C) Uçuş personeli ile yer personelinin çalışma koşullarını düzenlemek",
+      "D) Havalimanı gümrük sahalarındaki kaçakçılık faaliyetlerini denetlemek",
+      "E) Askeri hava savunma radarlarının bakım ve onarım süreçlerini yürütmek"
     ],
     "answer": 1,
     "explanation": "Slayt 10: AIM Hizmeti (Havacılık Bilgi Yönetimi), uluslararası hava seyrüseferinin emniyet, düzen ve etkinliği için gerekli bilgileri sağlar.",
@@ -211,13 +211,13 @@
     "id": 14,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "Aşağıdaki Türkiye havalimanı ICAO kodlarından hangisi Akdeniz / Ege bölgesindeki bir turizm meydanımıza aittir?",
+    "question": "Aşağıdaki havalimanı ICAO kodlarından hangisi Türkiye'nin Akdeniz bölgesindeki bir uluslararası turizm meydanımıza aittir?",
     "options": [
-      "A) LTAC (Ankara)",
-      "B) LTFJ (Sabiha Gökçen)",
-      "C) LTAI (Antalya)",
-      "D) LTBA (Atatürk)",
-      "E) LTFM (İstanbul)"
+      "A) LTAC",
+      "B) LTFJ",
+      "C) LTAI",
+      "D) LTBA",
+      "E) LTFM"
     ],
     "answer": 2,
     "explanation": "Slayt 6-9: LTAI, Antalya Havalimanı'nın resmi ICAO kodudur.",
@@ -275,13 +275,13 @@
     "id": 18,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Kolay",
-    "question": "1919 Paris Konvansiyonu'nun sivil havacılık tarihindeki en önemli hukuki ilkesi nedir?",
+    "question": "1919 Paris Konvansiyonu'nun sivil havacılık hukukundaki en temel ilkesi nedir?",
     "options": [
-      "A) Açık Semalar (Open Skies) ilkesini getirmiştir.",
-      "B) Her devletin, ülkesi üzerindeki hava sahasında tam ve mutlak egemenliğe sahip olduğunu ilk kez kabul etmiştir.",
-      "C) Havayolu şirketlerinin tazminat sorumluluklarını sınırlamıştır.",
-      "D) Uçak kaçırma suçlarını düzenlemiştir.",
-      "E) ICAO'yu resmen kurmuştur."
+      "A) Tüm dünya hava sahalarının uluslararası ortak kullanıma açık olduğunu ilan etmiştir.",
+      "B) Her devletin, ülkesi üzerindeki hava sahasında tam ve mutlak egemenliğe sahip olduğunu kabul etmiştir.",
+      "C) Havayolu işletmelerinin yolcu ve kargo tazminat sorumluluk limitlerini belirlemiştir.",
+      "D) Uçak kaçırma ve korsanlık suçlarına karşı uluslararası askeri güç oluşturulmasını öngörmüştür.",
+      "E) ICAO teşkilatını resmen kurarak havacılık standartlarını yürürlüğe koymuştur."
     ],
     "answer": 1,
     "explanation": "Slayt 18-19: 1919 Paris Konvansiyonu, her devletin kendi hava sahası üzerinde 'tam ve münhasır (mutlak) egemenliğe' sahip olduğunu uluslararası hukuka sokmuştur.",
@@ -323,13 +323,13 @@
     "id": 21,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Orta",
-    "question": "1952 Roma Konvansiyonu'nun sivil havacılıktaki temel düzenleme alanı nedir?",
+    "question": "1952 Roma Konvansiyonu'nun sivil havacılık hukukundaki temel düzenleme alanı nedir?",
     "options": [
-      "A) Hava araçlarının yüzeydeki (yerdeki) üçüncü şahıslara verdiği zararların tazmini",
-      "B) Uçak içi hırsızlık suçları",
-      "C) Kokpit ekibinin uçuş ve görev süreleri",
-      "D) Slot koordinasyon kuralları",
-      "E) Havalimanı iniş kalkış ücretleri"
+      "A) Hava araçlarının yüzeydeki üçüncü şahıslara ve mallara verdiği zararların tazmini",
+      "B) Uçak içinde yolcular arasında meydana gelen adli suçların cezalandırılması",
+      "C) Uçuş ekibinin haftalık ve aylık maksimum uçuş görev sürelerinin sınırlandırılması",
+      "D) Yoğun havalimanlarında slot koordinasyonu ve tarife planlama esasları",
+      "E) Uluslararası hava meydanlarındaki iniş, kalkış ve aydınlatma ücret tarifeleri"
     ],
     "answer": 0,
     "explanation": "Slayt 24: Roma Konvansiyonu (1952), yabancı bir hava aracının yerde/yüzeyde bulunan üçüncü şahıslara ve mallara verdiği zararlardan doğan sorumluluğu düzenler.",
@@ -355,13 +355,13 @@
     "id": 23,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Orta",
-    "question": "Chicago Konvansiyonu'nun 'Kabotaj' başlıklı 7. Maddesi devletlere hangi hakkı ve kısıtlamayı getirmiştir?",
+    "question": "Chicago Konvansiyonu'nun 7. Maddesi taraf devletlere hangi konuda hukuki yetki ve düzenleme getirmiştir?",
     "options": [
-      "A) Her devlete yabancı ülkelerde serbestçe iç hat uçma zorunluluğu getirmiştir.",
-      "B) Taraf devletlerin, kendi ülkesi içindeki iki nokta arasındaki ticari taşımayı (kabotaj) kendi milli taşıyıcılarına saklı tutma hakkını tanımıştır.",
-      "C) Tüm dünyada iç hat uçuşlarını tamamen serbest bırakmıştır.",
-      "D) Sadece deniz aşırı ülkelere kabotaj hakkı tanımıştır.",
-      "E) Kabotaj hakkının sadece askeri uçaklara verilmesini emretmiştir."
+      "A) Yabancı havayollarına kendi iç hat noktalarında sınırsız ve serbest uçuş hakkı tanımıştır.",
+      "B) Kendi ülkesi içindeki iki nokta arasındaki ticari taşımayı kendi milli araçlarına saklı tutma hakkı tanımıştır.",
+      "C) Bütün üye devletlerin hava sahalarını gümrük ve pasaport denetimine tamamen kapatmıştır.",
+      "D) Kabotaj hakkının sadece transit geçiş yapan askeri hava araçlarına verilmesini zorunlu kılmıştır.",
+      "E) İç hat uçuşlarında yabancı havayollarından vergi alınmasını kesin olarak yasaklamıştır."
     ],
     "answer": 1,
     "explanation": "Slayt 26: Şikago Sözleşmesi Madde 7, kabotaj hakkını düzenler. Her devlet kendi iç hat noktaları arasındaki ticari taşımacılığı kendi bayrağını taşıyan araçlara tahsis etme yetkisine sahiptir.",
@@ -371,13 +371,13 @@
     "id": 24,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Orta",
-    "question": "Devletlerin çok taraflı sözleşmeler yerine 'İkili Hava Ulaştırma Anlaşmaları' (Bilateral Agreements) yapmayı tercih etmelerinin temel sebebi nedir?",
+    "question": "Devletlerin çok taraflı küresel anlaşmalar yerine İkili Hava Ulaştırma Anlaşmaları yapmayı tercih etmelerinin temel nedeni nedir?",
     "options": [
-      "A) ICAO'nun kapatılmış olması",
-      "B) Çok taraflı sözleşmelerle trafik haklarının kontrol ve sürdürülebilirliğini sağlamak istememeleri, ekonomik dengeleri ikili koruma arzusu",
-      "C) Tüm dünyada vizelerin kaldırılması",
-      "D) Sadece tek bir uçak üreticisinin bulunması",
-      "E) Hava sahalarının birleştirilmek istenmesi"
+      "A) ICAO teşkilatının çok taraflı sözleşme yapma yetkisini feshetmiş olması",
+      "B) Trafik haklarının kontrolünü elinde tutmak ve ekonomik çıkarları karşılıklı dengelemek istemeleri",
+      "C) Bütün dünya ülkeleri arasındaki pasaport ve vize uygulamalarının tamamen kaldırılmış olması",
+      "D) Dünyada ticari yolcu uçağı üreten yalnızca tek bir uluslararası konsorsiyumun bulunması",
+      "E) Ülkelerin hava sahası egemenliklerini bölgesel birliklere devretmeyi hedeflemesi"
     ],
     "answer": 1,
     "explanation": "Slayt 29: Devletlerin çok taraflı sözleşmelerle trafik haklarının kontrolünü kaybetmek istememesi, birbirine yakın ekonomik güçteki devletlerle ikili anlaşmalar yapma yolunu açmıştır.",
@@ -387,13 +387,13 @@
     "id": 25,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Orta",
-    "question": "1963 Tokyo Konvansiyonu'nun sivil havacılık güvenliği açısından getirdiği EN ÖNEMLİ yenilik hangisidir?",
+    "question": "1963 Tokyo Konvansiyonu'nun sivil havacılık güvenliğine getirdiği EN ÖNEMLİ hukuki düzenleme nedir?",
     "options": [
-      "A) Uçak kaçıranlara ölüm cezası getirilmesi",
-      "B) Uçak içinde işlenen suçlarda yetkiyi tescil devletine vermesi ve Kaptan Pilota şüpheli kişileri etkisiz hale getirme/bağlama yetkisi tanıması",
-      "C) Havalimanlarında X-Ray cihazı zorunluluğu getirmesi",
-      "D) Sıvı kısıtlaması getirmesi",
-      "E) Pilotların silah taşımasını zorunlu kılması"
+      "A) Uçak kaçıran şüpheliler hakkında doğrudan uluslararası idam cezası getirmesi",
+      "B) Uçak içi suçlarda yargı yetkisini tescil devletine ve tedbir yetkisini kaptan pilota vermesi",
+      "C) Bütün yolcu terminallerinde bagaj taraması için X-Ray kullanımını zorunlu kılması",
+      "D) Kabin bagajlarında sıvı ve kesici alet taşınmasına küresel yasak getirmesi",
+      "E) Ticari uçuşlarda kokpitte görevli pilotların silah taşımasını zorunlu hale getirmesi"
     ],
     "answer": 1,
     "explanation": "Slayt 31-32: Tokyo Sözleşmesi (1963), uçak içindeki suçlar ve eylemlerde tescil devletinin yargı yetkisini ve uçak komutanının (kaptan pilot) emniyet tedbiri alma yetkilerini düzenlemiştir.",
@@ -403,13 +403,13 @@
     "id": 26,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Kolay",
-    "question": "16 Aralık 1970 tarihli Lahey Sözleşmesi'nin doğrudan mücadele ettiği ve uluslararası suç ilan ettiği eylem nedir?",
+    "question": "16 Aralık 1970 tarihli Lahey Sözleşmesi'nin doğrudan suç kabul ettiği ve cezalandırılmasını düzenlediği fiil nedir?",
     "options": [
-      "A) Bagaj hırsızlığı",
-      "B) Hava aracının yasa dışı ele geçirilmesi / Uçak kaçırma (Hijacking)",
-      "C) Fazla bilet satışı (Overbooking)",
-      "D) Slota uymama",
-      "E) Pilot lisans sahteciliği"
+      "A) Havalimanı apronunda meydana gelen bagaj ve kargo hırsızlığı",
+      "B) Hava aracının yasa dışı ele geçirilmesi ve uçak kaçırma eylemi",
+      "C) Kapasiteden fazla bilet satışı yaparak yolcuyu uçağa almama durumu",
+      "D) Koordineli havalimanlarında tahsis edilen slota kasıtlı olarak uymama",
+      "E) Pilot ve dispeçer lisanslarında sahtecilik yaparak uçuş planlama"
     ],
     "answer": 1,
     "explanation": "Slayt 33: 1970 Lahey Sözleşmesi, uçak kaçırma (hava aracının yasa dışı zaptı) fiilini suç kabul etmiş ve suçluların iadesi/yargılanmasını hükme bağlamıştır.",
@@ -419,13 +419,13 @@
     "id": 27,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Kolay",
-    "question": "Tokyo ve Lahey sözleşmelerinin eksik bıraktığı 'hava aracına ve tesislerine karşı SABOTAJ eylemlerini' suç kapsamına alan 1971 tarihli sözleşme hangisidir?",
+    "question": "Tokyo ve Lahey sözleşmelerinin kapsamı dışında kalan hava aracına ve tesislerine karşı SABOTAJ fiillerini uluslararası suç sayan sözleşme hangisidir?",
     "options": [
-      "A) Varşova Sözleşmesi",
-      "B) Montreal Sözleşmesi (1971)",
-      "C) Paris Konvansiyonu",
-      "D) Roma Sözleşmesi",
-      "E) Madrid Anlaşması"
+      "A) 1929 Varşova Sözleşmesi",
+      "B) 1971 Montreal Sözleşmesi",
+      "C) 1919 Paris Konvansiyonu",
+      "D) 1952 Roma Sözleşmesi",
+      "E) 1944 Chicago Sözleşmesi"
     ],
     "answer": 1,
     "explanation": "Slayt 33: 1971 Montreal Sözleşmesi, 'Sivil Havacılığın Güvenliğine Karşı Kanun Dışı Eylemlerin Önlenmesi' amacıyla özellikle sabotaj fiillerini kapsama almıştır.",
@@ -499,13 +499,13 @@
     "id": 32,
     "category": "Hukuk & Konvansiyonlar",
     "difficulty": "Orta",
-    "question": "1944 Chicago Konvansiyonu'nun Ekleri (Annexes) neyi ifade eder?",
+    "question": "1944 Chicago Konvansiyonu'nun Ekleri sivil havacılıkta neyi ifade eder?",
     "options": [
-      "A) Sadece üye devletlerin ödeyeceği yıllık aidat listesini",
-      "B) Uluslararası standartları ve tavsiye edilen uygulamaları (SARPs - Personel Lisanslama, Uçuş Kuralları, Meteoroloji, AIM vb.)",
-      "C) Sadece askeri hava üslerinin koordinatlarını",
-      "D) Havayolu şirketlerinin bilet fiyat tarifelerini",
-      "E) Pilotların çalışma saatlerini belirleyen yerel kanunları"
+      "A) Taraf devletlerin her yıl ICAO bütçesine ödemekle yükümlü olduğu aidat tarifelerini",
+      "B) Uluslararası sivil havacılık standartlarını ve tavsiye edilen teknik uygulamaları",
+      "C) Üye ülkelerin topraklarındaki askeri hava üslerinin coğrafi koordinat listelerini",
+      "D) Havayolu işletmelerinin dış hat uçuşlarında uygulayabileceği bilet tavan ücretlerini",
+      "E) Uçuş personelinin çalışma koşullarını belirleyen ulusal iş kanunu hükümlerini"
     ],
     "answer": 1,
     "explanation": "Slayt 26-28: Şikago Konvansiyonu Ekleri (Annex 1'den Annex 19'a kadar), tüm dünyada sivil havacılık standartlarını (SARPs) belirleyen teknik mevzuattır.",
@@ -563,13 +563,13 @@
     "id": 36,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Kolay",
-    "question": "Uluslararası Hava Taşımacılığı Birliği olan 'IATA'nın temel niteliği nedir?",
+    "question": "Uluslararası Hava Taşımacılığı Birliği (IATA) teşkilatının temel niteliği ve işlevi nedir?",
     "options": [
-      "A) Devletlerarası resmi bir askeri teşkilattır.",
-      "B) Dünyadaki ticari havayolu işletmelerinin üye olduğu, havayolu taşımacılığını temsil eden ticari bir birliktir.",
-      "C) Hava sahası kontrolünü yapan kule teşkilatıdır.",
-      "D) Uçak üreticisi bir konsorsiyumdur.",
-      "E) Birleşmiş Milletler Güvenlik Konseyi alt organıdır."
+      "A) Devletlerin askeri hava kuvvetlerini denetleyen hükümetler arası bir kuruldur.",
+      "B) Ticari havayollarının üye olduğu, biletleme ve işletme standartlarını belirleyen sektörel birliktir.",
+      "C) Avrupa hava sahasındaki hava trafik kontrol merkezlerini doğrudan yöneten kule otoritesidir.",
+      "D) Ticari yolcu uçaklarının gövde ve motor tasarımlarını yapan mühendislik birliğidir.",
+      "E) Birleşmiş Milletler Genel Kurulu bünyesinde faaliyet gösteren siyasi bir komisyondur."
     ],
     "answer": 1,
     "explanation": "Slayt 38: IATA, dünya havayolu işletmelerinin üye olduğu uluslararası sivil ticari havayolu birliğidir; biletleme standartları, slot kılavuzları (WSG) yayınlar.",
@@ -595,13 +595,13 @@
     "id": 38,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "Avrupa Birliği'nin sivil havacılık emniyet ajansı olan 'EASA'nın temel görevleri arasında hangisi YER ALIR?",
+    "question": "Avrupa Havacılık Emniyeti Ajansı (EASA) kuruluşunun temel görev alanı aşağıdakilerden hangisidir?",
     "options": [
-      "A) Uçak ve parça sertifikasyonu, bakım ve operasyon emniyet standartlarını belirlemek",
-      "B) Havayolu bilet fiyatlarını denetlemek",
-      "C) Savaş uçaklarının askeri tatbikatlarını yönetmek",
-      "D) Havalimanlarında Duty-Free mağazalarını işletmek",
-      "E) Ülkeler arasındaki vize muafiyetlerini düzenlemek"
+      "A) Hava aracı tip sertifikasyonu, bakım ve operasyonel uçuş emniyeti standartlarını belirlemek",
+      "B) Havayolu şirketlerinin koltuk bilet fiyatlarını ve sezonluk indirimlerini denetlemek",
+      "C) NATO üyesi ülkelerin savaş uçaklarıyla icra edeceği ortak askeri tatbikatları koordine etmek",
+      "D) Havalimanı terminallerindeki gümrüksüz satış mağazalarını kiraya vermek ve denetlemek",
+      "E) Taraf devletler arasındaki vize rejimlerini ve pasaport kontrol standartlarını düzenlemek"
     ],
     "answer": 0,
     "explanation": "Slayt 40: EASA (European Union Aviation Safety Agency), Avrupa'da uçuş emniyeti standartları, tip sertifikasyonu ve hava aracı regülasyonlarını belirler.",
@@ -611,13 +611,13 @@
     "id": 39,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Kolay",
-    "question": "Meydanlarda gerçekleştirilen rampa denetimlerinde; 'YABANCI tescilli uçakları denetleyen program' ile 'YERLİ/MİLLİ uçakları denetleyen program' kısaltmaları hangisidir?",
+    "question": "Meydanlarda icra edilen rampa denetimlerinde; YABANCI uçakları denetleyen program ile YERLİ uçakları denetleyen program kısaltmaları hangisidir?",
     "options": [
-      "A) SAFA (Yabancı) - SANA (Yerli)",
-      "B) SANA (Yabancı) - SAFA (Yerli)",
-      "C) IATA (Yabancı) - ICAO (Yerli)",
-      "D) ECAC (Yabancı) - EASA (Yerli)",
-      "E) AOC (Yabancı) - CAA (Yerli)"
+      "A) SAFA - SANA",
+      "B) SANA - SAFA",
+      "C) IATA - ICAO",
+      "D) ECAC - EASA",
+      "E) AOC - CAA"
     ],
     "answer": 0,
     "explanation": "Slayt 41-42: SAFA = Safety Assessment of Foreign Aircraft (Yabancı), SANA = Safety Assessment of National Aircraft (Yerli).",
@@ -627,13 +627,13 @@
     "id": 40,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "Türkiye'de SAFA ve SANA rampa emniyet denetimlerini icra etmeye yetkili resmi kurum hangisidir?",
+    "question": "Türkiye havalimanlarında SAFA ve SANA rampa emniyet denetimlerini icra etmeye yetkili resmi kurum hangisidir?",
     "options": [
-      "A) DHMİ Rampa Şefliği",
-      "B) Sivil Havacılık Genel Müdürlüğü (SHGM) Denetçileri",
+      "A) DHMİ Rampa Emniyet Şefliği",
+      "B) Sivil Havacılık Genel Müdürlüğü Denetçileri",
       "C) Emniyet Genel Müdürlüğü Havacılık Şubesi",
-      "D) Hava Meydanı Özel Güvenlik Birimi",
-      "E) Türk Hava Yolları Kalite Başkanlığı"
+      "D) Havalimanı Mülki İdare Amirliği",
+      "E) Türk Hava Yolları Kalite Güvence Başkanlığı"
     ],
     "answer": 1,
     "explanation": "Slayt 41-42: Türkiye'de SAFA ve SANA denetimleri münhasıran sivil havacılık otoritesi olan SHGM tarafından yetkilendirilmiş denetçilerce yapılır.",
@@ -659,13 +659,13 @@
     "id": 42,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "Türkiye'de Sivil Havacılık Genel Müdürlüğü'nün (SHGM) görevleri arasında aşağıdakilerden hangisi YER ALMAZ?",
+    "question": "Türkiye'de Sivil Havacılık Genel Müdürlüğü'nün (SHGM) yasal görevleri arasında aşağıdakilerden hangisi YER ALMAZ?",
     "options": [
-      "A) Uçuş izinlerini (permi) değerlendirmek ve vermek",
-      "B) Havayolu işletmelerine AOC düzenlemek",
-      "C) Havalimanı kontrol kulelerinde bizzat Hava Trafik Kontrolörlüğü (ATC) hizmeti vermek",
-      "D) Havacılık kuralları koymak ve mevzuata aykırılıkta idari para cezası uygulamak",
-      "E) Uçuş ekibi ve teknisyen lisanslandırma işlemlerini yürütmek"
+      "A) Uçuş izinleri ve permi başvurularını değerlendirip karara bağlamak",
+      "B) Havayolu işletmelerine ticari uçuş yapabilmeleri için işletme ruhsatı düzenlemek",
+      "C) Havalimanı kulelerinde hava trafik kontrolörlüğü hizmetini fiilen yürütmek",
+      "D) Sivil havacılık kuralları koymak ve mevzuata aykırı hallerde idari ceza uygulamak",
+      "E) Uçuş ekibi, dispeçer ve teknisyenlerin lisanslandırma süreçlerini yürütmek"
     ],
     "answer": 2,
     "explanation": "Slayt 50-52: Kulede hava trafik kontrol (ATC) hizmetini fiilen veren kurum DHMİ'dir. SHGM ise otoritedir (kural koyar, ruhsat/permi verir, denetler).",
@@ -675,13 +675,13 @@
     "id": 43,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "14.10.1983 tarihli 2920 Sayılı Türk Sivil Havacılık Kanunu'nun (TSHK) temel amacı nedir?",
+    "question": "2920 Sayılı Türk Sivil Havacılık Kanunu'nun 1. Maddesinde belirtilen temel kanun amacı nedir?",
     "options": [
-      "A) Sadece Türk Hava Yolları'nın bilet fiyatlarını belirlemek",
-      "B) Sivil havacılık sahasındaki faaliyetlerin ulusal çıkarlarımız ve uluslararası ilişkilere uygun şekilde düzenlenmesini sağlamak",
-      "C) Tüm yabancı hava araçlarının Türkiye'ye girişini yasaklamak",
-      "D) Askeri uçakların bakım periyotlarını düzenlemek",
-      "E) Havalimanı taksi tarifelerini sabitlemek"
+      "A) Türkiye'deki iç hat uçak bileti taban ve tavan fiyatlarını yıllık olarak belirlemek",
+      "B) Sivil havacılık faaliyetlerinin ulusal çıkarlar ve uluslararası ilişkilere uygun düzenlenmesini sağlamak",
+      "C) Yabancı havayollarının Türkiye hava sahasına girişini tamamen engelleyip yerli sektörü korumak",
+      "D) Askeri hava araçlarının gövde ve motor modernizasyon projelerini finanse etmek",
+      "E) Havalimanı transfer ücretlerini ve taksi tarifelerini standart hale getirmek"
     ],
     "answer": 1,
     "explanation": "Slayt 46: 2920 Sayılı Kanun Madde 1: Sivil havacılık faaliyetlerinin ulusal çıkarlarımız ve uluslararası ilişkilere uygun düzenlenmesini sağlamaktır.",
@@ -691,13 +691,13 @@
     "id": 44,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Zor (Senaryo)",
-    "question": "2920 Sayılı TSHK Madde 90 uyarınca, Türk hava sahasında uçuş yapacak 'Yabancı Devlet Hava Araçları'nın hukuki sorumluluğu nedir?",
+    "question": "2920 Sayılı Kanun Madde 90 uyarınca, Türk hava sahasını kullanacak YABANCI DEVLET hava araçlarının yasal durumu nedir?",
     "options": [
-      "A) Yabancı devlet hava araçları hiçbir Türk kanununa tabi değildir.",
-      "B) Türk hava sahasında uçuş yapacak yabancı devlet hava araçları Türk kanunlarına ve bunlara bağlı kurallara uymak zorundadırlar.",
-      "C) Sadece kendi ülkelerinin kanunlarına uyarlar.",
-      "D) NATO üyesi iseler Türk hava sahasında istedikleri gibi uçabilirler.",
-      "E) Yabancı devlet uçaklarının Türk hava sahasına girmesi ebediyen yasaktır."
+      "A) Diplomatik dokunulmazlıkları nedeniyle hiçbir Türk mevzuatına veya kuralına tabi değildirler.",
+      "B) Türk hava sahasında uçuş yaparken Türk kanunlarına ve bunlara bağlı kurallara uymak zorundadırlar.",
+      "C) Yalnızca kendi tescil edildikleri ülkenin ulusal havacılık kanunlarına karşı sorumludurlar.",
+      "D) NATO üyesi devletlere ait olmaları halinde Türk hava sahasında önceden bildirim yapmadan uçabilirler.",
+      "E) Yabancı devlet hava araçlarının Türk hava sahasını herhangi bir amaçla kullanması kesin olarak yasaktır."
     ],
     "answer": 1,
     "explanation": "Slayt 49: 2920 Sayılı TSHK Madde 90: 'Türk hava sahasında uçuş yapacak yabancı devlet hava araçları; Türk kanunlarına ve bunlara bağlı kurallara uymak zorundadırlar.'",
@@ -723,13 +723,13 @@
     "id": 46,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Kolay",
-    "question": "ECAC (European Civil Aviation Conference) teşkilatının temel amacı nedir?",
+    "question": "Avrupa Sivil Havacılık Konferansı (ECAC) teşkilatının temel amacı nedir?",
     "options": [
-      "A) Avrupa devletleri arasında sivil havacılık politikaları ve uygulamalarında uyum ve eşgüdüm sağlamak",
-      "B) Uçak motoru üretmek",
-      "C) Askeri hava savunma füzelerini kontrol etmek",
-      "D) Havalimanlarında yolcu bagajlarını taşımak",
-      "E) Pilotlara pasaport vermek"
+      "A) Üye devletler arasında sivil havacılık politikaları ve uygulamalarında uyum ve eşgüdüm sağlamak",
+      "B) Ticari yolcu uçakları için jet yakıtı ve yedek parça tedarik zincirini tek elden yönetmek",
+      "C) Avrupa hava sahasındaki radar istasyonlarının askeri hava savunma entegrasyonunu sağlamak",
+      "D) Havalimanlarındaki yer işletme kuruluşlarının bagaj taşıma araçlarını imal etmek",
+      "E) Uçuş personeline diplomatik pasaport ve uluslararası seyahat muafiyeti tanımak"
     ],
     "answer": 0,
     "explanation": "Slayt 37: ECAC (Avrupa Sivil Havacılık Konferansı), Avrupa'da emniyetli, verimli ve sürdürülebilir bir hava taşımacılığı sistemi geliştirmek için politikalar üretir.",
@@ -755,13 +755,13 @@
     "id": 48,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "2920 Sayılı TSHK Madde 91'e göre sivil hava araçlarının iniş kalkışları ile ilgili temel kural nedir?",
+    "question": "2920 Sayılı Kanun Madde 91'e göre sivil hava araçlarının iniş kalkışları ile ilgili temel kural nedir?",
     "options": [
-      "A) Sivil hava araçları Kanunun öngördüğü esaslar idaresinde saptanmış bulunan havaalanlarından başka yerlerde iniş/kalkış yapamazlar.",
-      "B) Pilotlar istedikleri otoyola serbestçe inebilirler.",
-      "C) Gündüzleri boş arazilere serbest iniş serbesttir.",
-      "D) Sivil hava araçları kule talimatını dinlemek zorunda değildir.",
-      "E) İniş kalkış için sadece belediye başkanından izin alınır."
+      "A) Sivil hava araçları kanunen saptanmış bulunan havaalanlarından başka yerlerde iniş kalkış yapamazlar.",
+      "B) Pilotlar acil bir durum olmasa dahi meteorolojik şartlara göre boş otoyollara serbestçe inebilirler.",
+      "C) Gündüz şartlarında ve görerek uçuş koşullarında yerleşim yerleri dışındaki arazilere iniş serbesttir.",
+      "D) Sivil hava araçları saptanmış havayolunu izlemek zorunda olup hava trafik kontrol talimatına uymak mecburidir.",
+      "E) Özel mülkiyete ait arazilere iniş yapabilmek için yalnızca ilgili belediye başkanlığından izin alınır."
     ],
     "answer": 0,
     "explanation": "Slayt 49: 2920 Sayılı Kanun Madde 91: Sivil hava araçlarının iniş ve kalkışları, kanunen saptanmış bulunan havaalanlarından başka yerlerde yapılamaz.",
@@ -771,13 +771,13 @@
     "id": 49,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Kolay",
-    "question": "Uluslararası Sivil Havacılık Teşkilatı ICAO'nun genel merkezi hangi şehirdedir?",
+    "question": "Uluslararası Sivil Havacılık Teşkilatı (ICAO) genel merkezi hangi ülkededir?",
     "options": [
-      "A) Brüksel (Belçika)",
-      "B) Cenevre (İsviçre)",
-      "C) Montreal (Kanada)",
-      "D) Paris (Fransa)",
-      "E) New York (ABD)"
+      "A) Belçika",
+      "B) İsviçre",
+      "C) Kanada",
+      "D) Fransa",
+      "E) ABD"
     ],
     "answer": 2,
     "explanation": "Slayt 36: ICAO'nun daimi genel merkezi Montreal, Kanada'dadır.",
@@ -787,13 +787,13 @@
     "id": 50,
     "category": "Otoriteler & Kurumlar",
     "difficulty": "Orta",
-    "question": "Türkiye'de tehlikeli maddelerin sivil hava araçlarıyla taşınmasında SHGM'nin koordinasyon kurduğu Ulaştırma ve Altyapı Bakanlığı birimi hangisidir?",
+    "question": "Türkiye'de tehlikeli maddelerin sivil hava araçlarıyla taşınmasında SHGM'nin koordinasyon kurduğu yetkili kurum hangisidir?",
     "options": [
       "A) Karayolları Genel Müdürlüğü",
-      "B) Tehlikeli Mal ve Kombine Taşımacılık Düzenleme Genel Müdürlüğü (TMKT)",
-      "C) Tersaneler Genel Müdürlüğü",
-      "D) TCDD Taşımacılık",
-      "E) Haberleşme Genel Müdürlüğü"
+      "B) Tehlikeli Mal ve Kombine Taşımacılık Düzenleme Genel Müdürlüğü",
+      "C) Tersaneler ve Kıyı Yapıları Genel Müdürlüğü",
+      "D) TCDD Taşımacılık Anonim Şirketi",
+      "E) Bilgi Teknolojileri ve İletişim Kurumu"
     ],
     "answer": 1,
     "explanation": "Slayt 53, 91: Tehlikeli maddelerin taşınması başvuruları TMKT Genel Müdürlüğü ile koordine edilerek SHGM tarafından sonuçlandırılır.",
@@ -803,13 +803,13 @@
     "id": 51,
     "category": "Trafik Hakları",
     "difficulty": "Kolay",
-    "question": "1. Trafik Hakkı (Birinci Serbesti) ne anlama gelir?",
+    "question": "Chicago Sözleşmesi kapsamındaki 1. Trafik Hakkı ne anlama gelir?",
     "options": [
-      "A) Bir devletin hava araçlarının diğer bir devletin hava sahasından YERE İNMEKSİZİN GEÇİŞ yapabilme hakkıdır.",
-      "B) Yakıt almak için teknik iniş yapma hakkıdır.",
-      "C) Yolcu indirip bindirme hakkıdır.",
-      "D) İç hatlarda uçabilme hakkıdır.",
-      "E) İki yabancı ülke arasında bağımsız uçma hakkıdır."
+      "A) Bir devletin hava araçlarının diğer bir devletin hava sahasından yere inmeksizin transit geçiş yapabilme hakkıdır.",
+      "B) Yabancı bir ülkenin topraklarına ticari amaçla yolcu ve kargo indirip bindirme ayrıcalığıdır.",
+      "C) Sadece yakıt ikmali ve teknik arıza nedeniyle yabancı bir meydana iniş yapabilme hakkıdır.",
+      "D) Yabancı bir ülkenin iki iç hat şehri arasında ticari bilet satarak sefer icra etme hakkıdır.",
+      "E) İki yabancı ülke arasında kendi ana vatanı ile bağ kurmaksızın bağımsız dış hat uçma hakkıdır."
     ],
     "answer": 0,
     "explanation": "Slayt 58: 1. Trafik Hakkı: Bir havayolunun diğer bir ülkenin hava sahasından yere inmeksizin transit geçiş (aşırı uçuş / overflight) yapabilme hakkıdır.",
@@ -819,13 +819,13 @@
     "id": 52,
     "category": "Trafik Hakları",
     "difficulty": "Kolay",
-    "question": "2. Trafik Hakkı (İkinci Serbesti) aşağıdakilerden hangisidir?",
+    "question": "Chicago Sözleşmesi kapsamındaki 2. Trafik Hakkı aşağıdakilerden hangisidir?",
     "options": [
-      "A) Ticari yolcu indirme hakkı",
-      "B) Ticari amaç DIŞINDA, yakıt ikmali veya teknik sebeplerle diğer ülke topraklarına inebilme hakkı",
-      "C) Kendi ülkesine yolcu taşıma hakkı",
-      "D) Tam kabotaj hakkı",
-      "E) Kargo taşıma tekeli"
+      "A) Yabancı bir ülkeden kendi tescil ülkesine yolcu ve kargo taşıma serbestisidir.",
+      "B) Ticari amaç dışında yakıt ikmali veya teknik sebeplerle diğer ülke topraklarına inebilme hakkıdır.",
+      "C) Kendi ülkesinden aldığı ticari yolcuları anlaşmalı yabancı bir ülkeye götürme serbestisidir.",
+      "D) Yabancı bir ülkenin iç hat noktalarında transit yolcu taşımacılığı yapabilme imtiyazıdır.",
+      "E) Uluslararası hava taşımacılığında posta ve tehlikeli madde taşıma tekeline sahip olmadır."
     ],
     "answer": 1,
     "explanation": "Slayt 59: 2. Trafik Hakkı: Ticari amaç dışında yakıt ikmali veya teknik arıza nedeniyle inebilme hakkıdır (Teknik İniş Hakkı). Yolcu/yük alıp indiremez.",
@@ -949,11 +949,11 @@
     "difficulty": "Zor (Senaryo)",
     "question": "5. Trafik Hakkı ile 7. Trafik Hakkı arasındaki EN KRİTİK FARK nedir?",
     "options": [
-      "A) 5. hak iç hatlarda geçerlidir, 7. hak dış hatlarda geçerlidir.",
-      "B) 5. hakta uçuş kendi ana vatanıyla bağlantılıdır (başlar veya biter); 7. hakta ise ana vatanla hiçbir operasyonel bağlantı yoktur.",
-      "C) 5. hak sadece kargo taşır, 7. hak sadece yolcu taşır.",
-      "D) 5. hakta slot gerekmez, 7. hakta slot şarttır.",
-      "E) 5. hakta teknik iniş yapılır, 7. hakta transit geçilir."
+      "A) 5. hak iç hat seferlerini kapsar, 7. hak ise sadece dış hat seferlerinde geçerlidir.",
+      "B) 5. hakta uçuş ana vatanla bağlantılıdır, 7. hakta ise ana vatanla hiçbir temas yoktur.",
+      "C) 5. hak sadece hava kargo taşır, 7. hak ise sadece tarifeli yolcu taşımacılığında kullanılır.",
+      "D) 5. hak Seviye-1 meydanlarda geçerlidir, 7. hak ise Seviye-3 meydanlarda slot gerektirir.",
+      "E) 5. hakta teknik iniş yapılır, 7. hakta ise sadece hava sahasından transit geçiş sağlanır."
     ],
     "answer": 1,
     "explanation": "Slayt 62, 66: İkisi de iki yabancı ülke arasındaki dış hat taşımacılığıdır. Ancak 5. Hakta sefer kendi ülkesinde başlar veya biter; 7. Hakta ise kendi ülkesiyle hiçbir temas yoktur.",
@@ -965,11 +965,11 @@
     "difficulty": "Zor (Senaryo)",
     "question": "8. Trafik Hakkı ile 9. Trafik Hakkı arasındaki EN TEMEL FARK nedir?",
     "options": [
-      "A) 8. hakta uçak kendi ülkesinden gelmiş veya oraya gidecektir (ardışık/bağlantılı); 9. hakta ise uçak tamamen yabancı ülkenin iç hatlarında bağımsızdır.",
-      "B) 8. hak kargo, 9. hak posta taşır.",
-      "C) 8. hak Seviye-1 meydanlarda, 9. hak Seviye-3 meydanlarda geçerlidir.",
-      "D) 8. hakta bilet kesilemez, 9. hakta bilet kesilir.",
-      "E) 8. hak IASTA'da yer alır, 9. hak IATA'da yer alır."
+      "A) 8. hak ana vatanla bağlantılı bir iç hat uçuşudur, 9. hak ise ana vatanla bağı olmayan bağımsız iç hat seferidir.",
+      "B) 8. hak tarifesiz charter seferlerde uygulanır, 9. hak ise sadece tarifeli transit seferlerde geçerlidir.",
+      "C) 8. hak sadece yolcu taşımaya izin verirken, 9. hak sadece tehlikeli madde ve kargo taşımacılığına izin verir.",
+      "D) 8. hakta slot almak zorunlu değildir, 9. hakta ise ilgili havalimanından meydan oluru alınması şarttır.",
+      "E) 8. hak ikili anlaşmalarla düzenlenir, 9. hak ise sadece askeri devlet hava araçları için geçerlidir."
     ],
     "answer": 0,
     "explanation": "Slayt 67-70: İkisi de yabancı ülkedeki iç hat (kabotaj) taşımacılığıdır. 8. Hak kendi ülkesiyle bağlantılıdır (Ardışık Kabotaj); 9. Hak ana vatanla hiçbir bağı olmayan Saf Kabotajdır.",
@@ -1059,13 +1059,13 @@
     "id": 67,
     "category": "Trafik Hakları",
     "difficulty": "Orta",
-    "question": "Bir taşıyıcının 1. ve 2. trafik haklarını kullanırken (transit geçiş ve teknik iniş) ticari yolcu veya kargo alıp indirmesi mümkün müdür?",
+    "question": "Bir taşıyıcının 1. ve 2. trafik haklarını kullanırken ticari yolcu veya kargo alıp indirmesi mümkün müdür?",
     "options": [
-      "A) Evet, serbestçe yolcu bileti satabilir.",
-      "B) Hayır, 1. ve 2. haklar ticari hak içermez; yolcu/kargo indirip bindirme hakkı yoktur.",
-      "C) Sadece kargo alabilir, yolcu alamaz.",
-      "D) Kaptanın onayına bağlıdır.",
-      "E) Meydan işletmecisi izin verirse satabilir."
+      "A) İlgili havayolunun işletme ruhsatı bulunması halinde serbestçe yolcu bileti satabilir.",
+      "B) Bu haklar yalnızca teknik ve seyir hakları olup ticari yolcu veya yük taşıma hakkı tanımaz.",
+      "C) Uçak sadece kargo ambarındaki yükleri boşaltabilir ancak kabine yolcu kabul edemez.",
+      "D) İniş yapılan meydanın mülki idare amiri izin verdiği takdirde bilet satışı serbesttir.",
+      "E) Seferin gecikmeye girmesi durumunda mağduriyet doğmaması için yolcu alınmasına izin verilir."
     ],
     "answer": 1,
     "explanation": "Slayt 58-59: 1. ve 2. trafik hakları teknik/seyir haklarıdır; ticari yolcu, kargo ve posta taşıma hakkı KESİNLİKLE tanımaz.",
@@ -1091,13 +1091,13 @@
     "id": 69,
     "category": "Trafik Hakları",
     "difficulty": "Kolay",
-    "question": "3. ve 4. Hava Trafik Hakları devletler arasında genellikle ne şekilde yürürlüğe konulur ve uygulanır?",
+    "question": "3. ve 4. Hava Trafik Hakları devletler arasında genellikle hangi hukuki araçla yürürlüğe konulur?",
     "options": [
-      "A) Herhangi bir anlaşma olmaksızın serbestçe",
-      "B) İki ülkenin karşılıklı olarak kendi taşıyıcılarına tanıdıkları 'İkili Hava Ulaştırma Anlaşmaları' ile",
-      "C) Sadece pilotların şahsi başvurusu ile",
-      "D) Polis teşkilatının protokolü ile",
-      "E) Belediye izinleriyle"
+      "A) Herhangi bir anlaşma ve kural olmaksızın serbest piyasa koşullarına göre uygulanır.",
+      "B) İki ülkenin karşılıklı olarak kendi taşıyıcılarına tanıdıkları İkili Hava Ulaştırma Anlaşmaları ile",
+      "C) Havayolu şirketlerinin pilotlar derneği ile havalimanı işletmecisi arasındaki protokol ile",
+      "D) Emniyet teşkilatları arasında imzalanan sınır güvenlik ve pasaport kontrol sözleşmeleri ile",
+      "E) Taraf devletlerin yerel belediye başkanlıkları tarafından yayınlanan tarife genelgeleri ile"
     ],
     "answer": 1,
     "explanation": "Slayt 61: 3. ve 4. trafik hakları iki ülkenin karşılıklı olarak kendi taşıyıcılarına tanıdıkları İkili Hava Ulaştırma Anlaşmaları çerçevesinde yürütülür.",
@@ -1171,13 +1171,13 @@
     "id": 74,
     "category": "Permi & Mevzuat",
     "difficulty": "Orta",
-    "question": "AIP GEN 1.2 Madde 1.16 kapsamındaki özel uçuşlar (Tanker uçakları, sınır ötesi İHA'lar, silahlı askeri birlik nakli vb.) için başvurular kural olarak nereye ve ne kadar süre önce yapılır?",
+    "question": "AIP GEN 1.2 Madde 1.16 kapsamındaki özel uçuşlar için başvurular kural olarak nereye ve ne kadar süre önce yapılır?",
     "options": [
       "A) SHGM'ye en az 5 iş günü önce",
-      "B) Diplomatik kanaldan Dışişleri Bakanlığına en az 10 iş günü önce",
+      "B) Dışişleri Bakanlığına en az 10 iş günü önce",
       "C) DHMİ'ye en az 48 saat önce",
-      "D) Valiliklere en az 3 gün önce",
-      "E) Jandarma Havacılığa en az 15 gün önce"
+      "D) Valiliklere en az 3 iş günü önce",
+      "E) Emniyete en az 15 gün önce"
     ],
     "answer": 1,
     "explanation": "Slayt 88: AIP GEN 1.2 Madde 1.16 kapsamındaki uçuşlar planlanan uçuştan en az 10 iş günü önce diplomatik kanaldan Dışişleri Bakanlığına yapılır.",
@@ -1187,13 +1187,13 @@
     "id": 75,
     "category": "Permi & Mevzuat",
     "difficulty": "Orta",
-    "question": "AIP GEN 1.2 Madde 1.19'a göre, harp malzemesi, silah, patlayıcı ve tehlikeli maddelerin sivil uçaklarla taşınması başvuruları için süre kuralı nedir?",
+    "question": "AIP GEN 1.2 Madde 1.19'a göre; harp malzemesi, patlayıcı ve tehlikeli maddelerin sivil uçaklarla taşınması izin başvuruları için süre kuralı nedir?",
     "options": [
-      "A) Uçuştan 2 saat önce kuleye bildirilmesi yeterlidir.",
-      "B) Madde 1.8'de belirtilen süreye uygun olarak (Planlanan kalkıştan en az 5 iş günü, acil durumlarda en az 2 iş günü önceden) SHGM'ye yapılır.",
-      "C) En az 60 gün önceden BM Güvenlik Konseyi'ne yapılır.",
-      "D) En az 10 ay önce DHMİ'ye yapılır.",
-      "E) Tehlikeli maddeler sivil uçakla asla taşınamaz, başvuru yapılamaz."
+      "A) Planlanan uçuştan en az 24 saat önce kuleye bildirilmesi yeterlidir.",
+      "B) Planlanan kalkıştan en az 5 iş günü (acil hallerde en az 2 iş günü) önce SHGM'ye yapılır.",
+      "C) Planlanan kalkıştan en az 30 gün önce Savunma Sanayii Başkanlığına yapılır.",
+      "D) Kalkıştan 3 saat önce uçuş planı ekinde doğrudan FIC birimine sunulur.",
+      "E) Varış meydanı gümrük müdürlüğüne uçuştan en az 10 gün önce yazılı olarak iletilir."
     ],
     "answer": 1,
     "explanation": "Slayt 91: Tehlikeli madde başvuruları Madde 1.8'deki standart süreye tabidir (en az 5 iş günü, acil hallerde 2 iş günü önce TMKT ile koordine edilerek SHGM'ye).",
@@ -1317,11 +1317,11 @@
     "difficulty": "Orta",
     "question": "AIP GEN 1.2 Madde 4.4.1'e göre Turistik Charter Uçuşlarında kural olarak tek yönlü bilet satışı yapılabilir mi?",
     "options": [
-      "A) Evet, istenildiği kadar serbestçe tek yön satılabilir.",
-      "B) Genel kural olarak bu uçuşlarda tek yönlü bilet ile yolcu taşınmaz; ancak mütekabiliyet gereği en fazla %10 tek yön koltuk satışı yapılabilir.",
-      "C) Sadece pilotların ailelerine tek yön bilet satılabilir.",
-      "D) %50'ye kadar tek yön bilet serbesttir.",
-      "E) Turistik charter uçuşlarında bilet satışı tamamen yasaktır."
+      "A) Uçaktaki tüm koltuklar tarifeli seferler gibi serbestçe tek yön olarak satılabilir.",
+      "B) Kural olarak tek yönlü bilet satılamaz; mütekabiliyete göre azami %10 koltuk satılabilir.",
+      "C) Yalnızca uçuş ekibinin birinci derece yakınlarına tek yön bilet tahsis edilebilir.",
+      "D) Koltuk kapasitesinin %50'sine kadar acenteler aracılığıyla tek yön bilet satışı serbesttir.",
+      "E) Turistik charter uçuşlarında bilet ücreti alınması uluslararası hukuka göre tamamen yasaktır."
     ],
     "answer": 1,
     "explanation": "Slayt 116: Turistik charter uçuşlarında tek yönlü bilet ile yolcu taşınmaz. Kısıtlama olmayan ülkelerden mütekabiliyete göre uçak koltuk kapasitesinin %10'una kadar tek yön satılabilir.",
@@ -1347,13 +1347,13 @@
     "id": 85,
     "category": "Permi & Mevzuat",
     "difficulty": "Orta",
-    "question": "AIP GEN 1.2 Madde 4.4.2.3 Kargo Charter Uçuşlarında; kargo uçağında taşınabilecek istisnai yolcu/kişiler arasında aşağıdakilerden hangisi YER ALMAZ?",
+    "question": "AIP GEN 1.2 Madde 4.4.2.3 Kargo Charter Uçuşlarında uçakta bulunabilecek kişiler arasında hangisi YER ALMAZ?",
     "options": [
-      "A) Uçuş ekip üyesi ve işletme el kitabında izin verilen şirket personeli ve aile üyeleri",
-      "B) İlgili kamu kurum/kuruluş yetkili temsilcisi",
-      "C) Uçaktaki özel bir sevkiyat/kargo ile ilgili olan görevli refakatçiler",
-      "D) Biletini internetten satın almış standart ticari sivil yolcular",
-      "E) Şirketin eğitim verdiği yetkili kişiler"
+      "A) Uçuş ekip üyesi ve işletme el kitabında izin verilen şirket personeli ile aile üyeleri",
+      "B) İlgili kamu kurum ve kuruluşlarının resmi denetim ve inceleme görevlileri",
+      "C) Uçaktaki özel veya hassas bir kargo sevkiyatı ile ilgili olan yetkili refakatçiler",
+      "D) Biletini internetten veya seyahat acentesinden satın almış standart ticari sivil yolcular",
+      "E) Havayolu işletmesinin eğitim programı kapsamında uçakta bulunan stajyer ve denetçiler"
     ],
     "answer": 3,
     "explanation": "Slayt 119: Kargo charter uçuşlarında yolcu kabul edilmez! Sadece ekip, denetçi, refakatçi ve kamu temsilcisi gibi görevliler bulunabilir.",
@@ -1363,13 +1363,13 @@
     "id": 86,
     "category": "Permi & Mevzuat",
     "difficulty": "Zor (Senaryo)",
-    "question": "AIP ENR 1.10 Madde 2.1.5'e göre; Lozan (1923) ve Paris (1947) Antlaşmalarıyla silahsızlandırılmış Doğu Ege Adaları ile GKRY meydanları ile ilgili diplomatik askeri uçuş kısıtlaması nedir?",
+    "question": "AIP ENR 1.10 Madde 2.1.5'e göre; silahsızlandırılmış Doğu Ege Adaları ve GKRY meydanları ile ilgili diplomatik askeri uçuş kısıtlaması nedir?",
     "options": [
-      "A) Sadece gündüz saatlerinde kullanılabilirler.",
-      "B) Türk hava sahasını kullanacak ve Türkiye'deki meydanlara inecek diplomatik uçuş iznine tabi askeri araçlar bu meydanları iniş/kalkış veya YEDEK (Alternate) meydan olarak belirtemez.",
-      "C) İsteyen her askeri uçak yakıt ikmali yapabilir.",
-      "D) Sadece NATO tatbikatlarında iniş meydanı yazılabilir.",
-      "E) Bu meydanlara iniş için sadece Valilik izni yeterlidir."
+      "A) Askeri hava araçlarının bu meydanları sadece gündüz şartlarında kullanmasına izin verilir.",
+      "B) Bu meydanlar uçuş planında iniş, kalkış veya yedek meydan olarak kesinlikle belirtilemez.",
+      "C) Yakıt ikmali yapılması şartıyla bu meydanlara teknik iniş yapılmasına izin verilir.",
+      "D) Sadece NATO üyesi ülkelerin askeri nakliye uçakları tarafından iniş meydanı olarak seçilebilir.",
+      "E) İlgili meydan işletmecisinden iniş izni alındığı takdirde uçuş planına yedek meydan yazılabilir."
     ],
     "answer": 1,
     "explanation": "Slayt 104: Silahsızlandırılmış Doğu Ege Adaları ve GKRY meydanları diplomatik uçuş iznine tabi askeri hava araçlarınca iniş/kalkış veya yedek (alternate) meydan olarak gösterilemez.",
@@ -1411,13 +1411,13 @@
     "id": 89,
     "category": "Permi & Mevzuat",
     "difficulty": "Kolay",
-    "question": "Tarifeli uçuş gerçekleştirecek yabancı bir hava taşıyıcısının kendi ülkesinden geçerli hangi belgeyi almamış olması durumunda Türk hava sahası ve havalimanlarını kullanmasına izin verilmez?",
+    "question": "Tarifeli uçuş gerçekleştirecek yabancı bir hava taşıyıcısının kendi ülkesinden geçerli hangi belgeyi almamış olması durumunda Türk hava sahasını kullanmasına izin verilmez?",
     "options": [
       "A) Seyahat Acentesi Belgesi",
-      "B) Hava Taşıyıcı İşletme Ruhsatı (AOC - Air Operator Certificate)",
-      "C) Kaptan Pilot Diploması",
-      "D) Otel Rezervasyon Belgesi",
-      "E) Yer Hizmetleri Faturası"
+      "B) Hava Taşıyıcı İşletme Ruhsatı (AOC)",
+      "C) Kaptan Pilot Uçuş Sertifikası",
+      "D) Meydan Yer Hizmetleri Yetki Belgesi",
+      "E) Uluslararası Sigorta Poliçesi"
     ],
     "answer": 1,
     "explanation": "Slayt 107: Kendi ülkesinden geçerli işletme izni (AOC - Airline Operation Certificate) almamış hava taşıyıcılarına Türk hava sahası ve havalimanları kullandırılmaz.",
@@ -1427,13 +1427,13 @@
     "id": 90,
     "category": "Permi & Mevzuat",
     "difficulty": "Orta",
-    "question": "Bir havayolu işletmesi SHGM'den uçuş izni (permi) aldıktan sonra, uçuşun gerçekleşeceği meydanın apron park yeri yetersizliği varsa ayrıca hangi onayı almak ZORUNDADIR?",
+    "question": "Bir havayolu işletmesi SHGM'den permi aldıktan sonra, iniş yapacağı meydanın apron park yeri yetersizliği varsa ayrıca hangi onayı almak ZORUNDADIR?",
     "options": [
-      "A) Belediye Ruhsatı",
-      "B) Meydan Oluru (İlgili havalimanı otoritesinden)",
-      "C) Emniyet İzni",
-      "D) Gümrük Beyannamesi",
-      "E) Dışişleri İzni"
+      "A) Belediye Çevre İzni",
+      "B) Meydan Oluru",
+      "C) Emniyet Uçuş İzni",
+      "D) Gümrük Tahsis Belgesi",
+      "E) Dışişleri Oluru"
     ],
     "answer": 1,
     "explanation": "Slayt 96: Apron park yeri yetersizliği olan meydanlar için havayolu permi almış olsa dahi ilgili havalimanı otoritesinden ayrıca 'Meydan Oluru' almak zorundadır.",
@@ -1443,13 +1443,13 @@
     "id": 91,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "IATA Dünya Slot Kılavuzu'na (WSG) göre Seviye-3 (Level 3) bir havalimanının temel niteliği nedir?",
+    "question": "IATA Dünya Slot Kılavuzu'na göre Seviye-3 bir havalimanının temel niteliği nedir?",
     "options": [
-      "A) Kapasite fazlası vardır, hiçbir uçağa slot verilmez.",
-      "B) Talebin havalimanı kapasitesini aştığı, uçuş gerçekleştirmek için bağımsız bir Koordinatör tarafından SLOT TAHSİSİNİN ZORUNLU olduğu meydandır.",
-      "C) Sadece genel havacılık ve askeri uçaklar inebilir.",
-      "D) Sadece kışın açık olan meydanlardır.",
-      "E) Bilet fiyatlarının devlet tarafından belirlendiği meydandır."
+      "A) Havalimanında kapasite fazlası olduğu için hiçbir havayoluna slot tahsis edilmez.",
+      "B) Talebin kapasiteyi aştığı ve uçuş için Koordinatörden slot alınmasının zorunlu olduğu meydandır.",
+      "C) Yalnızca genel havacılık ve askeri amaçlı hava araçlarının inişine açık olan meydandır.",
+      "D) Kış tarife döneminde kapalı olup yalnızca yaz aylarında turistik seferlere hizmet veren meydandır.",
+      "E) İniş kalkış ücretlerinin ve bilet fiyatlarının sivil havacılık otoritesince belirlendiği meydandır."
     ],
     "answer": 1,
     "explanation": "Slayt 94: Seviye-3 meydanlarda talep kapasiteyi aştığı için bir Slot Koordinatörü tarafından slot tahsis edilmesi şarttır.",
@@ -1459,13 +1459,13 @@
     "id": 92,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "IATA Dünya Slot Kılavuzu'na (WSG) göre Seviye-2 (Level 2) bir havalimanında slot ve tarife süreci nasıl işler?",
+    "question": "IATA Dünya Slot Kılavuzu'na göre Seviye-2 bir havalimanında slot ve tarife süreci nasıl işler?",
     "options": [
-      "A) Slot almak ölüm kalım meselesidir, koordinatör izin vermezse uçulamaz.",
-      "B) Talep yoğunlaşması olan saatler için havayolları bir Tarife Danışmanı (Facilitator) ile gönüllü iş birliği ve danışma içinde çalışır (SMA mesajı kullanılır).",
-      "C) Meydan tüm ticari uçuşlara kapatılır.",
-      "D) Sadece yerli şirketler uçabilir.",
-      "E) Permi başvurusu yapılmaz."
+      "A) Slot koordinatörünün yazılı onayı olmadan hiçbir uçuşun gerçekleşmesi mümkün değildir.",
+      "B) Havayolları yoğun saatlerde bir Tarife Danışmanı ile iş birliği ve danışma içinde çalışır.",
+      "C) Havalimanı kural olarak tüm tarifeli ve tarifesiz ticari uçuşlara tamamen kapatılır.",
+      "D) Sadece milli bayrak taşıyıcı havayoluna ait uçakların sefer düzenlemesine izin verilir.",
+      "E) Havayolu işletmelerinin bu meydanlar için SHGM'ye permi başvurusu yapmasına gerek yoktur."
     ],
     "answer": 1,
     "explanation": "Slayt 94: Seviye-2 meydanlar tarifesi düzenlenen/danışmalı meydanlardır. Havayolları bir tarife kolaylaştırıcısı ile programlarını koordine eder.",
@@ -1523,13 +1523,13 @@
     "id": 96,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "Seviye-3 (Koordineli) havalimanlarında havayolunun slot talep ederken (Request) ve koordinatörün onay/ret verirken (Response) kullandığı standart IATA mesaj formatı hangisidir?",
+    "question": "Seviye-3 koordineli havalimanlarında havayolunun slot talep ederken ve koordinatörün onay/ret verirken kullandığı standart mesaj formatı hangisidir?",
     "options": [
-      "A) SMA (Schedule Movement Advice)",
-      "B) SCR (Slot Clearance Request / Response)",
-      "C) SIR (Slot Information Response)",
-      "D) FPL (Filed Flight Plan)",
-      "E) LDM (Load Distribution Message)"
+      "A) SMA",
+      "B) SCR",
+      "C) SIR",
+      "D) FPL",
+      "E) LDM"
     ],
     "answer": 1,
     "explanation": "SCR (Slot Clearance Request / Response), Seviye-3 koordineli havalimanlarında slot alma, değiştirme ve onaylama işlemlerinde kullanılan temel mesajdır.",
@@ -1539,10 +1539,10 @@
     "id": 97,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "Seviye-2 (Tarife Danışmalı) havalimanlarında havayollarının tarife danışmanına tarife bildiriminde bulunurken kullandığı standart mesaj formatı hangisidir?",
+    "question": "Seviye-2 tarife danışmalı havalimanlarında havayollarının tarife bildiriminde bulunurken kullandığı standart mesaj formatı hangisidir?",
     "options": [
       "A) SCR",
-      "B) SMA (Schedule Movement Advice)",
+      "B) SMA",
       "C) MVT",
       "D) DLA",
       "E) NOTAM"
@@ -1571,13 +1571,13 @@
     "id": 99,
     "category": "Slot & Seviyeler",
     "difficulty": "Orta",
-    "question": "IATA Dünya Slot Kılavuzu'nda yer alan meşhur '80/20 Kuralı' (Kazanılmış Hak / Grandfather Rights) neyi ifade eder?",
+    "question": "IATA Dünya Slot Kılavuzu'nda yer alan meşhur 80/20 Kuralı neyi ifade eder?",
     "options": [
-      "A) Slotların %80'inin yabancı şirketlere verilmesini",
-      "B) Bir havayolunun bir sonraki sezon aynı slotu koruyabilmesi için tahsis edilen slot serisini en az %80 oranında fiilen kullanmış olması gerektiğini",
-      "C) Uçakların en az %20 boş koltukla uçması gerektiğini",
-      "D) Bilet ücretlerinin %80'inin vergi olduğunu",
-      "E) Gecikmelerin en fazla %20 olabileceğini"
+      "A) Havalimanı toplam slot kapasitesinin en az %80'inin yabancı havayollarına verilmesini",
+      "B) Sonraki sezon aynı slotu korumak için tahsis edilen slot serisinin en az %80 kullanılmış olmasını",
+      "C) Havayolunun sezon boyunca uçaklarında en az %20 boş koltuk bulundurmak zorunda olmasını",
+      "D) Slot tahsis ücretinin %80'inin devlete vergi olarak peşin ödenmesi gerektiğini",
+      "E) Sezon boyunca meydana gelen rötarların uçuşların en fazla %20'sini kapsayabileceğini"
     ],
     "answer": 1,
     "explanation": "IATA WSG 80/20 Kuralı: Bir havayolu tahsis edilen tarihi slot hakkını (Grandfather rights) bir sonraki sezonda korumak için en az %80 kullanım gerçekleştirmelidir (Use it or lose it).",
@@ -1587,13 +1587,13 @@
     "id": 100,
     "category": "Slot & Seviyeler",
     "difficulty": "Zor (Senaryo)",
-    "question": "AIP GEN 1.2 Madde 1.25 hükmü gereğince; Seviye-3 bir havalimanında slotu onaylanmış bir uçuşun herhangi bir sebeple iptal edilmesi durumunda havayolu işletmesinin yasal yükümlülüğü nedir?",
+    "question": "AIP GEN 1.2 Madde 1.25 hükmü gereğince; Seviye-3 bir havalimanında slotu alınmış bir uçuşun iptal edilmesi halinde havayolunun yasal görevi nedir?",
     "options": [
-      "A) Uçuş iptal edilse bile koordinatöre bildirim yapılmasına gerek yoktur.",
-      "B) Slot alındıktan sonra yapılacak uçuş iptallerinin DHMİ Genel Müdürlüğü Slot Koordinasyon Merkezine bildirilmesi ZORUNLUDUR.",
-      "C) İptal durumunda sadece bilet alan yolculara haber verilir.",
-      "D) İptal edilen slot otomatik olarak en yakın yerli havayoluna devredilir.",
-      "E) İptal bildirimi sadece uçuş gününden 1 ay sonra resmi gazetede ilan edilir."
+      "A) Sefer iptal edilse dahi slot koordinatörüne herhangi bir bildirim yapılması gerekmez.",
+      "B) Slot alındıktan sonra yapılan uçuş iptallerinin DHMİ Slot Merkezine bildirilmesi zorunludur.",
+      "C) Uçuş iptal edildiğinde yalnızca bilet satın almış olan yolculara kısa mesaj gönderilir.",
+      "D) İptal edilen slot otomatik olarak o meydandaki en büyük yerli havayoluna devredilir.",
+      "E) Slot iptal bildirimi sadece tarife dönemi bitiminde resmi gazete ilanı ile duyurulur."
     ],
     "answer": 1,
     "explanation": "Slayt 96: AIP GEN 1.2 Madde 1.25: 'Slot alındıktan sonra yapılacak uçuş iptallerinin DHMİ Genel Müdürlüğü Slot Koordinasyon Merkezine bildirilmesi zorunludur.'",
