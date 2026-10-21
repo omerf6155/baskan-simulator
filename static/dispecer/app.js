@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let filteredQuestions = [...allQuestions];
   let currentIndex = 0;
   let currentCategory = "ALL";
+  let currentStatusFilter = "ALL"; // "ALL" | "EMPTY" | "WRONG" | "CORRECT"
 
   // Persistent user state in LocalStorage
   let userProgress = JSON.parse(localStorage.getItem("dispecer_progress") || "{}");
@@ -35,13 +36,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // DOM Elements
   const headerCorrect = document.getElementById("headerCorrectCount");
   const headerTotal = document.getElementById("headerTotalSeen");
+  const topStatsBadge = document.getElementById("topStatsBadge");
+
+  // Status Filter Buttons
+  const statusBtns = document.querySelectorAll(".status-btn");
+  const badgeAllCount = document.getElementById("badgeAllCount");
+  const badgeEmptyCount = document.getElementById("badgeEmptyCount");
+  const badgeWrongCount = document.getElementById("badgeWrongCount");
+  const badgeCorrectCount = document.getElementById("badgeCorrectCount");
+
+  // Category Pills
   const filterPills = document.querySelectorAll(".filter-pill");
-  const wrongFilterPill = document.getElementById("wrongFilterPill");
   
+  // Progress & Navigation
   const progressBarFill = document.getElementById("progressBarFill");
   const currentQNum = document.getElementById("currentQuestionNumber");
   const progressPercent = document.getElementById("progressPercent");
+  const qNavTrigger = document.getElementById("qNavTrigger");
 
+  // Card Elements
   const cardCategory = document.getElementById("cardCategory");
   const cardDifficulty = document.getElementById("cardDifficulty");
   const cardSlideRef = document.getElementById("cardSlideRef");
@@ -53,13 +66,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusTitle = document.getElementById("statusTitle");
   const explanationText = document.getElementById("explanationText");
 
+  // Bottom Buttons
   const btnPrev = document.getElementById("btnPrev");
   const btnNext = document.getElementById("btnNext");
   const btnRandom = document.getElementById("btnRandom");
+  const btnNextEmpty = document.getElementById("btnNextEmpty");
 
-  const btnScoreboard = document.getElementById("btnScoreboard");
+  // Grid Map Modal
+  const btnGridModal = document.getElementById("btnGridModal");
+  const gridModal = document.getElementById("gridModal");
+  const btnCloseGridModal = document.getElementById("btnCloseGridModal");
+  const questionGridContainer = document.getElementById("questionGridContainer");
+
+  // Score Modal
   const scoreModal = document.getElementById("scoreModal");
-  const btnCloseModal = document.getElementById("btnCloseModal");
+  const btnCloseScoreModal = document.getElementById("btnCloseScoreModal");
   const btnResetProgress = document.getElementById("btnResetProgress");
 
   const modalCorrect = document.getElementById("modalCorrect");
@@ -69,37 +90,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Init
   function init() {
-    updateWrongPillCount();
-    applyFilter("ALL");
+    updateBadgesAndStats();
+    buildGridMap();
+    applyCombinedFilters();
     setupListeners();
-    updateHeaderStats();
   }
 
-  // Filter logic
-  function applyFilter(cat) {
-    currentCategory = cat;
-    filterPills.forEach(p => {
-      p.classList.toggle("active", p.getAttribute("data-category") === cat);
+  // Apply Category + Status Filters
+  function applyCombinedFilters() {
+    filteredQuestions = allQuestions.filter(q => {
+      // 1. Category check
+      const matchCat = (currentCategory === "ALL" || q.category === currentCategory);
+      if (!matchCat) return false;
+
+      // 2. Status check
+      const prog = userProgress[q.id];
+      const isAnswered = prog && prog.answered;
+
+      if (currentStatusFilter === "ALL") return true;
+      if (currentStatusFilter === "EMPTY") return !isAnswered;
+      if (currentStatusFilter === "WRONG") return isAnswered && !prog.isCorrect;
+      if (currentStatusFilter === "CORRECT") return isAnswered && prog.isCorrect;
+
+      return true;
     });
 
-    if (cat === "ALL") {
-      filteredQuestions = [...allQuestions];
-    } else if (cat === "WRONG") {
-      filteredQuestions = allQuestions.filter(q => {
-        const prog = userProgress[q.id];
-        return prog && prog.answered && !prog.isCorrect;
-      });
-      if (filteredQuestions.length === 0) {
-        alert("Harika! Hiç yanlış yaptığın soru bulunmuyor.");
-        applyFilter("ALL");
-        return;
+    if (filteredQuestions.length === 0) {
+      if (currentStatusFilter === "WRONG") {
+        alert("Süper! Yanlış yaptığın soru bulunmuyor.");
+      } else if (currentStatusFilter === "EMPTY") {
+        alert("Tüm soruları tamamladın! Boş soru kalmadı.");
       }
-    } else {
-      filteredQuestions = allQuestions.filter(q => q.category === cat);
+      currentStatusFilter = "ALL";
+      updateStatusBtnsActive();
+      filteredQuestions = allQuestions.filter(q => currentCategory === "ALL" || q.category === currentCategory);
     }
 
     currentIndex = 0;
     renderQuestion();
+    updateBadgesAndStats();
+    buildGridMap();
+  }
+
+  function updateStatusBtnsActive() {
+    statusBtns.forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-status-filter") === currentStatusFilter);
+    });
   }
 
   // Render Current Question
@@ -114,19 +150,20 @@ document.addEventListener("DOMContentLoaded", () => {
     cardSlideRef.textContent = q.slideRef || "REV02";
 
     // Progress Bar
-    const progress = Math.round(((currentIndex + 1) / filteredQuestions.length) * 100);
+    const totalCount = filteredQuestions.length;
+    const progress = Math.round(((currentIndex + 1) / totalCount) * 100);
     progressBarFill.style.width = `${progress}%`;
-    currentQNum.textContent = `Soru ${currentIndex + 1} / ${filteredQuestions.length}`;
+    currentQNum.textContent = `Soru ${currentIndex + 1} / ${totalCount} (No: #${q.id})`;
     progressPercent.textContent = `%${progress}`;
 
-    // Question Text (Pre-formatted line breaks)
+    // Question Text
     questionText.textContent = q.question;
 
     // Check if previously answered
     const prog = userProgress[q.id];
     const isAnswered = prog && prog.answered;
 
-    // Options (Clean white high contrast buttons)
+    // Options
     optionsGrid.innerHTML = "";
     q.options.forEach((optText, optIdx) => {
       const btn = document.createElement("button");
@@ -158,7 +195,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navigation buttons state
     btnPrev.disabled = currentIndex === 0;
-    btnNext.textContent = currentIndex === filteredQuestions.length - 1 ? "Bitti 🏁" : "Sonraki →";
+    btnNext.textContent = currentIndex === totalCount - 1 ? "Bitti 🏁" : "Sonraki →";
+
+    // Update active in grid
+    highlightActiveInGrid(q.id);
   }
 
   // Answer handler
@@ -173,8 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
-    updateHeaderStats();
-    updateWrongPillCount();
+    updateBadgesAndStats();
+    buildGridMap();
     renderQuestion();
 
     if (navigator.vibrate) {
@@ -191,44 +231,113 @@ document.addEventListener("DOMContentLoaded", () => {
     explanationText.textContent = text;
   }
 
-  // Header and Stats
-  function updateHeaderStats() {
-    let correctCount = 0;
-    let seenCount = 0;
+  // Find and jump to first unattempted question
+  function jumpToNextEmpty() {
+    // Search starting from next index
+    const total = filteredQuestions.length;
+    for (let offset = 1; offset <= total; offset++) {
+      const targetIdx = (currentIndex + offset) % total;
+      const targetQ = filteredQuestions[targetIdx];
+      if (!userProgress[targetQ.id] || !userProgress[targetQ.id].answered) {
+        currentIndex = targetIdx;
+        renderQuestion();
+        return;
+      }
+    }
+    alert("Bu filtrede cevaplanmamış boş soru kalmadı!");
+  }
 
-    Object.values(userProgress).forEach(p => {
-      if (p.answered) {
-        seenCount++;
-        if (p.isCorrect) correctCount++;
+  // Build 1-100 Question Grid Map
+  function buildGridMap() {
+    questionGridContainer.innerHTML = "";
+    allQuestions.forEach((q, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "grid-q-btn";
+      btn.textContent = q.id;
+
+      const prog = userProgress[q.id];
+      if (prog && prog.answered) {
+        btn.classList.add(prog.isCorrect ? "correct" : "wrong");
+      }
+
+      btn.addEventListener("click", () => {
+        // Find in current filtered list or switch to ALL
+        let foundIdx = filteredQuestions.findIndex(item => item.id === q.id);
+        if (foundIdx === -1) {
+          // Reset filters to ALL so user can view that question
+          currentCategory = "ALL";
+          currentStatusFilter = "ALL";
+          updateStatusBtnsActive();
+          filterPills.forEach(p => p.classList.toggle("active", p.getAttribute("data-category") === "ALL"));
+          filteredQuestions = [...allQuestions];
+          foundIdx = q.id - 1;
+        }
+        currentIndex = foundIdx;
+        renderQuestion();
+        gridModal.style.display = "none";
+      });
+
+      questionGridContainer.appendChild(btn);
+    });
+
+    const activeQ = filteredQuestions[currentIndex];
+    if (activeQ) highlightActiveInGrid(activeQ.id);
+  }
+
+  function highlightActiveInGrid(qId) {
+    const gridBtns = questionGridContainer.querySelectorAll(".grid-q-btn");
+    gridBtns.forEach(btn => {
+      btn.classList.toggle("current", btn.textContent === String(qId));
+    });
+  }
+
+  // Header and Status Badges
+  function updateBadgesAndStats() {
+    let correctCount = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+
+    allQuestions.forEach(q => {
+      const prog = userProgress[q.id];
+      if (prog && prog.answered) {
+        answeredCount++;
+        if (prog.isCorrect) correctCount++;
+        else wrongCount++;
       }
     });
 
+    const emptyCount = allQuestions.length - answeredCount;
+
     headerCorrect.textContent = correctCount;
-    headerTotal.textContent = seenCount;
+    headerTotal.textContent = answeredCount;
+
+    badgeAllCount.textContent = allQuestions.length;
+    badgeEmptyCount.textContent = emptyCount;
+    badgeWrongCount.textContent = wrongCount;
+    badgeCorrectCount.textContent = correctCount;
   }
 
-  function updateWrongPillCount() {
-    let wrongCount = 0;
-    Object.values(userProgress).forEach(p => {
-      if (p.answered && !p.isCorrect) wrongCount++;
-    });
-
-    if (wrongCount > 0) {
-      wrongFilterPill.style.display = "inline-block";
-      wrongFilterPill.textContent = `Yanlışlarım (${wrongCount})`;
-    } else {
-      wrongFilterPill.style.display = "none";
-    }
-  }
-
-  // Listeners
+  // Setup Listeners
   function setupListeners() {
-    filterPills.forEach(pill => {
-      pill.addEventListener("click", () => {
-        applyFilter(pill.getAttribute("data-category"));
+    // Status Mode Filter Buttons (Tümü, Boşlar, Yanlışlar, Doğrular)
+    statusBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentStatusFilter = btn.getAttribute("data-status-filter");
+        updateStatusBtnsActive();
+        applyCombinedFilters();
       });
     });
 
+    // Category Filter Pills
+    filterPills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        currentCategory = pill.getAttribute("data-category");
+        filterPills.forEach(p => p.classList.toggle("active", p.getAttribute("data-category") === currentCategory));
+        applyCombinedFilters();
+      });
+    });
+
+    // Nav Buttons
     btnNext.addEventListener("click", () => {
       if (currentIndex < filteredQuestions.length - 1) {
         currentIndex++;
@@ -245,13 +354,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    btnNextEmpty.addEventListener("click", jumpToNextEmpty);
+
     btnRandom.addEventListener("click", () => {
       currentIndex = Math.floor(Math.random() * filteredQuestions.length);
       renderQuestion();
     });
 
-    btnScoreboard.addEventListener("click", openScoreModal);
-    btnCloseModal.addEventListener("click", () => {
+    // Grid Modal
+    btnGridModal.addEventListener("click", () => {
+      gridModal.style.display = "flex";
+    });
+    qNavTrigger.addEventListener("click", () => {
+      gridModal.style.display = "flex";
+    });
+    btnCloseGridModal.addEventListener("click", () => {
+      gridModal.style.display = "none";
+    });
+
+    // Score Modal
+    topStatsBadge.addEventListener("click", openScoreModal);
+    btnCloseScoreModal.addEventListener("click", () => {
       scoreModal.style.display = "none";
     });
 
@@ -259,17 +382,22 @@ document.addEventListener("DOMContentLoaded", () => {
       if (confirm("Tüm ilerlemeni ve çözdüğün soruları sıfırlamak istiyor musun?")) {
         userProgress = {};
         localStorage.removeItem("dispecer_progress");
-        updateHeaderStats();
-        updateWrongPillCount();
-        if (currentCategory === "WRONG") applyFilter("ALL");
-        else renderQuestion();
+        updateBadgesAndStats();
+        buildGridMap();
+        applyCombinedFilters();
         scoreModal.style.display = "none";
       }
     });
 
-    // Keyboard support (1-5 or A-E keys)
+    // Close modal on background click
+    window.addEventListener("click", (e) => {
+      if (e.target === gridModal) gridModal.style.display = "none";
+      if (e.target === scoreModal) scoreModal.style.display = "none";
+    });
+
+    // Keyboard support
     window.addEventListener("keydown", (e) => {
-      if (scoreModal.style.display === "flex") return;
+      if (scoreModal.style.display === "flex" || gridModal.style.display === "flex") return;
       if (e.key === "ArrowRight") btnNext.click();
       if (e.key === "ArrowLeft") btnPrev.click();
       
@@ -288,10 +416,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let wrong = 0;
     let answered = 0;
 
-    Object.values(userProgress).forEach(p => {
-      if (p.answered) {
+    allQuestions.forEach(q => {
+      const prog = userProgress[q.id];
+      if (prog && prog.answered) {
         answered++;
-        if (p.isCorrect) correct++;
+        if (prog.isCorrect) correct++;
         else wrong++;
       }
     });

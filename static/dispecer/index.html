@@ -26,10 +26,13 @@
         </div>
       </div>
       <div class="header-right">
-        <button class="theme-toggle-btn" id="themeToggleBtn" title="Tema Değiştir (Gece/Gündüz)">
+        <button class="icon-btn" id="btnGridModal" title="Tüm Soruları Gör (Soru Haritası)">
+          <span>📋</span>
+        </button>
+        <button class="icon-btn" id="themeToggleBtn" title="Tema Değiştir (Gece/Gündüz)">
           <span id="themeIcon">☀️</span>
         </button>
-        <div class="stats-badge" id="topStatsBadge">
+        <div class="stats-badge" id="topStatsBadge" title="Skor Paneli">
           <span class="correct-count" id="headerCorrectCount">0</span>
           <span class="divider">/</span>
           <span class="total-seen" id="headerTotalSeen">0</span>
@@ -37,16 +40,35 @@
       </div>
     </header>
 
+    <!-- Quick Status / Mode Bar (Tümü, Boşlar, Yanlışlar, Doğrular) -->
+    <div class="status-mode-bar">
+      <button class="status-btn active" data-status-filter="ALL" id="btnFilterAll">
+        <span>Tümü</span>
+        <span class="count-pill" id="badgeAllCount">100</span>
+      </button>
+      <button class="status-btn unattempted-btn" data-status-filter="EMPTY" id="btnFilterEmpty">
+        <span>Boşlar</span>
+        <span class="count-pill" id="badgeEmptyCount">100</span>
+      </button>
+      <button class="status-btn wrong-btn" data-status-filter="WRONG" id="btnFilterWrong">
+        <span>Yanlışlarım</span>
+        <span class="count-pill" id="badgeWrongCount">0</span>
+      </button>
+      <button class="status-btn correct-btn" data-status-filter="CORRECT" id="btnFilterCorrect">
+        <span>Doğrular</span>
+        <span class="count-pill" id="badgeCorrectCount">0</span>
+      </button>
+    </div>
+
     <!-- Category / Filter Bar -->
     <nav class="filter-scroll">
-      <button class="filter-pill active" data-category="ALL">Hepsi (100)</button>
+      <button class="filter-pill active" data-category="ALL">Bütün Konular</button>
       <button class="filter-pill" data-category="Trafik Hakları">Trafik Hakları</button>
       <button class="filter-pill" data-category="Permi & Mevzuat">Permi & Süreler</button>
       <button class="filter-pill" data-category="Hukuk & Konvansiyonlar">Konvansiyonlar</button>
       <button class="filter-pill" data-category="Otoriteler & Kurumlar">Otoriteler</button>
       <button class="filter-pill" data-category="Slot & Seviyeler">Slot & Seviye</button>
       <button class="filter-pill" data-category="Terminoloji & Kısaltmalar">Kısaltmalar</button>
-      <button class="filter-pill error-filter-pill" id="wrongFilterPill" style="display:none;" data-category="WRONG">Yanlışlarım (0)</button>
     </nav>
 
     <!-- Progress Bar -->
@@ -55,7 +77,10 @@
         <div class="progress-bar-fill" id="progressBarFill"></div>
       </div>
       <div class="progress-label-wrap">
-        <span id="currentQuestionNumber">Soru 1 / 100</span>
+        <div class="q-nav-trigger" id="qNavTrigger" title="Soru Numarasına Tıkla ve Seç">
+          <span id="currentQuestionNumber">Soru 1 / 100</span>
+          <span class="dropdown-arrow">▼</span>
+        </div>
         <span id="progressPercent">0%</span>
       </div>
     </div>
@@ -91,15 +116,31 @@
     <!-- Bottom Actions Toolbar -->
     <footer class="app-footer">
       <button class="btn btn-secondary" id="btnPrev">← Önceki</button>
+      <button class="btn btn-action" id="btnNextEmpty" title="Sıradaki Boş Soruya Zıpla">⚡ İlk Boşa Git</button>
       <button class="btn btn-random" id="btnRandom" title="Rastgele Soru">🎲</button>
       <button class="btn btn-primary" id="btnNext">Sonraki →</button>
     </footer>
 
-    <!-- Result / Review Summary Modal (Optional trigger) -->
-    <div class="floating-fab" id="btnScoreboard">
-      📊 Skor
+    <!-- Soru Haritası / Grid Modal (Tüm Soruları Görme & İstediğine Zıplama) -->
+    <div class="modal-overlay" id="gridModal">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <h3>Soru Haritası (1 - 100)</h3>
+          <button class="close-x-btn" id="btnCloseGridModal">✕</button>
+        </div>
+        <div class="grid-legend">
+          <span><span class="legend-dot dot-correct"></span> Doğru</span>
+          <span><span class="legend-dot dot-wrong"></span> Yanlış</span>
+          <span><span class="legend-dot dot-empty"></span> Boş</span>
+          <span><span class="legend-dot dot-current"></span> Aktif</span>
+        </div>
+        <div class="question-grid-container" id="questionGridContainer">
+          <!-- 100 buttons injected here -->
+        </div>
+      </div>
     </div>
 
+    <!-- Skor Paneli Modal -->
     <div class="modal-overlay" id="scoreModal">
       <div class="modal-content">
         <h2>Uçuş Harekât Özeti</h2>
@@ -120,7 +161,7 @@
         <p class="score-msg" id="scoreMotivationalMsg">Pratik yapmaya devam!</p>
         <div class="modal-actions">
           <button class="btn btn-danger" id="btnResetProgress">İlerlemeyi Sıfırla</button>
-          <button class="btn btn-primary" id="btnCloseModal">Kapat</button>
+          <button class="btn btn-primary" id="btnCloseScoreModal">Kapat</button>
         </div>
       </div>
     </div>
