@@ -3,7 +3,7 @@ const QUESTIONS_DATA = [
     "id": 1,
     "category": "Terminoloji & Kısaltmalar",
     "difficulty": "Kolay",
-    "question": "ICAO 4 harfli yer göstergelerinde (Location Indicators - Doc 7910) kod yapısı ile ilgili aşağıdakilerden hangisi DOĞRUDUR? (Örn: LTBA)",
+    "question": "ICAO 4 harfli yer göstergelerinde (Location Indicators - Doc 7910) kod yapısı ile ilgili aşağıdakilerden hangisi DOĞRUDUR?",
     "options": [
       "A) İlk harf havalimanını, son üç harf ülkeyi gösterir.",
       "B) İlk iki harf şehri, son iki harf pist numarasını gösterir.",
@@ -805,7 +805,7 @@ const QUESTIONS_DATA = [
     "difficulty": "Kolay",
     "question": "1. Trafik Hakkı (Birinci Serbesti) ne anlama gelir?",
     "options": [
-      "A) Bir devletin hava araçlarının diğer bir devletin hava sahasından YERE İNMEKSİZİN GEÇİŞ (Transit / Overflight) yapabilme hakkıdır.",
+      "A) Bir devletin hava araçlarının diğer bir devletin hava sahasından YERE İNMEKSİZİN GEÇİŞ yapabilme hakkıdır.",
       "B) Yakıt almak için teknik iniş yapma hakkıdır.",
       "C) Yolcu indirip bindirme hakkıdır.",
       "D) İç hatlarda uçabilme hakkıdır.",
@@ -822,7 +822,7 @@ const QUESTIONS_DATA = [
     "question": "2. Trafik Hakkı (İkinci Serbesti) aşağıdakilerden hangisidir?",
     "options": [
       "A) Ticari yolcu indirme hakkı",
-      "B) Ticari amaç DIŞINDA, yakıt ikmali veya teknik sebeplerle diğer ülke topraklarına inebilme hakkı (Teknik İniş Hakkı)",
+      "B) Ticari amaç DIŞINDA, yakıt ikmali veya teknik sebeplerle diğer ülke topraklarına inebilme hakkı",
       "C) Kendi ülkesine yolcu taşıma hakkı",
       "D) Tam kabotaj hakkı",
       "E) Kargo taşıma tekeli"
@@ -835,7 +835,7 @@ const QUESTIONS_DATA = [
     "id": 53,
     "category": "Trafik Hakları",
     "difficulty": "Kolay",
-    "question": "Bir havayolunun kendi tescil ülkesinden aldığı yolcu ve kargoyu anlaşmalı yabancı bir ülkeye taşıma hakkı (Örn: THY'nin İstanbul'dan Barselona'ya yolcu götürmesi) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürk Hava Yolları uçağı, İstanbul meydanından kalkarak İspanya'nın Barselona meydanına uçuyor ve taşıdığı yolcuları burada indiriyor.\n\nBu taşıma faaliyeti Chicago Sözleşmesi'ne göre hangi serbesti / trafik hakkıdır?",
     "options": [
       "A) 1. Trafik Hakkı",
       "B) 2. Trafik Hakkı",
@@ -851,7 +851,7 @@ const QUESTIONS_DATA = [
     "id": 54,
     "category": "Trafik Hakları",
     "difficulty": "Kolay",
-    "question": "Bir taşıyıcının yabancı bir ülkeden kendi tescil ülkesine ticari yolcu ve kargo taşıma hakkı (Örn: THY'nin Barselona'dan aldığı yolcuları İstanbul'a getirmesi) hangi serbestidir?",
+    "question": "Senaryo:\nTürk Hava Yolları uçağı, İspanya'nın Barselona meydanından aldığı ticari yolcuları Türkiye'ye getirerek İstanbul meydanına indiriyor.\n\nBu taşıma faaliyeti Chicago Sözleşmesi'ne göre hangi trafik hakkıdır?",
     "options": [
       "A) 3. Trafik Hakkı",
       "B) 4. Trafik Hakkı",
@@ -867,7 +867,7 @@ const QUESTIONS_DATA = [
     "id": 55,
     "category": "Trafik Hakları",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir havayolunun kendi ülkesinden başlamak veya kendi ülkesinde sona ermek kaydıyla; yabancı Ülke A ile yabancı Ülke B arasındaki dış hat trafiğini taşıması (Örn: THY'nin İstanbul-Singapur-Avustralya uçuşunda Singapur ile Avustralya arasında yolcu taşıması) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürk Hava Yolları uçağı; İstanbul'dan kalkarak Singapur'a iniyor. Buradan aldığı yeni yolcularla Avustralya'ya uçuyor ve Singapur ile Avustralya arasındaki parkur için bağımsız olarak bilet satışı yapıyor.\n\nSingapur ile Avustralya arasındaki bu taşıma hangi trafik hakkıdır?",
     "options": [
       "A) 4. Trafik Hakkı",
       "B) 5. Trafik Hakkı",
@@ -883,7 +883,7 @@ const QUESTIONS_DATA = [
     "id": 56,
     "category": "Trafik Hakları",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir havayolunun yabancı bir ülkeden kendi ülkesine getirdiği yolcuları gümrüğe sokmadan transit olarak üçüncü bir yabancı ülkeye taşıması (4. ve 3. hakların birleşimi, Hub-and-Spoke modeli; Örn: THY'nin Londra'dan aldığı yolcuyu İstanbul aktarmalı Bangkok'a götürmesi) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürk Hava Yolları; Londra'dan aldığı yolcuyu Türkiye'de iniş-kalkış yaptırarak (gümrüğe sokmaksızın transit olarak) aktarmalı bir seferle Bangkok'a taşıyor.\n\nBu operasyon Chicago Sözleşmesi kapsamında hangi trafik hakkı olarak kabul edilir?",
     "options": [
       "A) 5. Trafik Hakkı",
       "B) 6. Trafik Hakkı",
@@ -899,7 +899,7 @@ const QUESTIONS_DATA = [
     "id": 57,
     "category": "Trafik Hakları",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir havayolunun kendi ülkesiyle hiçbir operasyonel bağlantı kurmaksızın (ana vatanında başlamaksızın veya bitmeksizin) tamamen iki yabancı ülke arasında dış hat uçuşu yapması (Örn: Türk tescilli şirketin Zürih-Londra arası uçup bilet satması) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürkiye tescilli bir havayolu şirketi; Türkiye ile hiçbir operasyonel veya fiziksel bağlantı kurmaksızın Zürih (İsviçre) meydanından kalkıp Londra (İngiltere) meydanına uçuyor ve bu hatta bilet satıyor.\n\nBu durum hangi serbesti / trafik hakkı kapsamındadır?",
     "options": [
       "A) 5. Trafik Hakkı",
       "B) 6. Trafik Hakkı",
@@ -915,12 +915,12 @@ const QUESTIONS_DATA = [
     "id": 58,
     "category": "Trafik Hakları",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir yabancı havayolunun kendi ülkesinden başlayan veya biten bir sefer kapsamında, başka bir ülkenin iki iç hat noktası arasında yolcu taşıması (Ardışık / Bağlantılı Kabotaj; Örn: Bir Türk şirketinin İstanbul'dan Madrid'e gidip oradan Madrid-Barselona arasında yolcu taşıması) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürkiye tescilli bir havayolu uçağı; İstanbul'dan kalkarak Madrid'e (İspanya) iniyor. Ardından Madrid'den yeni yolcular alarak Barselona'ya (İspanya) uçuyor ve Madrid-Barselona hattında bilet satışı yapıyor.\n\nUçağın Madrid ile Barselona arasındaki bu taşıma faaliyeti hangi trafik hakkıdır?",
     "options": [
       "A) 5. Trafik Hakkı",
       "B) 7. Trafik Hakkı",
-      "C) 8. Trafik Hakkı (Bağlantılı Kabotaj)",
-      "D) 9. Trafik Hakkı (Tam Kabotaj)",
+      "C) 8. Trafik Hakkı",
+      "D) 9. Trafik Hakkı",
       "E) 6. Trafik Hakkı"
     ],
     "answer": 2,
@@ -931,12 +931,12 @@ const QUESTIONS_DATA = [
     "id": 59,
     "category": "Trafik Hakları",
     "difficulty": "Zor (Senaryo)",
-    "question": "Bir yabancı havayolunun kendi ülkesiyle hiçbir bağlantı kurmaksızın doğrudan yabancı bir ülkenin iki iç hat noktası arasında bağımsız sefer yapması (Tam / Saf Kabotaj - Open Skies; Örn: Türk şirketinin Madrid-Barselona arasında mekik dokuması) hangi trafik hakkıdır?",
+    "question": "Senaryo:\nTürkiye tescilli bir havayolu şirketi; Türkiye ile hiçbir bağlantı kurmaksızın doğrudan İspanya içinde Madrid ile Barselona arasında mekik dokuyarak tamamen iç hat bileti satmaktadır.\n\nBu taşıma faaliyeti havacılık hukukunda hangi trafik hakkıdır?",
     "options": [
       "A) 5. Trafik Hakkı",
       "B) 7. Trafik Hakkı",
       "C) 8. Trafik Hakkı",
-      "D) 9. Trafik Hakkı (Tam Kabotaj / Stand-alone Cabotage)",
+      "D) 9. Trafik Hakkı",
       "E) 4. Trafik Hakkı"
     ],
     "answer": 3,
@@ -999,8 +999,8 @@ const QUESTIONS_DATA = [
     "options": [
       "A) 5. Trafik Hakkı",
       "B) 7. Trafik Hakkı",
-      "C) 8. Trafik Hakkı (Ardışık Kabotaj)",
-      "D) 9. Trafik Hakkı (Tam Kabotaj)",
+      "C) 8. Trafik Hakkı",
+      "D) 9. Trafik Hakkı",
       "E) 6. Trafik Hakkı"
     ],
     "answer": 2,
@@ -1032,7 +1032,7 @@ const QUESTIONS_DATA = [
       "A) 5. Trafik Hakkı",
       "B) 7. Trafik Hakkı",
       "C) 8. Trafik Hakkı",
-      "D) 9. Trafik Hakkı (Tam Kabotaj)",
+      "D) 9. Trafik Hakkı",
       "E) 6. Trafik Hakkı"
     ],
     "answer": 3,
@@ -1045,7 +1045,7 @@ const QUESTIONS_DATA = [
     "difficulty": "Orta",
     "question": "1944 Chicago Konvansiyonu ile birlikte açılan 'Transit Sözleşmesi' (IASTA) sadece hangi iki serbestiyi uluslararası olarak tanımıştır?",
     "options": [
-      "A) 1. ve 2. Trafik Haklarını (Aşırı uçuş ve Teknik iniş)",
+      "A) 1. ve 2. Trafik Haklarını",
       "B) 3. ve 4. Trafik Haklarını",
       "C) 5. ve 6. Trafik Haklarını",
       "D) 8. ve 9. Trafik Haklarını",
@@ -1443,7 +1443,7 @@ const QUESTIONS_DATA = [
     "id": 91,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "IATA Dünya Slot Kılavuzu'na (WSG) göre 'Seviye-3 (Level 3 - Coordinated)' bir havalimanının temel özelliği nedir?",
+    "question": "IATA Dünya Slot Kılavuzu'na (WSG) göre Seviye-3 (Level 3) bir havalimanının temel niteliği nedir?",
     "options": [
       "A) Kapasite fazlası vardır, hiçbir uçağa slot verilmez.",
       "B) Talebin havalimanı kapasitesini aştığı, uçuş gerçekleştirmek için bağımsız bir Koordinatör tarafından SLOT TAHSİSİNİN ZORUNLU olduğu meydandır.",
@@ -1459,7 +1459,7 @@ const QUESTIONS_DATA = [
     "id": 92,
     "category": "Slot & Seviyeler",
     "difficulty": "Kolay",
-    "question": "IATA kuralları gereğince 'Seviye-2 (Level 2 - Schedules Facilitated)' havalimanlarında slot yönetim süreci nasıl işler?",
+    "question": "IATA Dünya Slot Kılavuzu'na (WSG) göre Seviye-2 (Level 2) bir havalimanında slot ve tarife süreci nasıl işler?",
     "options": [
       "A) Slot almak ölüm kalım meselesidir, koordinatör izin vermezse uçulamaz.",
       "B) Talep yoğunlaşması olan saatler için havayolları bir Tarife Danışmanı (Facilitator) ile gönüllü iş birliği ve danışma içinde çalışır (SMA mesajı kullanılır).",
