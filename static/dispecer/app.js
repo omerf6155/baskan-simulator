@@ -1,15 +1,20 @@
 // App Logic for Dispeçer Permi & Hukuk Drill
 document.addEventListener("DOMContentLoaded", () => {
   // State
-  let allQuestions = typeof QUESTIONS_DATA !== "undefined" ? QUESTIONS_DATA : [];
-  let filteredQuestions = [...allQuestions];
+  let rawQuestions = typeof QUESTIONS_DATA !== "undefined" ? QUESTIONS_DATA : [];
+  let allQuestions = [];
+  let filteredQuestions = [];
   let currentIndex = 0;
   let currentCategory = "ALL";
   let currentStatusFilter = "ALL"; // "ALL" | "EMPTY" | "WRONG" | "CORRECT"
 
   // Persistent user state in LocalStorage
   let userProgress = JSON.parse(localStorage.getItem("dispecer_progress") || "{}");
-  // Structure: { [questionId]: { answered: true, selected: 1, isCorrect: true } }
+  // Structure: { [questionId]: { answered: true, selectedText: "...", isCorrect: true } }
+
+  // Question Shuffled Layouts in LocalStorage (so options stay stable until reset/shuffle)
+  let optionLayouts = JSON.parse(localStorage.getItem("dispecer_option_layouts") || "{}");
+  // Structure: { [questionId]: [ { prefix: "A", text: "...", isCorrect: bool }, ... ] }
 
   // Theme State
   let currentTheme = localStorage.getItem("dispecer_theme") || "dark";
@@ -88,8 +93,74 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalPercent = document.getElementById("modalPercent");
   const scoreMotivationalMsg = document.getElementById("scoreMotivationalMsg");
 
+  // Fisher-Yates array shuffler
+  function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Strip prefix like "A) ", "B) " to get pure text
+  function cleanOptionText(opt) {
+    return opt.replace(/^[A-E]\)\s*/, "").trim();
+  }
+
+  // Prepare or Retrieve Shuffled Options for Question
+  function getPreparedOptions(q, forceShuffle = false) {
+    if (!forceShuffle && optionLayouts[q.id]) {
+      return optionLayouts[q.id];
+    }
+
+    // Build items with pure text and correct flag
+    const items = q.options.map((opt, idx) => ({
+      rawText: cleanOptionText(opt),
+      isCorrect: idx === q.answer
+    }));
+
+    // Shuffle options
+    const shuffledItems = shuffleArray(items);
+
+    // Re-assign A), B), C), D), E) prefixes
+    const prefixes = ["A", "B", "C", "D", "E"];
+    const layout = shuffledItems.map((item, idx) => ({
+      prefix: prefixes[idx],
+      display: `${prefixes[idx]}) ${item.rawText}`,
+      rawText: item.rawText,
+      isCorrect: item.isCorrect
+    }));
+
+    optionLayouts[q.id] = layout;
+    localStorage.setItem("dispecer_option_layouts", JSON.stringify(optionLayouts));
+    return layout;
+  }
+
+  // Shuffle all questions options & re-shuffle wrong questions order
+  function shuffleEntireTest(onlyWrongs = false) {
+    if (onlyWrongs) {
+      // Re-shuffle options for wrong questions
+      rawQuestions.forEach(q => {
+        const prog = userProgress[q.id];
+        if (prog && prog.answered && !prog.isCorrect) {
+          getPreparedOptions(q, true);
+        }
+      });
+    } else {
+      // Re-shuffle all 100 questions options
+      rawQuestions.forEach(q => {
+        getPreparedOptions(q, true);
+      });
+    }
+  }
+
   // Init
   function init() {
+    allQuestions = [...rawQuestions];
+    // Ensure all questions have layouts
+    allQuestions.forEach(q => getPreparedOptions(q, false));
+
     updateBadgesAndStats();
     buildGridMap();
     applyCombinedFilters();
@@ -98,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Apply Category + Status Filters
   function applyCombinedFilters() {
-    filteredQuestions = allQuestions.filter(q => {
+    let list = allQuestions.filter(q => {
       // 1. Category check
       const matchCat = (currentCategory === "ALL" || q.category === currentCategory);
       if (!matchCat) return false;
@@ -115,17 +186,24 @@ document.addEventListener("DOMContentLoaded", () => {
       return true;
     });
 
-    if (filteredQuestions.length === 0) {
+    // If user filtered "WRONG", automatically shuffle their question order and their options
+    if (currentStatusFilter === "WRONG") {
+      shuffleEntireTest(true);
+      list = shuffleArray(list);
+    }
+
+    if (list.length === 0) {
       if (currentStatusFilter === "WRONG") {
         alert("Süper! Yanlış yaptığın soru bulunmuyor.");
       } else if (currentStatusFilter === "EMPTY") {
-        alert("Tüm soruları tamamladın! Boş soru kalmadı.");
+        alert("Tüm soruları tamamladın! Testi yeniden karıştırmak için 'İlerlemeyi Sıfırla' diyebilirsin.");
       }
       currentStatusFilter = "ALL";
       updateStatusBtnsActive();
-      filteredQuestions = allQuestions.filter(q => currentCategory === "ALL" || q.category === currentCategory);
+      list = allQuestions.filter(q => currentCategory === "ALL" || q.category === currentCategory);
     }
 
+    filteredQuestions = list;
     currentIndex = 0;
     renderQuestion();
     updateBadgesAndStats();
@@ -142,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderQuestion() {
     if (filteredQuestions.length === 0) return;
     const q = filteredQuestions[currentIndex];
+    const opts = getPreparedOptions(q);
 
     // Card Meta
     cardCategory.textContent = q.category;
@@ -165,22 +244,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Options
     optionsGrid.innerHTML = "";
-    q.options.forEach((optText, optIdx) => {
+    opts.forEach((optItem, optIdx) => {
       const btn = document.createElement("button");
       btn.className = "option-btn";
-      btn.innerHTML = `<span>${optText}</span>`;
+      btn.innerHTML = `<span>${optItem.display}</span>`;
 
       if (isAnswered) {
         btn.disabled = true;
-        if (optIdx === q.answer) {
+        if (optItem.isCorrect) {
           btn.classList.add("correct");
-        } else if (optIdx === prog.selected) {
+        } else if (optItem.rawText === prog.selectedRawText) {
           btn.classList.add("wrong");
         } else {
           btn.classList.add("faded");
         }
       } else {
-        btn.addEventListener("click", () => handleSelectAnswer(optIdx));
+        btn.addEventListener("click", () => handleSelectAnswer(optItem));
       }
 
       optionsGrid.appendChild(btn);
@@ -197,18 +276,18 @@ document.addEventListener("DOMContentLoaded", () => {
     btnPrev.disabled = currentIndex === 0;
     btnNext.textContent = currentIndex === totalCount - 1 ? "Bitti 🏁" : "Sonraki →";
 
-    // Update active in grid
+    // Highlight active in grid
     highlightActiveInGrid(q.id);
   }
 
   // Answer handler
-  function handleSelectAnswer(selectedIdx) {
+  function handleSelectAnswer(selectedOpt) {
     const q = filteredQuestions[currentIndex];
-    const isCorrect = selectedIdx === q.answer;
+    const isCorrect = selectedOpt.isCorrect;
 
     userProgress[q.id] = {
       answered: true,
-      selected: selectedIdx,
+      selectedRawText: selectedOpt.rawText,
       isCorrect: isCorrect
     };
 
@@ -231,9 +310,8 @@ document.addEventListener("DOMContentLoaded", () => {
     explanationText.textContent = text;
   }
 
-  // Find and jump to first unattempted question
+  // Jump to first unattempted question
   function jumpToNextEmpty() {
-    // Search starting from next index
     const total = filteredQuestions.length;
     for (let offset = 1; offset <= total; offset++) {
       const targetIdx = (currentIndex + offset) % total;
@@ -250,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Build 1-100 Question Grid Map
   function buildGridMap() {
     questionGridContainer.innerHTML = "";
-    allQuestions.forEach((q, idx) => {
+    allQuestions.forEach((q) => {
       const btn = document.createElement("button");
       btn.className = "grid-q-btn";
       btn.textContent = q.id;
@@ -261,10 +339,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       btn.addEventListener("click", () => {
-        // Find in current filtered list or switch to ALL
         let foundIdx = filteredQuestions.findIndex(item => item.id === q.id);
         if (foundIdx === -1) {
-          // Reset filters to ALL so user can view that question
           currentCategory = "ALL";
           currentStatusFilter = "ALL";
           updateStatusBtnsActive();
@@ -317,9 +393,26 @@ document.addEventListener("DOMContentLoaded", () => {
     badgeCorrectCount.textContent = correctCount;
   }
 
+  // Reset and Shuffle All (Testi tamamlayıp veya sıfırlayınca)
+  function handleResetAndReshuffleAll() {
+    userProgress = {};
+    optionLayouts = {};
+    localStorage.removeItem("dispecer_progress");
+    localStorage.removeItem("dispecer_option_layouts");
+
+    // Re-shuffle all options dynamically
+    shuffleEntireTest(false);
+
+    updateBadgesAndStats();
+    buildGridMap();
+    applyCombinedFilters();
+    scoreModal.style.display = "none";
+    alert("Test sıfırlandı ve tüm 100 sorunun şıkları rastgele yeniden karıştırıldı! Kas hafızası sıfırlandı.");
+  }
+
   // Setup Listeners
   function setupListeners() {
-    // Status Mode Filter Buttons (Tümü, Boşlar, Yanlışlar, Doğrular)
+    // Status Mode Filter Buttons
     statusBtns.forEach(btn => {
       btn.addEventListener("click", () => {
         currentStatusFilter = btn.getAttribute("data-status-filter");
@@ -379,13 +472,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnResetProgress.addEventListener("click", () => {
-      if (confirm("Tüm ilerlemeni ve çözdüğün soruları sıfırlamak istiyor musun?")) {
-        userProgress = {};
-        localStorage.removeItem("dispecer_progress");
-        updateBadgesAndStats();
-        buildGridMap();
-        applyCombinedFilters();
-        scoreModal.style.display = "none";
+      if (confirm("Tüm ilerlemeni sıfırlamak ve BÜTÜN soruların şıklarını yeniden karıştırmak istiyor musun?")) {
+        handleResetAndReshuffleAll();
       }
     });
 
@@ -404,9 +492,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const q = filteredQuestions[currentIndex];
       if (userProgress[q.id] && userProgress[q.id].answered) return;
 
+      const opts = getPreparedOptions(q);
       const keyMap = { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "A": 0, "B": 1, "C": 2, "D": 3, "E": 4 };
       if (e.key in keyMap) {
-        handleSelectAnswer(keyMap[e.key]);
+        const optIndex = keyMap[e.key];
+        if (opts[optIndex]) {
+          handleSelectAnswer(opts[optIndex]);
+        }
       }
     });
   }
