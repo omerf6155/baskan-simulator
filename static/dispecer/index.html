@@ -40,6 +40,29 @@
       </div>
     </header>
 
+    <!-- Mode Switcher (Genel Pratik vs 20'lik Zor Sınav) -->
+    <div class="mode-selector-wrap">
+      <button class="mode-tab-btn active" id="btnModePractice">
+        <span>📚 Genel Pratik (150)</span>
+      </button>
+      <button class="mode-tab-btn highlight-exam" id="btnModeExam">
+        <span>🎯 20'lik Zor Sınav</span>
+      </button>
+    </div>
+
+    <!-- Exam Info Bar (Active only in Exam Mode) -->
+    <div class="exam-info-bar" id="examInfoBar" style="display: none;">
+      <div class="exam-stats">
+        <span class="exam-badge" id="examRoundBadge">Sınav 1/4</span>
+        <span class="exam-pool-badge" id="examPoolBadge">Havuz: 20/80</span>
+        <label class="instant-feedback-toggle" title="İşaretlediğin an doğru/yanlış ve açıklamayı gör">
+          <input type="checkbox" id="chkInstantFeedback">
+          <span>Anında Dönüt</span>
+        </label>
+      </div>
+      <button class="btn-exam-finish" id="btnFinishExamTop">🏁 Sınavı Bitir</button>
+    </div>
+
     <!-- Quick Status / Mode Bar (Tümü, Boşlar, Yanlışlar, Doğrular) -->
     <div class="status-mode-bar">
       <button class="status-btn active" data-status-filter="ALL" id="btnFilterAll">
@@ -118,6 +141,7 @@
     <footer class="app-footer">
       <button class="btn btn-secondary" id="btnPrev">← Önceki</button>
       <button class="btn btn-action" id="btnRetryMode" title="Yanlışları Baştan Çöz">🔄 Yanlışları Tekrar Çöz</button>
+      <button class="btn btn-action" id="btnFinishExamBottom" style="display: none; background: #dc2626; color: #fff;">🏁 Sınavı Bitir</button>
       <button class="btn btn-random" id="btnRandom" title="Rastgele Soru">🎲</button>
       <button class="btn btn-primary" id="btnNext">Sonraki →</button>
     </footer>
@@ -168,7 +192,52 @@
     </div>
   </div>
 
-  <script src="questions.js?v=150.2"></script>
-  <script src="app.js?v=150.2"></script>
+  <!-- 20'lik Zor Sınav Sonuç Modalı -->
+  <div class="modal-overlay" id="examResultModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🎯 20'lik Zor Sınav Karnesi</h3>
+        <button class="close-x-btn" id="btnCloseExamModal">✕</button>
+      </div>
+      
+      <div class="exam-score-hero">
+        <div class="exam-score-big" id="examScoreBig">0 / 20</div>
+        <div class="exam-score-percent" id="examScorePercent">%0 BAŞARI</div>
+        <div class="exam-status-tag pass" id="examStatusTag">GEÇTİ</div>
+      </div>
+
+      <div class="exam-summary-grid">
+        <div class="summary-box correct">
+          <span class="num" id="examCorrectNum">0</span>
+          <span class="lbl">Doğru</span>
+        </div>
+        <div class="summary-box wrong">
+          <span class="num" id="examWrongNum">0</span>
+          <span class="lbl">Yanlış</span>
+        </div>
+        <div class="summary-box empty">
+          <span class="num" id="examEmptyNum">0</span>
+          <span class="lbl">Boş</span>
+        </div>
+      </div>
+
+      <div class="exam-pool-progress-card">
+        <div class="pool-txt" id="examPoolProgressText">80 zor sorunun 20 tanesini tamamladın.</div>
+        <div class="pool-bar">
+          <div class="pool-fill" id="examPoolFill" style="width: 25%"></div>
+        </div>
+        <div class="pool-sub" id="examPoolSubText">Sonraki sınavda henüz görmediğin 20 YENİ zor soru gelecek.</div>
+      </div>
+
+      <div class="modal-actions-column">
+        <button class="btn btn-action-next" id="btnNextExamBatch">🚀 Sonraki 20 Zor Soruya Başla</button>
+        <button class="btn btn-secondary" id="btnReviewExamQuestions">🔍 Bu Sınavdaki Yanlışları İncele</button>
+        <button class="btn btn-outline" id="btnBackToPractice">📚 Genel Pratiğe Dön</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="questions.js?v=150.3"></script>
+  <script src="app.js?v=150.3"></script>
 </body>
 </html>

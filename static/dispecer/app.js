@@ -1,4 +1,4 @@
-// App Logic for Dispeçer Permi & Hukuk Drill
+// App Logic for Dispeçer Permi & Hukuk Drill (150 Soru & 20'lik Zor Sınav Modu)
 document.addEventListener("DOMContentLoaded", () => {
   // State
   let rawQuestions = typeof QUESTIONS_DATA !== "undefined" ? QUESTIONS_DATA : [];
@@ -8,13 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentCategory = "ALL";
   let currentStatusFilter = "ALL"; // "ALL" | "EMPTY" | "WRONG" | "CORRECT"
 
-  // Persistent user state in LocalStorage
+  // App Modes: "PRACTICE" (150 Soru) or "EXAM" (20 Zor Soru)
+  let appMode = localStorage.getItem("dispecer_active_mode") || "PRACTICE";
+
+  // Persistent user state in LocalStorage (Genel Pratik)
   let userProgress = JSON.parse(localStorage.getItem("dispecer_progress") || "{}");
-  // Structure: { [questionId]: { answered: true, selectedText: "...", isCorrect: true } }
 
   // Question Shuffled Layouts in LocalStorage
   let optionLayouts = JSON.parse(localStorage.getItem("dispecer_option_layouts") || "{}");
-  // Structure: { [questionId]: [ { prefix: "A", text: "...", isCorrect: bool }, ... ] }
+
+  // Exam Mode State in LocalStorage
+  let examServedIds = JSON.parse(localStorage.getItem("dispecer_exam_served_ids") || "[]");
+  let activeExam = JSON.parse(localStorage.getItem("dispecer_active_exam") || "null");
 
   // Theme State
   let currentTheme = localStorage.getItem("dispecer_theme") || "dark";
@@ -38,21 +43,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // DOM Elements
+  // DOM Elements - Mode Switcher & Exam Bar
+  const btnModePractice = document.getElementById("btnModePractice");
+  const btnModeExam = document.getElementById("btnModeExam");
+  const examInfoBar = document.getElementById("examInfoBar");
+  const examRoundBadge = document.getElementById("examRoundBadge");
+  const examPoolBadge = document.getElementById("examPoolBadge");
+  const chkInstantFeedback = document.getElementById("chkInstantFeedback");
+  const btnFinishExamTop = document.getElementById("btnFinishExamTop");
+  const btnFinishExamBottom = document.getElementById("btnFinishExamBottom");
+
+  // DOM Elements - Header & Filter Bars
   const headerCorrect = document.getElementById("headerCorrectCount");
   const headerTotal = document.getElementById("headerTotalSeen");
   const topStatsBadge = document.getElementById("topStatsBadge");
-
-  // Status Filter Buttons
+  const statusModeBar = document.querySelector(".status-mode-bar");
   const statusBtns = document.querySelectorAll(".status-btn");
   const badgeAllCount = document.getElementById("badgeAllCount");
   const badgeEmptyCount = document.getElementById("badgeEmptyCount");
   const badgeWrongCount = document.getElementById("badgeWrongCount");
   const badgeCorrectCount = document.getElementById("badgeCorrectCount");
-
-  // Category Pills
+  const filterScroll = document.querySelector(".filter-scroll");
   const filterPills = document.querySelectorAll(".filter-pill");
-  
+
   // Progress & Navigation
   const progressBarFill = document.getElementById("progressBarFill");
   const currentQNum = document.getElementById("currentQuestionNumber");
@@ -84,15 +97,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnCloseGridModal = document.getElementById("btnCloseGridModal");
   const questionGridContainer = document.getElementById("questionGridContainer");
 
-  // Score Modal
+  // Score Modal (Genel Pratik)
   const scoreModal = document.getElementById("scoreModal");
   const btnCloseScoreModal = document.getElementById("btnCloseScoreModal");
   const btnResetProgress = document.getElementById("btnResetProgress");
-
   const modalCorrect = document.getElementById("modalCorrect");
   const modalWrong = document.getElementById("modalWrong");
   const modalPercent = document.getElementById("modalPercent");
   const scoreMotivationalMsg = document.getElementById("scoreMotivationalMsg");
+
+  // Exam Result Modal
+  const examResultModal = document.getElementById("examResultModal");
+  const btnCloseExamModal = document.getElementById("btnCloseExamModal");
+  const examScoreBig = document.getElementById("examScoreBig");
+  const examScorePercent = document.getElementById("examScorePercent");
+  const examStatusTag = document.getElementById("examStatusTag");
+  const examCorrectNum = document.getElementById("examCorrectNum");
+  const examWrongNum = document.getElementById("examWrongNum");
+  const examEmptyNum = document.getElementById("examEmptyNum");
+  const examPoolProgressText = document.getElementById("examPoolProgressText");
+  const examPoolFill = document.getElementById("examPoolFill");
+  const examPoolSubText = document.getElementById("examPoolSubText");
+  const btnNextExamBatch = document.getElementById("btnNextExamBatch");
+  const btnReviewExamQuestions = document.getElementById("btnReviewExamQuestions");
+  const btnBackToPractice = document.getElementById("btnBackToPractice");
 
   // Fisher-Yates array shuffler
   function shuffleArray(array) {
@@ -132,23 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return layout;
   }
 
-  // Shuffle entire test
-  function shuffleEntireTest(onlyWrongs = false) {
-    if (onlyWrongs) {
-      rawQuestions.forEach(q => {
-        const prog = userProgress[q.id];
-        if (prog && prog.answered && !prog.isCorrect) {
-          getPreparedOptions(q, true);
-        }
-      });
-    } else {
-      rawQuestions.forEach(q => {
-        getPreparedOptions(q, true);
-      });
-    }
+  // Get Hard Questions Pool (80 questions)
+  function getHardQuestionsPool() {
+    return rawQuestions.filter(q => q.difficulty && q.difficulty.includes("Zor"));
   }
 
-  // Init
+  // Init App
   async function init() {
     if (!rawQuestions || rawQuestions.length < 150) {
       try {
@@ -167,13 +184,226 @@ document.addEventListener("DOMContentLoaded", () => {
     allQuestions = [...rawQuestions];
     allQuestions.forEach(q => getPreparedOptions(q, false));
 
-    updateBadgesAndStats();
-    buildGridMap();
-    applyCombinedFilters();
     setupListeners();
+
+    if (appMode === "EXAM") {
+      enterExamMode(false);
+    } else {
+      enterPracticeMode();
+    }
   }
 
-  // Apply Category + Status Filters
+  // ==========================================
+  // EXAM MODE LOGIC (20 ZOR SORU)
+  // ==========================================
+  function enterExamMode(forceNew = false) {
+    appMode = "EXAM";
+    localStorage.setItem("dispecer_active_mode", "EXAM");
+
+    btnModeExam.classList.add("active");
+    btnModePractice.classList.remove("active");
+
+    if (statusModeBar) statusModeBar.style.display = "none";
+    if (filterScroll) filterScroll.style.display = "none";
+    if (btnRetryMode) btnRetryMode.style.display = "none";
+    if (btnRandom) btnRandom.style.display = "none";
+
+    if (examInfoBar) examInfoBar.style.display = "flex";
+    if (btnFinishExamBottom) btnFinishExamBottom.style.display = "inline-flex";
+
+    const hardPool = getHardQuestionsPool();
+
+    // Check if active exam exists and valid
+    if (forceNew || !activeExam || !activeExam.questionIds || activeExam.questionIds.length !== 20) {
+      startNewExamBatch(false);
+    } else {
+      loadExistingExam();
+    }
+  }
+
+  function startNewExamBatch(alertUser = true) {
+    const hardPool = getHardQuestionsPool();
+    let unserved = hardPool.filter(q => !examServedIds.includes(q.id));
+
+    if (unserved.length < 20) {
+      if (alertUser || examServedIds.length >= hardPool.length) {
+        alert("🎉 Harika! 80 zor sorunun tamamını turladın! Havuz sıfırlandı, yeni döngü başlıyor.");
+      }
+      examServedIds = [];
+      localStorage.setItem("dispecer_exam_served_ids", JSON.stringify([]));
+      unserved = [...hardPool];
+    }
+
+    // Pick 20 questions
+    const shuffledPool = shuffleArray(unserved);
+    const picked20 = shuffledPool.slice(0, 20);
+    const pickedIds = picked20.map(q => q.id);
+
+    // Shuffle options for these 20
+    picked20.forEach(q => getPreparedOptions(q, true));
+
+    // Update served IDs
+    examServedIds.push(...pickedIds);
+    localStorage.setItem("dispecer_exam_served_ids", JSON.stringify(examServedIds));
+
+    const roundNum = Math.ceil(examServedIds.length / 20) || 1;
+
+    activeExam = {
+      round: roundNum,
+      questionIds: pickedIds,
+      answers: {},
+      isFinished: false,
+      instantFeedback: chkInstantFeedback ? chkInstantFeedback.checked : false
+    };
+    localStorage.setItem("dispecer_active_exam", JSON.stringify(activeExam));
+
+    filteredQuestions = picked20;
+    currentIndex = 0;
+
+    updateExamUIElements();
+    renderQuestion();
+    buildGridMap();
+  }
+
+  function loadExistingExam() {
+    const hardPoolMap = new Map(rawQuestions.map(q => [q.id, q]));
+    filteredQuestions = activeExam.questionIds.map(id => hardPoolMap.get(id)).filter(Boolean);
+
+    if (chkInstantFeedback) {
+      chkInstantFeedback.checked = !!activeExam.instantFeedback;
+    }
+
+    currentIndex = 0;
+    updateExamUIElements();
+    renderQuestion();
+    buildGridMap();
+  }
+
+  function updateExamUIElements() {
+    const hardPool = getHardQuestionsPool();
+    const totalHard = hardPool.length || 80;
+    const servedCount = examServedIds.length;
+    const currentRound = activeExam ? activeExam.round : 1;
+
+    if (examRoundBadge) {
+      examRoundBadge.textContent = `Sınav ${currentRound}/4`;
+    }
+    if (examPoolBadge) {
+      examPoolBadge.textContent = `Havuz: ${servedCount}/${totalHard}`;
+    }
+
+    // Top stats in exam mode
+    if (headerCorrect && headerTotal) {
+      const ansCount = Object.keys(activeExam ? activeExam.answers : {}).length;
+      let corrCount = 0;
+      if (activeExam && activeExam.answers) {
+        Object.values(activeExam.answers).forEach(a => {
+          if (a.isCorrect) corrCount++;
+        });
+      }
+      headerCorrect.textContent = corrCount;
+      headerTotal.textContent = ansCount;
+    }
+  }
+
+  function finishExam() {
+    if (!activeExam) return;
+
+    const totalQuestions = filteredQuestions.length;
+    const answeredCount = Object.keys(activeExam.answers).length;
+
+    if (answeredCount < totalQuestions && !activeExam.isFinished) {
+      const proceed = confirm(`Henüz cevaplamadığın ${totalQuestions - answeredCount} soru var. Sınavı bitirip karneni görmek istiyor musun?`);
+      if (!proceed) return;
+    }
+
+    activeExam.isFinished = true;
+    localStorage.setItem("dispecer_active_exam", JSON.stringify(activeExam));
+
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    filteredQuestions.forEach(q => {
+      const ans = activeExam.answers[q.id];
+      if (ans) {
+        if (ans.isCorrect) correctCount++;
+        else wrongCount++;
+
+        // Also record to userProgress so user's wrong list & overall stats stay up to date
+        userProgress[q.id] = {
+          answered: true,
+          selectedRawText: ans.selectedRawText,
+          isCorrect: ans.isCorrect
+        };
+      }
+    });
+
+    localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
+
+    const emptyCount = totalQuestions - (correctCount + wrongCount);
+    const scorePct = Math.round((correctCount / totalQuestions) * 100);
+    const isPassed = scorePct >= 70;
+
+    // Populate Exam Result Modal
+    if (examScoreBig) examScoreBig.textContent = `${correctCount} / ${totalQuestions}`;
+    if (examScorePercent) examScorePercent.textContent = `%${scorePct} BAŞARI`;
+
+    if (examStatusTag) {
+      examStatusTag.textContent = isPassed ? "GEÇTİ (Dispeçer Standardı)" : "KALDI (Tekrar Dene)";
+      examStatusTag.className = "exam-status-tag " + (isPassed ? "pass" : "fail");
+    }
+
+    if (examCorrectNum) examCorrectNum.textContent = correctCount;
+    if (examWrongNum) examWrongNum.textContent = wrongCount;
+    if (examEmptyNum) examEmptyNum.textContent = emptyCount;
+
+    const totalHard = getHardQuestionsPool().length || 80;
+    const servedCount = examServedIds.length;
+    const remainingCount = Math.max(0, totalHard - servedCount);
+
+    if (examPoolProgressText) {
+      examPoolProgressText.textContent = `${totalHard} zor sorunun ${servedCount} tanesini tamamladın.`;
+    }
+    if (examPoolFill) {
+      const pct = Math.min(100, Math.round((servedCount / totalHard) * 100));
+      examPoolFill.style.width = `${pct}%`;
+    }
+    if (examPoolSubText) {
+      if (remainingCount === 0) {
+        examPoolSubText.textContent = "Tüm 80 zor soru döngüsünü tamamladın! Sonraki sınavda havuz sıfırlanıp taze döngü başlayacak.";
+      } else {
+        examPoolSubText.textContent = `Sonraki sınavda henüz görmediğin 20 YENİ zor soru gelecek (Kalan: ${remainingCount}).`;
+      }
+    }
+
+    if (examResultModal) examResultModal.classList.add("active");
+
+    renderQuestion();
+    buildGridMap();
+  }
+
+  // ==========================================
+  // PRACTICE MODE LOGIC (150 SORU)
+  // ==========================================
+  function enterPracticeMode() {
+    appMode = "PRACTICE";
+    localStorage.setItem("dispecer_active_mode", "PRACTICE");
+
+    btnModePractice.classList.add("active");
+    btnModeExam.classList.remove("active");
+
+    if (statusModeBar) statusModeBar.style.display = "flex";
+    if (filterScroll) filterScroll.style.display = "flex";
+    if (btnRetryMode) btnRetryMode.style.display = "inline-flex";
+    if (btnRandom) btnRandom.style.display = "inline-flex";
+
+    if (examInfoBar) examInfoBar.style.display = "none";
+    if (btnFinishExamBottom) btnFinishExamBottom.style.display = "none";
+
+    allQuestions = [...rawQuestions];
+    applyCombinedFilters();
+  }
+
   function applyCombinedFilters() {
     let list = allQuestions.filter(q => {
       // 1. Category check
@@ -221,7 +451,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Render Current Question
+  function shuffleEntireTest(onlyWrongs = false) {
+    if (onlyWrongs) {
+      rawQuestions.forEach(q => {
+        const prog = userProgress[q.id];
+        if (prog && prog.answered && !prog.isCorrect) {
+          getPreparedOptions(q, true);
+        }
+      });
+    } else {
+      rawQuestions.forEach(q => {
+        getPreparedOptions(q, true);
+      });
+    }
+  }
+
+  // ==========================================
+  // RENDER QUESTION (DUAL-MODE)
+  // ==========================================
   function renderQuestion() {
     if (filteredQuestions.length === 0) return;
     const q = filteredQuestions[currentIndex];
@@ -237,24 +484,102 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalCount = filteredQuestions.length;
     const progress = Math.round(((currentIndex + 1) / totalCount) * 100);
     progressBarFill.style.width = `${progress}%`;
-    currentQNum.textContent = `Soru ${currentIndex + 1} / ${totalCount} (No: #${q.id})`;
+
+    if (appMode === "EXAM") {
+      currentQNum.textContent = `Sınav Sorusu ${currentIndex + 1} / ${totalCount} (#${q.id})`;
+    } else {
+      currentQNum.textContent = `Soru ${currentIndex + 1} / ${totalCount} (#${q.id})`;
+    }
     progressPercent.textContent = `%${progress}`;
 
     // Question Text
     questionText.textContent = q.question;
 
-    // Check if previously answered
+    // Check Answers according to Mode
+    if (appMode === "EXAM") {
+      renderExamQuestion(q, opts, totalCount);
+    } else {
+      renderPracticeQuestion(q, opts, totalCount);
+    }
+
+    // Highlight active in grid
+    highlightActiveInGrid(q.id);
+  }
+
+  function renderExamQuestion(q, opts, totalCount) {
+    const examAns = activeExam ? activeExam.answers[q.id] : null;
+    const isExamAnswered = !!examAns;
+    const showRevealed = activeExam && (activeExam.isFinished || activeExam.instantFeedback);
+
+    if (btnRetrySingle) btnRetrySingle.style.display = "none";
+
+    optionsGrid.innerHTML = "";
+    opts.forEach(optItem => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.innerHTML = `<span>${optItem.display}</span>`;
+
+      if (showRevealed) {
+        btn.disabled = true;
+        if (optItem.isCorrect) {
+          btn.classList.add("correct");
+        } else if (isExamAnswered && optItem.rawText === examAns.selectedRawText) {
+          btn.classList.add("wrong");
+        } else {
+          btn.classList.add("faded");
+        }
+      } else {
+        if (isExamAnswered && optItem.rawText === examAns.selectedRawText) {
+          btn.classList.add("exam-selected");
+        }
+        btn.addEventListener("click", () => handleExamSelectAnswer(optItem));
+      }
+
+      optionsGrid.appendChild(btn);
+    });
+
+    if (showRevealed && isExamAnswered) {
+      showExplanation(examAns.isCorrect, q.explanation);
+    } else {
+      explanationBox.style.display = "none";
+    }
+
+    btnPrev.disabled = currentIndex === 0;
+    btnNext.textContent = currentIndex === totalCount - 1 ? "Son Soru" : "Sonraki →";
+  }
+
+  function handleExamSelectAnswer(selectedOpt) {
+    if (!activeExam || activeExam.isFinished) return;
+
+    const q = filteredQuestions[currentIndex];
+    const isCorrect = selectedOpt.isCorrect;
+
+    activeExam.answers[q.id] = {
+      selectedRawText: selectedOpt.rawText,
+      isCorrect: isCorrect
+    };
+
+    localStorage.setItem("dispecer_active_exam", JSON.stringify(activeExam));
+
+    updateExamUIElements();
+    renderQuestion();
+    buildGridMap();
+
+    if (navigator.vibrate) {
+      navigator.vibrate(isCorrect ? 30 : [50, 50, 50]);
+    }
+  }
+
+  function renderPracticeQuestion(q, opts, totalCount) {
     const prog = userProgress[q.id];
     const isAnswered = prog && prog.answered;
 
-    // Retry Button Visibility
     if (btnRetrySingle) {
       btnRetrySingle.style.display = isAnswered ? "inline-flex" : "none";
     }
 
-    // Options
     optionsGrid.innerHTML = "";
-    opts.forEach((optItem) => {
+    opts.forEach(optItem => {
       const btn = document.createElement("button");
       btn.className = "option-btn";
       btn.innerHTML = `<span>${optItem.display}</span>`;
@@ -269,24 +594,21 @@ document.addEventListener("DOMContentLoaded", () => {
           btn.classList.add("faded");
         }
       } else {
-        btn.addEventListener("click", () => handleSelectAnswer(optItem));
+        btn.addEventListener("click", () => handlePracticeSelectAnswer(optItem));
       }
 
       optionsGrid.appendChild(btn);
     });
 
-    // Explanation Box
     if (isAnswered) {
       showExplanation(prog.isCorrect, q.explanation);
     } else {
       explanationBox.style.display = "none";
     }
 
-    // Navigation buttons state
     btnPrev.disabled = currentIndex === 0;
     btnNext.textContent = currentIndex === totalCount - 1 ? "Bitti 🏁" : "Sonraki →";
 
-    // Update Retry Mode button label depending on current filter
     if (btnRetryMode) {
       if (currentStatusFilter === "WRONG") {
         btnRetryMode.textContent = "🔄 Bu Yanlışları Yeniden Çöz";
@@ -294,13 +616,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btnRetryMode.textContent = "⚡ İlk Boşa Git";
       }
     }
-
-    // Highlight active in grid
-    highlightActiveInGrid(q.id);
   }
 
-  // Answer handler
-  function handleSelectAnswer(selectedOpt) {
+  function handlePracticeSelectAnswer(selectedOpt) {
     const q = filteredQuestions[currentIndex];
     const isCorrect = selectedOpt.isCorrect;
 
@@ -320,15 +638,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Clear single question state so user can re-answer it immediately
   function resetCurrentQuestionForRetry() {
     const q = filteredQuestions[currentIndex];
     if (!q) return;
 
     delete userProgress[q.id];
     localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
-
-    // Re-shuffle this question's options so user tries again cleanly
     getPreparedOptions(q, true);
 
     updateBadgesAndStats();
@@ -336,14 +651,13 @@ document.addEventListener("DOMContentLoaded", () => {
     renderQuestion();
   }
 
-  // Clear all wrong questions progress so user can re-solve them
   function resetAllWrongQuestionsForRetry() {
     let wrongCount = 0;
     allQuestions.forEach(q => {
       const prog = userProgress[q.id];
       if (prog && prog.answered && !prog.isCorrect) {
         delete userProgress[q.id];
-        getPreparedOptions(q, true); // re-shuffle options
+        getPreparedOptions(q, true);
         wrongCount++;
       }
     });
@@ -356,83 +670,119 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("dispecer_progress", JSON.stringify(userProgress));
     currentStatusFilter = "ALL";
     updateStatusBtnsActive();
-    
-    // Switch to empty to immediately solve those cleared questions
-    currentStatusFilter = "EMPTY";
-    updateStatusBtnsActive();
-    applyCombinedFilters();
 
-    alert(`${wrongCount} adet yanlış sorun temizlendi ve şıkları karıştırıldı. Şimdi hepsini tekrar çözebilirsin!`);
+    applyCombinedFilters();
+    jumpToNextEmpty();
   }
 
-  function showExplanation(isCorrect, text) {
+  function showExplanation(isCorrect, explanation) {
     explanationBox.style.display = "block";
     explanationBox.className = "explanation-box " + (isCorrect ? "correct" : "wrong");
     statusIcon.textContent = isCorrect ? "✅" : "❌";
-    statusTitle.textContent = isCorrect ? "DOĞRU CEVAP!" : "YANLIŞ CEVAP!";
-    statusTitle.style.color = isCorrect ? "var(--success)" : "var(--danger)";
-    explanationText.textContent = text;
+    statusTitle.textContent = isCorrect ? "Doğru Cevap!" : "Yanlış Cevap!";
+    explanationText.textContent = explanation || "Açıklama mevcut değil.";
   }
 
-  // Jump to first unattempted question
   function jumpToNextEmpty() {
-    const total = filteredQuestions.length;
-    for (let offset = 1; offset <= total; offset++) {
-      const targetIdx = (currentIndex + offset) % total;
-      const targetQ = filteredQuestions[targetIdx];
-      if (!userProgress[targetQ.id] || !userProgress[targetQ.id].answered) {
-        currentIndex = targetIdx;
-        renderQuestion();
-        return;
-      }
+    const emptyIdx = filteredQuestions.findIndex(q => !userProgress[q.id] || !userProgress[q.id].answered);
+    if (emptyIdx !== -1) {
+      currentIndex = emptyIdx;
+      renderQuestion();
+    } else {
+      alert("Bu filtrede tüm soruları cevapladın!");
     }
-    alert("Bu filtrede cevaplanmamış boş soru kalmadı!");
   }
 
-  // Build 1-100 Question Grid Map
+  // ==========================================
+  // QUESTION GRID MAP (1-150 / 1-20)
+  // ==========================================
   function buildGridMap() {
+    if (!questionGridContainer) return;
     questionGridContainer.innerHTML = "";
-    allQuestions.forEach((q) => {
+
+    const isExam = appMode === "EXAM";
+    const modalTitle = gridModal ? gridModal.querySelector("h3") : null;
+
+    if (modalTitle) {
+      modalTitle.textContent = isExam ? "Sınav Soru Haritası (1 - 20)" : `Soru Haritası (1 - ${allQuestions.length})`;
+    }
+
+    const listToMap = isExam ? filteredQuestions : allQuestions;
+
+    listToMap.forEach((q, idx) => {
       const btn = document.createElement("button");
       btn.className = "grid-q-btn";
-      btn.textContent = q.id;
+      btn.id = `grid-btn-${q.id}`;
+      btn.textContent = isExam ? (idx + 1) : q.id;
 
-      const prog = userProgress[q.id];
-      if (prog && prog.answered) {
-        btn.classList.add(prog.isCorrect ? "correct" : "wrong");
+      let answered = false;
+      let correct = false;
+
+      if (isExam) {
+        const ans = activeExam ? activeExam.answers[q.id] : null;
+        if (ans) {
+          answered = true;
+          correct = ans.isCorrect;
+        }
+        if (answered) {
+          if (activeExam && (activeExam.isFinished || activeExam.instantFeedback)) {
+            btn.classList.add(correct ? "correct" : "wrong");
+          } else {
+            btn.classList.add("answered");
+          }
+        }
+      } else {
+        const prog = userProgress[q.id];
+        if (prog && prog.answered) {
+          answered = true;
+          correct = prog.isCorrect;
+          btn.classList.add(correct ? "correct" : "wrong");
+        }
+      }
+
+      if (filteredQuestions[currentIndex] && filteredQuestions[currentIndex].id === q.id) {
+        btn.classList.add("active");
       }
 
       btn.addEventListener("click", () => {
-        let foundIdx = filteredQuestions.findIndex(item => item.id === q.id);
-        if (foundIdx === -1) {
+        let targetIdx = filteredQuestions.findIndex(item => item.id === q.id);
+        if (targetIdx !== -1) {
+          currentIndex = targetIdx;
+          renderQuestion();
+          if (gridModal) gridModal.classList.remove("active");
+        } else {
           currentCategory = "ALL";
           currentStatusFilter = "ALL";
-          updateStatusBtnsActive();
           filterPills.forEach(p => p.classList.toggle("active", p.getAttribute("data-category") === "ALL"));
-          filteredQuestions = [...allQuestions];
-          foundIdx = q.id - 1;
+          updateStatusBtnsActive();
+          applyCombinedFilters();
+          targetIdx = filteredQuestions.findIndex(item => item.id === q.id);
+          if (targetIdx !== -1) {
+            currentIndex = targetIdx;
+            renderQuestion();
+          }
+          if (gridModal) gridModal.classList.remove("active");
         }
-        currentIndex = foundIdx;
-        renderQuestion();
-        gridModal.style.display = "none";
       });
 
       questionGridContainer.appendChild(btn);
     });
-
-    const activeQ = filteredQuestions[currentIndex];
-    if (activeQ) highlightActiveInGrid(activeQ.id);
   }
 
-  function highlightActiveInGrid(qId) {
-    const gridBtns = questionGridContainer.querySelectorAll(".grid-q-btn");
-    gridBtns.forEach(btn => {
-      btn.classList.toggle("current", btn.textContent === String(qId));
-    });
+  function highlightActiveInGrid(questionId) {
+    const allGridBtns = document.querySelectorAll(".grid-q-btn");
+    allGridBtns.forEach(btn => btn.classList.remove("active"));
+    const activeBtn = document.getElementById(`grid-btn-${questionId}`);
+    if (activeBtn) activeBtn.classList.add("active");
   }
 
-  // Header and Status Badges
   function updateBadgesAndStats() {
+    if (appMode === "EXAM") {
+      updateExamUIElements();
+      return;
+    }
+
+    const total = allQuestions.length;
     let correctCount = 0;
     let wrongCount = 0;
     let answeredCount = 0;
@@ -446,36 +796,125 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    const emptyCount = allQuestions.length - answeredCount;
+    const emptyCount = total - answeredCount;
 
-    headerCorrect.textContent = correctCount;
-    headerTotal.textContent = answeredCount;
+    if (badgeAllCount) badgeAllCount.textContent = total;
+    if (badgeEmptyCount) badgeEmptyCount.textContent = emptyCount;
+    if (badgeWrongCount) badgeWrongCount.textContent = wrongCount;
+    if (badgeCorrectCount) badgeCorrectCount.textContent = correctCount;
 
-    badgeAllCount.textContent = allQuestions.length;
-    badgeEmptyCount.textContent = emptyCount;
-    badgeWrongCount.textContent = wrongCount;
-    badgeCorrectCount.textContent = correctCount;
+    if (headerCorrect) headerCorrect.textContent = correctCount;
+    if (headerTotal) headerTotal.textContent = answeredCount;
   }
 
-  // Reset and Shuffle All
   function handleResetAndReshuffleAll() {
-    userProgress = {};
-    optionLayouts = {};
+    if (!confirm("Tüm test ilerlemen sıfırlanacak ve bütün şıklar yeniden karıştırılacak. Emin misin?")) return;
     localStorage.removeItem("dispecer_progress");
     localStorage.removeItem("dispecer_option_layouts");
-
+    userProgress = {};
+    optionLayouts = {};
     shuffleEntireTest(false);
-
     updateBadgesAndStats();
     buildGridMap();
-    applyCombinedFilters();
-    scoreModal.style.display = "none";
-    alert("Test sıfırlandı ve tüm 100 sorunun şıkları rastgele yeniden karıştırıldı!");
+    currentIndex = 0;
+    renderQuestion();
+    if (scoreModal) scoreModal.classList.remove("active");
   }
 
-  // Setup Listeners
+  function openScoreModal() {
+    const total = allQuestions.length;
+    let correctCount = 0;
+    let wrongCount = 0;
+
+    allQuestions.forEach(q => {
+      const prog = userProgress[q.id];
+      if (prog && prog.answered) {
+        if (prog.isCorrect) correctCount++;
+        else wrongCount++;
+      }
+    });
+
+    const answeredCount = correctCount + wrongCount;
+    const percent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+    if (modalCorrect) modalCorrect.textContent = correctCount;
+    if (modalWrong) modalWrong.textContent = wrongCount;
+    if (modalPercent) modalPercent.textContent = `%${percent}`;
+
+    if (scoreMotivationalMsg) {
+      if (answeredCount === 0) {
+        scoreMotivationalMsg.textContent = "Henüz soru çözmedin. Haydi başla!";
+      } else if (percent >= 90) {
+        scoreMotivationalMsg.textContent = "Mükemmel! Tam dispeçer standardı!";
+      } else if (percent >= 70) {
+        scoreMotivationalMsg.textContent = "Çok iyi! Yanlış yaptığın konuları tekrar ederek 100'e ulaşabilirsin.";
+      } else {
+        scoreMotivationalMsg.textContent = "Pratik yapmaya devam! Slayt referanslarına göz atarak eksikleri kapatabilirsin.";
+      }
+    }
+
+    if (scoreModal) scoreModal.classList.add("active");
+  }
+
+  // ==========================================
+  // EVENT LISTENERS SETUP
+  // ==========================================
   function setupListeners() {
-    // Status Mode Filter Buttons
+    // Mode Switcher buttons
+    if (btnModePractice) {
+      btnModePractice.addEventListener("click", () => enterPracticeMode());
+    }
+    if (btnModeExam) {
+      btnModeExam.addEventListener("click", () => enterExamMode(false));
+    }
+
+    // Exam Info Bar actions
+    if (btnFinishExamTop) {
+      btnFinishExamTop.addEventListener("click", () => finishExam());
+    }
+    if (btnFinishExamBottom) {
+      btnFinishExamBottom.addEventListener("click", () => finishExam());
+    }
+    if (chkInstantFeedback) {
+      chkInstantFeedback.addEventListener("change", (e) => {
+        if (activeExam) {
+          activeExam.instantFeedback = e.target.checked;
+          localStorage.setItem("dispecer_active_exam", JSON.stringify(activeExam));
+          renderQuestion();
+          buildGridMap();
+        }
+      });
+    }
+
+    // Exam Result Modal Actions
+    if (btnCloseExamModal) {
+      btnCloseExamModal.addEventListener("click", () => examResultModal.classList.remove("active"));
+    }
+    if (btnNextExamBatch) {
+      btnNextExamBatch.addEventListener("click", () => {
+        if (examResultModal) examResultModal.classList.remove("active");
+        startNewExamBatch(true);
+      });
+    }
+    if (btnReviewExamQuestions) {
+      btnReviewExamQuestions.addEventListener("click", () => {
+        if (examResultModal) examResultModal.classList.remove("active");
+        if (activeExam) {
+          activeExam.instantFeedback = true;
+          if (chkInstantFeedback) chkInstantFeedback.checked = true;
+          renderQuestion();
+          buildGridMap();
+        }
+      });
+    }
+    if (btnBackToPractice) {
+      btnBackToPractice.addEventListener("click", () => {
+        if (examResultModal) examResultModal.classList.remove("active");
+        enterPracticeMode();
+      });
+    }
+
+    // Status Filter buttons (Practice Mode)
     statusBtns.forEach(btn => {
       btn.addEventListener("click", () => {
         currentStatusFilter = btn.getAttribute("data-status-filter");
@@ -484,25 +923,17 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Category Filter Pills
+    // Category pills (Practice Mode)
     filterPills.forEach(pill => {
       pill.addEventListener("click", () => {
+        filterPills.forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
         currentCategory = pill.getAttribute("data-category");
-        filterPills.forEach(p => p.classList.toggle("active", p.getAttribute("data-category") === currentCategory));
         applyCombinedFilters();
       });
     });
 
-    // Nav Buttons
-    btnNext.addEventListener("click", () => {
-      if (currentIndex < filteredQuestions.length - 1) {
-        currentIndex++;
-        renderQuestion();
-      } else {
-        openScoreModal();
-      }
-    });
-
+    // Navigation buttons
     btnPrev.addEventListener("click", () => {
       if (currentIndex > 0) {
         currentIndex--;
@@ -510,13 +941,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Retry Buttons
+    btnNext.addEventListener("click", () => {
+      if (currentIndex < filteredQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        if (appMode === "EXAM") {
+          finishExam();
+        } else {
+          openScoreModal();
+        }
+      }
+    });
+
+    // Retry single question
     if (btnRetrySingle) {
-      btnRetrySingle.addEventListener("click", () => {
-        resetCurrentQuestionForRetry();
-      });
+      btnRetrySingle.addEventListener("click", () => resetCurrentQuestionForRetry());
     }
 
+    // Bottom Action Button (Retry Mode / Jump to empty)
     if (btnRetryMode) {
       btnRetryMode.addEventListener("click", () => {
         if (currentStatusFilter === "WRONG") {
@@ -527,92 +970,102 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    btnRandom.addEventListener("click", () => {
-      currentIndex = Math.floor(Math.random() * filteredQuestions.length);
-      renderQuestion();
-    });
+    // Random question
+    if (btnRandom) {
+      btnRandom.addEventListener("click", () => {
+        if (filteredQuestions.length > 1) {
+          let nextIdx;
+          do {
+            nextIdx = Math.floor(Math.random() * filteredQuestions.length);
+          } while (nextIdx === currentIndex);
+          currentIndex = nextIdx;
+          renderQuestion();
+        }
+      });
+    }
 
-    // Grid Modal
-    btnGridModal.addEventListener("click", () => {
-      gridModal.style.display = "flex";
-    });
-    qNavTrigger.addEventListener("click", () => {
-      gridModal.style.display = "flex";
-    });
-    btnCloseGridModal.addEventListener("click", () => {
-      gridModal.style.display = "none";
-    });
+    // Question number click
+    if (qNavTrigger) {
+      qNavTrigger.addEventListener("click", () => {
+        buildGridMap();
+        if (gridModal) gridModal.classList.add("active");
+      });
+    }
 
-    // Score Modal
-    topStatsBadge.addEventListener("click", openScoreModal);
-    btnCloseScoreModal.addEventListener("click", () => {
-      scoreModal.style.display = "none";
-    });
+    // Header score click
+    if (topStatsBadge) {
+      topStatsBadge.addEventListener("click", () => {
+        if (appMode === "EXAM") {
+          finishExam();
+        } else {
+          openScoreModal();
+        }
+      });
+    }
 
-    btnResetProgress.addEventListener("click", () => {
-      if (confirm("Tüm ilerlemeni sıfırlamak ve BÜTÜN soruların şıklarını yeniden karıştırmak istiyor musun?")) {
-        handleResetAndReshuffleAll();
+    // Grid Modal Open/Close
+    if (btnGridModal) {
+      btnGridModal.addEventListener("click", () => {
+        buildGridMap();
+        if (gridModal) gridModal.classList.add("active");
+      });
+    }
+
+    if (btnCloseGridModal) {
+      btnCloseGridModal.addEventListener("click", () => {
+        if (gridModal) gridModal.classList.remove("active");
+      });
+    }
+
+    // Score Modal Close
+    if (btnCloseScoreModal) {
+      btnCloseScoreModal.addEventListener("click", () => {
+        if (scoreModal) scoreModal.classList.remove("active");
+      });
+    }
+
+    // Reset Progress Button
+    if (btnResetProgress) {
+      btnResetProgress.addEventListener("click", () => handleResetAndReshuffleAll());
+    }
+
+    // Modal background click close
+    [gridModal, scoreModal, examResultModal].forEach(modal => {
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            modal.classList.remove("active");
+          }
+        });
       }
     });
 
-    // Close modal on background click
-    window.addEventListener("click", (e) => {
-      if (e.target === gridModal) gridModal.style.display = "none";
-      if (e.target === scoreModal) scoreModal.style.display = "none";
-    });
+    // Keyboard navigation
+    document.addEventListener("keydown", (e) => {
+      if (gridModal && gridModal.classList.contains("active")) return;
+      if (scoreModal && scoreModal.classList.contains("active")) return;
+      if (examResultModal && examResultModal.classList.contains("active")) return;
 
-    // Keyboard support
-    window.addEventListener("keydown", (e) => {
-      if (scoreModal.style.display === "flex" || gridModal.style.display === "flex") return;
-      if (e.key === "ArrowRight") btnNext.click();
-      if (e.key === "ArrowLeft") btnPrev.click();
-      
-      const q = filteredQuestions[currentIndex];
-      if (userProgress[q.id] && userProgress[q.id].answered) return;
-
-      const opts = getPreparedOptions(q);
-      const keyMap = { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "A": 0, "B": 1, "C": 2, "D": 3, "E": 4 };
-      if (e.key in keyMap) {
-        const optIndex = keyMap[e.key];
-        if (opts[optIndex]) {
-          handleSelectAnswer(opts[optIndex]);
+      if (e.key === "ArrowLeft") {
+        if (currentIndex > 0) {
+          currentIndex--;
+          renderQuestion();
+        }
+      } else if (e.key === "ArrowRight") {
+        if (currentIndex < filteredQuestions.length - 1) {
+          currentIndex++;
+          renderQuestion();
+        }
+      } else if (["1", "2", "3", "4", "5"].includes(e.key)) {
+        const idx = parseInt(e.key) - 1;
+        const optBtns = optionsGrid.querySelectorAll(".option-btn");
+        if (optBtns[idx] && !optBtns[idx].disabled) {
+          optBtns[idx].click();
         }
       }
     });
   }
 
-  function openScoreModal() {
-    let correct = 0;
-    let wrong = 0;
-    let answered = 0;
-
-    allQuestions.forEach(q => {
-      const prog = userProgress[q.id];
-      if (prog && prog.answered) {
-        answered++;
-        if (prog.isCorrect) correct++;
-        else wrong++;
-      }
-    });
-
-    const percent = answered > 0 ? Math.round((correct / answered) * 100) : 0;
-    modalCorrect.textContent = correct;
-    modalWrong.textContent = wrong;
-    modalPercent.textContent = `%${percent}`;
-
-    if (answered === 0) {
-      scoreMotivationalMsg.textContent = "Henüz soru çözmedin. İlk soruyla başla!";
-    } else if (percent >= 85) {
-      scoreMotivationalMsg.textContent = "🔥 Efsanesin! Dispeçerlik tek ders sınavı çantada keklik!";
-    } else if (percent >= 70) {
-      scoreMotivationalMsg.textContent = "👏 Gayet başarılı! Birkaç yanlışı da temizledin mi tamamdır.";
-    } else {
-      scoreMotivationalMsg.textContent = "💪 Pratiğe devam! Yanlışlarım sekmesinden hatalı soruları tekrar çöz.";
-    }
-
-    scoreModal.style.display = "flex";
-  }
-
-  // Start
+  // Start initialization
   init();
 });

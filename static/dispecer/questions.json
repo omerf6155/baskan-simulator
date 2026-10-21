@@ -306,7 +306,7 @@
   {
     "id": 20,
     "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "Varşova Konvansiyonu ve Lahey Protokolü hükümleri aşağıdaki uçuş türlerinden hangisine KURAL OLARAK UYGULANMAZ?",
     "options": [
       "A) Düzenli tarifeli dış hat uçuşlarına",
@@ -322,7 +322,7 @@
   {
     "id": 21,
     "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "1952 Roma Konvansiyonu'nun sivil havacılık hukukundaki temel düzenleme alanı nedir?",
     "options": [
       "A) Hava araçlarının yüzeydeki üçüncü şahıslara ve mallara verdiği zararların tazmini",
@@ -354,7 +354,7 @@
   {
     "id": 23,
     "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "Chicago Konvansiyonu'nun 7. Maddesi taraf devletlere hangi konuda hukuki yetki ve düzenleme getirmiştir?",
     "options": [
       "A) Yabancı havayollarına kendi iç hat noktalarında sınırsız ve serbest uçuş hakkı tanımıştır.",
@@ -386,7 +386,7 @@
   {
     "id": 25,
     "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "1963 Tokyo Konvansiyonu'nun sivil havacılık güvenliğine getirdiği EN ÖNEMLİ hukuki düzenleme nedir?",
     "options": [
       "A) Uçak kaçıran şüpheliler hakkında doğrudan uluslararası idam cezası getirmesi",
@@ -434,7 +434,7 @@
   {
     "id": 28,
     "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "1999 Montreal Sözleşmesi'nin 1929 Varşova Konvansiyonu'na kıyasla getirdiği en büyük reform nedir?",
     "options": [
       "A) Uçak biletlerini tamamen kaldırmıştır.",
@@ -754,7 +754,7 @@
   {
     "id": 48,
     "category": "Otoriteler & Kurumlar",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "2920 Sayılı Kanun Madde 91'e göre sivil hava araçlarının iniş kalkışları ile ilgili temel kural nedir?",
     "options": [
       "A) Sivil hava araçları kanunen saptanmış bulunan havaalanlarından başka yerlerde iniş kalkış yapamazlar.",
@@ -802,7 +802,7 @@
   {
     "id": 51,
     "category": "Trafik Hakları",
-    "difficulty": "Kolay",
+    "difficulty": "Zor (Senaryo)",
     "question": "Chicago Sözleşmesi kapsamındaki 1. Trafik Hakkı ne anlama gelir?",
     "options": [
       "A) Bir devletin hava araçlarının diğer bir devletin hava sahasından yere inmeksizin transit geçiş yapabilme hakkıdır.",
@@ -818,7 +818,7 @@
   {
     "id": 52,
     "category": "Trafik Hakları",
-    "difficulty": "Kolay",
+    "difficulty": "Zor (Senaryo)",
     "question": "Chicago Sözleşmesi kapsamındaki 2. Trafik Hakkı aşağıdakilerden hangisidir?",
     "options": [
       "A) Yabancı bir ülkeden kendi tescil ülkesine yolcu ve kargo taşıma serbestisidir.",
@@ -834,7 +834,7 @@
   {
     "id": 53,
     "category": "Trafik Hakları",
-    "difficulty": "Kolay",
+    "difficulty": "Zor (Senaryo)",
     "question": "Senaryo:\nTürk Hava Yolları uçağı, İstanbul meydanından kalkarak İspanya'nın Barselona meydanına uçuyor ve taşıdığı yolcuları burada indiriyor.\n\nBu taşıma faaliyeti Chicago Sözleşmesi'ne göre hangi serbesti / trafik hakkıdır?",
     "options": [
       "A) 1. Trafik Hakkı",
@@ -850,7 +850,7 @@
   {
     "id": 54,
     "category": "Trafik Hakları",
-    "difficulty": "Kolay",
+    "difficulty": "Zor (Senaryo)",
     "question": "Senaryo:\nTürk Hava Yolları uçağı, İspanya'nın Barselona meydanından aldığı ticari yolcuları Türkiye'ye getirerek İstanbul meydanına indiriyor.\n\nBu taşıma faaliyeti Chicago Sözleşmesi'ne göre hangi trafik hakkıdır?",
     "options": [
       "A) 3. Trafik Hakkı",
@@ -1106,7 +1106,7 @@
   {
     "id": 70,
     "category": "Trafik Hakları",
-    "difficulty": "Orta",
+    "difficulty": "Zor (Senaryo)",
     "question": "Genel olarak dünya ülkelerinin kendi ulusal havayollarını ve iç pazarını korumak amacıyla yabancı havayollarına en katı şekilde yasakladığı serbestiler hangileridir?",
     "options": [
       "A) 1. ve 2. Trafik Hakları",
@@ -1122,7 +1122,7 @@
   {
     "id": 71,
     "category": "Permi & Mevzuat",
-    "difficulty": "Kolay",
+    "difficulty": "Zor (Senaryo)",
     "question": "AIP GEN 1.2 Madde 1.6'ya göre; Türk hava sahasını ve havalimanlarını kullanmaya yönelik her türlü uçuş izni talebi ve tamamlayıcı belgelerin hangi dillerde olması zorunludur?",
     "options": [
       "A) Sadece Türkçe",
