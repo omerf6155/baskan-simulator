@@ -49,18 +49,18 @@
   },
   {
     "id": 4,
-    "category": "Terminoloji & Kısaltmalar",
-    "difficulty": "Orta",
-    "question": "Havacılık haberleşmesinde bir uçuşun fiili kalkış/iniş bilgilerini ve varsa gecikme nedenini ilgili istasyonlara bildiren operasyonel hareket mesajı hangisidir?",
+    "question": "Havacılık haberleşmesinde bir uçuşun fiili kalkış/iniş bilgilerini ve varsa gecikme (DLA) detaylarını bildirmek amacıyla kullanılan operasyonel mesaj formatı hangisidir?",
     "options": [
-      "A) LDM",
-      "B) MVT",
-      "C) FPL",
-      "D) NOTAM",
-      "E) SCR"
+      "A) LDM (Load Distribution Message)",
+      "B) MVT (Movement Message)",
+      "C) FPL (Flight Plan)",
+      "D) NOTAM (Notice to Airmen)",
+      "E) METAR (Aviation Routine Weather Report)"
     ],
     "answer": 1,
-    "explanation": "Slayt 13: MVT (Movement Message), uçağın kalkış (DEP), iniş (ARR/EA) ve gecikme (DLA) durumlarını bildiren standart operasyonel mesajdır.",
+    "explanation": "Slayt 13'te belirtildiği üzere MVT (Movement Message); uçağın kalkış (DEP), iniş, gecikme (DLA) ve tahmini varış (ETA) gibi fiili hareket bilgilerini operasyon merkezine ileten mesajdır.",
+    "difficulty": "Kolay",
+    "category": "Terminoloji & Kısaltmalar",
     "slideRef": "Slayt 13"
   },
   {
@@ -433,19 +433,19 @@
   },
   {
     "id": 28,
-    "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Zor (Senaryo)",
-    "question": "1999 Montreal Sözleşmesi'nin 1929 Varşova Konvansiyonu'na kıyasla getirdiği en büyük reform nedir?",
+    "question": "1971 Montreal Sözleşmesi, daha önce imzalanan Tokyo (1963) ve Lahey (1970) sözleşmelerinde yer almayan hangi kritik güvenlik tehdidini ve suç unsurunu kapsamak amacıyla kabul edilmiştir?",
     "options": [
-      "A) Uçak biletlerini tamamen kaldırmıştır.",
-      "B) Yolcu ölümü ve yaralanmasında taşıyıcının sorumluluk limitlerini çok yüksek SDR tutarlarına çıkarmış ve kusursuz sorumluluk ilkesini getirmiştir.",
-      "C) Tüm charter uçuşlarını yasaklamıştır.",
-      "D) Devlet uçaklarını sivil kapsama almıştır.",
-      "E) Permi alma zorunluluğunu kaldırmıştır."
+      "A) Taşıyıcının yolcu bagaj hasarı tazminat sorumluluğu",
+      "B) Hava aracına ve sivil havacılık tesislerine karşı sabotaj ve kanun dışı eylemlerin önlenmesi",
+      "C) Pilotların uçuş ve görev süresi sınırlandırmaları",
+      "D) Uluslararası kabotaj haklarının serbestleştirilmesi",
+      "E) Gürültü sertifikası olmayan hava araçlarının uçuş yasakları"
     ],
     "answer": 1,
-    "explanation": "Slayt 34: 1999 Montreal Konvansiyonu, Varşova sistemini modernize ederek yolcu, bagaj ve kargo taşımacılığındaki tazminat limitlerini günümüz şartlarına yükseltmiştir.",
-    "slideRef": "Slayt 34"
+    "explanation": "Slayt 33'te açıkça belirtildiği üzere: 'Lahey ve Tokyo Sözleşmeleri'ndeki hava aracına karşı sabotaj fiilinin yer almaması eksikliği, yeni bir uluslararası metin üzerinde çalışılmasına sebep olmuş ve sonucunda 1971 Montreal Sözleşmesi (Sivil Havacılığın Güvenliğine Karşı Kanun Dışı Eylemlerin Önlenmesi) imzalanmıştır.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Hukuk & Konvansiyonlar",
+    "slideRef": "Slayt 33"
   },
   {
     "id": 29,
@@ -545,18 +545,18 @@
   },
   {
     "id": 35,
-    "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Orta",
-    "question": "Havacılıkta 'Hava Korsanlığı' suçu işleyen bir kişinin tescil devletine iadesi ve yargılanması zorunluluğu hangi sözleşmenin temel omurgasını oluşturur?",
+    "question": "16 Aralık 1970 tarihli Lahey Sözleşmesi'nin sivil havacılık güvenliği açısından getirdiği en temel zorunlu hüküm aşağıdakilerden hangisidir?",
     "options": [
-      "A) 1970 Lahey Sözleşmesi",
-      "B) 1919 Paris Sözleşmesi",
-      "C) 1929 Varşova Sözleşmesi",
-      "D) 1952 Roma Sözleşmesi",
-      "E) 1945 Bermuda Anlaşması"
+      "A) Hava aracı 'kaçırma' (hijacking) eylemini suç kabul ederek faillerin iadesini ve yargılanmasını zorunlu kılması",
+      "B) Kaptan pilota uçuş sırasında kolluk yetkisi vermesi",
+      "C) 3. şahıslara verilen yer hasarlarının işleten tarafından karşılanması",
+      "D) Sivil hava araçlarının yalnızca gümrüklü meydanlara inmesini şart koşması",
+      "E) Havalimanlarında slot tahsisini zorunlu kılması"
     ],
     "answer": 0,
-    "explanation": "Slayt 33: 1970 Lahey Sözleşmesi, hava korsanlarının iadesi veya mutlaka yargılanması (aut dedere aut judicare) kuralını getirmiştir.",
+    "explanation": "Slayt 33'e göre: '16 Aralık 1970 Lahey Sözleşmesi, hava aracı kaçırma fiilini suç olarak kabul etmiştir. Uçak kaçıran kişilerin iadesine ve yargılanmasına ilişkin zorlayıcı hükümler getirmiştir (TSHK Madde 105).'",
+    "difficulty": "Orta",
+    "category": "Hukuk & Konvansiyonlar",
     "slideRef": "Slayt 33"
   },
   {
@@ -705,19 +705,19 @@
   },
   {
     "id": 45,
-    "category": "Otoriteler & Kurumlar",
-    "difficulty": "Orta",
-    "question": "Uçuş izinlendirme sürecinde görev alan ve hava sahası koordinasyonunu sağlayan 'Uluslararası FIC Birimi' hangi kurum bünyesinde yer alır?",
+    "question": "Slayt 53'te belirtilen uçuş izinlendirme (permi) sürecinde görev alan ve hava sahası koordinasyonunu sağlayan uluslararası FIC birimi hangisidir?",
     "options": [
-      "A) Dışişleri Bakanlığı",
-      "B) DHMİ - Hava Trafik Kontrol Merkezi (HTKM / SMART)",
-      "C) Milli Savunma Bakanlığı",
-      "D) Emniyet Genel Müdürlüğü",
-      "E) Gümrük Muhafaza Başmüdürlüğü"
+      "A) Eurocontrol Brüksel Merkezi",
+      "B) DHMİ Hava Trafik Kontrol Merkezi (HTKM) FIC Birimi",
+      "C) EASA Köln Merkezi",
+      "D) ICAO Paris Bölge Ofisi",
+      "E) Ulaştırma ve Altyapı Bakanlığı Denetim Dairesi"
     ],
     "answer": 1,
-    "explanation": "Slayt 53: Uluslararası FIC birimi (Uçuş Bilgi Merkezi), DHMİ bünyesindeki Hava Trafik Kontrol Merkezi'nde (HTKM) görev yapar.",
-    "slideRef": "Slayt 53"
+    "explanation": "Slayt 53 ve Slayt 97 uyarınca uluslararası uçuş izin ve hava sahası koordinasyonunda görev alan FIC birimi 'DHMİ Hava Trafik Kontrol Merkezi (HTKM) FIC Birimi'dir.",
+    "difficulty": "Orta",
+    "category": "Otoriteler & Kurumlar",
+    "slideRef": "Slayt 53, 97"
   },
   {
     "id": 46,
@@ -1521,35 +1521,35 @@
   },
   {
     "id": 96,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Kolay",
-    "question": "Seviye-3 koordineli havalimanlarında havayolunun slot talep ederken ve koordinatörün onay/ret verirken kullandığı standart mesaj formatı hangisidir?",
+    "question": "AIP GEN 1.2 Madde 1.27 uyarınca; Türkiye hava sahası ve havalimanları için uçuş izin (permi) başvuruları mesai saatleri dışında ve tatil günlerinde hangi birime yapılır?",
     "options": [
-      "A) SMA",
-      "B) SCR",
-      "C) SIR",
-      "D) FPL",
-      "E) LDM"
+      "A) Dışişleri Bakanlığı Nöbetçi Memurluğu",
+      "B) DHMİ Genel Müdürlüğü Hava Trafik Kontrol Merkezi (HTKM) Başmüdürlüğü FIC Birimi",
+      "C) Genelkurmay Başkanlığı Hava Kuvvetleri Komutanlığı",
+      "D) İlgili havalimanının Nöbetçi Meydan Müdürlüğü",
+      "E) EASA Güvenlik Operasyonları Merkezi"
     ],
     "answer": 1,
-    "explanation": "SCR (Slot Clearance Request / Response), Seviye-3 koordineli havalimanlarında slot alma, değiştirme ve onaylama işlemlerinde kullanılan temel mesajdır.",
-    "slideRef": "Slayt 94, IATA WSG"
+    "explanation": "Slayt 97'ye göre (AIP GEN 1.2 Madde 1.27): 'Uçuş izin başvuruları hafta içi çalışma saatleri içerisinde (08.30-17.30) SHGM'ye; mesai saatleri dışında ve tatil günlerinde DHMİ Genel Müdürlüğü Hava Trafik Kontrol Merkezi Başmüdürlüğü Havacılık Bilgi Yönetimi FIC Birimine yapılır.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 97"
   },
   {
     "id": 97,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Kolay",
-    "question": "Seviye-2 tarife danışmalı havalimanlarında havayollarının tarife bildiriminde bulunurken kullandığı standart mesaj formatı hangisidir?",
+    "question": "AIP GEN 1.2 Madde 1.22'ye göre; yabancılar tarafından Türk Hava Sahasında 'havada yakıt ikmali' yapılması için planlanan uçuştan en az kaç gün önce başvuruda bulunulması zorunludur?",
     "options": [
-      "A) SCR",
-      "B) SMA",
-      "C) MVT",
-      "D) DLA",
-      "E) NOTAM"
+      "A) 2 iş günü önceden",
+      "B) 5 iş günü önceden",
+      "C) 10 iş günü önceden",
+      "D) 15 iş günü önceden",
+      "E) 30 gün önceden"
     ],
-    "answer": 1,
-    "explanation": "SMA (Schedule Movement Advice), Seviye-2 havalimanlarında tarife bildirim ve danışma amacıyla çekilen mesajdır.",
-    "slideRef": "Slayt 94, IATA WSG"
+    "answer": 3,
+    "explanation": "Slayt 93'te açıkça belirtildiği üzere (AIP GEN 1.2 Madde 1.22): 'Yabancılar tarafından Türk Hava Sahasında havada yakıt ikmali yapılması özel izne tabidir. 15 iş günü öncesinden talepte bulunulur. Talebin Genelkurmay Başkanlığınca uygun görülmesi halinde izin verilir.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 93"
   },
   {
     "id": 98,
@@ -1569,19 +1569,19 @@
   },
   {
     "id": 99,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Orta",
-    "question": "IATA Dünya Slot Kılavuzu'nda yer alan meşhur 80/20 Kuralı neyi ifade eder?",
+    "question": "AIP GEN 1.2 Madde 1.3'e göre; Türkiye'ye yönelik 5. ve 7. trafik haklı YOLCU taşıyan uçuşlar için izin başvurusunda bulunulmadan önce Türk Hava Yolları haricinde hangi özel sektör derneğinden olumlu görüş alınması zorunludur?",
     "options": [
-      "A) Havalimanı toplam slot kapasitesinin en az %80'inin yabancı havayollarına verilmesini",
-      "B) Sonraki sezon aynı slotu korumak için tahsis edilen slot serisinin en az %80 kullanılmış olmasını",
-      "C) Havayolunun sezon boyunca uçaklarında en az %20 boş koltuk bulundurmak zorunda olmasını",
-      "D) Slot tahsis ücretinin %80'inin devlete vergi olarak peşin ödenmesi gerektiğini",
-      "E) Sezon boyunca meydana gelen rötarların uçuşların en fazla %20'sini kapsayabileceğini"
+      "A) TÖSHİD (Türkiye Özel Sektör Havacılık İşletmeleri Derneği)",
+      "B) IATA Türkiye Temsilciliği",
+      "C) TÜRSAB (Türkiye Seyahat Acentaları Birliği)",
+      "D) UTİKAD (Uluslararası Taşımacılık ve Lojistik Hizmet Üretenleri Derneği)",
+      "E) Türkiye Hava Trafik Kontrolörleri Derneği (TATCA)"
     ],
-    "answer": 1,
-    "explanation": "IATA WSG 80/20 Kuralı: Bir havayolu tahsis edilen tarihi slot hakkını (Grandfather rights) bir sonraki sezonda korumak için en az %80 kullanım gerçekleştirmelidir (Use it or lose it).",
-    "slideRef": "IATA WSG Kuralları"
+    "answer": 0,
+    "explanation": "Slayt 75'e göre (AIP GEN 1.2 Madde 1.3): '5. ve 7. trafik haklı yolcu taşıyan uçuşlar için TÖSHİD (Türkiye Özel Sektör Havacılık İşletmeleri Derneği) ve Türk Hava Yolları şirketlerinden olumlu görüş alındığı takdirde izin başvurusunda bulunulur.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 75"
   },
   {
     "id": 100,
@@ -1921,18 +1921,18 @@
   },
   {
     "id": 121,
-    "category": "Permi & Mevzuat",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Yerli bir havayolu işletmesinin Türkiye içinde tarifeli yeni bir iç hat hattı açmak için SHGM'ye ilettiği permi başvuru kodu hangisidir?",
+    "question": "Slayt 127 uyarınca; yerli bir havayolu işletmesinin Türkiye içinde tarifeli bir 'İç Hat Seferi' düzenlemek amacıyla SHGM'ye yaptığı başvuru onaylandığında kayıtlara giren resmi permi tür kodu hangisidir?",
     "options": [
       "A) CASL",
       "B) CASD",
-      "C) CAT",
-      "D) CAG",
-      "E) CAC"
+      "C) CAST",
+      "D) CAC",
+      "E) CAG"
     ],
     "answer": 1,
-    "explanation": "Slayt 127: Tarifeli sefer düzenlemek amaçlı talep (İç Hat) tür kodu CASD'dir.",
+    "explanation": "Slayt 127'de yer alan SHGM Permi Tür Kodları tablosuna göre: 'CASD: Tarifeli sefer düzenlemek amaçlı talep (İç hat)' kodudur. Dış hat ise CASL kodudur.",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
     "slideRef": "Slayt 127"
   },
   {
@@ -2161,35 +2161,35 @@
   },
   {
     "id": 136,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "IATA standartlarına göre Seviye-3 koordineli bir havalimanında slot talebinde bulunan bir havayoluna koordinatörün onay vermesi halinde kullanılan durum kodu hangisidir?",
+    "question": "1944 Chicago Konvansiyonu Madde 29 uyarınca; uluslararası seyrüsefer yapan her sivil hava aracında taşınması ZORUNLU olan belgeler arasında aşağıdakilerden hangisi yer almaz?",
     "options": [
-      "A) U",
-      "B) K",
-      "C) O",
-      "D) W",
-      "E) D"
+      "A) Tescil Sertifikası (Certificate of Registration - CoR)",
+      "B) Uçuşa Elverişlilik Sertifikası (Certificate of Airworthiness - CoA)",
+      "C) Gürültü Sertifikası (Noise Certificate) ve Hava İşletme Ruhsatı (AOC)",
+      "D) Üçüncü Şahıs Mali Sorumluluk Sigortası ve Bordo Jurnali",
+      "E) IATA Dünya Slot Tahsis Belgesi"
     ],
-    "answer": 1,
-    "explanation": "Slot koordinasyonunda durum kodlarından 'K' (Confirmed) slotun onaylandığını ifade eder.",
-    "slideRef": "IATA WSG Kuralları"
+    "answer": 4,
+    "explanation": "Slayt 27 ve 28'de (Chicago Madde 29) uçakta taşınması zorunlu belgeler: CoR, CoA, Noise Certificate, AOC, Radio Licence, Third Party Liability Insurance, Pilot Lisansları, Bordo Jurnali, Yolcu Listesi ve Kargo Manifestosu olarak sayılmıştır. Slot belgesi uçakta taşınması zorunlu konvansiyon belgesi değildir.",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Hukuk & Konvansiyonlar",
+    "slideRef": "Slayt 27-28"
   },
   {
     "id": 137,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Bir havayolu işletmesi Seviye-3 bir havalimanı için talep ettiği slot saatine karşılık koordinatörden 'U' durum kodu alırsa bu ne anlama gelir?",
+    "question": "Slayt 53 ve Slayt 91 uyarınca; Türkiye'de tehlikeli maddelerin sivil hava araçlarıyla taşınması izinlerinde SHGM'nin zorunlu olarak koordine ettiği bakanlık birimi hangisidir?",
     "options": [
-      "A) Slot koşulsuz onaylanmıştır.",
-      "B) İstenen saat kapasite yetersizliği nedeniyle reddedilmiştir (Unable).",
-      "C) Uçuşun derhal iptal edilmesi emredilmiştir.",
-      "D) Uçak tipinin değiştirilmesi zorunlu tutulmuştur.",
-      "E) Bilet fiyatlarının yükseltilmesi istenmiştir."
+      "A) Çevre, Şehircilik ve İklim Değişikliği Bakanlığı",
+      "B) Ulaştırma ve Altyapı Bakanlığı Tehlikeli Mal ve Kombine Taşımacılık Düzenleme Genel Müdürlüğü (TMKT)",
+      "C) Sanayi ve Teknoloji Bakanlığı Metroloji Dairesi",
+      "D) Ticaret Bakanlığı Gümrükler Muhafaza Genel Müdürlüğü",
+      "E) Enerji ve Tabii Kaynaklar Bakanlığı Nükleer Düzenleme Kurumu"
     ],
     "answer": 1,
-    "explanation": "Slot mesajlarında 'U' (Unable / Refused) talep edilen slotun verilemediğini ve reddedildiğini gösterir.",
-    "slideRef": "IATA WSG Kuralları"
+    "explanation": "Slayt 53 ve Slayt 91'e göre: 'Tehlikeli maddelerin taşınması halinde başvurular Ulaştırma ve Altyapı Bakanlığı Tehlikeli Mal ve Kombine Taşımacılık Düzenleme Genel Müdürlüğü (TMKT) ile koordine edilerek SHGM tarafından değerlendirilir.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Otoriteler & Kurumlar",
+    "slideRef": "Slayt 53, 91"
   },
   {
     "id": 138,
@@ -2225,51 +2225,51 @@
   },
   {
     "id": 140,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "IATA Dünya Slot Kılavuzu'na göre havayollarının Seviye-2 havalimanlarında kullandığı SMA mesajının SCR mesajından temel farkı nedir?",
+    "question": "AIP GEN 1.2 Madde 1.2 hükmü uyarınca; belirlenmiş bulunan gümrüklü havaalanlarından başka bir yere zorunluluk (acil durum) nedeniyle iniş yapılması halinde, hava aracı sorumlu pilotunun yapması gereken ilk yasal işlem nedir?",
     "options": [
-      "A) SMA mesajında sadece kargo taşınabilir.",
-      "B) SMA bir onay/tahsis talebi değil, tarife bildirim ve danışma amaçlı bir tavsiye mesajıdır.",
-      "C) SMA sadece askeri uçaklar tarafından kullanılır.",
-      "D) SMA mesajına cevap verilmesi 30 gün sürer.",
-      "E) SMA mesajı çeken havayolu permi almaktan muaf olur."
+      "A) Durumu derhal varsa havaalanı yöneticisine, yoksa en yakın mülki amire veya zabıtaya duyurmak ve uçağı güvence altına almak",
+      "B) Yolcuları derhal en yakın otobüs terminaline sevk etmek",
+      "C) Uçağın motorlarını çalıştırmaya devam ederek kalkış için ICAO'dan telsizle permi istemek",
+      "D) Gümrüksüz eşyaları derhal yerel halka satmak",
+      "E) En yakın yabancı konsolosluğu arayarak diplomatik dokunulmazlık talep etmek"
     ],
-    "answer": 1,
-    "explanation": "Slayt 94: SMA (Schedule Movement Advice) Seviye-2 meydanlarda tarife kolaylaştırıcısına sunulan danışma mesajıdır; bağlayıcı onay mekanizması SCR'dir.",
-    "slideRef": "Slayt 94"
+    "answer": 0,
+    "explanation": "Slayt 74'e göre (AIP GEN 1.2 Madde 1.2): 'Zorunluluk nedeniyle iniş yapıldığı takdirde, sorumlu pilot durumu derhal varsa havaalanı yöneticisine yoksa en yakın mülki amire veya zabıta yetkilisine duyurmak ve yetkili makamlar el koyuncaya kadar hava aracını yolcuları ve yükü ile birlikte güvence altına almakla yükümlüdür.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 74"
   },
   {
     "id": 141,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Seviye-3 bir havalimanında slot tahsis edilmiş bir uçuşun slot tolerans penceresi genel IATA kuralı olarak kaç dakikadır?",
+    "question": "AIP GEN 1.2 Madde 1.3 uyarınca; Türkiye'ye 5. ve 7. trafik haklı KARGO taşıyan uçuşlar için başvuru yapılmadan önce görüş alınması zorunlu olan yerli kargo havayolu işletmeleri arasında aşağıdakilerden hangisi yer alır?",
     "options": [
-      "A) -5 dakika / +5 dakika",
-      "B) -15 dakika / +15 dakika",
-      "C) -30 dakika / +30 dakika",
-      "D) -60 dakika / +60 dakika",
-      "E) Sadece tam saatinde kalkış yapılabilir"
+      "A) MNG Kargo, ULS Havayolları Kargo ve ACT Havayolları (My Cargo)",
+      "B) Yalnızca Türk Hava Yolları",
+      "C) DHL ve FedEx Türkiye Şubeleri",
+      "D) Pegasus ve SunExpress Kargo Bölümleri",
+      "E) Sadece Askeri Hava Lojistik Komutanlığı"
     ],
-    "answer": 1,
-    "explanation": "Havalimanı slot operasyonlarında kabul edilen standart tolerans penceresi slot saatinin 15 dakika öncesi ve 15 dakika sonrasıdır (-15 / +15 dk).",
-    "slideRef": "IATA WSG"
+    "answer": 0,
+    "explanation": "Slayt 75'e göre: '5. ve 7. trafik haklı kargo taşıyan uçuşlar için Türk Hava Yolları, MNG Kargo, ULS Havayolları Kargo, ACT Havayolları (My Cargo), Air Anka ve BBN Havayolu şirketlerinden olumlu görüş alındığı takdirde izin başvurusunda bulunulur.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 75"
   },
   {
     "id": 142,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Bir havayolu şirketi tahsis edilen tarihi slot hakkını (Grandfather rights) bir sonraki sezonda kaybetmemek için slot serisini en az yüzde kaç oranında fiilen kullanmalıdır?",
+    "question": "AIP GEN 1.2 Madde 4.4.1 (b) bendi gereğince; Türk taşıyıcılarına charter kısıtlaması uygulamayan ülkelerden yapılan turistik charter uçuşlarında, mütekabiliyet esasına göre uçak koltuk kapasitesinin en fazla yüzde kaçına kadar münferit tek yön koltuk satışı yapılabilir?",
     "options": [
-      "A) En az %50",
-      "B) En az %60",
-      "C) En az %70",
-      "D) En az %80",
-      "E) En az %95"
+      "A) Yüzde beşine (%5)",
+      "B) Yüzde onuna (%10)",
+      "C) Yüzde yirmisine (%20)",
+      "D) Yüzde ellisine (%50)",
+      "E) Koltuk satışına hiçbir şekilde izin verilmez"
     ],
-    "answer": 3,
-    "explanation": "80/20 Kuralı: Havayolunun sonraki sezonda öncelikli hakkını koruyabilmesi için tahsis edilen slotun en az %80'ini kullanması gerekir.",
-    "slideRef": "IATA WSG"
+    "answer": 1,
+    "explanation": "Slayt 116'da açıkça belirtildiği üzere (AIP GEN 1.2 Madde 4.4.1.b): 'Türk taşıyıcılarına charter kısıtlaması uygulanmayan ülkelerden yapılan charter uçuşlarında mütekabiliyet ilkesine göre uçak koltuk kapasitesinin yüzde onuna (%10) kadar koltuk satışı yapılabilir.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 116"
   },
   {
     "id": 143,
@@ -2305,19 +2305,19 @@
   },
   {
     "id": 145,
-    "category": "Slot & Seviyeler",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Bir dispeçer Seviye-3 bir havalimanı için slot planlaması yaparken bir slotu SİLMEK veya İPTAL ETMEK istediğinde SCR mesajında hangi eylem kodunu kullanır?",
+    "question": "AIP GEN 1.2 Madde 1.14 hükmü gereğince; Türk hava sahası içinde ilgili resmi otoriteden özel izin alınmaksızın yapılması KESİNLİKLE YASAK olan faaliyetler arasında aşağıdakilerden hangisi yer alır?",
     "options": [
-      "A) N",
-      "B) C",
-      "C) D",
-      "D) K",
-      "E) O"
+      "A) Akrobatik uçuş veya hava gösterisi yapmak, tehlike hariç paraşütle atlamak ve reklam/propaganda faaliyeti yürütmek",
+      "B) IFR uçuş planı doldurarak kontrollü hava sahasında uçmak",
+      "C) Havalimanı yaklaşmasında standart aletli alçalma prosedürü (STAR) uygulamak",
+      "D) Uçakta yolculara sıcak yemek ikramı yapmak",
+      "E) Yedek meydana divert etme kararı almak"
     ],
-    "answer": 2,
-    "explanation": "Slot eylem kodlarında 'D' (Delete) mevcut bir slotun iptali veya silinmesi için kullanılır.",
-    "slideRef": "SSIM Chapter 6"
+    "answer": 0,
+    "explanation": "Slayt 85'te belirtildiği üzere (AIP GEN 1.2 Madde 1.14): 'Paraşütle atlamak, akrobatik uçuş yapmak, izinli yerler dışında fotoğraf/film çekmek, reklam/propaganda faaliyeti yürütmek, elektronik karıştırma (ECCM) yapmak izin alınmaksızın kesinlikle yasaktır.'",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 85"
   },
   {
     "id": 146,
@@ -2353,35 +2353,35 @@
   },
   {
     "id": 148,
-    "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Uluslararası sivil havacılıkta hava korsanlığı ve sabotaj suçları işleyen şüpheliler hakkında 'İade et ya da yargıla' (Aut dedere aut judicare) kuralını getiren temel sözleşmeler çifti hangisidir?",
+    "question": "Slayt 33'e göre; hava aracı kaçırma (hijacking) suçunu uluslararası düzeyde ilk kez bağımsız suç olarak tanımlayan ve faillerin iadesini/yargılanmasını zorunlu kılan sözleşme hangisidir?",
     "options": [
-      "A) Varşova ve Paris",
-      "B) Lahey (1970) ve Montreal (1971)",
-      "C) Roma ve Cenevre",
-      "D) Chicago ve IASTA",
-      "E) Bermuda ve Madrid"
+      "A) 1970 Lahey Sözleşmesi",
+      "B) 1919 Paris Sözleşmesi",
+      "C) 1928 Havana Konvansiyonu",
+      "D) 1926 Madrid Konvansiyonu",
+      "E) 1933 Roma Konvansiyonu"
     ],
-    "answer": 1,
-    "explanation": "Slayt 33: 1970 Lahey (uçak kaçırma) ve 1971 Montreal (sabotaj) sözleşmeleri suçluların mutlaka yargılanmasını veya iadesini zorunlu kılmıştır.",
+    "answer": 0,
+    "explanation": "Slayt 33 uyarınca 16 Aralık 1970 tarihli Lahey Sözleşmesi, hava aracı kaçırma fiilini doğrudan suç kabul etmiş ve uçak kaçıranların iadesi ile yargılanmasını zorunlu kılmıştır.",
+    "difficulty": "Orta",
+    "category": "Hukuk & Konvansiyonlar",
     "slideRef": "Slayt 33"
   },
   {
     "id": 149,
-    "category": "Hukuk & Konvansiyonlar",
-    "difficulty": "Zor (Senaryo)",
-    "question": "Varşova Konvansiyonu sisteminde hava yoluyla taşınan kargonun hasar görmesi halinde göndericinin havayolu işletmesine yazılı protesto/ihbar süresi kuralı nedir?",
+    "question": "Slayt 111 ve 113'e göre; SHGM tarafından verilen uçuş izinlerinde 'Tarifeli Dış Hat Seferleri' için ve 'Tarifeli Transit Uçuşlar' için kullanılan resmi müsaade kodları sırasıyla hangileridir?",
     "options": [
-      "A) Teslim tarihinden itibaren en geç 14 gün içinde",
-      "B) En az 6 ay içinde",
-      "C) Sadece uçağın teker koyduğu anda apronda",
-      "D) 5 iş günü içinde SHGM'ye",
-      "E) İhbar süresi bulunmaz, 10 yıl sonra da dava açılabilir"
+      "A) CA: SL ve CA: ST",
+      "B) CA: C ve CA: M",
+      "C) CA: D ve CA: X",
+      "D) CA: K ve CA: U",
+      "E) CA: FPL ve CA: AIS"
     ],
     "answer": 0,
-    "explanation": "Varşova ve Montreal sisteminde kargo hasarlarında teslimden itibaren 14 gün içinde taşıyıcıya yazılı ihbarda bulunulmalıdır.",
-    "slideRef": "Slayt 20, 34"
+    "explanation": "Slayt 111'e göre Tarifeli Dış Hat müsaade kodu 'CA: SL', Slayt 113'e göre Tarifeli Transit müsaade kodu ise 'CA: ST'dir.",
+    "difficulty": "Zor (Senaryo)",
+    "category": "Permi & Mevzuat",
+    "slideRef": "Slayt 111, 113"
   },
   {
     "id": 150,
