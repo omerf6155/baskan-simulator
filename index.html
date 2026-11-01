@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
-  <link rel="stylesheet" href="style.css?v=2.1">
+  <link rel="stylesheet" href="style.css?v=2.2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,12 +19,12 @@
     <!-- Top Bar -->
     <header class="app-header">
       <div class="brand">
-        <span class="brand-badge" id="activeTrackBadge">UHY</span>
-        <div class="brand-text">
-          <h1 id="appTitle">DİSPEÇER DRILL</h1>
-          <p class="subtitle" id="globalStatsText">Yükleniyor...</p>
-        </div>
+        <button class="track-header-pill" id="activeTrackBtn" title="Havuz Değiştir">
+          <span class="track-pill-dot" id="activeTrackDot"></span>
+          <span class="track-pill-text" id="activeTrackLabel">📙 Slayt 80</span>
+        </button>
       </div>
+
       <div class="header-actions">
         <button class="header-btn sync-btn" id="btnSyncModal" title="İlerlemeyi Kaydet / Kopyala">
           <span class="icon">💾</span>
@@ -39,25 +39,6 @@
         </button>
       </div>
     </header>
-
-    <!-- Track Selector Banner (Giriş Ekranında 2 Havuz Seçeneği) -->
-    <div class="track-selector-bar">
-      <div class="track-tab-card active" id="btnTrackPPTX" data-track="pptx">
-        <div class="track-top">
-          <span class="track-badge pptx">📙 UHY Dispeç</span>
-          <span class="track-curr" id="trackPPTXCurr">Slayt 80</span>
-        </div>
-        <div class="track-meta" id="trackPPTXMeta">Slayt 80 / 505 · %16 Bitti</div>
-      </div>
-
-      <div class="track-tab-card" id="btnTrackDOCX" data-track="docx">
-        <div class="track-top">
-          <span class="track-badge docx">📘 Genel Sorular</span>
-          <span class="track-curr" id="trackDOCXCurr">S.679</span>
-        </div>
-        <div class="track-meta" id="trackDOCXMeta">Soru 679 / 1,095 · %61 Bitti</div>
-      </div>
-    </div>
 
     <!-- Main Content Area -->
     <main class="main-content" id="mainContent">
@@ -76,7 +57,7 @@
               <span class="badge-req">0 Yanlış Zorunlu</span>
             </div>
             <h2 class="hero-title" id="studyHeroTitle">Ezber & Hafıza Aşaması</h2>
-            <p class="hero-desc">Önce 10 sorunun doğru şıklarını ve 📌 <strong>Hafıza Çivilerini</strong> zihnine kazı. Hazır olunca aşağıdaki butona basıp teste başla!</p>
+            <p class="hero-desc">Önce 10 sorunun doğru şıklarını ve 📌 <strong>Hafıza Çivilerini</strong> zihnine kazı. Hazır olunca teste başla!</p>
           </div>
 
           <div class="cards-list" id="studyQuestionsList">
@@ -136,7 +117,7 @@
         <div class="subview hidden" id="blockRetryScreen">
           <div class="quiz-sticky-header retry-theme">
             <div class="quiz-progress-row">
-              <span class="quiz-badge retry">Telafi Testi (0 Yanlış İçin)</span>
+              <span class="quiz-badge retry" id="retryBadgeTitle">Telafi Testi (0 Yanlış İçin)</span>
               <span class="quiz-count" id="retryAnsweredCount">0 / X İşaretlendi</span>
             </div>
             <div class="progress-bar-track">
@@ -271,7 +252,44 @@
   </div>
 
   <!-- ========================================================
-       MODAL: SAVE & SENKRONİZASYON (MOBİL İLERLEME DOSYASI)
+       MODAL 1: HAVUZ SEÇİMİ (GİRİŞ EKRANI / APP AÇILINCA)
+       ======================================================== -->
+  <div class="modal-overlay hidden" id="trackPickerModal">
+    <div class="modal-card track-picker-card">
+      <div class="modal-header">
+        <h3>🎯 Çalışma Havuzunu Seç</h3>
+        <button class="modal-close-btn" id="btnCloseTrackPicker">&times;</button>
+      </div>
+      <div class="track-picker-body">
+        <p class="hero-desc" style="margin-bottom: 14px;">
+          Hangi soru havuzunda çalışmak istediğini seç cano. Seçtikten sonra ekranında hiç yer kaplamaz, tam odaklanırsın!
+        </p>
+
+        <div class="track-selection-options">
+          <div class="track-big-card" id="chooseTrackPPTX">
+            <div class="track-big-top">
+              <span class="track-badge pptx">📙 UHY Dispeç (Slaytlar)</span>
+              <span class="track-curr-tag" id="choosePPTXCurrTag">Slayt 80'den Başlar</span>
+            </div>
+            <div class="track-big-title">Kapadokya Üniversitesi Slayt Soru Havuzu</div>
+            <div class="track-big-meta" id="choosePPTXMetaText">505 Slayt (496 Özgün) · %16 Bitti (7/50 Blok)</div>
+          </div>
+
+          <div class="track-big-card" id="chooseTrackDOCX">
+            <div class="track-big-top">
+              <span class="track-badge docx">📘 Genel Sorular</span>
+              <span class="track-curr-tag" id="chooseDOCXCurrTag">S.679'dan Başlar</span>
+            </div>
+            <div class="track-big-title">Resmi Sınav & Bakanlık Soru Havuzu</div>
+            <div class="track-big-meta" id="chooseDOCXMetaText">1,095 Soru (1,058 Özgün) · %61 Bitti (64/106 Blok)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL 2: SAVE & SENKRONİZASYON (MOBİL İLERLEME DOSYASI)
        ======================================================== -->
   <div class="modal-overlay hidden" id="syncModal">
     <div class="modal-card">
@@ -307,7 +325,7 @@
   </div>
 
   <!-- ========================================================
-       MODAL: BLOK SEÇİCİ (BLOK HARİTASI)
+       MODAL 3: BLOK SEÇİCİ (BLOK HARİTASI)
        ======================================================== -->
   <div class="modal-overlay hidden" id="blockPickerModal">
     <div class="modal-card">
@@ -327,7 +345,7 @@
   </div>
 
   <!-- ========================================================
-       MODAL: AYARLAR & SIFIRLAMA
+       MODAL 4: AYARLAR & SIFIRLAMA
        ======================================================== -->
   <div class="modal-overlay hidden" id="settingsModal">
     <div class="modal-card">
@@ -361,7 +379,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="questions.js?v=2.1"></script>
-  <script src="app.js?v=2.1"></script>
+  <script src="questions.js?v=2.2"></script>
+  <script src="app.js?v=2.2"></script>
 </body>
 </html>

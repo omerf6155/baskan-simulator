@@ -1,14 +1,15 @@
 /**
- * KAPADOKYA UHY DISPATCHER DRILL - DUAL-TRACK CORE ENGINE (v2.1)
+ * KAPADOKYA UHY DISPATCHER DRILL - DUAL-TRACK CORE ENGINE (v2.2)
  * Track 1: UHY Dispeç (505 Slayt / 496 Özgün - Slayt 80'den Başlar)
  * Track 2: Genel Sorular (1,095 DOCX / 1,058 Özgün - S.679'dan Başlar)
- * 0-Yanlış Kuralı & Mobil Senkronizasyon (Save Export/Import)
+ * 0-Yanlış Kuralı, Ghost Error Temizliği & Akıllı Havuz Seçimi
  */
 
 (function () {
   'use strict';
 
   const STORAGE_KEY = 'uhy_dual_tracks_state_v2';
+  const SESSION_TRACK_KEY = 'uhy_session_track_chosen_v2';
 
   // Master Application State
   let appState = {
@@ -49,6 +50,7 @@
     setupTrackData();
     setupDOMEvents();
     renderAllViews();
+    checkSessionWelcome();
   });
 
   // --- STATE MANAGEMENT ---
@@ -59,6 +61,15 @@
         const parsed = JSON.parse(saved);
         if (parsed && parsed.tracks) {
           appState = { ...appState, ...parsed };
+
+          // CRITICAL BUG FIX: Scrub any phantom errors where userAns was undefined/null/-1
+          ['pptx', 'docx'].forEach(k => {
+            if (appState.tracks[k] && Array.isArray(appState.tracks[k].errorBank)) {
+              appState.tracks[k].errorBank = appState.tracks[k].errorBank.filter(e => 
+                e && e.userAns !== undefined && e.userAns !== null && e.userAns !== -1
+              );
+            }
+          });
         }
       }
     } catch (e) {
@@ -73,6 +84,53 @@
     } catch (e) {
       console.warn('LocalStorage save error:', e);
     }
+  }
+
+  // --- SESSION WELCOME & TRACK PICKER ---
+  function checkSessionWelcome() {
+    const chosen = sessionStorage.getItem(SESSION_TRACK_KEY);
+    if (!chosen) {
+      // First time opening app in this session -> show choice screen!
+      openTrackPickerModal();
+    }
+  }
+
+  function openTrackPickerModal() {
+    updateTrackPickerModalData();
+    const modal = document.getElementById('trackPickerModal');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function closeTrackPickerModal() {
+    const modal = document.getElementById('trackPickerModal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function updateTrackPickerModalData() {
+    const pptxState = appState.tracks.pptx;
+    const pptxData = window.DATA_TRACKS ? window.DATA_TRACKS.pptx : null;
+    if (pptxData) {
+      const currSlide = getFirstSlideOfBlock('pptx', pptxState.currentBlock);
+      const doneBlocks = pptxState.completedBlocks.length;
+      const pct = Math.round((doneBlocks / pptxData.totalBlocks) * 100);
+      document.getElementById('choosePPTXCurrTag').textContent = `Slayt ${currSlide}'den Devam`;
+      document.getElementById('choosePPTXMetaText').textContent = `Slayt ${currSlide} / ${pptxData.totalSourceCount} · ${doneBlocks}/${pptxData.totalBlocks} Blok (%${pct})`;
+    }
+
+    const docxState = appState.tracks.docx;
+    const docxData = window.DATA_TRACKS ? window.DATA_TRACKS.docx : null;
+    if (docxData) {
+      const currQ = getFirstDocxOfBlock(docxState.currentBlock);
+      const doneBlocks = docxState.completedBlocks.length;
+      const pct = Math.round((doneBlocks / docxData.totalBlocks) * 100);
+      document.getElementById('chooseDOCXCurrTag').textContent = `S.${currQ}'den Devam`;
+      document.getElementById('chooseDOCXMetaText').textContent = `Soru ${currQ} / ${docxData.totalSourceCount} · ${doneBlocks}/${docxData.totalBlocks} Blok (%${pct})`;
+    }
+
+    const choosePPTX = document.getElementById('chooseTrackPPTX');
+    const chooseDOCX = document.getElementById('chooseTrackDOCX');
+    if (choosePPTX) choosePPTX.classList.toggle('active', appState.activeTrack === 'pptx');
+    if (chooseDOCX) chooseDOCX.classList.toggle('active', appState.activeTrack === 'docx');
   }
 
   // --- TRACK SETUP ---
@@ -103,27 +161,36 @@
       checkpointQuestionsMap[cpId].push(q);
     });
 
-    // Ensure valid current block
     const trackState = appState.tracks[tKey];
     const totalBlocks = Object.keys(blockQuestionsMap).length;
     if (!trackState.currentBlock || trackState.currentBlock < 1) trackState.currentBlock = 1;
     if (trackState.currentBlock > totalBlocks) trackState.currentBlock = totalBlocks;
   }
 
-  function switchTrack(trackKey) {
-    if (appState.activeTrack === trackKey) return;
+  function selectTrack(trackKey) {
     appState.activeTrack = trackKey;
+    sessionStorage.setItem(SESSION_TRACK_KEY, 'true');
     saveCurrentState();
     setupTrackData();
+    closeTrackPickerModal();
     renderAllViews();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // --- DOM EVENTS ---
   function setupDOMEvents() {
-    // Track Switchers
-    document.getElementById('btnTrackPPTX').addEventListener('click', () => switchTrack('pptx'));
-    document.getElementById('btnTrackDOCX').addEventListener('click', () => switchTrack('docx'));
+    // Header Track Pill Button (opens picker anytime)
+    document.getElementById('activeTrackBtn').addEventListener('click', () => {
+      openTrackPickerModal();
+    });
+
+    // Track Picker Modal Choices
+    document.getElementById('chooseTrackPPTX').addEventListener('click', () => selectTrack('pptx'));
+    document.getElementById('chooseTrackDOCX').addEventListener('click', () => selectTrack('docx'));
+    document.getElementById('btnCloseTrackPicker').addEventListener('click', closeTrackPickerModal);
+    document.getElementById('trackPickerModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('trackPickerModal')) closeTrackPickerModal();
+    });
 
     // Navigation Tabs
     document.querySelectorAll('.nav-item').forEach(btn => {
@@ -133,7 +200,6 @@
       });
     });
 
-    // Modals
     setupModals();
   }
 
@@ -175,49 +241,26 @@
     const trackState = appState.tracks[tKey];
     const tData = window.DATA_TRACKS ? window.DATA_TRACKS[tKey] : null;
 
-    // Track Bar Visuals
-    const pptxCard = document.getElementById('btnTrackPPTX');
-    const docxCard = document.getElementById('btnTrackDOCX');
-    if (pptxCard) pptxCard.classList.toggle('active', tKey === 'pptx');
-    if (docxCard) docxCard.classList.toggle('active', tKey === 'docx');
-
-    // PPTX Meta
-    const pptxState = appState.tracks.pptx;
-    const pptxData = window.DATA_TRACKS ? window.DATA_TRACKS.pptx : null;
-    if (pptxData) {
-      const pptxCurrSlide = getFirstSlideOfBlock('pptx', pptxState.currentBlock);
-      const pptxDoneCount = pptxState.completedBlocks.length;
-      document.getElementById('trackPPTXCurr').textContent = `Slayt ${pptxCurrSlide}`;
-      document.getElementById('trackPPTXMeta').textContent = `Slayt ${pptxCurrSlide} / ${pptxData.totalSourceCount} · ${pptxDoneCount}/${pptxData.totalBlocks} Blok`;
-    }
-
-    // DOCX Meta
-    const docxState = appState.tracks.docx;
-    const docxData = window.DATA_TRACKS ? window.DATA_TRACKS.docx : null;
-    if (docxData) {
-      const docxCurrQ = getFirstDocxOfBlock(docxState.currentBlock);
-      const docxDoneCount = docxState.completedBlocks.length;
-      document.getElementById('trackDOCXCurr').textContent = `S.${docxCurrQ}`;
-      document.getElementById('trackDOCXMeta').textContent = `Soru ${docxCurrQ} / ${docxData.totalSourceCount} · ${docxDoneCount}/${docxData.totalBlocks} Blok`;
-    }
-
-    // Header badge
-    const badge = document.getElementById('activeTrackBadge');
-    if (badge) {
-      badge.textContent = tKey === 'pptx' ? 'UHY' : 'GENEL';
-      badge.style.background = tKey === 'pptx' ? 'linear-gradient(135deg, #d97706, #b45309)' : 'linear-gradient(135deg, #0284c7, #2563eb)';
+    // Header Pill Label
+    const activeTrackLabel = document.getElementById('activeTrackLabel');
+    const activeTrackDot = document.getElementById('activeTrackDot');
+    if (activeTrackLabel && activeTrackDot) {
+      if (tKey === 'pptx') {
+        const currSlide = getFirstSlideOfBlock('pptx', trackState.currentBlock);
+        activeTrackLabel.textContent = `📙 Slayt S.${currSlide}`;
+        activeTrackDot.style.backgroundColor = '#fbbf24';
+        activeTrackDot.style.boxShadow = '0 0 8px #fbbf24';
+      } else {
+        const currQ = getFirstDocxOfBlock(trackState.currentBlock);
+        activeTrackLabel.textContent = `📘 Genel S.${currQ}`;
+        activeTrackDot.style.backgroundColor = '#38bdf8';
+        activeTrackDot.style.boxShadow = '0 0 8px #38bdf8';
+      }
     }
 
     const currentBlockNavBadge = document.getElementById('currentBlockNavBadge');
     if (currentBlockNavBadge) {
       currentBlockNavBadge.textContent = `Blok ${trackState.currentBlock}`;
-    }
-
-    const globalStatsText = document.getElementById('globalStatsText');
-    if (globalStatsText && tData) {
-      const totalBlocks = tData.totalBlocks;
-      const doneBlocks = trackState.completedBlocks.length;
-      globalStatsText.textContent = `${tData.shortName} · ${doneBlocks}/${totalBlocks} Blok Tamam`;
     }
 
     // Bottom badges
@@ -283,10 +326,8 @@
     const questions = blockQuestionsMap[bId] || [];
     const totalBlocks = Object.keys(blockQuestionsMap).length;
 
-    // Badges
     document.getElementById('studyBlockBadge').textContent = `BLOK ${bId} / ${totalBlocks}`;
     
-    // Exact Slide / Page Range
     if (tKey === 'pptx') {
       const startS = questions.length > 0 ? questions[0].slide_num : 1;
       const endS = questions.length > 0 ? questions[questions.length - 1].slide_num : startS;
@@ -317,7 +358,6 @@
         `;
       });
 
-      // Slide and Page Traceability Label
       let traceBadge = '';
       if (tKey === 'pptx') {
         traceBadge = `📙 ${q.slide_label || 'Slayt S.' + q.slide_num} / 505`;
@@ -448,8 +488,6 @@
   }
 
   function evaluateBlockQuiz(questions) {
-    showBlockSubview('blockResultScreen');
-
     const tKey = appState.activeTrack;
     const trackState = appState.tracks[tKey];
     const bId = trackState.currentBlock;
@@ -458,9 +496,10 @@
 
     questions.forEach(q => {
       const userAns = currentQuizAnswers[q.id];
-      if (userAns === q.answer) {
+      if (userAns !== undefined && userAns === q.answer) {
         correct.push(q);
-      } else {
+        removeError(q.id); // If it was in error bank, clear it
+      } else if (userAns !== undefined && userAns !== q.answer) {
         missed.push({
           q: q,
           userAns: userAns,
@@ -470,120 +509,141 @@
       }
     });
 
-    const isPerfect = missed.length === 0;
-    const banner = document.getElementById('resultBanner');
-    const letters = ['A', 'B', 'C', 'D'];
-
-    if (isPerfect) {
-      banner.className = 'result-banner success';
-      banner.innerHTML = `
-        <div class="result-icon">🎯</div>
-        <h2 class="result-title">10/10 Kusursuz!</h2>
-        <div class="result-score-text">0 Yanlış - Blok ${bId} Başarıyla Kilitlendi!</div>
-        <p class="result-subdesc">Bu 10 sorunun tamamı hafızana çivilendi. Bir sonraki blok seni bekliyor!</p>
-      `;
-
-      if (!trackState.completedBlocks.includes(bId)) {
-        trackState.completedBlocks.push(bId);
-        saveCurrentState();
-      }
-
-      const cpId = Math.ceil(bId / 4);
-      const cpBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
-      const cpDone = cpBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
-
-      document.getElementById('mistakesReviewContainer').innerHTML = `
-        <div class="memory-peg-box" style="margin-top: 16px;">
-          <strong>🎯 Checkpoint ${cpId} İlerlemesi:</strong> ${cpDone}/4 Blok Tamamlandı.<br>
-          ${cpDone === 4 ? '🎉 <strong>Tebrikler!</strong> Checkpoint ' + cpId + ' (40 Soru) Denemesi açıldı!' : 'Kalan ' + (4 - cpDone) + ' blok tamamlanınca Checkpoint ' + cpId + ' açılacak.'}
-        </div>
-      `;
-
-      const totalBlocks = Object.keys(blockQuestionsMap).length;
-      const footerActions = document.getElementById('resultFooterActions');
-      if (bId < totalBlocks) {
-        footerActions.innerHTML = `
-          <button class="primary-btn btn-cta" id="btnNextBlock">
-            <span>Sonraki Bloğa Geç (Blok ${bId + 1}) ➡️</span>
-          </button>
-        `;
-        document.getElementById('btnNextBlock').onclick = () => {
-          trackState.currentBlock = bId + 1;
-          saveCurrentState();
-          renderBlockStudyScreen();
-        };
-      } else {
-        footerActions.innerHTML = `
-          <div class="memory-peg-box" style="text-align: center; width: 100%;">
-            🏆 <strong>TÜM BLOKLAR TAMAMLANDI!</strong> Efsanesin cano!
-          </div>
-        `;
-      }
-
+    if (missed.length === 0) {
+      showBlockSuccess(bId);
     } else {
-      // 0 Wrong Rule
-      banner.className = 'result-banner failed';
-      banner.innerHTML = `
-        <div class="result-icon">⚠️</div>
-        <h2 class="result-title">0 Yanlış Kuralı Devrede!</h2>
-        <div class="result-score-text">${correct.length} Doğru · ${missed.length} Yanlış</div>
-        <p class="result-subdesc">Bir sonraki bloğa geçebilmek için bu bloktaki tüm yanlışları 0'a indirmen gerekiyor. Nedenleri incele ve telafi testine başla!</p>
-      `;
+      showBlockMistakesReview(bId, missed, correct);
+    }
+  }
 
-      const listContainer = document.getElementById('reviewMistakesList');
-      listContainer.innerHTML = '';
+  function showBlockSuccess(bId) {
+    showBlockSubview('blockResultScreen');
 
-      missed.forEach((m, idx) => {
-        const q = m.q;
-        const userOptText = q.options[m.userAns] || 'Boş';
-        const correctOptText = q.options[m.correctAns];
-        const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
 
-        const card = document.createElement('div');
-        card.className = 'mistake-card';
-        card.innerHTML = `
-          <div class="q-card-header">
-            <span class="q-num-badge" style="color: var(--danger)">${traceBadge} · Hata #${idx + 1}</span>
-            <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
-          </div>
-          <div class="q-text">${escapeHtml(q.question)}</div>
-          <div class="mistake-answers-box">
-            <div class="mistake-ans-row wrong">
-              <span class="ans-indicator">❌ Senin Cevabın:</span>
-              <span><strong>${letters[m.userAns]})</strong> ${escapeHtml(userOptText)}</span>
-            </div>
-            <div class="mistake-ans-row correct">
-              <span class="ans-indicator">✅ Doğru Cevap:</span>
-              <span><strong>${letters[m.correctAns]})</strong> ${escapeHtml(correctOptText)}</span>
-            </div>
-          </div>
-          <div class="memory-peg-box">
-            ${escapeHtml(q.explanation || 'Doğru şıkkı hafızana kaydet.')}
-          </div>
-        `;
-        listContainer.appendChild(card);
-      });
+    if (!trackState.completedBlocks.includes(bId)) {
+      trackState.completedBlocks.push(bId);
+      saveCurrentState();
+    }
 
-      const footerActions = document.getElementById('resultFooterActions');
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner success';
+    banner.innerHTML = `
+      <div class="result-icon">🎯</div>
+      <h2 class="result-title">10/10 Kusursuz!</h2>
+      <div class="result-score-text">0 Yanlış - Blok ${bId} Başarıyla Kilitlendi!</div>
+      <p class="result-subdesc">Bu 10 sorunun tamamı hafızana çivilendi. Bir sonraki blok seni bekliyor!</p>
+    `;
+
+    const cpId = Math.ceil(bId / 4);
+    const cpBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+    const cpDone = cpBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
+
+    document.getElementById('mistakesReviewContainer').innerHTML = `
+      <div class="memory-peg-box" style="margin-top: 16px;">
+        <strong>🎯 Checkpoint ${cpId} İlerlemesi:</strong> ${cpDone}/4 Blok Tamamlandı.<br>
+        ${cpDone === 4 ? '🎉 <strong>Tebrikler!</strong> Checkpoint ' + cpId + ' (40 Soru) Denemesi açıldı!' : 'Kalan ' + (4 - cpDone) + ' blok tamamlanınca Checkpoint ' + cpId + ' açılacak.'}
+      </div>
+    `;
+
+    const totalBlocks = Object.keys(blockQuestionsMap).length;
+    const footerActions = document.getElementById('resultFooterActions');
+    if (bId < totalBlocks) {
       footerActions.innerHTML = `
-        <button class="primary-btn btn-danger" id="btnStartRetryQuiz">
-          <span>Yanlışları Tekrar Çöz (${missed.length} Soru) 🔄</span>
+        <button class="primary-btn btn-cta" id="btnNextBlock">
+          <span>Sonraki Bloğa Geç (Blok ${bId + 1}) ➡️</span>
         </button>
       `;
-      document.getElementById('btnStartRetryQuiz').onclick = () => {
-        renderBlockRetryScreen(missed.map(m => m.q));
+      document.getElementById('btnNextBlock').onclick = () => {
+        trackState.currentBlock = bId + 1;
+        saveCurrentState();
+        renderBlockStudyScreen();
       };
+    } else {
+      footerActions.innerHTML = `
+        <div class="memory-peg-box" style="text-align: center; width: 100%;">
+          🏆 <strong>TÜM BLOKLAR TAMAMLANDI!</strong> Efsanesin cano!
+        </div>
+      `;
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function renderBlockRetryScreen(retryQuestions) {
+  function showBlockMistakesReview(bId, missed, correct) {
+    showBlockSubview('blockResultScreen');
+
+    const tKey = appState.activeTrack;
+    const letters = ['A', 'B', 'C', 'D'];
+    const banner = document.getElementById('resultBanner');
+
+    banner.className = 'result-banner failed';
+    banner.innerHTML = `
+      <div class="result-icon">⚠️</div>
+      <h2 class="result-title">0 Yanlış Kuralı Devrede!</h2>
+      <div class="result-score-text">${correct.length} Doğru · ${missed.length} Yanlış</div>
+      <p class="result-subdesc">Bir sonraki bloğa geçebilmek için bu bloktaki tüm yanlışları 0'a indirmen gerekiyor. Nedenleri incele ve telafi testine başla!</p>
+    `;
+
+    const listContainer = document.getElementById('reviewMistakesList');
+    listContainer.innerHTML = '';
+
+    missed.forEach((m, idx) => {
+      const q = m.q;
+      const userOptText = q.options[m.userAns] || 'Boş';
+      const correctOptText = q.options[m.correctAns];
+      const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
+
+      const card = document.createElement('div');
+      card.className = 'mistake-card';
+      card.innerHTML = `
+        <div class="q-card-header">
+          <span class="q-num-badge" style="color: var(--danger)">${traceBadge} · Hata #${idx + 1}</span>
+          <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
+        </div>
+        <div class="q-text">${escapeHtml(q.question)}</div>
+        <div class="mistake-answers-box">
+          <div class="mistake-ans-row wrong">
+            <span class="ans-indicator">❌ Senin Cevabın:</span>
+            <span><strong>${letters[m.userAns]})</strong> ${escapeHtml(userOptText)}</span>
+          </div>
+          <div class="mistake-ans-row correct">
+            <span class="ans-indicator">✅ Doğru Cevap:</span>
+            <span><strong>${letters[m.correctAns]})</strong> ${escapeHtml(correctOptText)}</span>
+          </div>
+        </div>
+        <div class="memory-peg-box">
+          ${escapeHtml(q.explanation || 'Doğru şıkkı hafızana kaydet.')}
+        </div>
+      `;
+      listContainer.appendChild(card);
+    });
+
+    const footerActions = document.getElementById('resultFooterActions');
+    footerActions.innerHTML = `
+      <button class="primary-btn btn-danger" id="btnStartRetryQuiz">
+        <span>Yanlışları Tekrar Çöz (${missed.length} Soru) 🔄</span>
+      </button>
+    `;
+    document.getElementById('btnStartRetryQuiz').onclick = () => {
+      renderBlockRetryScreen(missed.map(m => m.q), 'block');
+    };
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderBlockRetryScreen(retryQuestions, retryContext = 'block') {
     showBlockSubview('blockRetryScreen');
 
     const letters = ['A', 'B', 'C', 'D'];
     const retryAnswers = {};
     const tKey = appState.activeTrack;
+
+    const retryBadge = document.getElementById('retryBadgeTitle');
+    if (retryBadge) {
+      retryBadge.textContent = retryContext === 'error_bank' ? 'Hata Bankası Telafi Testi' : 'Telafi Testi (0 Yanlış İçin)';
+    }
 
     updateRetryProgress(0, retryQuestions.length);
 
@@ -609,7 +669,7 @@
 
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge" style="color: #f87171">${traceBadge} · Telafi ${idx + 1} / ${retryQuestions.length}</span>
+          <span class="q-num-badge" style="color: #f87171">${traceBadge} · Soru ${idx + 1} / ${retryQuestions.length}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -656,17 +716,18 @@
       });
 
       if (stillMissed.length === 0) {
-        const trackState = appState.tracks[tKey];
-        const bId = trackState.currentBlock;
-        if (!trackState.completedBlocks.includes(bId)) {
-          trackState.completedBlocks.push(bId);
-          saveCurrentState();
+        if (retryContext === 'block') {
+          const trackState = appState.tracks[tKey];
+          const bId = trackState.currentBlock;
+          alert(`Harika cano! Yanlışların tamamını düzelttin. Blok ${bId} 10/10 ile tamamlandı! 🎉`);
+          showBlockSuccess(bId);
+        } else {
+          alert('Harika cano! Seçili tüm hataları başarıyla temizledin! 🎉');
+          switchTab('tab3');
         }
-        alert(`Harika cano! Yanlışların tamamını düzelttin. Blok ${bId} 10/10 ile tamamlandı! 🎉`);
-        evaluateBlockQuiz(blockQuestionsMap[bId]);
       } else {
         alert(`Hala ${stillMissed.length} soruda takıldın. Hemen telafi edelim!`);
-        renderBlockRetryScreen(stillMissed);
+        renderBlockRetryScreen(stillMissed, retryContext);
       }
     };
 
@@ -862,15 +923,18 @@
 
     questions.forEach(q => {
       const userAns = currentCheckpointAnswers[q.id];
-      if (userAns === q.answer) {
+      if (userAns !== undefined && userAns === q.answer) {
         correctCount++;
+        removeError(q.id);
       } else {
         missed.push({
           q: q,
           userAns: userAns !== undefined ? userAns : -1,
           correctAns: q.answer
         });
-        recordError(q.id, userAns, q.answer, `${cpId}. Checkpoint`);
+        if (userAns !== undefined && userAns !== -1) {
+          recordError(q.id, userAns, q.answer, `${cpId}. Checkpoint`);
+        }
       }
     });
 
@@ -955,6 +1019,11 @@
   // TAB 3: HATA BANKASI
   // ==========================================================
   function recordError(qId, userAns, correctAns, source) {
+    // SAFEGUARD: Never record an error if answer was undefined, null or -1
+    if (userAns === undefined || userAns === null || userAns === -1) {
+      return;
+    }
+
     const tKey = appState.activeTrack;
     const trackState = appState.tracks[tKey];
     const existingIdx = trackState.errorBank.findIndex(e => e.qId === qId);
@@ -1007,7 +1076,7 @@
       document.getElementById('btnStartErrorDrill').onclick = () => {
         const errorQuestions = filtered.map(e => questionsById[e.qId]).filter(Boolean);
         switchTab('tab1');
-        renderBlockRetryScreen(errorQuestions);
+        renderBlockRetryScreen(errorQuestions, 'error_bank');
       };
     } else {
       actionBar.style.display = 'none';
@@ -1071,7 +1140,7 @@
         const q = questionsById[qId];
         if (q) {
           switchTab('tab1');
-          renderBlockRetryScreen([q]);
+          renderBlockRetryScreen([q], 'error_bank');
         }
       });
     });
@@ -1102,7 +1171,6 @@
       if (e.target === syncModal) syncModal.classList.add('hidden');
     };
 
-    // Copy Save Code
     document.getElementById('btnCopySaveCode').onclick = () => {
       const code = JSON.stringify(appState);
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1116,7 +1184,6 @@
       }
     };
 
-    // Download Save File
     document.getElementById('btnDownloadSaveFile').onclick = () => {
       const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -1129,7 +1196,6 @@
       URL.revokeObjectURL(url);
     };
 
-    // Apply / Import Save Code
     document.getElementById('btnApplySaveCode').onclick = () => {
       const val = document.getElementById('importSaveInput').value.trim();
       if (!val) {
@@ -1178,7 +1244,6 @@
       if (e.target === settingsModal) settingsModal.classList.add('hidden');
     };
 
-    // Reset Track Progress
     document.getElementById('btnResetTrackProgress').onclick = () => {
       const tKey = appState.activeTrack;
       if (confirm(`DİKKAT! ${tKey === 'pptx' ? 'UHY Dispeç' : 'Genel Sorular'} havuzundaki ilerlemen sıfırlanacaktır. Emin misin cano?`)) {
