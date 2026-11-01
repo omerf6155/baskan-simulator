@@ -1,127 +1,308 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dispeçer Permi & Hukuk Drill | 100 Soru</title>
-  <meta name="theme-color" content="#0d1117">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Kapadokya UHY Dispeçer Çalışma Sistemi | 1395 Soru</title>
+  <meta name="theme-color" content="#0a0e17">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="app-container">
-    <!-- Top Header -->
+    <!-- Top Bar -->
     <header class="app-header">
       <div class="brand">
-        <span class="plane-icon">✈️</span>
-        <div>
-          <h1>DISPATCHER DRILL</h1>
-          <p class="subtitle">Semih Saylam REV02 • 100 Soru</p>
+        <span class="brand-badge">UHY</span>
+        <div class="brand-text">
+          <h1>DİSPEÇER DRILL</h1>
+          <p class="subtitle" id="globalStatsText">1,395 Soru · 140 Blok · 35 Checkpoint</p>
         </div>
       </div>
-      <div class="stats-badge" id="topStatsBadge">
-        <span class="correct-count" id="headerCorrectCount">0</span>
-        <span class="divider">/</span>
-        <span class="total-seen" id="headerTotalSeen">0</span>
+      <div class="header-actions">
+        <button class="header-btn" id="btnBlockPicker" title="Tüm Bloklar Haritası">
+          <span class="icon">📑</span>
+          <span class="btn-label" id="currentBlockNavBadge">Blok 1</span>
+        </button>
+        <button class="header-btn icon-only" id="btnSettings" title="Ayarlar & Sıfırla">
+          <span class="icon">⚙️</span>
+        </button>
       </div>
     </header>
 
-    <!-- Category / Filter Bar -->
-    <nav class="filter-scroll">
-      <button class="filter-pill active" data-category="ALL">Hepsi (100)</button>
-      <button class="filter-pill" data-category="Trafik Hakları">Trafik Hakları</button>
-      <button class="filter-pill" data-category="Permi & Mevzuat">Permi & Süreler</button>
-      <button class="filter-pill" data-category="Hukuk & Konvansiyonlar">Konvansiyonlar</button>
-      <button class="filter-pill" data-category="Otoriteler & Kurumlar">Otoriteler</button>
-      <button class="filter-pill" data-category="Slot & Seviyeler">Slot & Seviye</button>
-      <button class="filter-pill" data-category="Terminoloji & Kısaltmalar">Kısaltmalar</button>
-      <button class="filter-pill error-filter-pill" id="wrongFilterPill" style="display:none;" data-category="WRONG">Yanlışlarım (0)</button>
-    </nav>
+    <!-- Main Content Area -->
+    <main class="main-content" id="mainContent">
 
-    <!-- Progress Bar -->
-    <div class="progress-wrap">
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="progressBarFill"></div>
-      </div>
-      <div class="progress-label-wrap">
-        <span id="currentQuestionNumber">Soru 1 / 100</span>
-        <span id="progressPercent">0%</span>
-      </div>
-    </div>
-
-    <!-- Question Card Area -->
-    <main class="question-container">
-      <div class="card" id="questionCard">
-        <div class="card-meta">
-          <span class="badge category-badge" id="cardCategory">Kategori</span>
-          <span class="badge difficulty-badge" id="cardDifficulty">Zorluk</span>
-          <span class="slide-ref" id="cardSlideRef">Slayt Ref</span>
-        </div>
-
-        <div class="question-text" id="questionText">
-          Soru yükleniyor...
-        </div>
-
-        <div class="options-grid" id="optionsGrid">
-          <!-- Options injected via JS -->
-        </div>
-
-        <!-- Explanation Drawer (Hidden until answered) -->
-        <div class="explanation-box" id="explanationBox">
-          <div class="explanation-header">
-            <span id="statusIcon">✅</span>
-            <strong id="statusTitle">Doğru!</strong>
+      <!-- ========================================================
+           TAB 1: 10'LUK BLOKLAR (EZBER & TEST)
+           ======================================================== -->
+      <section class="tab-view active" id="tab1View">
+        
+        <!-- Block Subview A: Ezber & Hafıza Bloğu (Önce Cevaplar) -->
+        <div class="subview" id="blockStudyScreen">
+          <div class="screen-hero">
+            <div class="hero-header">
+              <span class="badge-accent" id="studyBlockBadge">BLOK 1 / 140</span>
+              <span class="badge-range" id="studyRangeBadge">Sorular 1 - 10</span>
+              <span class="badge-req">0 Yanlış Zorunlu</span>
+            </div>
+            <h2 class="hero-title">Ezber & Hafıza Aşaması</h2>
+            <p class="hero-desc">Önce 10 sorunun doğru şıklarını ve 📌 <strong>Hafıza Çivilerini</strong> zihnine kazı. Hazır olunca aşağıdaki butona basıp teste başla!</p>
           </div>
-          <p id="explanationText" class="explanation-body"></p>
+
+          <div class="cards-list" id="studyQuestionsList">
+            <!-- 10 Study Question Cards rendered here -->
+          </div>
+
+          <div class="sticky-footer-action">
+            <button class="primary-btn btn-cta" id="btnStartBlockQuiz">
+              <span class="btn-text">Soruları Ver / Teste Başla (10 Soru) 🚀</span>
+            </button>
+          </div>
         </div>
-      </div>
+
+        <!-- Block Subview B: 10 Soruluk Test -->
+        <div class="subview hidden" id="blockQuizScreen">
+          <div class="quiz-sticky-header">
+            <div class="quiz-progress-row">
+              <span class="quiz-badge" id="quizBlockBadge">Blok 1 Testi</span>
+              <span class="quiz-count" id="quizAnsweredCount">0 / 10 İşaretlendi</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="quizProgressFill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="cards-list" id="quizQuestionsList">
+            <!-- 10 Quiz Cards with interactive options rendered here -->
+          </div>
+
+          <div class="sticky-footer-action">
+            <button class="primary-btn btn-cta" id="btnSubmitBlockQuiz">
+              <span class="btn-text">Testi Bitir ve Kontrol Et ✅</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Block Subview C: Sonuç & Hata İnceleme Ekranı -->
+        <div class="subview hidden" id="blockResultScreen">
+          <div class="result-banner" id="resultBanner">
+            <!-- Dynamic celebration or warning banner -->
+          </div>
+
+          <!-- Section for Mistakes (Buradaki Sistem) -->
+          <div class="mistakes-review-container" id="mistakesReviewContainer">
+            <h3 class="section-heading" id="mistakesSectionTitle">Hata Raporu & Hafıza Çivileri</h3>
+            <div class="cards-list" id="reviewMistakesList">
+              <!-- Cards of wrong questions with why, user answer, correct answer, hafıza çivisi -->
+            </div>
+          </div>
+
+          <div class="sticky-footer-action" id="resultFooterActions">
+            <!-- Dynamic button: "Yanlışları Tekrar Çöz" or "Sonraki Bloğa Geç" -->
+          </div>
+        </div>
+
+        <!-- Block Subview D: Hızlı Telafi Testi (Sadece Yanlışlar) -->
+        <div class="subview hidden" id="blockRetryScreen">
+          <div class="quiz-sticky-header retry-theme">
+            <div class="quiz-progress-row">
+              <span class="quiz-badge retry">Telafi Testi (0 Yanlış İçin)</span>
+              <span class="quiz-count" id="retryAnsweredCount">0 / X İşaretlendi</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="retryProgressFill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="cards-list" id="retryQuestionsList">
+            <!-- Missed Questions Only -->
+          </div>
+
+          <div class="sticky-footer-action">
+            <button class="primary-btn btn-cta" id="btnSubmitRetryQuiz">
+              <span class="btn-text">Telafi Testini Kontrol Et 🎯</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================
+           TAB 2: CHECKPOINTS (40'LIK DENEMELER)
+           ======================================================== -->
+      <section class="tab-view hidden" id="tab2View">
+        
+        <!-- Checkpoint List Screen -->
+        <div class="subview" id="checkpointListScreen">
+          <div class="screen-hero">
+            <span class="badge-accent">HER 4 BLOK = 1 CHECKPOINT</span>
+            <h2 class="hero-title">Checkpoint Alanı (40'lık Denemeler)</h2>
+            <p class="hero-desc">10'luk bloklarda ustalaştığın her 40 soru burada bir deneme satırı olarak açılır. Bilgilerini 40 soruluk sınav modunda sına!</p>
+          </div>
+
+          <div class="checkpoint-cards-list" id="checkpointCardsContainer">
+            <!-- 35 Checkpoint rows rendered here -->
+          </div>
+        </div>
+
+        <!-- Checkpoint Quiz Screen (40 Questions) -->
+        <div class="subview hidden" id="checkpointQuizScreen">
+          <div class="quiz-sticky-header">
+            <div class="quiz-progress-row">
+              <button class="text-btn" id="btnExitCheckpoint">⬅️ Çıkış</button>
+              <span class="quiz-badge" id="checkpointQuizTitle">1. Checkpoint (1 - 40)</span>
+              <span class="quiz-count" id="checkpointAnsweredCount">0 / 40</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="checkpointProgressFill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="cards-list" id="checkpointQuestionsContainer">
+            <!-- 40 Questions -->
+          </div>
+
+          <div class="sticky-footer-action">
+            <button class="primary-btn btn-cta" id="btnSubmitCheckpointQuiz">
+              <span class="btn-text">40'lık Denemeyi Bitir 🏁</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Checkpoint Result Screen -->
+        <div class="subview hidden" id="checkpointResultScreen">
+          <div class="result-banner" id="checkpointResultBanner">
+            <!-- Score summary -->
+          </div>
+          <div class="cards-list" id="checkpointMistakesReviewList">
+            <!-- Mistakes from checkpoint -->
+          </div>
+          <div class="sticky-footer-action">
+            <button class="primary-btn btn-cta" id="btnBackToCheckpoints">
+              <span class="btn-text">Checkpoint Listesine Dön 📋</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================
+           TAB 3: HATA BANKASI (YANLIŞ YAPILAN SORULAR)
+           ======================================================== -->
+      <section class="tab-view hidden" id="tab3View">
+        <div class="subview" id="errorBankScreen">
+          <div class="screen-hero error-hero">
+            <div class="hero-header">
+              <span class="badge-accent red" id="errorTotalBadge">0 Hata</span>
+              <span class="badge-range">Tekrar Odaklı</span>
+            </div>
+            <h2 class="hero-title">Hata Bankası</h2>
+            <p class="hero-desc">10'luk bloklarda ve Checkpointlerde kaçırdığın tüm sorular burada toplanır. Çözdükçe listeden temizle!</p>
+          </div>
+
+          <div class="filter-chips-row">
+            <button class="chip active" data-filter="all">Tümü (<span id="chipAllCount">0</span>)</button>
+            <button class="chip" data-filter="block">10'luk Blok Hataları (<span id="chipBlockCount">0</span>)</button>
+            <button class="chip" data-filter="checkpoint">Checkpoint Hataları (<span id="chipCheckpointCount">0</span>)</button>
+          </div>
+
+          <div class="error-action-bar" id="errorActionBar" style="display: none;">
+            <button class="primary-btn btn-danger" id="btnStartErrorDrill">
+              <span>Tüm Hatalardan Test Başlat ⚡</span>
+            </button>
+          </div>
+
+          <div class="cards-list" id="errorBankCardsContainer">
+            <!-- Error Cards or Empty State -->
+          </div>
+        </div>
+      </section>
+
     </main>
 
-    <!-- Bottom Actions Toolbar -->
-    <footer class="app-footer">
-      <button class="btn btn-secondary" id="btnPrev">← Önceki</button>
-      <button class="btn btn-random" id="btnRandom" title="Rastgele Soru">🎲 Rastgele</button>
-      <button class="btn btn-primary" id="btnNext">Sonraki →</button>
-    </footer>
+    <!-- Bottom Navigation Bar (Mobile Native Feel) -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="navTab1" data-tab="tab1">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">10'luk Bloklar</span>
+        <span class="nav-dot" id="tab1Dot"></span>
+      </button>
+      <button class="nav-item" id="navTab2" data-tab="tab2">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">Checkpoints</span>
+        <span class="nav-badge" id="checkpointAvailableBadge">0</span>
+      </button>
+      <button class="nav-item" id="navTab3" data-tab="tab3">
+        <span class="nav-icon">⚠️</span>
+        <span class="nav-label">Hata Bankası</span>
+        <span class="nav-badge red" id="errorCountBadge">0</span>
+      </button>
+    </nav>
+  </div>
 
-    <!-- Result / Review Summary Modal (Optional trigger) -->
-    <div class="floating-fab" id="btnScoreboard">
-      📊 Skor
+  <!-- ========================================================
+       MODAL 1: BLOK SEÇİCİ (140 BLOK HARİTASI)
+       ======================================================== -->
+  <div class="modal-overlay hidden" id="blockPickerModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>10'luk Blok Haritası (140 Blok)</h3>
+        <button class="modal-close-btn" id="btnCloseBlockPicker">&times;</button>
+      </div>
+      <div class="modal-legend">
+        <span class="legend-item"><span class="dot done"></span> Tamamlandı (10/10)</span>
+        <span class="legend-item"><span class="dot active"></span> Açık</span>
+        <span class="legend-item"><span class="dot locked"></span> Kilitli</span>
+      </div>
+      <div class="block-grid" id="blockPickerGrid">
+        <!-- 140 Block Buttons -->
+      </div>
     </div>
+  </div>
 
-    <div class="modal-overlay" id="scoreModal">
-      <div class="modal-content">
-        <h2>Uçuş Harekât Özeti</h2>
-        <div class="score-grid">
-          <div class="score-card correct-card">
-            <div class="score-num" id="modalCorrect">0</div>
-            <div class="score-txt">Doğru</div>
+  <!-- ========================================================
+       MODAL 2: AYARLAR & SIFIRLAMA
+       ======================================================== -->
+  <div class="modal-overlay hidden" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Sistem & İlerleme Ayarları</h3>
+        <button class="modal-close-btn" id="btnCloseSettings">&times;</button>
+      </div>
+      <div class="settings-body">
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">UHY Soru Veritabanı</span>
+            <span class="setting-sub">1,395 Benzersiz Dispeçer Sorusu</span>
           </div>
-          <div class="score-card wrong-card">
-            <div class="score-num" id="modalWrong">0</div>
-            <div class="score-txt">Yanlış</div>
-          </div>
-          <div class="score-card total-card">
-            <div class="score-num" id="modalPercent">%0</div>
-            <div class="score-txt">Başarı Oranı</div>
-          </div>
+          <span class="tag green">Aktif & Güncel</span>
         </div>
-        <p class="score-msg" id="scoreMotivationalMsg">Pratik yapmaya devam!</p>
-        <div class="modal-actions">
-          <button class="btn btn-danger" id="btnResetProgress">İlerlemeyi Sıfırla</button>
-          <button class="btn btn-primary" id="btnCloseModal">Kapat</button>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-title">Karanlık Kokpit Modu</span>
+            <span class="setting-sub">Göz yormayan OLED siyahı</span>
+          </div>
+          <span class="tag">Kilitli OLED</span>
+        </div>
+        <hr class="modal-divider">
+        <div class="danger-zone">
+          <span class="danger-title">İlerlemeyi Sıfırla</span>
+          <p class="danger-desc">Tüm tamamlanan blokları, checkpoint puanlarını ve hata bankasını sıfırlayarak en baştan başlar.</p>
+          <button class="btn-danger-outline" id="btnResetAllProgress">Tüm İlerlemeyi Sıfırla</button>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <!-- Scripts -->
+  <script src="questions.js?v=2.0"></script>
+  <script src="app.js?v=2.0"></script>
 </body>
 </html>

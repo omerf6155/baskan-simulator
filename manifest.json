@@ -1,11 +1,11 @@
 {
-  "name": "Dispeçerlik Permi & Hukuk Drill",
-  "short_name": "Dispatcher Drill",
-  "description": "Kapadokya Üniversitesi Permi, Slot ve Havacılık Hukuku 100 Soru Mobil Sınav Simülatörü",
+  "name": "Kapadokya UHY Dispeçer Drill",
+  "short_name": "UHY Drill",
+  "description": "Kapadokya Üniversitesi Dispeçerlik UHY Sınavı 1395 Soru Mobil Çalışma ve Checkpoint Sistemi",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0a0e14",
-  "theme_color": "#0a0e14",
+  "background_color": "#07090e",
+  "theme_color": "#07090e",
   "orientation": "portrait",
   "icons": [
     {
