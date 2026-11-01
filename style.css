@@ -41,8 +41,8 @@
   --peg-border: #ffffff;
   --peg-text: #d4d4d4;
 
-  --header-bg: rgba(0, 0, 0, 0.95);
-  --nav-bg: rgba(0, 0, 0, 0.95);
+  --header-bg: #000000;
+  --nav-bg: #000000;
   --modal-bg: #0d0d0d;
   --modal-overlay: rgba(0, 0, 0, 0.85);
 
@@ -90,8 +90,8 @@
   --peg-border: #111827;
   --peg-text: #374151;
 
-  --header-bg: rgba(255, 255, 255, 0.95);
-  --nav-bg: rgba(255, 255, 255, 0.95);
+  --header-bg: #ffffff;
+  --nav-bg: #ffffff;
   --modal-bg: #ffffff;
   --modal-overlay: rgba(0, 0, 0, 0.5);
 
@@ -111,8 +111,9 @@
   --radius-full: 9999px;
 
   --nav-height: 60px;
-  --header-content-height: 48px;
-  --header-safe-height: calc(var(--header-content-height) + max(env(safe-area-inset-top, 0px), 8px));
+  --header-content-height: 40px;
+  --header-top-pad: max(calc(env(safe-area-inset-top, 0px) + 12px), 16px);
+  --header-safe-height: calc(var(--header-top-pad) + var(--header-content-height) + 10px);
 }
 
 * {
@@ -174,14 +175,12 @@ body {
   min-height: var(--header-safe-height);
   box-sizing: border-box;
   background-color: var(--header-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  padding-top: max(env(safe-area-inset-top, 0px), 8px);
-  padding-bottom: 6px;
+  padding-top: var(--header-top-pad);
+  padding-bottom: 10px;
   padding-left: 12px;
   padding-right: 12px;
   z-index: 100;
@@ -580,8 +579,6 @@ body {
   top: var(--header-safe-height);
   z-index: 80;
   background-color: var(--header-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   padding: 10px 16px;
   border-bottom: 1px solid var(--border-subtle);
 }
@@ -964,8 +961,6 @@ body {
   height: calc(var(--nav-height) + env(safe-area-inset-bottom, 16px));
   padding-bottom: env(safe-area-inset-bottom, 16px);
   background-color: var(--nav-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
