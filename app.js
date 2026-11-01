@@ -55,6 +55,14 @@
     checkSessionWelcome();
   });
 
+  function safeScrollToTop() {
+    try {
+      window.scrollTo(0, 0);
+    } catch (e) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  }
+
   // --- THEME MANAGEMENT ---
   function initTheme() {
     const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
@@ -199,7 +207,7 @@
     setupTrackData();
     closeTrackPickerModal();
     renderAllViews();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   // --- DOM EVENTS ---
@@ -253,7 +261,7 @@
     if (activeView) activeView.classList.remove('hidden');
 
     renderTabContent();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function renderAllViews() {
@@ -424,7 +432,7 @@
       renderBlockQuizScreen();
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function renderBlockQuizScreen() {
@@ -512,7 +520,7 @@
       evaluateBlockQuiz(questions);
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function updateQuizProgress(answered, total) {
@@ -603,7 +611,7 @@
       `;
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function showBlockMistakesReview(bId, missed, correct) {
@@ -665,7 +673,7 @@
       renderBlockRetryScreen(missed.map(m => m.q), 'block');
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function renderBlockRetryScreen(retryQuestions, retryContext = 'block') {
@@ -766,7 +774,7 @@
       }
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function updateRetryProgress(answered, total) {
@@ -937,7 +945,7 @@
       evaluateCheckpointQuiz(cpId, questions);
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function updateCheckpointProgress(answered, total) {
@@ -1039,7 +1047,7 @@
       renderCheckpointList();
     };
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollToTop();
   }
 
   function showCheckpointSubview(subviewId) {
