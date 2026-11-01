@@ -247,14 +247,14 @@
     if (activeTrackLabel && activeTrackDot) {
       if (tKey === 'pptx') {
         const currSlide = getFirstSlideOfBlock('pptx', trackState.currentBlock);
-        activeTrackLabel.textContent = `📙 Slayt S.${currSlide}`;
-        activeTrackDot.style.backgroundColor = '#fbbf24';
-        activeTrackDot.style.boxShadow = '0 0 8px #fbbf24';
+        activeTrackLabel.textContent = `Slayt S.${currSlide}`;
+        activeTrackDot.style.backgroundColor = '#ffffff';
+        activeTrackDot.style.boxShadow = 'none';
       } else {
         const currQ = getFirstDocxOfBlock(trackState.currentBlock);
-        activeTrackLabel.textContent = `📘 Genel S.${currQ}`;
-        activeTrackDot.style.backgroundColor = '#38bdf8';
-        activeTrackDot.style.boxShadow = '0 0 8px #38bdf8';
+        activeTrackLabel.textContent = `Genel S.${currQ}`;
+        activeTrackDot.style.backgroundColor = '#ffffff';
+        activeTrackDot.style.boxShadow = 'none';
       }
     }
 
