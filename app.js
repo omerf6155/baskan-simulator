@@ -10,6 +10,7 @@
 
   const STORAGE_KEY = 'uhy_dual_tracks_state_v2';
   const SESSION_TRACK_KEY = 'uhy_session_track_chosen_v2';
+  const THEME_KEY = 'uhy_theme_preference_v2';
 
   // Master Application State
   let appState = {
@@ -46,12 +47,36 @@
   let errorFilter = 'all';
 
   document.addEventListener('DOMContentLoaded', () => {
+    initTheme();
     loadSavedState();
     setupTrackData();
     setupDOMEvents();
     renderAllViews();
     checkSessionWelcome();
   });
+
+  // --- THEME MANAGEMENT ---
+  function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    applyTheme(savedTheme);
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (e) {}
+
+    const themeIcon = document.getElementById('themeIcon');
+    if (themeIcon) {
+      themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', theme === 'dark' ? '#000000' : '#ffffff');
+    }
+  }
 
   // --- STATE MANAGEMENT ---
   function loadSavedState() {
@@ -183,6 +208,16 @@
     document.getElementById('activeTrackBtn').addEventListener('click', () => {
       openTrackPickerModal();
     });
+
+    // Theme Toggle Button
+    const btnTheme = document.getElementById('btnThemeToggle');
+    if (btnTheme) {
+      btnTheme.addEventListener('click', () => {
+        const curr = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = curr === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
+    }
 
     // Track Picker Modal Choices
     document.getElementById('chooseTrackPPTX').addEventListener('click', () => selectTrack('pptx'));

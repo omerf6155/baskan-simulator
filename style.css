@@ -1,14 +1,16 @@
 /* ==========================================================
-   KAPADOKYA UHY DISPATCHER DRILL - MINIMALIST MONOCHROME
-   Premium Black & White OLED Theme (Zero AI Clutter, Pure Focus)
+   KAPADOKYA UHY DISPATCHER DRILL - DUAL MONOCHROME
+   Minimalist Black & White (OLED Dark & Clean Light Paper)
    ========================================================== */
 
-:root {
+/* 1. DARK THEME (DEFAULT OLED MONOCHROME) */
+:root, [data-theme="dark"] {
   --bg-deep: #000000;
   --bg-surface: #0a0a0a;
   --bg-card: #121212;
   --bg-card-hover: #181818;
   --bg-card-alt: #161616;
+  --bg-hero: #060606;
 
   --border-subtle: #242424;
   --border-hover: #404040;
@@ -18,20 +20,88 @@
   --text-muted: #a3a3a3;
   --text-dim: #737373;
 
-  /* High contrast monochrome accents */
   --accent-white: #ffffff;
   --accent-black: #000000;
   --accent-silver: #d4d4d4;
 
-  /* Functional Indicators (Subtle & Crisp, No Neon) */
+  --btn-primary-bg: #ffffff;
+  --btn-primary-text: #000000;
+  --btn-primary-hover: #f0f0f0;
+
+  --opt-selected-bg: #ffffff;
+  --opt-selected-text: #000000;
+  --opt-circle-selected-bg: #000000;
+  --opt-circle-selected-text: #ffffff;
+
+  --correct-bg: #1a1a1a;
+  --correct-border: #ffffff;
+  --correct-text: #ffffff;
+
+  --peg-bg: #0a0a0a;
+  --peg-border: #ffffff;
+  --peg-text: #d4d4d4;
+
+  --header-bg: rgba(0, 0, 0, 0.95);
+  --nav-bg: rgba(0, 0, 0, 0.95);
+  --modal-bg: #0d0d0d;
+  --modal-overlay: rgba(0, 0, 0, 0.85);
+
   --success: #22c55e;
   --success-bg: rgba(34, 197, 94, 0.1);
-  --success-border: #16a34a;
-
   --danger: #ef4444;
   --danger-bg: rgba(239, 68, 68, 0.1);
-  --danger-border: #dc2626;
+}
 
+/* 2. LIGHT THEME (CLEAN MINIMAL PAPER) */
+[data-theme="light"] {
+  --bg-deep: #f2f3f5;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f9fa;
+  --bg-card-alt: #f4f5f7;
+  --bg-hero: #f9fafb;
+
+  --border-subtle: #e5e7eb;
+  --border-hover: #d1d5db;
+  --border-focus: #111827;
+
+  --text-main: #111827;
+  --text-muted: #4b5563;
+  --text-dim: #9ca3af;
+
+  --accent-white: #111827;
+  --accent-black: #ffffff;
+  --accent-silver: #4b5563;
+
+  --btn-primary-bg: #111827;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover: #1f2937;
+
+  --opt-selected-bg: #111827;
+  --opt-selected-text: #ffffff;
+  --opt-circle-selected-bg: #ffffff;
+  --opt-circle-selected-text: #111827;
+
+  --correct-bg: #f8fafc;
+  --correct-border: #111827;
+  --correct-text: #111827;
+
+  --peg-bg: #f3f4f6;
+  --peg-border: #111827;
+  --peg-text: #374151;
+
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --modal-bg: #ffffff;
+  --modal-overlay: rgba(0, 0, 0, 0.5);
+
+  --success: #16a34a;
+  --success-bg: rgba(22, 163, 74, 0.08);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+}
+
+:root {
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -61,6 +131,7 @@ body {
   display: flex;
   justify-content: center;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .app-container {
@@ -77,11 +148,11 @@ body {
 }
 
 /* ==========================================================
-   TOP HEADER (MINIMALIST)
+   TOP HEADER
    ========================================================== */
 .app-header {
   height: var(--header-height);
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: var(--header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
@@ -116,7 +187,7 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--text-main);
 }
 
 .track-pill-text {
@@ -154,14 +225,13 @@ body {
 }
 
 .header-btn.sync-btn {
-  background: #141414;
-  border-color: #333333;
-  color: #ffffff;
+  background: var(--bg-card-alt);
+  border-color: var(--border-hover);
+  color: var(--text-main);
 }
 
 .header-btn.sync-btn:hover {
-  background: #222222;
-  border-color: #ffffff;
+  border-color: var(--border-focus);
 }
 
 .header-btn.icon-only {
@@ -169,12 +239,12 @@ body {
 }
 
 /* ==========================================================
-   HERO & BANNERS (CLEAN & SUBTLE)
+   HERO & BANNERS
    ========================================================== */
 .screen-hero {
   padding: 18px 16px;
   border-bottom: 1px solid var(--border-subtle);
-  background: #060606;
+  background: var(--bg-hero);
 }
 
 .hero-header {
@@ -186,9 +256,9 @@ body {
 }
 
 .badge-accent {
-  background: #1c1c1c;
-  color: #ffffff;
-  border: 1px solid #333333;
+  background: var(--bg-card-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
   font-size: 11px;
   font-weight: 700;
   font-family: var(--font-mono);
@@ -199,12 +269,12 @@ body {
 
 .badge-accent.red {
   background: var(--danger-bg);
-  color: #f87171;
+  color: var(--danger);
   border-color: rgba(239, 68, 68, 0.3);
 }
 
 .badge-range {
-  background: #141414;
+  background: var(--bg-card);
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
   font-size: 11px;
@@ -215,8 +285,8 @@ body {
 
 .badge-req {
   background: transparent;
-  color: #a3a3a3;
-  border: 1px solid #333333;
+  color: var(--text-dim);
+  border: 1px solid var(--border-subtle);
   font-size: 10.5px;
   font-weight: 600;
   padding: 3px 8px;
@@ -227,7 +297,7 @@ body {
   font-size: 18px;
   font-weight: 800;
   margin-bottom: 4px;
-  color: #ffffff;
+  color: var(--text-main);
   letter-spacing: -0.3px;
 }
 
@@ -277,8 +347,8 @@ body {
 .q-category-tag {
   font-size: 11px;
   color: var(--text-dim);
-  background: #000000;
-  border: 1px solid #222222;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   padding: 2px 7px;
   border-radius: var(--radius-sm);
 }
@@ -312,9 +382,9 @@ body {
 }
 
 .study-opt.is-correct {
-  background-color: #1a1a1a;
-  border-color: #ffffff;
-  color: #ffffff;
+  background-color: var(--correct-bg);
+  border-color: var(--correct-border);
+  color: var(--correct-text);
   font-weight: 600;
 }
 
@@ -326,36 +396,36 @@ body {
 }
 
 .study-opt.is-correct .opt-letter {
-  color: #ffffff;
+  color: var(--correct-text);
 }
 
 .correct-tag {
   margin-left: auto;
   font-size: 11px;
   font-weight: 700;
-  color: #ffffff;
-  background: #000000;
-  border: 1px solid #444444;
+  color: var(--correct-text);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   padding: 1px 6px;
   border-radius: var(--radius-sm);
 }
 
-/* Memory Peg (Hafıza Çivisi) - Minimalist & Pure */
+/* Hafıza Çivisi (Memory Peg) */
 .memory-peg-box {
-  background: #0a0a0a;
-  border-left: 3px solid #ffffff;
+  background: var(--peg-bg);
+  border-left: 3px solid var(--peg-border);
   border-radius: 4px;
   padding: 10px 12px;
   font-size: 12.5px;
-  color: #d4d4d4;
+  color: var(--peg-text);
   line-height: 1.45;
 }
 
 .memory-peg-box strong {
-  color: #ffffff;
+  color: var(--text-main);
 }
 
-/* Options (Interactive Quiz View - High Contrast) */
+/* Options (Interactive Quiz View) */
 .quiz-options-grid {
   display: flex;
   flex-direction: column;
@@ -390,18 +460,17 @@ body {
   border-color: var(--border-hover);
 }
 
-/* Selected Option: Crisp White Inverted Luxury Feel */
 .quiz-opt-btn.selected {
-  background-color: #ffffff;
-  border-color: #ffffff;
-  color: #000000;
+  background-color: var(--opt-selected-bg);
+  border-color: var(--opt-selected-bg);
+  color: var(--opt-selected-text);
   font-weight: 600;
 }
 
 .quiz-opt-btn.selected .opt-circle {
-  background-color: #000000;
-  color: #ffffff;
-  border-color: #000000;
+  background-color: var(--opt-circle-selected-bg);
+  color: var(--opt-circle-selected-text);
+  border-color: var(--opt-circle-selected-bg);
 }
 
 .opt-circle {
@@ -417,7 +486,7 @@ body {
   justify-content: center;
   flex-shrink: 0;
   color: var(--text-muted);
-  background-color: #0a0a0a;
+  background-color: var(--bg-surface);
 }
 
 /* ==========================================================
@@ -427,7 +496,7 @@ body {
   position: sticky;
   top: var(--header-height);
   z-index: 30;
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: var(--header-bg);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 10px 16px;
@@ -435,7 +504,7 @@ body {
 }
 
 .quiz-sticky-header.retry-theme {
-  border-bottom-color: #333333;
+  border-bottom-color: var(--border-hover);
 }
 
 .quiz-progress-row {
@@ -449,11 +518,11 @@ body {
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .quiz-badge.retry {
-  color: #f87171;
+  color: var(--danger);
 }
 
 .quiz-count {
@@ -465,31 +534,31 @@ body {
 .progress-bar-track {
   width: 100%;
   height: 4px;
-  background-color: #222222;
+  background-color: var(--border-subtle);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: #ffffff;
+  background: var(--text-main);
   border-radius: var(--radius-full);
   transition: width 0.2s ease;
 }
 
 .retry-theme .progress-bar-fill {
-  background: #f87171;
+  background: var(--danger);
 }
 
 /* ==========================================================
-   PRIMARY ACTION BUTTONS (BLACK & WHITE SOLID)
+   PRIMARY ACTION BUTTONS
    ========================================================== */
 .sticky-footer-action {
   position: sticky;
   bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 16px));
   z-index: 35;
   padding: 12px 16px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.95) 30%, rgba(0, 0, 0, 1) 100%);
+  background: linear-gradient(180deg, transparent 0%, var(--bg-surface) 35%, var(--bg-surface) 100%);
   display: flex;
   gap: 10px;
 }
@@ -499,8 +568,8 @@ body {
   padding: 14px 20px;
   border-radius: var(--radius-sm);
   border: none;
-  background: #ffffff;
-  color: #000000;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   font-family: var(--font-sans);
   font-size: 14.5px;
   font-weight: 800;
@@ -513,7 +582,7 @@ body {
 }
 
 .primary-btn:hover {
-  background: #f0f0f0;
+  background: var(--btn-primary-hover);
 }
 
 .primary-btn:active {
@@ -521,14 +590,14 @@ body {
 }
 
 .primary-btn.btn-cta {
-  background: #ffffff;
-  color: #000000;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
 .primary-btn.btn-danger {
-  background: #ffffff;
-  color: #000000;
-  border: 1px solid #ef4444;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--danger);
 }
 
 .text-btn {
@@ -553,13 +622,13 @@ body {
 }
 
 .result-banner.success {
-  border-color: #333333;
-  background: #111111;
+  border-color: var(--border-hover);
+  background: var(--bg-card-alt);
 }
 
 .result-banner.failed {
-  border-color: #401010;
-  background: #160a0a;
+  border-color: var(--danger-bg);
+  background: var(--bg-card-alt);
 }
 
 .result-icon {
@@ -570,7 +639,7 @@ body {
 .result-title {
   font-size: 19px;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
@@ -579,7 +648,7 @@ body {
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 6px;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .result-subdesc {
@@ -602,7 +671,7 @@ body {
 
 .mistake-card {
   background-color: var(--bg-card);
-  border: 1px solid #332020;
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 16px;
   margin-bottom: 14px;
@@ -625,15 +694,15 @@ body {
 }
 
 .mistake-ans-row.wrong {
-  background: #1c0f0f;
-  color: #fca5a5;
-  border: 1px solid #4a1c1c;
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .mistake-ans-row.correct {
-  background: #121814;
-  color: #86efac;
-  border: 1px solid #1e3a29;
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
 .ans-indicator {
@@ -664,7 +733,7 @@ body {
 }
 
 .checkpoint-row-card.unlocked {
-  border-color: #333333;
+  border-color: var(--border-hover);
 }
 
 .checkpoint-row-card.unlocked:hover {
@@ -685,7 +754,7 @@ body {
 .checkpoint-title-wrap h3 {
   font-size: 15px;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-main);
   margin-bottom: 2px;
 }
 
@@ -702,21 +771,21 @@ body {
 }
 
 .checkpoint-status-badge.available {
-  background: #1c1c1c;
-  color: #ffffff;
-  border: 1px solid #444444;
+  background: var(--bg-card-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
 }
 
 .checkpoint-status-badge.done {
-  background: #161616;
-  color: #ffffff;
-  border: 1px solid #333333;
+  background: var(--bg-card-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-hover);
 }
 
 .checkpoint-status-badge.locked {
-  background: #121212;
+  background: var(--bg-surface);
   color: var(--text-dim);
-  border: 1px solid #222222;
+  border: 1px solid var(--border-subtle);
 }
 
 .checkpoint-action-btn {
@@ -725,22 +794,22 @@ body {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  border: 1px solid #333333;
-  background: #1a1a1a;
-  color: #ffffff;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card-alt);
+  color: var(--text-main);
   transition: all 0.15s ease;
 }
 
 .checkpoint-action-btn:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-bg);
 }
 
 .checkpoint-action-btn.disabled {
-  background: #121212;
+  background: var(--bg-surface);
   color: var(--text-dim);
-  border-color: #222222;
+  border-color: var(--border-subtle);
   cursor: not-allowed;
 }
 
@@ -769,9 +838,9 @@ body {
 }
 
 .chip.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: var(--btn-primary-bg);
 }
 
 .error-action-bar {
@@ -791,7 +860,7 @@ body {
 
 .empty-state-box h3 {
   font-size: 16px;
-  color: #ffffff;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
@@ -800,7 +869,7 @@ body {
 }
 
 /* ==========================================================
-   BOTTOM NAVIGATION BAR (MINIMALIST)
+   BOTTOM NAVIGATION BAR
    ========================================================== */
 .bottom-nav {
   position: fixed;
@@ -811,7 +880,7 @@ body {
   max-width: 680px;
   height: calc(var(--nav-height) + env(safe-area-inset-bottom, 16px));
   padding-bottom: env(safe-area-inset-bottom, 16px);
-  background-color: rgba(0, 0, 0, 0.95);
+  background-color: var(--nav-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border-subtle);
@@ -837,7 +906,7 @@ body {
 }
 
 .nav-item.active {
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .nav-icon {
@@ -855,8 +924,9 @@ body {
   position: absolute;
   top: 6px;
   right: calc(50% - 24px);
-  background: #333333;
-  color: #ffffff;
+  background: var(--bg-card-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
   font-size: 10px;
   font-weight: 800;
   font-family: var(--font-mono);
@@ -865,8 +935,9 @@ body {
 }
 
 .nav-badge.red {
-  background: #ef4444;
+  background: var(--danger);
   color: #ffffff;
+  border: none;
 }
 
 .nav-dot {
@@ -874,7 +945,7 @@ body {
   bottom: 4px;
   width: 4px;
   height: 4px;
-  background-color: #ffffff;
+  background-color: var(--text-main);
   border-radius: 50%;
   display: none;
 }
@@ -884,12 +955,12 @@ body {
 }
 
 /* ==========================================================
-   MODALS (BLACK & WHITE SOPHISTICATED)
+   MODALS
    ========================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
+  background: var(--modal-overlay);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 100;
@@ -907,13 +978,13 @@ body {
   width: 100%;
   max-width: 520px;
   max-height: 85vh;
-  background-color: #0d0d0d;
-  border: 1px solid #282828;
+  background-color: var(--modal-bg);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .modal-header {
@@ -927,7 +998,7 @@ body {
 .modal-header h3 {
   font-size: 15px;
   font-weight: 800;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .modal-close-btn {
@@ -943,7 +1014,7 @@ body {
   display: flex;
   gap: 16px;
   padding: 10px 20px;
-  background-color: #060606;
+  background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
   font-size: 11.5px;
   color: var(--text-muted);
@@ -961,9 +1032,9 @@ body {
   border-radius: 50%;
 }
 
-.dot.done { background-color: #ffffff; }
-.dot.active { background-color: #888888; }
-.dot.locked { background-color: #333333; }
+.dot.done { background-color: var(--text-main); }
+.dot.active { background-color: var(--text-dim); }
+.dot.locked { background-color: var(--border-subtle); }
 
 .block-grid {
   padding: 16px;
@@ -990,15 +1061,15 @@ body {
 }
 
 .block-grid-btn.completed {
-  background-color: #ffffff;
-  border-color: #ffffff;
-  color: #000000;
+  background-color: var(--btn-primary-bg);
+  border-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
 .block-grid-btn.current {
-  background-color: #222222;
-  border-color: #ffffff;
-  color: #ffffff;
+  background-color: var(--bg-card-alt);
+  border-color: var(--border-focus);
+  color: var(--text-main);
 }
 
 .block-grid-btn.locked {
@@ -1006,7 +1077,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Track Picker Modal Cards (Black & White Brutalist) */
+/* Track Picker Modal */
 .track-picker-card {
   max-width: 480px;
 }
@@ -1022,8 +1093,8 @@ body {
 }
 
 .track-big-card {
-  background: #141414;
-  border: 1px solid #2a2a2a;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 16px;
   cursor: pointer;
@@ -1032,8 +1103,8 @@ body {
 }
 
 .track-big-card:hover {
-  background: #1a1a1a;
-  border-color: #ffffff;
+  background: var(--bg-card-hover);
+  border-color: var(--border-focus);
 }
 
 .track-big-card:active {
@@ -1041,8 +1112,8 @@ body {
 }
 
 .track-big-card.active {
-  border-color: #ffffff;
-  background: #181818;
+  border-color: var(--border-focus);
+  background: var(--bg-card);
 }
 
 .track-big-top {
@@ -1057,25 +1128,18 @@ body {
   font-weight: 800;
   border-radius: var(--radius-sm);
   padding: 2px 7px;
-  background: #000000;
-  border: 1px solid #333333;
-  color: #ffffff;
-}
-
-.track-badge.pptx {
-  border-color: #555555;
-}
-
-.track-badge.docx {
-  border-color: #555555;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
 }
 
 .track-curr-tag {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
-  color: #ffffff;
-  background: #242424;
+  color: var(--text-main);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
   padding: 2px 8px;
   border-radius: var(--radius-sm);
 }
@@ -1083,7 +1147,7 @@ body {
 .track-big-title {
   font-size: 14.5px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-main);
   margin-bottom: 4px;
 }
 
@@ -1108,7 +1172,7 @@ body {
   display: block;
   font-size: 14px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .setting-sub {
@@ -1121,15 +1185,9 @@ body {
   font-weight: 600;
   padding: 3px 8px;
   border-radius: var(--radius-sm);
-  background: #1c1c1c;
-  color: #ffffff;
-  border: 1px solid #333333;
-}
-
-.tag.green {
-  background: #141414;
-  color: #ffffff;
-  border-color: #444444;
+  background: var(--bg-card-alt);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
 }
 
 .modal-divider {
@@ -1147,7 +1205,7 @@ body {
 .danger-title {
   font-size: 14px;
   font-weight: 700;
-  color: #ef4444;
+  color: var(--danger);
 }
 
 .danger-desc {
@@ -1160,9 +1218,9 @@ body {
   margin-top: 8px;
   padding: 10px 16px;
   border-radius: var(--radius-sm);
-  border: 1px solid #4a1c1c;
-  background: #180c0c;
-  color: #f87171;
+  border: 1px solid var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -1171,7 +1229,7 @@ body {
 .import-textarea {
   width: 100%;
   height: 80px;
-  background-color: #060606;
+  background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
   color: var(--text-main);
@@ -1183,12 +1241,12 @@ body {
 
 .import-textarea:focus {
   outline: none;
-  border-color: #ffffff;
+  border-color: var(--border-focus);
 }
 
 /* ==========================================================
    HELPERS & UTILITIES
-   ========================================================== */
+   ========================================================= */
 .hidden {
   display: none !important;
 }
