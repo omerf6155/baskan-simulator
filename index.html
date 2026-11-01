@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Kapadokya UHY Dispeçer Çalışma Sistemi | 1395 Soru</title>
-  <meta name="theme-color" content="#0a0e17">
+  <title>Kapadokya UHY Dispeçer Çalışma Sistemi</title>
+  <meta name="theme-color" content="#07090e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
-  <link rel="stylesheet" href="style.css?v=2.0">
+  <link rel="stylesheet" href="style.css?v=2.1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,22 +19,45 @@
     <!-- Top Bar -->
     <header class="app-header">
       <div class="brand">
-        <span class="brand-badge">UHY</span>
+        <span class="brand-badge" id="activeTrackBadge">UHY</span>
         <div class="brand-text">
-          <h1>DİSPEÇER DRILL</h1>
-          <p class="subtitle" id="globalStatsText">1,395 Soru · 140 Blok · 35 Checkpoint</p>
+          <h1 id="appTitle">DİSPEÇER DRILL</h1>
+          <p class="subtitle" id="globalStatsText">Yükleniyor...</p>
         </div>
       </div>
       <div class="header-actions">
+        <button class="header-btn sync-btn" id="btnSyncModal" title="İlerlemeyi Kaydet / Kopyala">
+          <span class="icon">💾</span>
+          <span class="btn-label">Save</span>
+        </button>
         <button class="header-btn" id="btnBlockPicker" title="Tüm Bloklar Haritası">
           <span class="icon">📑</span>
-          <span class="btn-label" id="currentBlockNavBadge">Blok 1</span>
+          <span class="btn-label" id="currentBlockNavBadge">Blok 8</span>
         </button>
-        <button class="header-btn icon-only" id="btnSettings" title="Ayarlar & Sıfırla">
+        <button class="header-btn icon-only" id="btnSettings" title="Ayarlar">
           <span class="icon">⚙️</span>
         </button>
       </div>
     </header>
+
+    <!-- Track Selector Banner (Giriş Ekranında 2 Havuz Seçeneği) -->
+    <div class="track-selector-bar">
+      <div class="track-tab-card active" id="btnTrackPPTX" data-track="pptx">
+        <div class="track-top">
+          <span class="track-badge pptx">📙 UHY Dispeç</span>
+          <span class="track-curr" id="trackPPTXCurr">Slayt 80</span>
+        </div>
+        <div class="track-meta" id="trackPPTXMeta">Slayt 80 / 505 · %16 Bitti</div>
+      </div>
+
+      <div class="track-tab-card" id="btnTrackDOCX" data-track="docx">
+        <div class="track-top">
+          <span class="track-badge docx">📘 Genel Sorular</span>
+          <span class="track-curr" id="trackDOCXCurr">S.679</span>
+        </div>
+        <div class="track-meta" id="trackDOCXMeta">Soru 679 / 1,095 · %61 Bitti</div>
+      </div>
+    </div>
 
     <!-- Main Content Area -->
     <main class="main-content" id="mainContent">
@@ -48,11 +71,11 @@
         <div class="subview" id="blockStudyScreen">
           <div class="screen-hero">
             <div class="hero-header">
-              <span class="badge-accent" id="studyBlockBadge">BLOK 1 / 140</span>
-              <span class="badge-range" id="studyRangeBadge">Sorular 1 - 10</span>
+              <span class="badge-accent" id="studyBlockBadge">BLOK 8 / 50</span>
+              <span class="badge-range" id="studyRangeBadge">Slayt 80 - 89</span>
               <span class="badge-req">0 Yanlış Zorunlu</span>
             </div>
-            <h2 class="hero-title">Ezber & Hafıza Aşaması</h2>
+            <h2 class="hero-title" id="studyHeroTitle">Ezber & Hafıza Aşaması</h2>
             <p class="hero-desc">Önce 10 sorunun doğru şıklarını ve 📌 <strong>Hafıza Çivilerini</strong> zihnine kazı. Hazır olunca aşağıdaki butona basıp teste başla!</p>
           </div>
 
@@ -71,7 +94,7 @@
         <div class="subview hidden" id="blockQuizScreen">
           <div class="quiz-sticky-header">
             <div class="quiz-progress-row">
-              <span class="quiz-badge" id="quizBlockBadge">Blok 1 Testi</span>
+              <span class="quiz-badge" id="quizBlockBadge">Blok 8 Testi</span>
               <span class="quiz-count" id="quizAnsweredCount">0 / 10 İşaretlendi</span>
             </div>
             <div class="progress-bar-track">
@@ -143,12 +166,12 @@
         <div class="subview" id="checkpointListScreen">
           <div class="screen-hero">
             <span class="badge-accent">HER 4 BLOK = 1 CHECKPOINT</span>
-            <h2 class="hero-title">Checkpoint Alanı (40'lık Denemeler)</h2>
+            <h2 class="hero-title" id="checkpointHeroTitle">Checkpoint Alanı (40'lık Denemeler)</h2>
             <p class="hero-desc">10'luk bloklarda ustalaştığın her 40 soru burada bir deneme satırı olarak açılır. Bilgilerini 40 soruluk sınav modunda sına!</p>
           </div>
 
           <div class="checkpoint-cards-list" id="checkpointCardsContainer">
-            <!-- 35 Checkpoint rows rendered here -->
+            <!-- Checkpoint rows rendered here -->
           </div>
         </div>
 
@@ -248,61 +271,97 @@
   </div>
 
   <!-- ========================================================
-       MODAL 1: BLOK SEÇİCİ (140 BLOK HARİTASI)
+       MODAL: SAVE & SENKRONİZASYON (MOBİL İLERLEME DOSYASI)
        ======================================================== -->
-  <div class="modal-overlay hidden" id="blockPickerModal">
+  <div class="modal-overlay hidden" id="syncModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>10'luk Blok Haritası (140 Blok)</h3>
-        <button class="modal-close-btn" id="btnCloseBlockPicker">&times;</button>
+        <h3>💾 İlerleme Kaydet & Paylaş</h3>
+        <button class="modal-close-btn" id="btnCloseSync">&times;</button>
       </div>
-      <div class="modal-legend">
-        <span class="legend-item"><span class="dot done"></span> Tamamlandı (10/10)</span>
-        <span class="legend-item"><span class="dot active"></span> Açık</span>
-        <span class="legend-item"><span class="dot locked"></span> Kilitli</span>
-      </div>
-      <div class="block-grid" id="blockPickerGrid">
-        <!-- 140 Block Buttons -->
+      <div class="settings-body">
+        <p class="hero-desc" style="margin-bottom: 14px;">
+          Mobildeki tüm ilerlemen otomatik olarak telefonunda saklanır. Ayrıca gece geldiğinde sohbetimize aktarabilmen için save kodunu kopyalayabilir veya dosya olarak indirebilirsin!
+        </p>
+        
+        <div class="sync-actions-box">
+          <button class="primary-btn btn-cta" id="btnCopySaveCode">
+            <span>📋 Save Kodunu Kopyala (Panoya Al)</span>
+          </button>
+          <button class="header-btn" style="width: 100%; justify-content: center; padding: 12px; margin-top: 8px;" id="btnDownloadSaveFile">
+            <span>📥 Save Dosyası İndir (uhy_save.json)</span>
+          </button>
+        </div>
+
+        <hr class="modal-divider">
+
+        <div class="import-section">
+          <span class="setting-title" style="margin-bottom: 6px;">Save Kodu Yükle / İçe Aktar</span>
+          <textarea class="import-textarea" id="importSaveInput" placeholder="Save kodunu buraya yapıştır..."></textarea>
+          <button class="primary-btn" style="margin-top: 8px; padding: 10px;" id="btnApplySaveCode">
+            <span>Kodu Yükle ve Devam Et ⚡</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ========================================================
-       MODAL 2: AYARLAR & SIFIRLAMA
+       MODAL: BLOK SEÇİCİ (BLOK HARİTASI)
+       ======================================================== -->
+  <div class="modal-overlay hidden" id="blockPickerModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="blockPickerTitle">10'luk Blok Haritası</h3>
+        <button class="modal-close-btn" id="btnCloseBlockPicker">&times;</button>
+      </div>
+      <div class="modal-legend">
+        <span class="legend-item"><span class="dot done"></span> Tamamlandı (10/10)</span>
+        <span class="legend-item"><span class="dot active"></span> Aktif</span>
+        <span class="legend-item"><span class="dot locked"></span> Kilitli</span>
+      </div>
+      <div class="block-grid" id="blockPickerGrid">
+        <!-- Block Buttons rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: AYARLAR & SIFIRLAMA
        ======================================================== -->
   <div class="modal-overlay hidden" id="settingsModal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Sistem & İlerleme Ayarları</h3>
+        <h3>Sistem Bilgisi & Ayarlar</h3>
         <button class="modal-close-btn" id="btnCloseSettings">&times;</button>
       </div>
       <div class="settings-body">
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-title">UHY Soru Veritabanı</span>
-            <span class="setting-sub">1,395 Benzersiz Dispeçer Sorusu</span>
+            <span class="setting-title">UHY Dispeç (Slaytlar)</span>
+            <span class="setting-sub" id="settingsPPTXCount">505 Slayt (496 Özgün)</span>
           </div>
-          <span class="tag green">Aktif & Güncel</span>
+          <span class="tag green">Aktif</span>
         </div>
         <div class="setting-item">
           <div class="setting-info">
-            <span class="setting-title">Karanlık Kokpit Modu</span>
-            <span class="setting-sub">Göz yormayan OLED siyahı</span>
+            <span class="setting-title">Genel Sorular (DOCX)</span>
+            <span class="setting-sub" id="settingsDOCXCount">1,095 Soru (1,058 Özgün)</span>
           </div>
-          <span class="tag">Kilitli OLED</span>
+          <span class="tag green">Aktif</span>
         </div>
         <hr class="modal-divider">
         <div class="danger-zone">
           <span class="danger-title">İlerlemeyi Sıfırla</span>
-          <p class="danger-desc">Tüm tamamlanan blokları, checkpoint puanlarını ve hata bankasını sıfırlayarak en baştan başlar.</p>
-          <button class="btn-danger-outline" id="btnResetAllProgress">Tüm İlerlemeyi Sıfırla</button>
+          <p class="danger-desc">Seçili havuzun ilerlemesini sıfırlar. Dikkatli kullan cano!</p>
+          <button class="btn-danger-outline" id="btnResetTrackProgress">Bu Havuzun İlerlemesini Sıfırla</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
-  <script src="questions.js?v=2.0"></script>
-  <script src="app.js?v=2.0"></script>
+  <script src="questions.js?v=2.1"></script>
+  <script src="app.js?v=2.1"></script>
 </body>
 </html>

@@ -1,75 +1,97 @@
 /**
- * KAPADOKYA UHY DISPATCHER DRILL - CORE APPLICATION ENGINE
- * 1,395 Soru · 140 Blok · 35 Checkpoint
- * 0-Hata Kuralı & Otomasyonlu Çalışma Sistemi
+ * KAPADOKYA UHY DISPATCHER DRILL - DUAL-TRACK CORE ENGINE (v2.1)
+ * Track 1: UHY Dispeç (505 Slayt / 496 Özgün - Slayt 80'den Başlar)
+ * Track 2: Genel Sorular (1,095 DOCX / 1,058 Özgün - S.679'dan Başlar)
+ * 0-Yanlış Kuralı & Mobil Senkronizasyon (Save Export/Import)
  */
 
 (function () {
   'use strict';
 
-  // --- STATE MANAGEMENT ---
-  const STORAGE_KEY = 'uhy_dispatcher_v2_state';
+  const STORAGE_KEY = 'uhy_dual_tracks_state_v2';
 
-  let state = {
-    completedBlocks: [],     // [1, 2, 3...]
-    currentBlock: 1,         // 1 to 140
-    checkpointScores: {},    // { [checkpointId]: { bestScore: 38, total: 40, date: '...' } }
-    errorBank: [],           // [ { qId: 10, userAns: 1, correctAns: 2, source: 'Blok 1', timestamp: 12345 } ]
-    currentTab: 'tab1'       // 'tab1', 'tab2', 'tab3'
+  // Master Application State
+  let appState = {
+    version: 2,
+    activeTrack: 'pptx', // 'pptx' or 'docx'
+    currentTab: 'tab1',  // 'tab1', 'tab2', 'tab3'
+    tracks: {
+      pptx: {
+        currentBlock: 8,
+        completedBlocks: [1, 2, 3, 4, 5, 6, 7],
+        checkpointScores: {},
+        errorBank: []
+      },
+      docx: {
+        currentBlock: 65,
+        completedBlocks: Array.from({ length: 64 }, (_, i) => i + 1),
+        checkpointScores: {},
+        errorBank: []
+      }
+    }
   };
 
-  let allQuestions = [];
-  let blockQuestionsMap = {};     // { [blockId]: [q1, q2, ...] }
-  let checkpointQuestionsMap = {};// { [checkpointId]: [q1, q2, ...] }
+  // In-memory indexed structures for active track
+  let currentTrackData = null;
+  let activeQuestions = [];
+  let blockQuestionsMap = {};
+  let checkpointQuestionsMap = {};
   let questionsById = {};
 
-  // Active in-memory quiz states
+  // Transient quiz states
   let currentQuizAnswers = {};
-  let currentQuizMissedIds = [];
   let currentCheckpointId = null;
   let currentCheckpointAnswers = {};
   let errorFilter = 'all';
 
-  // --- INITIALIZATION ---
   document.addEventListener('DOMContentLoaded', () => {
-    loadState();
-    initDatabase();
-    setupNavigation();
-    setupModals();
-    renderCurrentTab();
+    loadSavedState();
+    setupTrackData();
+    setupDOMEvents();
+    renderAllViews();
   });
 
-  function loadState() {
+  // --- STATE MANAGEMENT ---
+  function loadSavedState() {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        state = { ...state, ...parsed };
+        if (parsed && parsed.tracks) {
+          appState = { ...appState, ...parsed };
+        }
       }
     } catch (e) {
-      console.warn('LocalStorage error:', e);
+      console.warn('LocalStorage load error:', e);
     }
   }
 
-  function saveState() {
+  function saveCurrentState() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      updateGlobalBadges();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      updateTopBarAndBadges();
     } catch (e) {
-      console.warn('Save state error:', e);
+      console.warn('LocalStorage save error:', e);
     }
   }
 
-  function initDatabase() {
-    if (window.QUESTIONS_DATABASE && Array.isArray(window.QUESTIONS_DATABASE)) {
-      allQuestions = window.QUESTIONS_DATABASE;
-    } else {
-      console.error('QUESTIONS_DATABASE not found on window!');
+  // --- TRACK SETUP ---
+  function setupTrackData() {
+    if (!window.DATA_TRACKS) {
+      console.error('DATA_TRACKS not found!');
       return;
     }
 
-    // Build indexing maps
-    allQuestions.forEach(q => {
+    const tKey = appState.activeTrack;
+    currentTrackData = window.DATA_TRACKS[tKey];
+    activeQuestions = currentTrackData.questions || [];
+
+    // Re-index
+    blockQuestionsMap = {};
+    checkpointQuestionsMap = {};
+    questionsById = {};
+
+    activeQuestions.forEach(q => {
       questionsById[q.id] = q;
 
       const bId = q.block_id || Math.floor((q.id - 1) / 10) + 1;
@@ -81,78 +103,42 @@
       checkpointQuestionsMap[cpId].push(q);
     });
 
-    // Make sure currentBlock is valid
+    // Ensure valid current block
+    const trackState = appState.tracks[tKey];
     const totalBlocks = Object.keys(blockQuestionsMap).length;
-    if (state.currentBlock < 1) state.currentBlock = 1;
-    if (state.currentBlock > totalBlocks) state.currentBlock = totalBlocks;
-
-    updateGlobalBadges();
+    if (!trackState.currentBlock || trackState.currentBlock < 1) trackState.currentBlock = 1;
+    if (trackState.currentBlock > totalBlocks) trackState.currentBlock = totalBlocks;
   }
 
-  function updateGlobalBadges() {
-    const totalQ = allQuestions.length;
-    const totalBlocks = Object.keys(blockQuestionsMap).length;
-    const completedBlocksCount = state.completedBlocks.length;
-    const errorCount = state.errorBank.length;
-
-    // Header badges
-    const currentBlockNavBadge = document.getElementById('currentBlockNavBadge');
-    if (currentBlockNavBadge) {
-      currentBlockNavBadge.textContent = `Blok ${state.currentBlock}`;
-    }
-
-    const globalStatsText = document.getElementById('globalStatsText');
-    if (globalStatsText) {
-      globalStatsText.textContent = `${totalQ} Soru · ${completedBlocksCount}/${totalBlocks} Blok Bitti`;
-    }
-
-    // Bottom nav badges
-    const checkpointAvailableBadge = document.getElementById('checkpointAvailableBadge');
-    if (checkpointAvailableBadge) {
-      const unlockedCount = getUnlockedCheckpointsCount();
-      checkpointAvailableBadge.textContent = unlockedCount;
-    }
-
-    const errorCountBadge = document.getElementById('errorCountBadge');
-    if (errorCountBadge) {
-      errorCountBadge.textContent = errorCount;
-      errorCountBadge.style.display = errorCount > 0 ? 'inline-block' : 'none';
-    }
-
-    const errorTotalBadge = document.getElementById('errorTotalBadge');
-    if (errorTotalBadge) {
-      errorTotalBadge.textContent = `${errorCount} Hata`;
-    }
+  function switchTrack(trackKey) {
+    if (appState.activeTrack === trackKey) return;
+    appState.activeTrack = trackKey;
+    saveCurrentState();
+    setupTrackData();
+    renderAllViews();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function getUnlockedCheckpointsCount() {
-    let count = 0;
-    const totalCheckpoints = Object.keys(checkpointQuestionsMap).length;
-    for (let cpId = 1; cpId <= totalCheckpoints; cpId++) {
-      if (isCheckpointUnlocked(cpId)) count++;
-    }
-    return count;
-  }
+  // --- DOM EVENTS ---
+  function setupDOMEvents() {
+    // Track Switchers
+    document.getElementById('btnTrackPPTX').addEventListener('click', () => switchTrack('pptx'));
+    document.getElementById('btnTrackDOCX').addEventListener('click', () => switchTrack('docx'));
 
-  function isCheckpointUnlocked(cpId) {
-    // Checkpoint k unlocks when blocks (4k-3), (4k-2), (4k-1), 4k are completed!
-    const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
-    return reqBlocks.every(b => state.completedBlocks.includes(b));
-  }
-
-  // --- NAVIGATION (TABS) ---
-  function setupNavigation() {
-    const navButtons = document.querySelectorAll('.nav-item');
-    navButtons.forEach(btn => {
+    // Navigation Tabs
+    document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => {
-        const targetTab = btn.getAttribute('data-tab');
-        switchTab(targetTab);
+        const tab = btn.getAttribute('data-tab');
+        switchTab(tab);
       });
     });
+
+    // Modals
+    setupModals();
   }
 
   function switchTab(tabId) {
-    state.currentTab = tabId;
+    appState.currentTab = tabId;
 
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
@@ -165,41 +151,154 @@
     const activeView = document.getElementById(`${tabId}View`);
     if (activeView) activeView.classList.remove('hidden');
 
-    renderCurrentTab();
+    renderTabContent();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function renderCurrentTab() {
-    if (state.currentTab === 'tab1') {
+  function renderAllViews() {
+    updateTopBarAndBadges();
+    renderTabContent();
+  }
+
+  function renderTabContent() {
+    if (appState.currentTab === 'tab1') {
       renderBlockStudyScreen();
-    } else if (state.currentTab === 'tab2') {
+    } else if (appState.currentTab === 'tab2') {
       renderCheckpointList();
-    } else if (state.currentTab === 'tab3') {
+    } else if (appState.currentTab === 'tab3') {
       renderErrorBank();
     }
+  }
+
+  function updateTopBarAndBadges() {
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const tData = window.DATA_TRACKS ? window.DATA_TRACKS[tKey] : null;
+
+    // Track Bar Visuals
+    const pptxCard = document.getElementById('btnTrackPPTX');
+    const docxCard = document.getElementById('btnTrackDOCX');
+    if (pptxCard) pptxCard.classList.toggle('active', tKey === 'pptx');
+    if (docxCard) docxCard.classList.toggle('active', tKey === 'docx');
+
+    // PPTX Meta
+    const pptxState = appState.tracks.pptx;
+    const pptxData = window.DATA_TRACKS ? window.DATA_TRACKS.pptx : null;
+    if (pptxData) {
+      const pptxCurrSlide = getFirstSlideOfBlock('pptx', pptxState.currentBlock);
+      const pptxDoneCount = pptxState.completedBlocks.length;
+      document.getElementById('trackPPTXCurr').textContent = `Slayt ${pptxCurrSlide}`;
+      document.getElementById('trackPPTXMeta').textContent = `Slayt ${pptxCurrSlide} / ${pptxData.totalSourceCount} · ${pptxDoneCount}/${pptxData.totalBlocks} Blok`;
+    }
+
+    // DOCX Meta
+    const docxState = appState.tracks.docx;
+    const docxData = window.DATA_TRACKS ? window.DATA_TRACKS.docx : null;
+    if (docxData) {
+      const docxCurrQ = getFirstDocxOfBlock(docxState.currentBlock);
+      const docxDoneCount = docxState.completedBlocks.length;
+      document.getElementById('trackDOCXCurr').textContent = `S.${docxCurrQ}`;
+      document.getElementById('trackDOCXMeta').textContent = `Soru ${docxCurrQ} / ${docxData.totalSourceCount} · ${docxDoneCount}/${docxData.totalBlocks} Blok`;
+    }
+
+    // Header badge
+    const badge = document.getElementById('activeTrackBadge');
+    if (badge) {
+      badge.textContent = tKey === 'pptx' ? 'UHY' : 'GENEL';
+      badge.style.background = tKey === 'pptx' ? 'linear-gradient(135deg, #d97706, #b45309)' : 'linear-gradient(135deg, #0284c7, #2563eb)';
+    }
+
+    const currentBlockNavBadge = document.getElementById('currentBlockNavBadge');
+    if (currentBlockNavBadge) {
+      currentBlockNavBadge.textContent = `Blok ${trackState.currentBlock}`;
+    }
+
+    const globalStatsText = document.getElementById('globalStatsText');
+    if (globalStatsText && tData) {
+      const totalBlocks = tData.totalBlocks;
+      const doneBlocks = trackState.completedBlocks.length;
+      globalStatsText.textContent = `${tData.shortName} · ${doneBlocks}/${totalBlocks} Blok Tamam`;
+    }
+
+    // Bottom badges
+    const cpBadge = document.getElementById('checkpointAvailableBadge');
+    if (cpBadge) {
+      cpBadge.textContent = getUnlockedCheckpointsCount();
+    }
+
+    const errBadge = document.getElementById('errorCountBadge');
+    if (errBadge) {
+      const errCount = trackState.errorBank.length;
+      errBadge.textContent = errCount;
+      errBadge.style.display = errCount > 0 ? 'inline-block' : 'none';
+    }
+
+    const errTotalBadge = document.getElementById('errorTotalBadge');
+    if (errTotalBadge) {
+      errTotalBadge.textContent = `${trackState.errorBank.length} Hata`;
+    }
+  }
+
+  function getFirstSlideOfBlock(trackKey, bId) {
+    if (trackKey !== 'pptx') return 1;
+    const questions = (window.DATA_TRACKS?.pptx?.questions || []).filter(q => q.block_id === bId);
+    return questions.length > 0 ? questions[0].slide_num : 1;
+  }
+
+  function getFirstDocxOfBlock(bId) {
+    const questions = (window.DATA_TRACKS?.docx?.questions || []).filter(q => q.block_id === bId);
+    return questions.length > 0 ? questions[0].docx_num : 1;
+  }
+
+  function getUnlockedCheckpointsCount() {
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    let count = 0;
+    const totalCheckpoints = Object.keys(checkpointQuestionsMap).length;
+    for (let cpId = 1; cpId <= totalCheckpoints; cpId++) {
+      const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+      if (reqBlocks.every(b => trackState.completedBlocks.includes(b))) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  function isCheckpointUnlocked(cpId) {
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+    return reqBlocks.every(b => trackState.completedBlocks.includes(b));
   }
 
   // ==========================================================
   // TAB 1: 10'LUK BLOKLAR (EZBER & TEST SİSTEMİ)
   // ==========================================================
-
-  // Subview A: Ezber & Hafıza Bloğu (Önce Cevaplar)
   function renderBlockStudyScreen() {
     showBlockSubview('blockStudyScreen');
 
-    const bId = state.currentBlock;
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const bId = trackState.currentBlock;
     const questions = blockQuestionsMap[bId] || [];
     const totalBlocks = Object.keys(blockQuestionsMap).length;
 
-    // Set badges
+    // Badges
     document.getElementById('studyBlockBadge').textContent = `BLOK ${bId} / ${totalBlocks}`;
-    const startNum = (bId - 1) * 10 + 1;
-    const endNum = startNum + questions.length - 1;
-    document.getElementById('studyRangeBadge').textContent = `Sorular ${startNum} - ${endNum}`;
+    
+    // Exact Slide / Page Range
+    if (tKey === 'pptx') {
+      const startS = questions.length > 0 ? questions[0].slide_num : 1;
+      const endS = questions.length > 0 ? questions[questions.length - 1].slide_num : startS;
+      document.getElementById('studyRangeBadge').textContent = `Slayt S.${startS} - S.${endS}`;
+    } else {
+      const startD = questions.length > 0 ? questions[0].docx_num : 1;
+      const endD = questions.length > 0 ? questions[questions.length - 1].docx_num : startD;
+      document.getElementById('studyRangeBadge').textContent = `Genel S.${startD} - S.${endD}`;
+    }
 
     const listContainer = document.getElementById('studyQuestionsList');
     listContainer.innerHTML = '';
-
     const letters = ['A', 'B', 'C', 'D'];
 
     questions.forEach((q, idx) => {
@@ -218,9 +317,20 @@
         `;
       });
 
+      // Slide and Page Traceability Label
+      let traceBadge = '';
+      if (tKey === 'pptx') {
+        traceBadge = `📙 ${q.slide_label || 'Slayt S.' + q.slide_num} / 505`;
+        if (q.dup_slides && q.dup_slides.length > 0) {
+          traceBadge += ` (Tekrar: S.${q.dup_slides.join(', S.')})`;
+        }
+      } else {
+        traceBadge = `📘 ${q.docx_label || 'Genel S.' + q.docx_num} / 1095`;
+      }
+
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge">Soru ${idx + 1} (${q.orig_id || '#' + q.id})</span>
+          <span class="q-num-badge">${traceBadge}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -228,27 +338,26 @@
           ${optionsHtml}
         </div>
         <div class="memory-peg-box">
-          ${escapeHtml(q.explanation || 'Bu soru için hafıza çivisi: Doğru cevabı dikkatlice ezberle.')}
+          ${escapeHtml(q.explanation || 'Doğru seçeneği hafızana al.')}
         </div>
       `;
 
       listContainer.appendChild(card);
     });
 
-    // Start Test button
-    const btnStart = document.getElementById('btnStartBlockQuiz');
-    btnStart.onclick = () => {
+    document.getElementById('btnStartBlockQuiz').onclick = () => {
       renderBlockQuizScreen();
     };
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Subview B: 10 Soruluk Test Ekranı
   function renderBlockQuizScreen() {
     showBlockSubview('blockQuizScreen');
 
-    const bId = state.currentBlock;
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const bId = trackState.currentBlock;
     const questions = blockQuestionsMap[bId] || [];
     currentQuizAnswers = {};
 
@@ -257,7 +366,6 @@
 
     const listContainer = document.getElementById('quizQuestionsList');
     listContainer.innerHTML = '';
-
     const letters = ['A', 'B', 'C', 'D'];
 
     questions.forEach((q, idx) => {
@@ -275,9 +383,11 @@
         `;
       });
 
+      const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
+
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge">Soru ${idx + 1} / ${questions.length}</span>
+          <span class="q-num-badge">${traceBadge} · Soru ${idx + 1} / ${questions.length}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -289,7 +399,6 @@
       listContainer.appendChild(card);
     });
 
-    // Attach option click handlers
     listContainer.querySelectorAll('.quiz-opt-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const qId = parseInt(btn.getAttribute('data-qid'), 10);
@@ -297,7 +406,6 @@
 
         currentQuizAnswers[qId] = oIdx;
 
-        // Visual selection
         const siblings = listContainer.querySelectorAll(`.quiz-opt-btn[data-qid="${qId}"]`);
         siblings.forEach(s => s.classList.remove('selected'));
         btn.classList.add('selected');
@@ -309,12 +417,9 @@
       });
     });
 
-    // Submit Quiz Button
-    const btnSubmit = document.getElementById('btnSubmitBlockQuiz');
-    btnSubmit.onclick = () => {
+    document.getElementById('btnSubmitBlockQuiz').onclick = () => {
       const answeredCount = Object.keys(currentQuizAnswers).length;
       if (answeredCount < questions.length) {
-        // Find first unanswered question
         for (let q of questions) {
           if (currentQuizAnswers[q.id] === undefined) {
             const cardEl = document.getElementById(`quizCard_${q.id}`);
@@ -323,13 +428,12 @@
               cardEl.style.borderColor = 'var(--danger)';
               setTimeout(() => { cardEl.style.borderColor = ''; }, 1500);
             }
-            alert(`Cano, henüz cevaplamadığın soru var! (${answeredCount}/${questions.length})`);
+            alert(`Cano, henüz işaretlemediğin sorular var! (${answeredCount}/${questions.length})`);
             break;
           }
         }
         return;
       }
-
       evaluateBlockQuiz(questions);
     };
 
@@ -343,11 +447,12 @@
     if (fillEl) fillEl.style.width = `${(answered / total) * 100}%`;
   }
 
-  // Subview C: Sonuç & Hata İnceleme Ekranı
   function evaluateBlockQuiz(questions) {
     showBlockSubview('blockResultScreen');
 
-    const bId = state.currentBlock;
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const bId = trackState.currentBlock;
     const missed = [];
     const correct = [];
 
@@ -361,16 +466,11 @@
           userAns: userAns,
           correctAns: q.answer
         });
-        // Record into Error Bank
         recordError(q.id, userAns, q.answer, `Blok ${bId}`);
       }
     });
 
-    currentQuizMissedIds = missed.map(m => m.q.id);
-
     const isPerfect = missed.length === 0;
-
-    // Banner rendering
     const banner = document.getElementById('resultBanner');
     const letters = ['A', 'B', 'C', 'D'];
 
@@ -378,30 +478,27 @@
       banner.className = 'result-banner success';
       banner.innerHTML = `
         <div class="result-icon">🎯</div>
-        <h2 class="result-title">Kusursuz! 10/10 Tam İsabet!</h2>
-        <div class="result-score-text">0 Yanlış - Blok ${bId} Başarıyla Tamamlandı!</div>
-        <p class="result-subdesc">Bu blok hafızana tam kilitlendi. Bir sonraki blok seni bekliyor!</p>
+        <h2 class="result-title">10/10 Kusursuz!</h2>
+        <div class="result-score-text">0 Yanlış - Blok ${bId} Başarıyla Kilitlendi!</div>
+        <p class="result-subdesc">Bu 10 sorunun tamamı hafızana çivilendi. Bir sonraki blok seni bekliyor!</p>
       `;
 
-      // Mark block as completed if not already
-      if (!state.completedBlocks.includes(bId)) {
-        state.completedBlocks.push(bId);
-        saveState();
+      if (!trackState.completedBlocks.includes(bId)) {
+        trackState.completedBlocks.push(bId);
+        saveCurrentState();
       }
 
-      // Checkpoint progress note
       const cpId = Math.ceil(bId / 4);
       const cpBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
-      const cpDone = cpBlocks.filter(b => state.completedBlocks.includes(b)).length;
+      const cpDone = cpBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
 
       document.getElementById('mistakesReviewContainer').innerHTML = `
         <div class="memory-peg-box" style="margin-top: 16px;">
           <strong>🎯 Checkpoint ${cpId} İlerlemesi:</strong> ${cpDone}/4 Blok Tamamlandı.<br>
-          ${cpDone === 4 ? '🎉 <strong>Tebrikler!</strong> Bu 4 blok bitti, Checkpoint ' + cpId + ' (40 Soru) Denemesi açıldı!' : 'Kalan ' + (4 - cpDone) + ' blok tamamlanınca ' + cpId + '. Checkpoint (40 Soru) açılacak.'}
+          ${cpDone === 4 ? '🎉 <strong>Tebrikler!</strong> Checkpoint ' + cpId + ' (40 Soru) Denemesi açıldı!' : 'Kalan ' + (4 - cpDone) + ' blok tamamlanınca Checkpoint ' + cpId + ' açılacak.'}
         </div>
       `;
 
-      // Footer button: Go to next block
       const totalBlocks = Object.keys(blockQuestionsMap).length;
       const footerActions = document.getElementById('resultFooterActions');
       if (bId < totalBlocks) {
@@ -411,29 +508,28 @@
           </button>
         `;
         document.getElementById('btnNextBlock').onclick = () => {
-          state.currentBlock = bId + 1;
-          saveState();
+          trackState.currentBlock = bId + 1;
+          saveCurrentState();
           renderBlockStudyScreen();
         };
       } else {
         footerActions.innerHTML = `
           <div class="memory-peg-box" style="text-align: center; width: 100%;">
-            🏆 <strong>TÜM 140 BLOK TAMAMLANDI!</strong> Efsanesin cano!
+            🏆 <strong>TÜM BLOKLAR TAMAMLANDI!</strong> Efsanesin cano!
           </div>
         `;
       }
 
     } else {
-      // Mistakes exist - Enforce 0 Wrong Rule
+      // 0 Wrong Rule
       banner.className = 'result-banner failed';
       banner.innerHTML = `
         <div class="result-icon">⚠️</div>
         <h2 class="result-title">0 Yanlış Kuralı Devrede!</h2>
         <div class="result-score-text">${correct.length} Doğru · ${missed.length} Yanlış</div>
-        <p class="result-subdesc">Bir sonraki bloğa geçebilmek için bu bloktaki tüm yanlışları 0'a indirmen gerekiyor. Aşağıdaki nedenleri incele ve telafi testine başla!</p>
+        <p class="result-subdesc">Bir sonraki bloğa geçebilmek için bu bloktaki tüm yanlışları 0'a indirmen gerekiyor. Nedenleri incele ve telafi testine başla!</p>
       `;
 
-      // Render mistakes review cards (Buradaki Sistem)
       const listContainer = document.getElementById('reviewMistakesList');
       listContainer.innerHTML = '';
 
@@ -441,12 +537,13 @@
         const q = m.q;
         const userOptText = q.options[m.userAns] || 'Boş';
         const correctOptText = q.options[m.correctAns];
+        const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
 
         const card = document.createElement('div');
         card.className = 'mistake-card';
         card.innerHTML = `
           <div class="q-card-header">
-            <span class="q-num-badge" style="color: var(--danger)">Hata #${idx + 1} (${q.orig_id || '#' + q.id})</span>
+            <span class="q-num-badge" style="color: var(--danger)">${traceBadge} · Hata #${idx + 1}</span>
             <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
           </div>
           <div class="q-text">${escapeHtml(q.question)}</div>
@@ -467,7 +564,6 @@
         listContainer.appendChild(card);
       });
 
-      // Footer Button: Retry Mistakes
       const footerActions = document.getElementById('resultFooterActions');
       footerActions.innerHTML = `
         <button class="primary-btn btn-danger" id="btnStartRetryQuiz">
@@ -482,12 +578,12 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Subview D: Hızlı Telafi Testi (Sadece Yanlış Yapılan Sorular)
   function renderBlockRetryScreen(retryQuestions) {
     showBlockSubview('blockRetryScreen');
 
     const letters = ['A', 'B', 'C', 'D'];
     const retryAnswers = {};
+    const tKey = appState.activeTrack;
 
     updateRetryProgress(0, retryQuestions.length);
 
@@ -509,9 +605,11 @@
         `;
       });
 
+      const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
+
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge" style="color: #f87171">Telafi Sorusu ${idx + 1} / ${retryQuestions.length}</span>
+          <span class="q-num-badge" style="color: #f87171">${traceBadge} · Telafi ${idx + 1} / ${retryQuestions.length}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -541,19 +639,16 @@
       });
     });
 
-    const btnSubmitRetry = document.getElementById('btnSubmitRetryQuiz');
-    btnSubmitRetry.onclick = () => {
+    document.getElementById('btnSubmitRetryQuiz').onclick = () => {
       const answeredCount = Object.keys(retryAnswers).length;
       if (answeredCount < retryQuestions.length) {
         alert(`Cano, telafi testindeki tüm soruları işaretlemelisin! (${answeredCount}/${retryQuestions.length})`);
         return;
       }
 
-      // Check answers
       const stillMissed = [];
       retryQuestions.forEach(q => {
         if (retryAnswers[q.id] === q.answer) {
-          // Solved correctly! Remove from error bank
           removeError(q.id);
         } else {
           stillMissed.push(q);
@@ -561,18 +656,16 @@
       });
 
       if (stillMissed.length === 0) {
-        // SUCCESS: All mistakes resolved! Block is complete (0 wrong achieved!)
-        const bId = state.currentBlock;
-        if (!state.completedBlocks.includes(bId)) {
-          state.completedBlocks.push(bId);
-          saveState();
+        const trackState = appState.tracks[tKey];
+        const bId = trackState.currentBlock;
+        if (!trackState.completedBlocks.includes(bId)) {
+          trackState.completedBlocks.push(bId);
+          saveCurrentState();
         }
         alert(`Harika cano! Yanlışların tamamını düzelttin. Blok ${bId} 10/10 ile tamamlandı! 🎉`);
-        
-        // Re-evaluate to show congratulations & advance button
         evaluateBlockQuiz(blockQuestionsMap[bId]);
       } else {
-        alert(`Hala ${stillMissed.length} soruda takıldın. Nedenleri tekrar inceleyip hemen telafi edelim!`);
+        alert(`Hala ${stillMissed.length} soruda takıldın. Hemen telafi edelim!`);
         renderBlockRetryScreen(stillMissed);
       }
     };
@@ -601,6 +694,8 @@
   function renderCheckpointList() {
     showCheckpointSubview('checkpointListScreen');
 
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
     const container = document.getElementById('checkpointCardsContainer');
     container.innerHTML = '';
 
@@ -609,14 +704,21 @@
     for (let cpId = 1; cpId <= totalCheckpoints; cpId++) {
       const questions = checkpointQuestionsMap[cpId] || [];
       const isUnlocked = isCheckpointUnlocked(cpId);
-      const scoreData = state.checkpointScores[cpId];
+      const scoreData = trackState.checkpointScores[cpId];
 
-      const startQ = (cpId - 1) * 40 + 1;
-      const endQ = startQ + questions.length - 1;
+      let rangeLabel = '';
+      if (tKey === 'pptx') {
+        const startS = questions.length > 0 ? questions[0].slide_num : 1;
+        const endS = questions.length > 0 ? questions[questions.length - 1].slide_num : startS;
+        rangeLabel = `Slayt S.${startS} - S.${endS} (${questions.length} Soru)`;
+      } else {
+        const startD = questions.length > 0 ? questions[0].docx_num : 1;
+        const endD = questions.length > 0 ? questions[questions.length - 1].docx_num : startD;
+        rangeLabel = `Genel S.${startD} - S.${endD} (${questions.length} Soru)`;
+      }
 
-      // Calculate block completion progress for this checkpoint
       const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
-      const completedReqBlocks = reqBlocks.filter(b => state.completedBlocks.includes(b)).length;
+      const completedReqBlocks = reqBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
 
       const card = document.createElement('div');
       card.className = `checkpoint-row-card ${isUnlocked ? 'unlocked' : 'locked'}`;
@@ -641,7 +743,7 @@
         <div class="checkpoint-top-meta">
           <div class="checkpoint-title-wrap">
             <h3>${cpId}. Checkpoint</h3>
-            <span class="checkpoint-range-sub">Sorular ${startQ} - ${endQ} (${questions.length} Soru)</span>
+            <span class="checkpoint-range-sub">${rangeLabel}</span>
           </div>
           ${statusBadgeHtml}
         </div>
@@ -651,7 +753,6 @@
       container.appendChild(card);
     }
 
-    // Attach click events
     container.querySelectorAll('.checkpoint-action-btn:not(.disabled)').forEach(btn => {
       btn.addEventListener('click', () => {
         const cpId = parseInt(btn.getAttribute('data-cpid'), 10);
@@ -665,6 +766,7 @@
     currentCheckpointAnswers = {};
     showCheckpointSubview('checkpointQuizScreen');
 
+    const tKey = appState.activeTrack;
     const questions = checkpointQuestionsMap[cpId] || [];
     const letters = ['A', 'B', 'C', 'D'];
 
@@ -689,9 +791,11 @@
         `;
       });
 
+      const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
+
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge">Soru ${idx + 1} / ${questions.length} (${q.orig_id || '#' + q.id})</span>
+          <span class="q-num-badge">${traceBadge} · Soru ${idx + 1} / ${questions.length}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -721,14 +825,12 @@
       });
     });
 
-    // Exit Button
     document.getElementById('btnExitCheckpoint').onclick = () => {
       if (confirm('Denemeden çıkmak istiyor musun? İlerlemen kaydedilmeyecektir.')) {
         renderCheckpointList();
       }
     };
 
-    // Submit Checkpoint
     document.getElementById('btnSubmitCheckpointQuiz').onclick = () => {
       const answeredCount = Object.keys(currentCheckpointAnswers).length;
       if (answeredCount < questions.length) {
@@ -752,6 +854,8 @@
   function evaluateCheckpointQuiz(cpId, questions) {
     showCheckpointSubview('checkpointResultScreen');
 
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
     const letters = ['A', 'B', 'C', 'D'];
     let correctCount = 0;
     const missed = [];
@@ -766,20 +870,18 @@
           userAns: userAns !== undefined ? userAns : -1,
           correctAns: q.answer
         });
-        // Auto log to error bank
         recordError(q.id, userAns, q.answer, `${cpId}. Checkpoint`);
       }
     });
 
-    // Update state score
-    const prevBest = state.checkpointScores[cpId]?.bestScore || 0;
-    state.checkpointScores[cpId] = {
+    const prevBest = trackState.checkpointScores[cpId]?.bestScore || 0;
+    trackState.checkpointScores[cpId] = {
       bestScore: Math.max(prevBest, correctCount),
       total: questions.length,
       lastScore: correctCount,
       date: new Date().toISOString()
     };
-    saveState();
+    saveCurrentState();
 
     const banner = document.getElementById('checkpointResultBanner');
     const percent = Math.round((correctCount / questions.length) * 100);
@@ -793,7 +895,6 @@
       <p class="result-subdesc">${isPass ? 'Harika sonuç! Bilgilerin pekişti.' : 'Biraz daha pratik yapmalısın. Hatalarını incele!'}</p>
     `;
 
-    // Render mistake cards
     const listContainer = document.getElementById('checkpointMistakesReviewList');
     listContainer.innerHTML = '';
 
@@ -807,12 +908,13 @@
         const q = m.q;
         const userOptText = m.userAns >= 0 ? q.options[m.userAns] : 'Boş Bırakıldı';
         const correctOptText = q.options[m.correctAns];
+        const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
 
         const card = document.createElement('div');
         card.className = 'mistake-card';
         card.innerHTML = `
           <div class="q-card-header">
-            <span class="q-num-badge" style="color: var(--danger)">Hata #${idx + 1} (${q.orig_id || '#' + q.id})</span>
+            <span class="q-num-badge" style="color: var(--danger)">${traceBadge} · Hata #${idx + 1}</span>
             <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
           </div>
           <div class="q-text">${escapeHtml(q.question)}</div>
@@ -850,11 +952,12 @@
   }
 
   // ==========================================================
-  // TAB 3: HATA BANKASI (YANLIŞ YAPILAN SORULAR)
+  // TAB 3: HATA BANKASI
   // ==========================================================
   function recordError(qId, userAns, correctAns, source) {
-    // If question already in error bank, update it
-    const existingIdx = state.errorBank.findIndex(e => e.qId === qId);
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    const existingIdx = trackState.errorBank.findIndex(e => e.qId === qId);
     const entry = {
       qId: qId,
       userAns: userAns,
@@ -864,26 +967,29 @@
     };
 
     if (existingIdx >= 0) {
-      state.errorBank[existingIdx] = entry;
+      trackState.errorBank[existingIdx] = entry;
     } else {
-      state.errorBank.unshift(entry);
+      trackState.errorBank.unshift(entry);
     }
-    saveState();
+    saveCurrentState();
   }
 
   function removeError(qId) {
-    state.errorBank = state.errorBank.filter(e => e.qId !== qId);
-    saveState();
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
+    trackState.errorBank = trackState.errorBank.filter(e => e.qId !== qId);
+    saveCurrentState();
   }
 
   function renderErrorBank() {
     const container = document.getElementById('errorBankCardsContainer');
     container.innerHTML = '';
 
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
     const letters = ['A', 'B', 'C', 'D'];
-    const allErrors = state.errorBank;
+    const allErrors = trackState.errorBank;
 
-    // Filter counts
     const blockErrors = allErrors.filter(e => e.source && e.source.startsWith('Blok'));
     const checkpointErrors = allErrors.filter(e => e.source && e.source.includes('Checkpoint'));
 
@@ -898,8 +1004,7 @@
     const actionBar = document.getElementById('errorActionBar');
     if (filtered.length > 0) {
       actionBar.style.display = 'block';
-      const btnDrill = document.getElementById('btnStartErrorDrill');
-      btnDrill.onclick = () => {
+      document.getElementById('btnStartErrorDrill').onclick = () => {
         const errorQuestions = filtered.map(e => questionsById[e.qId]).filter(Boolean);
         switchTab('tab1');
         renderBlockRetryScreen(errorQuestions);
@@ -913,7 +1018,7 @@
         <div class="empty-state-box">
           <div class="empty-icon">🎉</div>
           <h3>Tertemiz Cano!</h3>
-          <p>${allErrors.length === 0 ? 'Şu anda hiç kayıtlı yanlış soru yok. Blokları çözmeye devam et!' : 'Bu filtrede hiç hata bulunmuyor.'}</p>
+          <p>${allErrors.length === 0 ? 'Bu havuzda şu anda hiç kayıtlı hata yok. Blokları çözmeye devam et!' : 'Bu filtrede hata bulunamadı.'}</p>
         </div>
       `;
       return;
@@ -925,6 +1030,7 @@
 
       const userOptText = err.userAns >= 0 && q.options[err.userAns] ? q.options[err.userAns] : 'Boş Bırakıldı';
       const correctOptText = q.options[q.answer];
+      const traceBadge = tKey === 'pptx' ? `📙 Slayt S.${q.slide_num}` : `📘 Genel S.${q.docx_num}`;
 
       const card = document.createElement('div');
       card.className = 'mistake-card';
@@ -932,7 +1038,7 @@
 
       card.innerHTML = `
         <div class="q-card-header">
-          <span class="q-num-badge" style="color: var(--danger)">${escapeHtml(err.source || 'Hata')} · ${q.orig_id || '#' + q.id}</span>
+          <span class="q-num-badge" style="color: var(--danger)">${traceBadge} · ${escapeHtml(err.source || 'Hata')}</span>
           <span class="q-category-tag">${escapeHtml(q.category || 'Dispeç')}</span>
         </div>
         <div class="q-text">${escapeHtml(q.question)}</div>
@@ -959,7 +1065,6 @@
       container.appendChild(card);
     });
 
-    // Attach mini retry handlers
     container.querySelectorAll('button[data-retry-qid]').forEach(btn => {
       btn.addEventListener('click', () => {
         const qId = parseInt(btn.getAttribute('data-retry-qid'), 10);
@@ -971,7 +1076,6 @@
       });
     });
 
-    // Chip filter handlers
     document.querySelectorAll('.filter-chips-row .chip').forEach(chip => {
       chip.onclick = () => {
         document.querySelectorAll('.filter-chips-row .chip').forEach(c => c.classList.remove('active'));
@@ -983,76 +1087,131 @@
   }
 
   // ==========================================================
-  // MODALS (BLOCK PICKER & SETTINGS)
+  // MODALS (SYNC / SAVE, BLOCK PICKER & SETTINGS)
   // ==========================================================
   function setupModals() {
-    // Block Picker
-    const btnBlockPicker = document.getElementById('btnBlockPicker');
-    const blockPickerModal = document.getElementById('blockPickerModal');
-    const btnCloseBlockPicker = document.getElementById('btnCloseBlockPicker');
+    // 1. SYNC / SAVE MODAL
+    const syncModal = document.getElementById('syncModal');
+    document.getElementById('btnSyncModal').onclick = () => {
+      syncModal.classList.remove('hidden');
+    };
+    document.getElementById('btnCloseSync').onclick = () => {
+      syncModal.classList.add('hidden');
+    };
+    syncModal.onclick = (e) => {
+      if (e.target === syncModal) syncModal.classList.add('hidden');
+    };
 
-    btnBlockPicker.onclick = () => {
+    // Copy Save Code
+    document.getElementById('btnCopySaveCode').onclick = () => {
+      const code = JSON.stringify(appState);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(() => {
+          alert('Save kodu kopyalandı cano! Bu kodu gece Antigravity sohbetine yapıştırabilirsin.');
+        }).catch(() => {
+          prompt('Save kodun burada, kopyalayabilirsin:', code);
+        });
+      } else {
+        prompt('Save kodun burada, kopyalayabilirsin:', code);
+      }
+    };
+
+    // Download Save File
+    document.getElementById('btnDownloadSaveFile').onclick = () => {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `uhy_dispec_save_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    // Apply / Import Save Code
+    document.getElementById('btnApplySaveCode').onclick = () => {
+      const val = document.getElementById('importSaveInput').value.trim();
+      if (!val) {
+        alert('Lütfen geçerli bir save kodu yapıştır cano!');
+        return;
+      }
+      try {
+        const parsed = JSON.parse(val);
+        if (parsed && parsed.tracks) {
+          appState = parsed;
+          saveCurrentState();
+          setupTrackData();
+          renderAllViews();
+          syncModal.classList.add('hidden');
+          alert('İlerleme başarıyla yüklendi! Kaldığın yerden tam gaz devam.');
+        } else {
+          alert('Geçersiz save kodu formatı.');
+        }
+      } catch (e) {
+        alert('Kod okunamadı. Lütfen tam kopyaladığından emin ol.');
+      }
+    };
+
+    // 2. BLOCK PICKER MODAL
+    const blockPickerModal = document.getElementById('blockPickerModal');
+    document.getElementById('btnBlockPicker').onclick = () => {
       renderBlockGrid();
       blockPickerModal.classList.remove('hidden');
     };
-
-    btnCloseBlockPicker.onclick = () => {
+    document.getElementById('btnCloseBlockPicker').onclick = () => {
       blockPickerModal.classList.add('hidden');
     };
-
     blockPickerModal.onclick = (e) => {
       if (e.target === blockPickerModal) blockPickerModal.classList.add('hidden');
     };
 
-    // Settings Modal
-    const btnSettings = document.getElementById('btnSettings');
+    // 3. SETTINGS MODAL
     const settingsModal = document.getElementById('settingsModal');
-    const btnCloseSettings = document.getElementById('btnCloseSettings');
-
-    btnSettings.onclick = () => {
+    document.getElementById('btnSettings').onclick = () => {
       settingsModal.classList.remove('hidden');
     };
-
-    btnCloseSettings.onclick = () => {
+    document.getElementById('btnCloseSettings').onclick = () => {
       settingsModal.classList.add('hidden');
     };
-
     settingsModal.onclick = (e) => {
       if (e.target === settingsModal) settingsModal.classList.add('hidden');
     };
 
-    // Reset All Progress
-    const btnReset = document.getElementById('btnResetAllProgress');
-    btnReset.onclick = () => {
-      if (confirm('DİKKAT! Tüm tamamlanan bloklar, puanlar ve hata bankası sıfırlanacaktır. Emin misin cano?')) {
-        state = {
-          completedBlocks: [],
+    // Reset Track Progress
+    document.getElementById('btnResetTrackProgress').onclick = () => {
+      const tKey = appState.activeTrack;
+      if (confirm(`DİKKAT! ${tKey === 'pptx' ? 'UHY Dispeç' : 'Genel Sorular'} havuzundaki ilerlemen sıfırlanacaktır. Emin misin cano?`)) {
+        appState.tracks[tKey] = {
           currentBlock: 1,
+          completedBlocks: [],
           checkpointScores: {},
-          errorBank: [],
-          currentTab: 'tab1'
+          errorBank: []
         };
-        saveState();
+        saveCurrentState();
         settingsModal.classList.add('hidden');
-        switchTab('tab1');
-        alert('Tüm ilerleme sıfırlandı. 1. Bloktan tertemiz başlıyorsun!');
+        renderAllViews();
+        alert('Bu havuz 1. bloktan itibaren sıfırlandı.');
       }
     };
   }
 
   function renderBlockGrid() {
+    const tKey = appState.activeTrack;
+    const trackState = appState.tracks[tKey];
     const grid = document.getElementById('blockPickerGrid');
     grid.innerHTML = '';
 
     const totalBlocks = Object.keys(blockQuestionsMap).length;
+    document.getElementById('blockPickerTitle').textContent = `${tKey === 'pptx' ? 'UHY Dispeç' : 'Genel Sorular'} (${totalBlocks} Blok)`;
 
     for (let bId = 1; bId <= totalBlocks; bId++) {
       const btn = document.createElement('button');
       btn.className = 'block-grid-btn';
       btn.textContent = bId;
 
-      const isCompleted = state.completedBlocks.includes(bId);
-      const isCurrent = state.currentBlock === bId;
+      const isCompleted = trackState.completedBlocks.includes(bId);
+      const isCurrent = trackState.currentBlock === bId;
 
       if (isCompleted) {
         btn.classList.add('completed');
@@ -1061,17 +1220,16 @@
       }
 
       btn.onclick = () => {
-        state.currentBlock = bId;
-        saveState();
+        trackState.currentBlock = bId;
+        saveCurrentState();
         document.getElementById('blockPickerModal').classList.add('hidden');
-        switchTab('tab1');
+        renderBlockStudyScreen();
       };
 
       grid.appendChild(btn);
     }
   }
 
-  // --- UTILITY ---
   function escapeHtml(str) {
     if (!str) return '';
     return String(str)
