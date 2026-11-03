@@ -285,7 +285,7 @@
 
   function renderTabContent() {
     if (appState.currentTab === 'tab1') {
-      renderBlockStudyScreen();
+      renderBlockQuizScreen();
     } else if (appState.currentTab === 'tab2') {
       renderCheckpointList();
     } else if (appState.currentTab === 'tab3') {
@@ -645,7 +645,7 @@
       document.getElementById('btnNextBlock').onclick = () => {
         trackState.currentBlock = bId + 1;
         saveCurrentState();
-        renderBlockStudyScreen();
+        renderBlockQuizScreen();
       };
     } else {
       footerActions.innerHTML = `
@@ -1386,7 +1386,7 @@ const bQCount = (blockQuestionsMap[bId] || []).length || (tKey === 'pptx' ? 25 :
         trackState.currentBlock = bId;
         saveCurrentState();
         document.getElementById('blockPickerModal').classList.add('hidden');
-        renderBlockStudyScreen();
+        renderBlockQuizScreen();
       };
 
       grid.appendChild(btn);

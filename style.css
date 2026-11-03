@@ -540,6 +540,8 @@ body {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-main);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   font-family: var(--font-sans);
   font-size: 13.5px;
   line-height: 1.45;
@@ -1063,8 +1065,13 @@ body {
   padding: 16px;
 }
 
-.modal-overlay.hidden {
-  display: none;
+.modal-overlay.hidden,
+div.modal-overlay.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  z-index: -9999 !important;
 }
 
 .modal-card {
