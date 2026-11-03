@@ -19,8 +19,8 @@
     currentTab: 'tab1',  // 'tab1', 'tab2', 'tab3'
     tracks: {
       pptx: {
-        currentBlock: 8,
-        completedBlocks: [1, 2, 3, 4, 5, 6, 7],
+        currentBlock: 4, // 25'lik blok yapisinda Slayt 77-101 (Slayt 80 burada yer alir)
+        completedBlocks: [1, 2, 3], // 1-3 bloklar tamamlandi (Slayt 2-76)
         checkpointScores: {},
         errorBank: []
       },
@@ -103,6 +103,16 @@
               );
             }
           });
+
+          // 25-Question Block Migration for PPTX:
+          if (appState.tracks.pptx) {
+            if (appState.tracks.pptx.currentBlock > 20) {
+              appState.tracks.pptx.currentBlock = 4;
+            }
+            if (Array.isArray(appState.tracks.pptx.completedBlocks)) {
+              appState.tracks.pptx.completedBlocks = appState.tracks.pptx.completedBlocks.filter(b => b <= 20);
+            }
+          }
         }
       }
     } catch (e) {
@@ -306,6 +316,20 @@
       currentBlockNavBadge.textContent = `Blok ${trackState.currentBlock}`;
     }
 
+    // Dynamic Navigation Tab 1 Label
+    const navTab1Label = document.querySelector('#navTab1 .nav-label');
+    if (navTab1Label) {
+      navTab1Label.textContent = tKey === 'pptx' ? "25'lik Bloklar" : "10'luk Bloklar";
+    }
+
+    // Dynamic Hero Description in Study Screen
+    const studyHeroDesc = document.querySelector('#blockStudyScreen .hero-desc');
+    if (studyHeroDesc) {
+      const bQuestions = blockQuestionsMap[trackState.currentBlock] || [];
+      const qCount = bQuestions.length || (tKey === 'pptx' ? 25 : 10);
+      studyHeroDesc.innerHTML = `Önce ${qCount} sorunun doğru şıklarını ve 💡 <strong>Hafıza Çivilerini</strong> zihnine kazı. Hazır olunca teste başla!`;
+    }
+
     // Bottom badges
     const cpBadge = document.getElementById('checkpointAvailableBadge');
     if (cpBadge) {
@@ -336,13 +360,20 @@
     return questions.length > 0 ? questions[0].docx_num : 1;
   }
 
+  function getRequiredBlocksForCheckpoint(tKey, cpId) {
+    if (tKey === 'pptx') {
+      return [cpId * 2 - 1, cpId * 2]; // Her 2 blok (50 soru) = 1 Checkpoint
+    }
+    return [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4]; // 4 blok (40 soru) = 1 Checkpoint
+  }
+
   function getUnlockedCheckpointsCount() {
     const tKey = appState.activeTrack;
     const trackState = appState.tracks[tKey];
     let count = 0;
     const totalCheckpoints = Object.keys(checkpointQuestionsMap).length;
     for (let cpId = 1; cpId <= totalCheckpoints; cpId++) {
-      const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+      const reqBlocks = getRequiredBlocksForCheckpoint(tKey, cpId);
       if (reqBlocks.every(b => trackState.completedBlocks.includes(b))) {
         count++;
       }
@@ -353,7 +384,7 @@
   function isCheckpointUnlocked(cpId) {
     const tKey = appState.activeTrack;
     const trackState = appState.tracks[tKey];
-    const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+    const reqBlocks = getRequiredBlocksForCheckpoint(tKey, cpId);
     return reqBlocks.every(b => trackState.completedBlocks.includes(b));
   }
 
@@ -428,9 +459,14 @@
       listContainer.appendChild(card);
     });
 
-    document.getElementById('btnStartBlockQuiz').onclick = () => {
-      renderBlockQuizScreen();
-    };
+    const btnStart = document.getElementById('btnStartBlockQuiz');
+    if (btnStart) {
+      const btnText = btnStart.querySelector('.btn-text');
+      if (btnText) btnText.textContent = `Soruları Ver / Teste Başla (${questions.length} Soru) 🚀`;
+      btnStart.onclick = () => {
+        renderBlockQuizScreen();
+      };
+    }
 
     safeScrollToTop();
   }
@@ -564,6 +600,8 @@
 
     const tKey = appState.activeTrack;
     const trackState = appState.tracks[tKey];
+    const questions = blockQuestionsMap[bId] || [];
+    const totalQ = questions.length || (tKey === 'pptx' ? 25 : 10);
 
     if (!trackState.completedBlocks.includes(bId)) {
       trackState.completedBlocks.push(bId);
@@ -574,19 +612,21 @@
     banner.className = 'result-banner success';
     banner.innerHTML = `
       <div class="result-icon">🎯</div>
-      <h2 class="result-title">10/10 Kusursuz!</h2>
+      <h2 class="result-title">${totalQ}/${totalQ} Kusursuz!</h2>
       <div class="result-score-text">0 Yanlış - Blok ${bId} Başarıyla Kilitlendi!</div>
-      <p class="result-subdesc">Bu 10 sorunun tamamı hafızana çivilendi. Bir sonraki blok seni bekliyor!</p>
+      <p class="result-subdesc">Bu ${totalQ} sorunun tamamı hafızana çivilendi. Bir sonraki blok seni bekliyor!</p>
     `;
 
-    const cpId = Math.ceil(bId / 4);
-    const cpBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+    const cpBlocksPerCheckpoint = tKey === 'pptx' ? 2 : 4;
+    const cpQuestionsCount = tKey === 'pptx' ? 50 : 40;
+    const cpId = Math.ceil(bId / cpBlocksPerCheckpoint);
+    const cpBlocks = getRequiredBlocksForCheckpoint(tKey, cpId);
     const cpDone = cpBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
 
     document.getElementById('mistakesReviewContainer').innerHTML = `
       <div class="memory-peg-box" style="margin-top: 16px;">
-        <strong>🎯 Checkpoint ${cpId} İlerlemesi:</strong> ${cpDone}/4 Blok Tamamlandı.<br>
-        ${cpDone === 4 ? '🎉 <strong>Tebrikler!</strong> Checkpoint ' + cpId + ' (40 Soru) Denemesi açıldı!' : 'Kalan ' + (4 - cpDone) + ' blok tamamlanınca Checkpoint ' + cpId + ' açılacak.'}
+        <strong>🎯 Checkpoint ${cpId} İlerlemesi:</strong> ${cpDone}/${cpBlocksPerCheckpoint} Blok Tamamlandı.<br>
+        ${cpDone === cpBlocksPerCheckpoint ? '🎉 <strong>Tebrikler!</strong> Checkpoint ' + cpId + ' (' + cpQuestionsCount + ' Soru) Denemesi açıldı!' : 'Kalan ' + (cpBlocksPerCheckpoint - cpDone) + ' blok tamamlanınca Checkpoint ' + cpId + ' açılacak.'}
       </div>
     `;
 
@@ -595,7 +635,7 @@
     if (bId < totalBlocks) {
       footerActions.innerHTML = `
         <button class="primary-btn btn-cta" id="btnNextBlock">
-          <span>Sonraki Bloğa Geç (Blok ${bId + 1}) ➡️</span>
+          <span>Sonraki Bloğa Geç (Blok ${bId + 1}) ➔</span>
         </button>
       `;
       document.getElementById('btnNextBlock').onclick = () => {
@@ -762,7 +802,8 @@
         if (retryContext === 'block') {
           const trackState = appState.tracks[tKey];
           const bId = trackState.currentBlock;
-          alert(`Harika cano! Yanlışların tamamını düzelttin. Blok ${bId} 10/10 ile tamamlandı! 🎉`);
+const bQCount = (blockQuestionsMap[bId] || []).length || (tKey === 'pptx' ? 25 : 10);
+          alert(Harika cano! Yanlışların tamamını düzelttin. Blok  / ile tamamlandı! 🎯);
           showBlockSuccess(bId);
         } else {
           alert('Harika cano! Seçili tüm hataları başarıyla temizledin! 🎉');
@@ -821,7 +862,9 @@
         rangeLabel = `Genel S.${startD} - S.${endD} (${questions.length} Soru)`;
       }
 
-      const reqBlocks = [cpId * 4 - 3, cpId * 4 - 2, cpId * 4 - 1, cpId * 4];
+      const reqBlocks = getRequiredBlocksForCheckpoint(tKey, cpId);
+      const totalReqBlocks = reqBlocks.length;
+      const maxScore = questions.length || (tKey === 'pptx' ? 50 : 40);
       const completedReqBlocks = reqBlocks.filter(b => trackState.completedBlocks.includes(b)).length;
 
       const card = document.createElement('div');
@@ -832,15 +875,15 @@
 
       if (isUnlocked) {
         if (scoreData) {
-          statusBadgeHtml = `<span class="checkpoint-status-badge done">En İyi: ${scoreData.bestScore}/40 (%${Math.round((scoreData.bestScore/40)*100)})</span>`;
+          statusBadgeHtml = `<span class="checkpoint-status-badge done">En İyi: ${scoreData.bestScore}/${maxScore} (%${Math.round((scoreData.bestScore/maxScore)*100)})</span>`;
           actionBtnHtml = `<button class="checkpoint-action-btn" data-cpid="${cpId}">Tekrar Çöz (${questions.length} Soru) 🔄</button>`;
         } else {
           statusBadgeHtml = `<span class="checkpoint-status-badge available">Çözülmeye Hazır</span>`;
-          actionBtnHtml = `<button class="checkpoint-action-btn" data-cpid="${cpId}">40'lık Denemeyi Başlat 🚀</button>`;
+          actionBtnHtml = `<button class="checkpoint-action-btn" data-cpid="${cpId}">${maxScore}'lik Denemeyi Başlat 🚀</button>`;
         }
       } else {
-        statusBadgeHtml = `<span class="checkpoint-status-badge locked">🔒 Kilitli (${completedReqBlocks}/4 Blok)</span>`;
-        actionBtnHtml = `<button class="checkpoint-action-btn disabled" disabled>Blok ${reqBlocks[0]}-${reqBlocks[3]}'ü Tamamla</button>`;
+        statusBadgeHtml = `<span class="checkpoint-status-badge locked">🔒 Kilitli (${completedReqBlocks}/${totalReqBlocks} Blok)</span>`;
+        actionBtnHtml = `<button class="checkpoint-action-btn disabled" disabled>Blok ${reqBlocks[0]}-${reqBlocks[reqBlocks.length - 1]}'ü Tamamla</button>`;
       }
 
       card.innerHTML = `
@@ -1109,6 +1152,12 @@
     document.getElementById('chipBlockCount').textContent = blockErrors.length;
     document.getElementById('chipCheckpointCount').textContent = checkpointErrors.length;
 
+    const chipBlockBtn = document.querySelector('.filter-chips-row button[data-filter="block"]');
+    if (chipBlockBtn) {
+      const blockLabel = tKey === 'pptx' ? "25'lik Blok Hataları" : "10'luk Blok Hataları";
+      chipBlockBtn.innerHTML = `${blockLabel} (<span id="chipBlockCount">${blockErrors.length}</span>)`;
+    }
+
     let filtered = allErrors;
     if (errorFilter === 'block') filtered = blockErrors;
     else if (errorFilter === 'checkpoint') filtered = checkpointErrors;
@@ -1317,6 +1366,8 @@
       const btn = document.createElement('button');
       btn.className = 'block-grid-btn';
       btn.textContent = bId;
+      const bQuestions = blockQuestionsMap[bId] || [];
+      btn.title = `Blok ${bId}: ${bQuestions.length} Soru`;
 
       const isCompleted = trackState.completedBlocks.includes(bId);
       const isCurrent = trackState.currentBlock === bId;

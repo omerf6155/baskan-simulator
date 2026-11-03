@@ -1,4 +1,4 @@
-// KAPADOKYA UHY DISPEÇER ÇİFT HAVUZLU ÇALIŞMA SİSTEMİ
+// KAPADOKYA UHY DİSPEÇER ÇİFT HAVUZLU ÇALIŞMA SİSTEMİ
 window.DATA_TRACKS = {
  "pptx": {
   "trackKey": "pptx",
@@ -6,8 +6,8 @@ window.DATA_TRACKS = {
   "shortName": "UHY Dispeç",
   "totalSourceCount": 505,
   "totalUniqueCount": 496,
-  "totalBlocks": 50,
-  "totalCheckpoints": 13,
+  "totalBlocks": 20,
+  "totalCheckpoints": 10,
   "savedQuestionNum": 80,
   "savedIndex": 78,
   "savedBlock": 8,
@@ -227,7 +227,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 5 km",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -246,7 +246,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 9/M02",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -265,7 +265,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Troposfer",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -284,7 +284,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Güneyden kuzeye doğru yüksekliği azalır",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -303,7 +303,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Meydanın yüksekliği",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -322,7 +322,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Bir hava kütlesinin doygunluğa ulaşması için soğutulması gereken sıcaklık",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -341,7 +341,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> INS/GPS/VOR",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -362,7 +362,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Precision Approach",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -381,7 +381,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> MDA(h)",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -400,7 +400,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> GS",
-    "block_id": 2,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -419,7 +419,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> CAS",
-    "block_id": 3,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -438,7 +438,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 0",
-    "block_id": 3,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -457,7 +457,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Deviation",
-    "block_id": 3,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -476,7 +476,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> DA(h)",
-    "block_id": 3,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -495,7 +495,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Variation",
-    "block_id": 3,
+    "block_id": 1,
     "checkpoint_id": 1
    },
    {
@@ -514,7 +514,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Azalır",
-    "block_id": 3,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -533,7 +533,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> AIP",
-    "block_id": 3,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -552,7 +552,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Altitude",
-    "block_id": 3,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -571,7 +571,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Height",
-    "block_id": 3,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -590,7 +590,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Class E",
-    "block_id": 3,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -609,7 +609,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Danger area",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -628,7 +628,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Restricted area",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -647,7 +647,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Track",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -666,7 +666,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçak kaçırılması durumu",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -687,7 +687,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Air traffic control service",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -706,7 +706,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Communication Failure",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -725,7 +725,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> unsable fuel ve traffic load",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -744,7 +744,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> LM = TOM - Trip Fuel",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -763,7 +763,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Zero Fuel Mass - Dry Operating Mass",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -782,7 +782,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dry operating mass",
-    "block_id": 4,
+    "block_id": 2,
     "checkpoint_id": 1
    },
    {
@@ -801,8 +801,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Crew and crew baggage, catering, removable passenger service equipment, potable water and lavatory chemicals",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 42,
@@ -820,8 +820,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Referance line",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 43,
@@ -839,8 +839,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Mean Aerodynamic Chord",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 44,
@@ -858,8 +858,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Maximum Zero Fuel Weight (MZFW)",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 45,
@@ -877,8 +877,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Kabin basıncı sınırlamaları",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 46,
@@ -896,8 +896,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Devlet-Meydan",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 47,
@@ -915,8 +915,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Annex 17",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 48,
@@ -934,8 +934,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Güvenlik el kitabı",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 49,
@@ -953,8 +953,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sabotaj",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 50,
@@ -972,8 +972,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Mümkün olduğunca sesli bir şekilde iş arkadaşlarının dikkatini dağıtmak",
-    "block_id": 5,
-    "checkpoint_id": 2
+    "block_id": 2,
+    "checkpoint_id": 1
    },
    {
     "id": 51,
@@ -991,7 +991,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Teröristler için riskler çok fazladır",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1010,7 +1010,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> IATA Güvenlik Kılavuzu",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1029,7 +1029,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Tokyo Sözleşmesi",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1048,7 +1048,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lahey Sözleşmesi",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1067,7 +1067,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Montreal Sözleşmesi",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1086,7 +1086,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Chicago",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1105,7 +1105,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Develop principles and techniques for international aviation",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1124,7 +1124,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Standarts and recommended international practices for contracting member states",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1143,7 +1143,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The Counsil",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1164,7 +1164,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Warsaw Convention",
-    "block_id": 6,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1183,7 +1183,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 5th freedom rights",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1202,7 +1202,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2nd freedom",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1221,7 +1221,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The Tokyo Convention",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1240,7 +1240,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: limitation of the operator's responsibility, passenger and goods transported",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1259,7 +1259,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ECAC",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1278,7 +1278,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Slightly high",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1297,7 +1297,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Maturity Period",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1316,7 +1316,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> B747",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1335,7 +1335,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lift",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1354,7 +1354,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lateral",
-    "block_id": 7,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1373,7 +1373,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 8",
-    "block_id": 8,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1392,7 +1392,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Runway threshold markings",
-    "block_id": 8,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1411,7 +1411,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Red",
-    "block_id": 8,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1430,7 +1430,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Touchdown zone lights",
-    "block_id": 8,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1449,7 +1449,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 900 mt",
-    "block_id": 8,
+    "block_id": 3,
     "checkpoint_id": 2
    },
    {
@@ -1468,7 +1468,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 03R/21L inişe açıktır",
-    "block_id": 8,
+    "block_id": 4,
     "checkpoint_id": 2
    },
    {
@@ -1487,7 +1487,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Contengency yakıt",
-    "block_id": 8,
+    "block_id": 4,
     "checkpoint_id": 2
    },
    {
@@ -1506,7 +1506,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Magnetic Course",
-    "block_id": 8,
+    "block_id": 4,
     "checkpoint_id": 2
    },
    {
@@ -1525,7 +1525,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> NOTAM",
-    "block_id": 8,
+    "block_id": 4,
     "checkpoint_id": 2
    },
    {
@@ -1544,7 +1544,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ZZZZ",
-    "block_id": 8,
+    "block_id": 4,
     "checkpoint_id": 2
    },
    {
@@ -1563,8 +1563,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> IFR ardından VFR",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 82,
@@ -1582,8 +1582,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1,2,3,4",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 83,
@@ -1601,8 +1601,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Tahmini off-block zamanını",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 84,
@@ -1620,8 +1620,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TAS",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 85,
@@ -1639,8 +1639,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ROMEO/N0120F085",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 86,
@@ -1658,8 +1658,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Maximum take-off weight",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 87,
@@ -1677,8 +1677,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> N",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 88,
@@ -1696,8 +1696,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> EDDM0215",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 89,
@@ -1715,8 +1715,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: The Commander and the Operations Officer/ Flight Dispatcher (where applicable)",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 90,
@@ -1734,8 +1734,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The Operations Manual",
-    "block_id": 9,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 91,
@@ -1753,8 +1753,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: The ICAO document entitled \"Technical Instructions for the safe transport of dangerous goods by air\"",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 92,
@@ -1772,8 +1772,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: The shipper when completing the shipper's declaration for dangerous goods",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 93,
@@ -1791,8 +1791,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ICAO Annex 18",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 94,
@@ -1810,8 +1810,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> air operator certificate",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 95,
@@ -1829,8 +1829,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> English",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 96,
@@ -1848,8 +1848,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Shall",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 97,
@@ -1867,8 +1867,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: The IATA DGR is more restrictive than the ICAO Technical Instructions",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 98,
@@ -1886,8 +1886,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 24 months",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 99,
@@ -1905,8 +1905,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Permitted in or as checked baggage",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 100,
@@ -1924,8 +1924,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> the prevention and/or the removal of stress",
-    "block_id": 10,
-    "checkpoint_id": 3
+    "block_id": 4,
+    "checkpoint_id": 2
    },
    {
     "id": 101,
@@ -1943,7 +1943,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: biological characteristics, social environment and cultural influences",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -1962,7 +1962,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Liveware – Hardware",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -1981,7 +1981,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> It reduces the ability to manage multiple matters",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2000,7 +2000,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: a mechanism by which an individual can respond to situations which he/she may have to face",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2019,7 +2019,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1, 2, 3 and 4 are correct",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2038,7 +2038,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Body temperature",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2057,7 +2057,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sleep",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2076,7 +2076,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Environment element of Shell model",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2095,7 +2095,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Leads to degraded performance",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2114,7 +2114,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Konveksiyon",
-    "block_id": 11,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2133,7 +2133,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Buz kristalleri",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2152,7 +2152,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: İrtifa veya konum değişiklikleri meydana gelir ancak uçak her zaman pozitif kontrolde kalır",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2171,7 +2171,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Soğuk cephe",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2190,7 +2190,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Meteorolojik görüş genellikle RVR’dan düşüktür",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2209,7 +2209,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yoğun fırtına bulutları",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2228,7 +2228,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2 kapalılık",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2247,7 +2247,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Significant weather chart",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2266,7 +2266,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> OCNL CB",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2285,7 +2285,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Cumulonimbus",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2304,7 +2304,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Mesafe",
-    "block_id": 12,
+    "block_id": 5,
     "checkpoint_id": 3
    },
    {
@@ -2323,8 +2323,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yükseklik(height) bilgisi verir",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 5,
+    "checkpoint_id": 3
    },
    {
     "id": 122,
@@ -2342,8 +2342,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> MEA",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 5,
+    "checkpoint_id": 3
    },
    {
     "id": 123,
@@ -2361,8 +2361,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> MCA",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 5,
+    "checkpoint_id": 3
    },
    {
     "id": 124,
@@ -2380,8 +2380,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> İnner marker",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 5,
+    "checkpoint_id": 3
    },
    {
     "id": 125,
@@ -2399,8 +2399,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> MRA",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 5,
+    "checkpoint_id": 3
    },
    {
     "id": 126,
@@ -2420,8 +2420,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> LLZ / GS / MARKERS / ALS",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 127,
@@ -2439,8 +2439,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yön bulmaya yarar",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 128,
@@ -2458,8 +2458,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2000 – 1000",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 129,
@@ -2477,8 +2477,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yansımazlar – Etkilenirler – Etkilenmezler",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 130,
@@ -2496,8 +2496,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 290 – 310 – 330 – 350",
-    "block_id": 13,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 131,
@@ -2515,8 +2515,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 300 – 320 – 340 – 360",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 132,
@@ -2534,8 +2534,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> RNP",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 133,
@@ -2553,8 +2553,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2000 feet",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 134,
@@ -2572,8 +2572,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Üzerinde uçuş yapılması yasak hava sahası",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 135,
@@ -2591,8 +2591,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> H Serisi",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 136,
@@ -2610,8 +2610,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> A serisi",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 137,
@@ -2629,8 +2629,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Trigger NOTAM",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 138,
@@ -2648,8 +2648,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> İlgilendirdiği trafiği",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 139,
@@ -2667,8 +2667,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: a structural limit which may not be exceeded for any take - off",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 140,
@@ -2686,8 +2686,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> A decrease in range",
-    "block_id": 14,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 141,
@@ -2705,8 +2705,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> usable fuel and traffic load",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 142,
@@ -2724,8 +2724,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dry Operating Mass",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 143,
@@ -2743,8 +2743,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The take-off mass minus the take-off fuel mass",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 144,
@@ -2762,8 +2762,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dry Operating Mass plus the traffic load",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 145,
@@ -2781,8 +2781,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Zero Fuel Mass minus Dry Operating Mass",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 146,
@@ -2800,8 +2800,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Dry Operating Mass plus take-off fuel and the traffic load",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 147,
@@ -2819,8 +2819,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: avoid unplanned centre of gravity movement and aircraft damage",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 148,
@@ -2838,8 +2838,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> decrease in range",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 149,
@@ -2857,8 +2857,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Montreal Protokolü",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 150,
@@ -2876,8 +2876,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lahey Sözleşmesi",
-    "block_id": 15,
-    "checkpoint_id": 4
+    "block_id": 6,
+    "checkpoint_id": 3
    },
    {
     "id": 151,
@@ -2895,7 +2895,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Tokyo Sözleşmesi",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -2914,7 +2914,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> İçişleri Bakanlığı",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -2933,7 +2933,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Hemen müdahale edilerek eylemlerine son verilmeye çalışılır",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -2952,7 +2952,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: the baggage must be placed in a secure and isolated area in case it contains explosive devices",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -2971,7 +2971,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 7600",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -2990,7 +2990,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: It is a trade association of aviation operators and others involved with international aviation",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -3009,7 +3009,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Domestic air services by an operator within another State",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -3028,7 +3028,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Rome",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -3047,7 +3047,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The authority of State of Registration",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -3066,7 +3066,7 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> PAN",
-    "block_id": 16,
+    "block_id": 7,
     "checkpoint_id": 4
    },
    {
@@ -3085,8 +3085,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Aircraft can only be registered in one country",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 162,
@@ -3104,8 +3104,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Air Traffic Flow Management in Europe",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 163,
@@ -3123,8 +3123,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The right to overfly without landing",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 164,
@@ -3142,8 +3142,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The State of Registration",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 165,
@@ -3161,8 +3161,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Outer marker",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 166,
@@ -3180,8 +3180,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Cat II and Cat III",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 167,
@@ -3199,8 +3199,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> A",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 168,
@@ -3218,8 +3218,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Localizer",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 169,
@@ -3237,8 +3237,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> George Cayley",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 170,
@@ -3256,8 +3256,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 31L",
-    "block_id": 17,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 171,
@@ -3275,8 +3275,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> NDB",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 172,
@@ -3294,8 +3294,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Ailerons",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 173,
@@ -3313,8 +3313,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Localizer",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 174,
@@ -3332,8 +3332,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: The RVR and cloud ceiling at the departure aerodrome is below minima",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 175,
@@ -3351,8 +3351,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: The flight can be safely completed with a reserve for contingencies",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 7,
+    "checkpoint_id": 4
    },
    {
     "id": 176,
@@ -3370,8 +3370,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Operations staff and flight crew, and specific to aircraft type",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 177,
@@ -3389,8 +3389,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> All of the above",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 178,
@@ -3408,8 +3408,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Callsign, Position, Time, Level, Next position, and ETA",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 179,
@@ -3427,8 +3427,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ATC – ATIS – VOLMET",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 180,
@@ -3446,8 +3446,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 4 ve 7",
-    "block_id": 18,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 181,
@@ -3465,8 +3465,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Hassas olmayan yaklaşmada veya turlu yaklaşmada gerekli görsel referanslar sağlanmadan altına inilemeyecek belirli irtifa veya yükseklik",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 182,
@@ -3484,8 +3484,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> In an emergency",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 183,
@@ -3503,8 +3503,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçuş başlamayabilir",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 184,
@@ -3522,8 +3522,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Danger area",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 185,
@@ -3541,8 +3541,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Tekerlekler toplandığında",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 186,
@@ -3560,8 +3560,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Take-off karar hızı",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 187,
@@ -3579,8 +3579,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Take-off tırmanma hızı, 35 ft yükseklik geçiş hızı",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 188,
@@ -3598,8 +3598,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sadece Headwind etkisi olur",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 189,
@@ -3617,8 +3617,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Take-off climb speed or speed at 35 ft",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 190,
@@ -3636,8 +3636,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Takeoff mesafesini azaltır, climb performansı olumlu etkiler",
-    "block_id": 19,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 191,
@@ -3655,8 +3655,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Head wind / Down slope / Uzun pist / Alçak meydan irtifası",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 192,
@@ -3674,8 +3674,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 700 feet",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 193,
@@ -3693,8 +3693,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Manyetik kuzeye göredir",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 194,
@@ -3712,8 +3712,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Accelerate segment",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 195,
@@ -3731,8 +3731,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Vlof",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 196,
@@ -3750,8 +3750,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 9 sınıf",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 197,
@@ -3769,8 +3769,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: ICAO Technical Instruction Manual / IATA Dangerous Goods Ragulation",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 198,
@@ -3788,8 +3788,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Havayolu",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 199,
@@ -3807,8 +3807,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Kütlesel patlama ve ısı yayarlar",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 200,
@@ -3826,8 +3826,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Approach and Landing",
-    "block_id": 20,
-    "checkpoint_id": 5
+    "block_id": 8,
+    "checkpoint_id": 4
    },
    {
     "id": 201,
@@ -3845,8 +3845,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Optimum working conditions",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 202,
@@ -3864,8 +3864,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Flex time",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 203,
@@ -3883,8 +3883,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Extreme caution",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 204,
@@ -3902,8 +3902,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Micromanages",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 205,
@@ -3921,8 +3921,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lack of concentration",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 206,
@@ -3940,8 +3940,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Situational Awareness",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 207,
@@ -3959,8 +3959,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> noise , temperature ( low or high ) , humidity",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 208,
@@ -3978,8 +3978,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 8 hrs",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 209,
@@ -3997,8 +3997,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: constitutes approximately 70% of human communication",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 210,
@@ -4016,8 +4016,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Troposferi stratosferden ayırır",
-    "block_id": 21,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 211,
@@ -4035,8 +4035,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Belirli bir seviyede aynı hava basıncına sahip konumlar",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 212,
@@ -4054,8 +4054,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> CB",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 213,
@@ -4073,8 +4073,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Gök gürültülü sağanak yağışlar",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 214,
@@ -4092,8 +4092,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Fırtınalar",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 215,
@@ -4111,8 +4111,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> METAR/SPECI’ye eklenen 2 saatlik bir hava tahmini",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 216,
@@ -4130,8 +4130,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 7 oranında kapalılık",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 217,
@@ -4149,8 +4149,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> No significant changes",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 218,
@@ -4168,8 +4168,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VRB01KT 8000 SCT250 11/10 Q1028 BECMG 3000 BR =",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 219,
@@ -4189,8 +4189,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: LSGG 22003KT 9999 SCT120 BKN280 09/08 Q1026 BECMG 5000 BR =",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 220,
@@ -4208,8 +4208,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VHF, HF, MF, LF",
-    "block_id": 22,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 221,
@@ -4227,8 +4227,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 4",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 222,
@@ -4246,8 +4246,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 4 ve 7",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 223,
@@ -4265,8 +4265,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Precision Approach yapılamaz",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 224,
@@ -4286,8 +4286,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Mevcut yakıt ile havada kalınabilecek zaman",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 225,
@@ -4305,8 +4305,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: a line on the surface of the earth cutting all meridians at the same angle",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 9,
+    "checkpoint_id": 5
    },
    {
     "id": 226,
@@ -4324,8 +4324,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1 nautical mile",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 227,
@@ -4343,8 +4343,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The meridian running through Greenwich, England",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 228,
@@ -4362,8 +4362,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Universal Time Co-ordinated",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 229,
@@ -4381,8 +4381,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Devletin belirttiğinden daha az olmamalıdır",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 230,
@@ -4400,8 +4400,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Operatörün devleti",
-    "block_id": 23,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 231,
@@ -4419,8 +4419,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hepsi doğru",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 232,
@@ -4438,8 +4438,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2 , 4 , 6",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 233,
@@ -4457,8 +4457,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Two independent altitude measurement systems, one automatic altitude control, one altitude alert system, one SSR altitude reporting transponder (RVSM compliant)",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 234,
@@ -4476,8 +4476,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 60 dakika",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 235,
@@ -4495,8 +4495,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uçuş zamanının %95’ inde 5 NM’dan fazla hata olmamasını dikte ettirir",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 236,
@@ -4514,8 +4514,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Eski plan iptal edilerek 290’ın altında yeni plan gönderilir",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 237,
@@ -4533,8 +4533,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Esenboğa Havalimanı",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 238,
@@ -4552,8 +4552,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 7500",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 239,
@@ -4571,8 +4571,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> International Civil Aviation Organization (ICAO)",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 240,
@@ -4590,8 +4590,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Until the flight starts",
-    "block_id": 24,
-    "checkpoint_id": 6
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 241,
@@ -4609,8 +4609,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Annex 11",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 242,
@@ -4628,8 +4628,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Annex 4",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 243,
@@ -4647,8 +4647,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> PEGASUS",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 244,
@@ -4666,8 +4666,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> All of them",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 245,
@@ -4685,8 +4685,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Assembly, Council, Secretariat",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 246,
@@ -4704,8 +4704,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> IATA",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 247,
@@ -4723,8 +4723,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> EUROCONTROL",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 248,
@@ -4742,8 +4742,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> that there is an operational requirement",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 249,
@@ -4761,8 +4761,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: How long it will take to fix the said defect is specified in the MEL item description",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 250,
@@ -4780,8 +4780,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> MLS",
-    "block_id": 25,
-    "checkpoint_id": 7
+    "block_id": 10,
+    "checkpoint_id": 5
    },
    {
     "id": 251,
@@ -4799,8 +4799,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Decision Height",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 252,
@@ -4818,8 +4818,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VOR",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 253,
@@ -4837,8 +4837,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yellow",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 254,
@@ -4856,8 +4856,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Lateral – Vertical",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 255,
@@ -4875,8 +4875,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçağın sağa ve sola dönmesini sağlayan parçadır",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 256,
@@ -4894,8 +4894,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Genelde hassas yaklaşma sistemi olmayan pistlere konurlar",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 257,
@@ -4913,8 +4913,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VASI",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 258,
@@ -4932,8 +4932,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Son yaklaşmada uçağın yönünün kontrol edilmesini sağlarlar",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 259,
@@ -4951,8 +4951,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Circling",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 260,
@@ -4970,8 +4970,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> RNP 5",
-    "block_id": 26,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 261,
@@ -4989,8 +4989,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> R",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 262,
@@ -5008,8 +5008,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Suriye",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 263,
@@ -5027,8 +5027,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Kalkış yedek meydanı belirlemeli ve 1 saatlik uçuş mesafesinde olmalıdır",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 264,
@@ -5048,8 +5048,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uluslararası tarifesiz hava trafiğine açık hava alanları",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 265,
@@ -5067,8 +5067,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> DME",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 266,
@@ -5086,8 +5086,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Contingency yakıt",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 267,
@@ -5105,8 +5105,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TAS bölü Local Speed of sound",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 268,
@@ -5124,8 +5124,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> A pitot and a static source",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 269,
@@ -5143,8 +5143,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TORA + Stopway",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 270,
@@ -5162,8 +5162,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ILS , MLS , PAR",
-    "block_id": 27,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 271,
@@ -5181,8 +5181,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Inner marker",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 272,
@@ -5200,8 +5200,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Precision Approach yapılamaz",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 273,
@@ -5219,8 +5219,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> RL , TL , REIL",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 274,
@@ -5238,8 +5238,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> PAPI",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 275,
@@ -5257,8 +5257,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> PAR",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 11,
+    "checkpoint_id": 6
    },
    {
     "id": 276,
@@ -5276,8 +5276,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ADF",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 277,
@@ -5295,8 +5295,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sıkıştırılmış sıvı ve karışık zehirli maddelerdir",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 278,
@@ -5314,8 +5314,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: ICAO/IATA Dangerous Goods Regulations taşımacılık kuralları ile uygun ambalajlama ve dokümantasyonu konusunda uyumlu olmalıdır",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 279,
@@ -5333,8 +5333,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Su ile teması halinde,alev alıcı gazlar oluşturan maddeler",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 280,
@@ -5352,8 +5352,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Radyonükleik ve izotop yayan insan sağlığına zararlı maddelerdir",
-    "block_id": 28,
-    "checkpoint_id": 7
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 281,
@@ -5371,8 +5371,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yetkili acenta/yükleme şefi",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 282,
@@ -5390,8 +5390,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 24 months",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 283,
@@ -5409,8 +5409,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Operator",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 284,
@@ -5428,8 +5428,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Forbidden",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 285,
@@ -5447,8 +5447,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hidden Dangerous Goods",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 286,
@@ -5466,8 +5466,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dry ICE",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 287,
@@ -5485,8 +5485,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: intended to develop effectiveness of crew performance by improving attitudes towards flight safety and human relationship management",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 288,
@@ -5504,8 +5504,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 90%",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 289,
@@ -5523,8 +5523,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: is cited in approximately 70 - 80 % of aviation accidents",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 290,
@@ -5542,8 +5542,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 10.000 - 12.000feet",
-    "block_id": 29,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 291,
@@ -5561,8 +5561,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Deciding means choosing between alternatives",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 292,
@@ -5580,8 +5580,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: It increases fatigue, reduces concentration and increases the risk of sensory illusions",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 293,
@@ -5599,8 +5599,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Software (which includes check lists)",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 294,
@@ -5618,8 +5618,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Alkol insan performansını olumsuz yönde etkiler",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 295,
@@ -5637,8 +5637,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> İhtiyacın giderilmemesi",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 296,
@@ -5656,8 +5656,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Olumlu ve yapıcı olan düşünceler üretme",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 297,
@@ -5675,8 +5675,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Yetkili havacılık hava durumu ofisi bir SIGMET yayınlayacak",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 298,
@@ -5694,8 +5694,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 500 feet",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 299,
@@ -5713,8 +5713,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Şiddetli yağmur sağanağı",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 300,
@@ -5732,8 +5732,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 8 km",
-    "block_id": 30,
-    "checkpoint_id": 8
+    "block_id": 12,
+    "checkpoint_id": 6
    },
    {
     "id": 301,
@@ -5751,8 +5751,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 3 km",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 302,
@@ -5770,8 +5770,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> QFE, QNH’den büyüktür",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 303,
@@ -5789,8 +5789,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SIGMET",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 304,
@@ -5808,8 +5808,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Şiddetli dağ dalgalarında",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 305,
@@ -5827,8 +5827,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: The direction along any meridian toward the true north pole",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 306,
@@ -5846,8 +5846,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Variation",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 307,
@@ -5865,8 +5865,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Magnetic North and Compass North",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 308,
@@ -5884,8 +5884,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> compass deviation",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 309,
@@ -5903,8 +5903,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VHF",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 310,
@@ -5924,8 +5924,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M",
-    "block_id": 31,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 311,
@@ -5943,8 +5943,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> V",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 312,
@@ -5962,8 +5962,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> N",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 313,
@@ -5981,8 +5981,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> N0450",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 314,
@@ -6000,8 +6000,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M083",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 315,
@@ -6019,8 +6019,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> estimated off-block time",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 316,
@@ -6038,8 +6038,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 4",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 317,
@@ -6057,8 +6057,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> AIRBUS",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 318,
@@ -6076,8 +6076,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ICAO",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 319,
@@ -6095,8 +6095,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> İşleten ve Havaaracı pilotunu",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 320,
@@ -6114,8 +6114,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Şikago Konvansiyonu",
-    "block_id": 32,
-    "checkpoint_id": 8
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 321,
@@ -6133,8 +6133,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uçağın kayıtlı olduğu ülkenin Sivil Havacılı Otoritesi",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 322,
@@ -6152,8 +6152,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Roma Konvansiyonu",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 323,
@@ -6171,8 +6171,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hak",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 324,
@@ -6190,8 +6190,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hak",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 325,
@@ -6209,8 +6209,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hak",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 13,
+    "checkpoint_id": 7
    },
    {
     "id": 326,
@@ -6228,8 +6228,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yön bulmaya yarar",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 327,
@@ -6247,8 +6247,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sürati artar, basıncı düşer",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 328,
@@ -6266,8 +6266,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uzunluk ekseni - Aileron, Yatay ekseni-Elevator, Dikey ekseni-Rudder",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 329,
@@ -6285,8 +6285,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Ülkelerin sivil havacılık otoritelerine",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 330,
@@ -6304,8 +6304,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Longitudinal axis",
-    "block_id": 33,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 331,
@@ -6323,8 +6323,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uçağın uçuş esnasındaki tüm teknik verileri kaydeder",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 332,
@@ -6342,8 +6342,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Pitching",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 333,
@@ -6361,8 +6361,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> RL",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 334,
@@ -6380,8 +6380,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> VHF",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 335,
@@ -6399,8 +6399,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Uçuş hattı üzerinde kurulu navigasyon yardımcılarına ihtiyaç duyulan bir navigasyon metodudur",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 336,
@@ -6418,8 +6418,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: İçinde uçuş bilgi ve ikaz hizmetlerinin yürütüldüğü sınırları belirli sahalardır",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 337,
@@ -6437,8 +6437,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> The estimated off-block time",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 338,
@@ -6456,8 +6456,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Varış meydanı üzerinde 1 saat bekleme yakıtı",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 339,
@@ -6475,8 +6475,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Kayseri üzeri 1500 feet’te 30 dakika holding yakıtı",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 340,
@@ -6494,8 +6494,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> True Air Speed",
-    "block_id": 34,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 341,
@@ -6513,8 +6513,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçak MSN numarası",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 342,
@@ -6532,8 +6532,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçağın bulunduğu bölgedeki uçuş yoğunluğu",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 343,
@@ -6551,8 +6551,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 0858 UTC",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 344,
@@ -6570,8 +6570,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Taşıma katsayısı artar",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 345,
@@ -6589,8 +6589,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 3000 ft",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 346,
@@ -6608,8 +6608,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Alternate fuel + Final reserve fuel",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 347,
@@ -6627,8 +6627,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Kalkış mesafesi artar",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 348,
@@ -6646,8 +6646,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> %115’ i",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 349,
@@ -6665,8 +6665,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Yükseklikte yoğunluğun düşmesi trust’ ı arttıracağından climb gradient artacaktır",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 350,
@@ -6684,8 +6684,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TORA+ Clearway",
-    "block_id": 35,
-    "checkpoint_id": 9
+    "block_id": 14,
+    "checkpoint_id": 7
    },
    {
     "id": 351,
@@ -6703,8 +6703,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> stopway",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 352,
@@ -6722,8 +6722,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> an up-sloping runway with a tailwind component",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 353,
@@ -6741,8 +6741,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> elevator",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 354,
@@ -6760,8 +6760,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçağa elektrik sağlayan bir güç ünitesidir",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 355,
@@ -6779,8 +6779,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dry ICE",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 356,
@@ -6798,8 +6798,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> List of Dangerous Goods",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 357,
@@ -6817,8 +6817,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Proper Shipping Name",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 358,
@@ -6836,8 +6836,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ICAO",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 359,
@@ -6855,8 +6855,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> L and S",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 360,
@@ -6874,8 +6874,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Paniğe yol açar",
-    "block_id": 36,
-    "checkpoint_id": 9
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 361,
@@ -6893,8 +6893,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Kalp atım sayısı artar",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 362,
@@ -6912,8 +6912,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Beceriye dayalı davranış (Skill based behaviour)",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 363,
@@ -6931,8 +6931,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dışarıyı izlemeye daha fazla zaman ayrılması",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 364,
@@ -6950,8 +6950,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Liveware-Hardware",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 365,
@@ -6969,8 +6969,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Liveware",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 366,
@@ -6988,8 +6988,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Rapor mümkündür, çünkü sığ sis, göz seviyesinin altında ince bir sis tabakası olarak tanımlanır",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 367,
@@ -7007,8 +7007,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Bilinmez, NOSIG RVR derecesine referans vermez",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 368,
@@ -7026,8 +7026,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 60 kt",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 369,
@@ -7045,8 +7045,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 500 mt",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 370,
@@ -7064,8 +7064,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Dikine görüş 100 ft",
-    "block_id": 37,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 371,
@@ -7083,8 +7083,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 2 saat",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 372,
@@ -7102,8 +7102,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Hava koşullarında önemli bir değişiklik gözlemlendiğinde yayınlanan özel bir havaalanı hava durumu raporu",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 373,
@@ -7121,8 +7121,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> %30 olasılık",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 374,
@@ -7140,8 +7140,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 7 kapalılık, tavan 400 ft",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 375,
@@ -7159,8 +7159,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hava meydanı yüksekliğindeki basınç",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 15,
+    "checkpoint_id": 8
    },
    {
     "id": 376,
@@ -7178,8 +7178,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 20W",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 377,
@@ -7197,8 +7197,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 15E",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 378,
@@ -7216,8 +7216,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 60 dk",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 379,
@@ -7235,8 +7235,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1000 FT, FL290 – 410, Tek binli, Çift binli",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 380,
@@ -7254,8 +7254,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SRM",
-    "block_id": 38,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 381,
@@ -7273,8 +7273,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> FCM",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 382,
@@ -7292,8 +7292,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SPA",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 383,
@@ -7311,8 +7311,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Muhafaza edilen sürat",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 384,
@@ -7330,8 +7330,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> PIREP",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 385,
@@ -7349,8 +7349,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uncertainly Phase",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 386,
@@ -7368,8 +7368,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hak",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 387,
@@ -7387,8 +7387,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Kabotaj",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 388,
@@ -7406,8 +7406,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Arızanın uçak bakım defterine yazıldığı günü takip eden gün 00:01’de;",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 389,
@@ -7425,8 +7425,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Takvim günü",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 390,
@@ -7444,8 +7444,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Uçuş günü",
-    "block_id": 39,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 391,
@@ -7463,8 +7463,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: İniş meydanı izole edilmişse ve iniş için elverişli yedek meydan yoksa",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 392,
@@ -7482,8 +7482,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Devlet hava araçları, Sivil hava araçları",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 393,
@@ -7501,8 +7501,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> aircraft with MTOM greater than 5.700 kg",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 394,
@@ -7520,8 +7520,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> in the aircraft",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 395,
@@ -7539,8 +7539,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> II VE IV",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 396,
@@ -7558,8 +7558,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Transponder",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 397,
@@ -7577,8 +7577,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> En yakın uygun meydana iniş yapar",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 398,
@@ -7596,8 +7596,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> AIP",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 399,
@@ -7615,8 +7615,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Emergency aircraft",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 400,
@@ -7634,8 +7634,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yolcu sayısını arttırmak",
-    "block_id": 40,
-    "checkpoint_id": 10
+    "block_id": 16,
+    "checkpoint_id": 8
    },
    {
     "id": 401,
@@ -7653,8 +7653,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Yolcu Manifestosu",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 402,
@@ -7672,8 +7672,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> QRH",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 403,
@@ -7691,8 +7691,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 90",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 404,
@@ -7710,8 +7710,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> %60",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 405,
@@ -7729,8 +7729,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> %15",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 406,
@@ -7748,8 +7748,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Unutma: Tail wind Ground speed’i artırdığından Air distance ve Flight time azalır",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 407,
@@ -7767,8 +7767,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Alternate fuel + Holding Fuel",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 408,
@@ -7786,8 +7786,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> V1 Critical Engine – Failure Speed",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 409,
@@ -7805,8 +7805,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ASDA",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 410,
@@ -7824,8 +7824,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> safety speed",
-    "block_id": 41,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 411,
@@ -7843,8 +7843,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TORA+ Clearway",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 412,
@@ -7862,8 +7862,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Azalır",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 413,
@@ -7881,8 +7881,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1,5 km’den az değil ama 10 km üstü de olabilir",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 414,
@@ -7900,8 +7900,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M04",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 415,
@@ -7919,8 +7919,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> +7",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 416,
@@ -7938,8 +7938,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M08",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 417,
@@ -7957,8 +7957,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Inversion",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 418,
@@ -7976,8 +7976,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Önceki 10 dakikanın ortalama hızı",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 419,
@@ -7995,8 +7995,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Hamle ana rüzgar hızının en az 10 kt üzerinde olunca",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 420,
@@ -8014,8 +8014,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Alert Phase",
-    "block_id": 42,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 421,
@@ -8033,8 +8033,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 8",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 422,
@@ -8052,8 +8052,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 7",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 423,
@@ -8071,8 +8071,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> WW",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 424,
@@ -8090,8 +8090,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> RPL",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 425,
@@ -8109,8 +8109,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TORA",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 17,
+    "checkpoint_id": 9
    },
    {
     "id": 426,
@@ -8128,8 +8128,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TODA",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 427,
@@ -8147,8 +8147,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ASDA",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 428,
@@ -8166,8 +8166,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Aerodrome Identification Sign",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 429,
@@ -8185,8 +8185,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Aerodrome Elevation",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 430,
@@ -8204,8 +8204,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 45'ten fazla",
-    "block_id": 43,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 431,
@@ -8223,8 +8223,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Beyaz-yeşil",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 432,
@@ -8242,8 +8242,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Annex 19",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 433,
@@ -8261,8 +8261,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> GEN, ENR, AD",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 434,
@@ -8280,8 +8280,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ECAC",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 435,
@@ -8299,8 +8299,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> JAA/EASA",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 436,
@@ -8318,8 +8318,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> IATA politik bir kuruluştur",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 437,
@@ -8337,8 +8337,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SQUAWK Code",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 438,
@@ -8356,8 +8356,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ATC",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 439,
@@ -8375,8 +8375,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: Meydan Kontrol – Yaklaşma Kontrol - Yol Kontrol – Yaklaşma Kontrol – Meydan Kontrol",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 440,
@@ -8394,8 +8394,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 18/24",
-    "block_id": 44,
-    "checkpoint_id": 11
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 441,
@@ -8413,8 +8413,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> ILS",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 442,
@@ -8432,8 +8432,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> LLZ / GS",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 443,
@@ -8451,8 +8451,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Cross Wind etkisi olur",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 444,
@@ -8470,8 +8470,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 200 feet",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 445,
@@ -8489,8 +8489,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Saat 13:00utc de varacak şekilde kalkışın ayarlanması gerekir",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 446,
@@ -8508,8 +8508,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Canceled",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 447,
@@ -8527,8 +8527,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Düşük süratlerde kanatların kaldırma kuvvetini arttırmak",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 448,
@@ -8546,8 +8546,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: SIGMET, tehlikeli meteorolojik koşulların bir uyarısıdır",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 449,
@@ -8565,8 +8565,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SN",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 450,
@@ -8584,8 +8584,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> +FZRA",
-    "block_id": 45,
-    "checkpoint_id": 12
+    "block_id": 18,
+    "checkpoint_id": 9
    },
    {
     "id": 451,
@@ -8603,8 +8603,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: 201350Z 21005KT 9999 SCT040CB SCT100 26/18 Q1016 TEMPO 24018G30KT TS =",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 452,
@@ -8622,8 +8622,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: 201850Z 15003KT 6000 SCT120 05/04 Q1032 BECMG 1600 BR =",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 453,
@@ -8641,8 +8641,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 15003KT 9999 BKN100 17/11 Q1024 NOSIG =",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 454,
@@ -8660,8 +8660,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 1500 ft",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 455,
@@ -8679,8 +8679,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 9 saatlik TAF",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 456,
@@ -8698,8 +8698,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 4 kapalılık",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 457,
@@ -8717,8 +8717,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> artan yükseklikle sıcaklık düşmeyi durdurur",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 458,
@@ -8736,8 +8736,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> code 7500",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 459,
@@ -8755,8 +8755,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 460,
@@ -8774,8 +8774,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Minimum Navigation Performance Specification",
-    "block_id": 46,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 461,
@@ -8793,8 +8793,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: 60 minutes at cruising speed with one engine unserviceable",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 462,
@@ -8812,8 +8812,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Park Pozisyonu Bilgi Hizmeti",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 463,
@@ -8831,8 +8831,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> FIR",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 464,
@@ -8850,8 +8850,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Class A Airspace",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 465,
@@ -8869,8 +8869,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 60",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 466,
@@ -8888,8 +8888,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 5 mil 2000 ft",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 467,
@@ -8907,8 +8907,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> FL290-FL410",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 468,
@@ -8926,8 +8926,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Park pozisyonu değişikliği",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 469,
@@ -8945,8 +8945,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> DLA",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 470,
@@ -8964,8 +8964,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SIP",
-    "block_id": 47,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 471,
@@ -8983,8 +8983,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TWR",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 472,
@@ -9002,8 +9002,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> AD",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 473,
@@ -9021,8 +9021,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 474,
@@ -9040,8 +9040,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: CNL mesajı ve yeni EOBT' yi gösteren yeni bir uçuş planı gönderilir",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 475,
@@ -9059,8 +9059,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: İçerisinde kontrollü uçuşlara hava trafik kontrol hizmetinin sağlandığı, ölçüleri tayin edilmiş bir hava sahasıdır",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 19,
+    "checkpoint_id": 10
    },
    {
     "id": 476,
@@ -9078,8 +9078,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Unutma: The over-all length of the longest aeroplane normally using the aerodrome and its maximun fuselage width",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 477,
@@ -9097,8 +9097,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Unutma: Upon receipt of any offical weather, regardless of content change or reported values",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 478,
@@ -9116,8 +9116,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Initial, intermediate and final",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 479,
@@ -9135,8 +9135,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> F320",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 480,
@@ -9154,8 +9154,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> N0470",
-    "block_id": 48,
-    "checkpoint_id": 12
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 481,
@@ -9173,8 +9173,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> 24 saat",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 482,
@@ -9192,8 +9192,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> M05",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 483,
@@ -9211,8 +9211,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Su buharı",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 484,
@@ -9230,8 +9230,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> QNH, QFE’ye eşit olabilir",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 485,
@@ -9249,8 +9249,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Havanın yatay hareketidir",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 486,
@@ -9268,8 +9268,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hava sıcaklığına eşit olabilir",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 487,
@@ -9287,8 +9287,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Aşağı-yukarı hava hareketlerinin göstergesidir",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 488,
@@ -9306,8 +9306,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> SWC and SIGMET",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 489,
@@ -9325,8 +9325,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Sıcaklığın yükseklikle artmasıdır",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 490,
@@ -9344,8 +9344,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> TAF içerisinde belirtilir",
-    "block_id": 49,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 491,
@@ -9363,8 +9363,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Meteorolojik ve operasyonel bilgiler",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 492,
@@ -9382,8 +9382,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> METAR",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 493,
@@ -9401,8 +9401,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 0,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Hava alanı seviyesinden olan yüksekliktir",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 494,
@@ -9420,8 +9420,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 1,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> Visual manoeuvring(circling)",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 495,
@@ -9439,8 +9439,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 3,
     "explanation": "📌 Hafıza Çivisi: Bu sorunun kilit cevabı -> as Flight Level",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    },
    {
     "id": 496,
@@ -9460,8 +9460,8 @@ window.DATA_TRACKS = {
     ],
     "answer": 2,
     "explanation": "📌 Hafıza Çivisi: Unutma: Şehir üzerinde 1000 ft / İnsan topluluğu olmayan yerlerde 500 ft",
-    "block_id": 50,
-    "checkpoint_id": 13
+    "block_id": 20,
+    "checkpoint_id": 10
    }
   ]
  },
