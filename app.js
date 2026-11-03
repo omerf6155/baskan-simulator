@@ -8,7 +8,7 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'uhy_dual_tracks_state_v2';
+  const STORAGE_KEY = 'uhy_dual_tracks_state_v3';
   const SESSION_TRACK_KEY = 'uhy_session_track_chosen_v2';
   const THEME_KEY = 'uhy_theme_preference_v2';
 
@@ -19,8 +19,8 @@
     currentTab: 'tab1',  // 'tab1', 'tab2', 'tab3'
     tracks: {
       pptx: {
-        currentBlock: 4, // 25'lik blok yapisinda Slayt 77-101 (Slayt 80 burada yer alir)
-        completedBlocks: [1, 2, 3], // 1-3 bloklar tamamlandi (Slayt 2-76)
+        currentBlock: 1, // 1. bloktan başlar (Slayt 2-26)
+        completedBlocks: [],
         checkpointScores: {},
         errorBank: []
       },
@@ -89,13 +89,20 @@
   // --- STATE MANAGEMENT ---
   function loadSavedState() {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      let saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        // Fallback check from v2 if exists
+        saved = localStorage.getItem('uhy_dual_tracks_state_v2');
+      }
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.tracks) {
           appState = { ...appState, ...parsed };
 
-          // CRITICAL BUG FIX: Scrub any phantom errors where userAns was undefined/null/-1
+          // Always enforce pptx track as primary
+          appState.activeTrack = 'pptx';
+
+          // Scrub any phantom errors where userAns was undefined/null/-1
           ['pptx', 'docx'].forEach(k => {
             if (appState.tracks[k] && Array.isArray(appState.tracks[k].errorBank)) {
               appState.tracks[k].errorBank = appState.tracks[k].errorBank.filter(e => 
@@ -106,8 +113,8 @@
 
           // 25-Question Block Migration for PPTX:
           if (appState.tracks.pptx) {
-            if (appState.tracks.pptx.currentBlock > 20) {
-              appState.tracks.pptx.currentBlock = 4;
+            if (!appState.tracks.pptx.currentBlock || appState.tracks.pptx.currentBlock > 20 || appState.tracks.pptx.currentBlock < 1) {
+              appState.tracks.pptx.currentBlock = 1;
             }
             if (Array.isArray(appState.tracks.pptx.completedBlocks)) {
               appState.tracks.pptx.completedBlocks = appState.tracks.pptx.completedBlocks.filter(b => b <= 20);
@@ -131,11 +138,8 @@
 
   // --- SESSION WELCOME & TRACK PICKER ---
   function checkSessionWelcome() {
-    const chosen = sessionStorage.getItem(SESSION_TRACK_KEY);
-    if (!chosen) {
-      // First time opening app in this session -> show choice screen!
-      openTrackPickerModal();
-    }
+    // 500 Slayt havuzu varsayilan ve tek odaktir; modal asla otomatik acilmaz!
+    sessionStorage.setItem(SESSION_TRACK_KEY, 'true');
   }
 
   function openTrackPickerModal() {
@@ -195,7 +199,7 @@
     activeQuestions.forEach(q => {
       questionsById[q.id] = q;
 
-      const bId = q.block_id || Math.floor((q.id - 1) / 10) + 1;
+      const bId = q.block_id || Math.floor((q.id - 1) / (tKey === 'pptx' ? 25 : 10)) + 1;
       if (!blockQuestionsMap[bId]) blockQuestionsMap[bId] = [];
       blockQuestionsMap[bId].push(q);
 
